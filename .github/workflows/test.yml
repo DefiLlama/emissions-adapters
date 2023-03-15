@@ -32,7 +32,6 @@ jobs:
             { 
               node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i}
               node ${{ github.workspace }}/.github/workflows/comment.js /home/runner/work/emissions-adapters/emissions-adapters/result.png "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
-              fi
             } || { 
               echo -n $i
               echo ' doesnt run'
