@@ -15,7 +15,8 @@ jobs:
         run: |
           RUN_FILES=$(
             MODIFIED=${{ steps.file_changes.outputs.files_modified}} \
-            ADDED=${{ steps.file_changes.outputs.files_added}}
+            ADDED=${{ steps.file_changes.outputs.files_added}} \ 
+            node ${{ github.workspace }}/.github/workflows/getFileList.js
           )
 
           if [ "$RUN_FILES" = "[]" ]; then
@@ -31,9 +32,9 @@ jobs:
           for i in $(echo $RUN_FILES | tr  -d '"[]' | tr "," "\n")
           do 
             { 
-              node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i}
+              node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i} 2>&1 | tee output.txt
               echo 'done test.ts'
-              node ${{ github.workspace }}/.github/workflows/comment.js /home/runner/work/emissions-adapters/emissions-adapters/utils/result.png "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
+              node ${{ github.workspace }}/.github/workflows/comment.js /home/runner/work/emissions-adapters/emissions-adapters/output.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
             } || { 
               echo -n $i
               echo ' doesnt run'
