@@ -32,6 +32,7 @@ jobs:
           do 
             { 
               node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i}
+              echo 'done test.ts'
               node ${{ github.workspace }}/.github/workflows/comment.js /home/runner/work/emissions-adapters/emissions-adapters/utils/result.png "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
             } || { 
               echo -n $i

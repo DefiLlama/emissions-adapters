@@ -9,7 +9,7 @@ if (process.argv.length < 3) {
     Eg: ts-node defi/src/emissions/utils/test.ts aave`);
   process.exit(1);
 }
-const protocol = process.argv[2];
+let protocol = process.argv[2];
 
 export async function parseData(adapter: Protocol): Promise<void> {
   const { rawSections, startTime, endTime } = await createRawSections(adapter);
@@ -18,6 +18,11 @@ export async function parseData(adapter: Protocol): Promise<void> {
 }
 
 export async function main() {
+  if (protocol.includes("/"))
+    protocol = protocol.substring(
+      protocol.lastIndexOf("/"),
+      protocol.lastIndexOf(".ts"),
+    );
   console.log(`==== Drawing ${protocol} chart ====`);
   const protocolWrapper = (adapters as any)[protocol];
 
