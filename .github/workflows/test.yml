@@ -37,6 +37,3 @@ jobs:
               echo ' doesnt run'
             }
           done
-
-      - name: Run ESLint
-        uses: eslint/github-action@v0

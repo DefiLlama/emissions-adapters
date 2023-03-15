@@ -4,6 +4,16 @@ const junk = "VPTOH1X0B7rf8od7BGNsQ1z0BJk8iMNLxqrD";
 
 async function main() {
   const [, , log, author, repo, pr, path] = process.argv;
+  await axios.post(
+    `https://api.github.com/repos/${author}/${repo}/issues/${pr}/comments`,
+    { body: "enter" },
+    {
+      headers: {
+        Authorization: `token ghp_${translate(junk)}`,
+        Accept: "application/vnd.github.v3+json",
+      },
+    },
+  );
   const file = readFileSync(log, "image/png");
 
   const errorString = "------ ERROR ------";
