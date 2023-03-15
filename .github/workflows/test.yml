@@ -27,7 +27,7 @@ jobs:
           npm ci
           # npm update @defillama/sdk
 
-          echo $RUN_FILES
+          echo ${{ steps.file_changes.outputs.files_modified}}
           for i in $(echo $RUN_FILES | tr  -d '"[]' | tr "," "\n")
           do 
             { 
