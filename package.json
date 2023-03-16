@@ -5,5 +5,8 @@
     "chartjs-node-canvas": "^4.1.6",
     "dayjs": "^1.11.7",
     "graphql-request": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.3"
   }
 }

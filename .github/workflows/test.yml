@@ -13,6 +13,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Run changes files through test script
         run: |
+          tsc --build
+
           RUN_FILES=$(
             MODIFIED=${{ steps.file_changes.outputs.files_modified}} \
             ADDED=${{ steps.file_changes.outputs.files_added}} \ 
@@ -33,7 +35,7 @@ jobs:
           do 
             { 
               node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i} 2>&1 | tee output.txt
-              echo 'done test.ts'
+              echo 'done test.js'
               node ${{ github.workspace }}/.github/workflows/comment.js /home/runner/work/emissions-adapters/emissions-adapters/output.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
             } || { 
               echo -n $i

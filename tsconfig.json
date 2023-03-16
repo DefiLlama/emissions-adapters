@@ -29,13 +29,11 @@
     ]
   },
   "include": [
-    "src",
-    "/**/*.ts"
+    "adapters",
+    "protocols",
+    "utils"
   ],
   "exclude": [
-    "src/setupTestEnv.js",
-    "DefiLlama-Adapters/**/*.js",
-    "src/**/*js",
-    "src/cli/backfillDexVolumes"
+    ".github/workflows/**.js",
   ]
 }
