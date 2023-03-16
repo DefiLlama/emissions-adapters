@@ -10,6 +10,8 @@ const fileSet = new Set();
 console.log(JSON.stringify([...fileSet]));
 
 function parse(data) {
+  console.log("data below:");
   console.log(data);
+  console.log("data above:");
   return data.replace("[", "").replace("]", "").split(",");
 }
