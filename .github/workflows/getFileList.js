@@ -1,6 +1,6 @@
 console.log(`modified: ${process.env.MODIFIED}`);
 console.log(`added: ${process.env.ADDED}`);
-// const MODIFIED = parse(process.env.MODIFIED);
+const MODIFIED = parse(process.env.MODIFIED);
 // const ADDED = parse(process.env.ADDED);
 // const fileSet = new Set();
 
@@ -11,9 +11,9 @@ console.log(`added: ${process.env.ADDED}`);
 
 // console.log(JSON.stringify([...fileSet]));
 
-// function parse(data) {
-//   console.log("data below:");
-//   console.log(data);
-//   console.log("data above:");
-//   return data; //.replace("[", "").replace("]", "").split(",");
-// }
+function parse(data) {
+  console.log("data below:");
+  console.log(data);
+  console.log("data above:");
+  return data; //.replace("[", "").replace("]", "").split(",");
+}
