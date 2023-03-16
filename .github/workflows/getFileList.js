@@ -1,8 +1,8 @@
 console.log(`modified: ${process.env.MODIFIED}`);
 console.log(`added: ${process.env.ADDED}`);
-const MODIFIED = parse(process.env.MODIFIED);
-const ADDED = parse(process.env.ADDED);
-const fileSet = new Set();
+// const MODIFIED = parse(process.env.MODIFIED);
+// const ADDED = parse(process.env.ADDED);
+// const fileSet = new Set();
 
 // [...MODIFIED, ...ADDED].forEach(file => {
 //   const [root, dir] = file.split("/");
