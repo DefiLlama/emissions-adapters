@@ -13,5 +13,5 @@ function parse(data) {
   console.log("data below:");
   console.log(data);
   console.log("data above:");
-  return data.replace("[", "").replace("]", "").split(",");
+  return data; //.replace("[", "").replace("]", "").split(",");
 }
