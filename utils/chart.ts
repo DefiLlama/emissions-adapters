@@ -3,6 +3,8 @@ import { resolve } from "path";
 import dayjs from "dayjs";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import { ChartSection, Dataset } from "../types/adapters";
+import { sendToImageHost } from "./comment";
+
 const chartJSNodeCanvas = new ChartJSNodeCanvas({
   width: 1000,
   height: 500,
@@ -17,7 +19,12 @@ const hexColors: { [name: string]: string } = {
   maroon: "#800000",
   purple: "#800080",
 };
-export async function draw(configuration: any): Promise<Buffer> {
+export async function draw(
+  configuration: any,
+  toBase64: boolean,
+): Promise<Buffer | string> {
+  if (toBase64)
+    return await chartJSNodeCanvas.renderToDataURL(configuration, `image/png`);
   return await chartJSNodeCanvas.renderToBuffer(configuration, `image/png`);
 }
 function buildOptionsObject(data: ChartSection[]): Object {
@@ -67,15 +74,23 @@ function buildOptionsObject(data: ChartSection[]): Object {
     },
   };
 }
-export async function getChartPng(data: ChartSection[]): Promise<void> {
+export async function getChartPng(
+  data: ChartSection[],
+  isCI: boolean,
+): Promise<void> {
   const path: string = resolve(__dirname);
   const options: Object = buildOptionsObject(data);
-  const image: Buffer = await draw(options);
-  fs.writeFile(`${path}/result.png`, image, function (err) {
+  let image: Buffer | string = await draw(options, isCI);
+  let saveLocation = `${path}/result.png`;
+  if (typeof image == "string") {
+    image = await sendToImageHost(image);
+    saveLocation = `${path}/result.txt`;
+  }
+  fs.writeFile(saveLocation, image, function(err) {
     if (err) {
       return console.log(err);
     }
-    console.log("The file was saved at utils/result.png!");
+    console.log(`The file was saved at ${saveLocation}!`);
   });
 }
 function stringifyDate(

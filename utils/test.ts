@@ -14,7 +14,7 @@ let protocol = process.argv[2];
 export async function parseData(adapter: Protocol): Promise<void> {
   const { rawSections, startTime, endTime } = await createRawSections(adapter);
   const data = createChartData(rawSections, startTime, endTime);
-  await getChartPng(data);
+  await getChartPng(data, process.argv[3] == 'true');
 }
 
 export async function main() {
@@ -27,15 +27,16 @@ export async function main() {
 
   try {
     const protocolWrapper = (adapters as any)[protocol];
-    if (!protocolWrapper) {
+    if (!protocolWrapper && process.argv[3] == 'true') {
+      return 
+    } else if (!protocolWrapper) {
       console.log(
         `The passed protocol name is invalid. Make sure '${protocol}' is a key of './adapters/index.ts'`,
       );
-      return;
+    } else {
+      console.log(`==== Drawing ${protocol} chart ====`);
+      await parseData(protocolWrapper);
     }
-    console.log(`==== Drawing ${protocol} chart ====`);
-    await parseData(protocolWrapper);
-    return "Hi this is a test";
   } catch {}
 }
 main();
