@@ -3,7 +3,7 @@ import { resolve } from "path";
 import dayjs from "dayjs";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import { ChartSection, Dataset } from "../types/adapters";
-import { sendToImageHost } from "./comment";
+import { sendToImageHost } from "./sendToImageHost";
 
 const chartJSNodeCanvas = new ChartJSNodeCanvas({
   width: 1000,

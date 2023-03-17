@@ -23,8 +23,6 @@ export async function main() {
       protocol.lastIndexOf("/") + 1,
       protocol.lastIndexOf(".ts"),
     );
-  console.log(`entering with '${protocol}'`);
-
   try {
     const protocolWrapper = (adapters as any)[protocol];
     if (!protocolWrapper && process.argv[3] == 'true') {
