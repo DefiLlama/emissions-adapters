@@ -84,7 +84,7 @@ export async function getChartPng(
   let saveLocation = `${path}/result.png`;
   if (typeof image == "string") {
     image = await sendToImageHost(image);
-    saveLocation = `${path}/result.txt`;
+    saveLocation = `result.txt`;
   }
   fs.writeFile(saveLocation, image, function(err) {
     if (err) {

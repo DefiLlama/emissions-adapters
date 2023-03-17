@@ -18,20 +18,23 @@ jobs:
           for i in $(echo ${{ steps.file_changes.outputs.files_modified}} | tr  -d '[]' | tr "," "\n")
           do 
             { 
+              ls home/runner/work
+              ls home/runner/work/emissions-adapters
+              ls home/runner/work/emissions-adapters/emissions-adapters
               ts-node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i} true
-              ts-node ${{ github.workspace }}/utils/comment.ts /home/runner/work/emissions-adapters/emissions-adapters/utils/result.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
+              ts-node ${{ github.workspace }}/utils/comment.ts /home/runner/work/emissions-adapters/emissions-adapters/result.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
             } || { 
               echo -n $i
               echo ' doesnt run'
             }
           done
-          for i in $(echo ${{ steps.file_changes.outputs.files_added}} | tr  -d '[]' | tr "," "\n")
-          do 
-            { 
-              ts-node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i} true
-              ts-node ${{ github.workspace }}/utils/comment.ts /home/runner/work/emissions-adapters/emissions-adapters/utils/result.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
-            } || { 
-              echo -n $i
-              echo ' doesnt run'
-            }
-          done
+          # for i in $(echo ${{ steps.file_changes.outputs.files_added}} | tr  -d '[]' | tr "," "\n")
+          # do 
+          #   { 
+          #     ts-node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i} true
+          #     ts-node ${{ github.workspace }}/utils/comment.ts /home/runner/work/emissions-adapters/emissions-adapters/result.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
+          #   } || { 
+          #     echo -n $i
+          #     echo ' doesnt run'
+          #   }
+          # done
