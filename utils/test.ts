@@ -18,6 +18,7 @@ export async function parseData(adapter: Protocol): Promise<void> {
 }
 
 export async function main() {
+  console.log("entering");
   if (protocol.includes("/"))
     protocol = protocol.substring(
       protocol.lastIndexOf("/"),
@@ -33,5 +34,6 @@ export async function main() {
   }
 
   await parseData(protocolWrapper);
+  return "Hi this is a test";
 }
 main();
