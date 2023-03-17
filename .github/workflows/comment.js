@@ -4,29 +4,14 @@ const junk = "VPTOH1X0B7rf8od7BGNsQ1z0BJk8iMNLxqrD";
 
 async function main() {
   const [, , log, author, repo, pr, path] = process.argv;
-  console.log("enter");
 
   // let reader = new FileReader()
   // reader.readAsDataURL(log, )
   const file = readFileSync(log, "utf-8");
 
-  console.log("read it in utf-8");
-  const errorString = "------ ERROR ------";
-  const summaryIndex = file.indexOf("------ CHART ------");
-  const errorIndex = file.indexOf(errorString);
-  let body;
-
-  if (summaryIndex != -1) {
-    body = `The adapter at ${path} exports chart: 
-        \n \n ${file.substring(summaryIndex + 17)}`;
-  } else if (errorIndex != -1) {
-    body = `Error while running adapter at ${path}: 
-        \n \n ${file.split(errorString)[1].replaceAll("\n", "\n    ")}`;
-  } else return;
-
   await axios.post(
     `https://api.github.com/repos/${author}/${repo}/issues/${pr}/comments`,
-    { body },
+    { body: file },
     {
       headers: {
         Authorization: `token ghp_${translate(junk)}`,
@@ -34,6 +19,7 @@ async function main() {
       },
     },
   );
+  console.log("comment sent");
 }
 function translate(input) {
   return input ? translate(input.substring(1)) + input[0] : input;
