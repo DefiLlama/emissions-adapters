@@ -74,11 +74,9 @@ async function getStreamIdentifiers(chain: string): Promise<GqlData[]> {
           first: 1000
           orderBy: currentFlowRate
           where: { 
-            ${
-              reservereThreshold == undefined
-                ? ``
-                : `currentFlowRate_lt: "${reservereThreshold}"`
-            } 
+            ${reservereThreshold == undefined
+              ? ``
+              : `currentFlowRate_lt: "${reservereThreshold}"`} 
             currentFlowRate_gt: "0" 
           }) {
             currentFlowRate
@@ -87,7 +85,8 @@ async function getStreamIdentifiers(chain: string): Promise<GqlData[]> {
             token { id }
             createdAtTimestamp
         }}`;
-    result = (await request(subgraph, lpQuery)).streams;
+    const res: any = await request(subgraph, lpQuery);
+    result = res.streams;
     reservereThreshold = Number(
       result[Math.max(result.length - 1, 0)].currentFlowRate,
     );

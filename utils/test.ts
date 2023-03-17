@@ -9,24 +9,34 @@ if (process.argv.length < 3) {
     Eg: ts-node defi/src/emissions/utils/test.ts aave`);
   process.exit(1);
 }
-const protocol = process.argv[2];
+let protocol = process.argv[2];
 
 export async function parseData(adapter: Protocol): Promise<void> {
   const { rawSections, startTime, endTime } = await createRawSections(adapter);
   const data = createChartData(rawSections, startTime, endTime);
-  await getChartPng(data);
+  await getChartPng(data, process.argv[3] == 'true');
 }
 
 export async function main() {
-  console.log(`==== Drawing ${protocol} chart ====`);
-  const protocolWrapper = (adapters as any)[protocol];
-
-  if (!protocolWrapper) {
-    console.log(
-      `The passed protocol name is invalid. Make sure '${protocol}' is a key of './adapters/index.ts'`,
+  if (protocol.includes("/"))
+    protocol = protocol.substring(
+      protocol.lastIndexOf("/") + 1,
+      protocol.lastIndexOf(".ts"),
     );
-  }
+  console.log(`entering with '${protocol}'`);
 
-  await parseData(protocolWrapper);
+  try {
+    const protocolWrapper = (adapters as any)[protocol];
+    if (!protocolWrapper && process.argv[3] == 'true') {
+      return 
+    } else if (!protocolWrapper) {
+      console.log(
+        `The passed protocol name is invalid. Make sure '${protocol}' is a key of './adapters/index.ts'`,
+      );
+    } else {
+      console.log(`==== Drawing ${protocol} chart ====`);
+      await parseData(protocolWrapper);
+    }
+  } catch {}
 }
 main();

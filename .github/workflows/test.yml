@@ -13,32 +13,28 @@ jobs:
         uses: actions/checkout@v2
       - name: Run changes files through test script
         run: |
-          RUN_FILES=$(
-            MODIFIED=${{ steps.file_changes.outputs.files_modified}} \
-            ADDED=${{ steps.file_changes.outputs.files_added}} \
-            node ${{ github.workspace }}/.github/workflows/getFileList.js
-          )
-
-          if [ "$RUN_FILES" = "[]" ]; then
-            echo "No files were modified"
-            exit 0
-          fi
-
-          # npm ci --omit=dev
-          npm ci
-          # npm update @defillama/sdk
-
-          for i in $(echo $RUN_FILES | tr  -d '"[]' | tr "," "\n")
+          npm i
+          npm install -g ts-node
+          for i in $(echo ${{ steps.file_changes.outputs.files_modified}} | tr  -d '[]' | tr "," "\n")
           do 
             { 
-              node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i}
-              node ${{ github.workspace }}/.github/workflows/comment.js /home/runner/work/emissions-adapters/emissions-adapters/result.png "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
-              fi
+              ts-node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i} true
+              echo 'LSLSLSLSLSLLSLSLSLSLSLSLSLS:'
+              ls
+              echo 'LSLSLSLSLSLSLSLSLSLSLSLSLSLSLS^^'
+              ts-node ${{ github.workspace }}/utils/comment.ts /home/runner/work/emissions-adapters/emissions-adapters/result.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
             } || { 
               echo -n $i
               echo ' doesnt run'
             }
           done
-
-      - name: Run ESLint
-        uses: eslint/github-action@v0
+          # for i in $(echo ${{ steps.file_changes.outputs.files_added}} | tr  -d '[]' | tr "," "\n")
+          # do 
+          #   { 
+          #     ts-node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i} true
+          #     ts-node ${{ github.workspace }}/utils/comment.ts /home/runner/work/emissions-adapters/emissions-adapters/result.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
+          #   } || { 
+          #     echo -n $i
+          #     echo ' doesnt run'
+          #   }
+          # done
