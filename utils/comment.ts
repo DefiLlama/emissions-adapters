@@ -10,11 +10,11 @@ function translate(input: string): string {
 }
 
 export async function sendToImageHost(source: string): Promise<string> {
-  let a = source.substring(22);
   let data = new FormData();
   data.append("key", translate(junk0));
   data.append("source", source.substring(22));
   data.append("format", "json");
+
   const config = {
     method: "post",
     maxBodyLength: Infinity,
@@ -25,31 +25,23 @@ export async function sendToImageHost(source: string): Promise<string> {
     },
     data: data,
   };
+
   const res = await axios(config);
+
   if (res.status != 200) return `unable to save image!!`;
   return res.data.image.display_url;
 }
 
 async function main() {
   const [, , log, author, repo, pr, path] = process.argv;
+  console.log(
+    `log: ${log}, author: ${author}, repo: ${repo}, pr: ${pr}, path: ${path}`,
+  );
   const file = readFileSync(log, "utf-8");
 
-  const errorString = "------ ERROR ------";
-  const summaryIndex = file.indexOf("------ TVL ------");
-  const errorIndex = file.indexOf(errorString);
-  let body;
-
-  if (summaryIndex != -1) {
-    body = `The adapter at ${path} exports TVL: 
-      \n \n ${file.substring(summaryIndex + 17).replaceAll("\n", "\n    ")}`;
-  } else if (errorIndex != -1) {
-    body = `Error while running adapter at ${path}: 
-      \n \n ${file.split(errorString)[1].replaceAll("\n", "\n    ")}`;
-  } else return;
-
-  await axios.post(
+  let a = await axios.post(
     `https://api.github.com/repos/${author}/${repo}/issues/${pr}/comments`,
-    { body },
+    { body: `Your emissions chart should be below: \n \n ${file}` },
     {
       headers: {
         Authorization: `token ghp_${translate(junk1)}`,
@@ -57,5 +49,6 @@ async function main() {
       },
     },
   );
+  console.log(a);
 }
 main();
