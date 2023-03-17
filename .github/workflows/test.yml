@@ -14,6 +14,7 @@ jobs:
       - name: Run changes files through test script
         run: |
           npm i
+          npm install -g ts-node
           for i in $(echo ${{ steps.file_changes.outputs.files_modified}} | tr  -d '[]' | tr "," "\n")
           do 
             { 

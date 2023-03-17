@@ -5,16 +5,7 @@ const junk = "VPTOH1X0B7rf8od7BGNsQ1z0BJk8iMNLxqrD";
 async function main() {
   const [, , log, author, repo, pr, path] = process.argv;
   console.log("enter");
-  await axios.post(
-    `https://api.github.com/repos/${author}/${repo}/issues/${pr}/comments`,
-    { body: "enter" },
-    {
-      headers: {
-        Authorization: `token ghp_${translate(junk)}`,
-        Accept: "application/vnd.github.v3+json",
-      },
-    },
-  );
+
   // let reader = new FileReader()
   // reader.readAsDataURL(log, )
   const file = readFileSync(log, "utf-8");
