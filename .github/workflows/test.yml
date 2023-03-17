@@ -19,7 +19,7 @@ jobs:
           do 
             { 
               ts-node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i} true
-              node ${{ github.workspace }}/.github/workflows/comment.js /home/runner/work/emissions-adapters/emissions-adapters/utils/result.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
+              ts-node ${{ github.workspace }}/utils/comment.ts /home/runner/work/emissions-adapters/emissions-adapters/utils/result.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
             } || { 
               echo -n $i
               echo ' doesnt run'
@@ -29,7 +29,7 @@ jobs:
           do 
             { 
               ts-node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i} true
-              node ${{ github.workspace }}/.github/workflows/comment.js /home/runner/work/emissions-adapters/emissions-adapters/utils/result.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
+              ts-node ${{ github.workspace }}/utils/comment.ts /home/runner/work/emissions-adapters/emissions-adapters/utils/result.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
             } || { 
               echo -n $i
               echo ' doesnt run'
