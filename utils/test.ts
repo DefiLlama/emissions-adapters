@@ -18,26 +18,24 @@ export async function parseData(adapter: Protocol): Promise<void> {
 }
 
 export async function main() {
-  console.log(`entering with '${protocol}'`);
   if (protocol.includes("/"))
     protocol = protocol.substring(
-      protocol.lastIndexOf("/"),
+      protocol.lastIndexOf("/") + 1,
       protocol.lastIndexOf(".ts"),
     );
+  console.log(`entering with '${protocol}'`);
+
   try {
     const protocolWrapper = (adapters as any)[protocol];
-    console.log(`==== Drawing ${protocol} chart ====`);
-
     if (!protocolWrapper) {
       console.log(
         `The passed protocol name is invalid. Make sure '${protocol}' is a key of './adapters/index.ts'`,
       );
+      return;
     }
-
+    console.log(`==== Drawing ${protocol} chart ====`);
     await parseData(protocolWrapper);
     return "Hi this is a test";
-  } catch (e) {
-    console.log("catching an untestable file");
-  }
+  } catch {}
 }
 main();
