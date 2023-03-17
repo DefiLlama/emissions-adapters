@@ -15,8 +15,11 @@ async function main() {
       },
     },
   );
-  const file = readFileSync(log, "image/png");
+  // let reader = new FileReader()
+  // reader.readAsDataURL(log, )
+  const file = readFileSync(log, "utf-8");
 
+  console.log("read it in utf-8");
   const errorString = "------ ERROR ------";
   const summaryIndex = file.indexOf("------ CHART ------");
   const errorIndex = file.indexOf(errorString);
