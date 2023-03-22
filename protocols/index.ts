@@ -19,6 +19,7 @@ export default {
   hop: require("./hop"),
   jonesDao: require("./jonesDao"),
   liquity: require("./liquity"),
+  moonbeam: require("./moonbeam"),
   pendle: require("./pendle"),
   perpetual: require("./perpetual"),
   qiDao: require("./qiDao"),
