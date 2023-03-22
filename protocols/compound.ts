@@ -13,7 +13,7 @@ const compound: Protocol = {
   Community: manualCliff(start, qty * 0.077),
   Future_Team: manualCliff(start, qty * 0.037),
   notes: [
-    `We were unable to find details about the team's unlock schedule. Therefore we've extrapolated their vesting rate (as of 14 Mar '23) to estimate an average Team unlock schedule.`,
+    `No mention regarding if the team founders tokens are vested or not.`,
   ],
   token: "ethereum:0xc00e94cb662c3520282e6f5717214004a7f26888",
   sources: ["https://medium.com/compound-finance/compound-governance-decentralized-b18659f811e0"],
