@@ -1,4 +1,3 @@
-import adapters from "./../protocols";
 import { Protocol } from "../types/adapters";
 import { createChartData } from "./convertToChartData";
 import { createRawSections } from "./convertToRawData";
@@ -24,7 +23,7 @@ export async function main() {
       protocol.lastIndexOf(".ts"),
     );
   try {
-    const protocolWrapper = (adapters as any)[protocol];
+    const protocolWrapper = await import(`../protocols/${protocol}`);
     if (!protocolWrapper && process.argv[3] == 'true') {
       return 
     } else if (!protocolWrapper) {
