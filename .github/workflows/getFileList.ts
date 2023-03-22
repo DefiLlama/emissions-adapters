@@ -1,13 +1,10 @@
 const MODIFIED = parse(process.env.MODIFIED);
 const ADDED = parse(process.env.ADDED);
-console.log(MODIFIED);
-console.log(ADDED);
 const fileSet = new Set();
+const files = [...MODIFIED, ...ADDED]
 
-[...MODIFIED, ...ADDED].forEach(file => {
-  console.log("entered");
+files.forEach(file => {
   const [root, dir] = file.split("/");
-  console.log(root);
   if (root === "projects") fileSet.add(root + "/" + dir);
 });
 
