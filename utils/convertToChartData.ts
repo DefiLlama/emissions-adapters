@@ -23,19 +23,26 @@ export function createChartData(
     );
   });
 
-  return isTest ? data : consolidateDuplicateKeys(data);
+  return consolidateDuplicateKeys(data, isTest);
 }
-function consolidateDuplicateKeys(data: any[]) {
+function consolidateDuplicateKeys(data: any[], isTest: boolean) {
   let sortedData: any[] = [];
 
   data.map((d: any) => {
     const sortedKeys = sortedData.map((s: any) => s.section);
 
     if (sortedKeys.includes(d.section)) {
-      d.data.apiData.map((a: any, i: number) => {
-        const j = sortedKeys.indexOf(d.section);
-        sortedData[j].data.apiData[i].unlocked += a.unlocked;
-      });
+      if (isTest) {
+        d.data.unlocked.map((a: any, i: number) => {
+          const j = sortedKeys.indexOf(d.section);
+          sortedData[j].data.unlocked[i] += a;
+        });
+      } else {
+        d.data.apiData.map((a: any, i: number) => {
+          const j = sortedKeys.indexOf(d.section);
+          sortedData[j].data.apiData[i].unlocked += a.unlocked;
+        });
+      }
     } else {
       sortedData.push(d);
     }
@@ -86,7 +93,7 @@ function continuous(raw: RawResult[], config: ChartConfig): ChartData {
     );
 
   const dy: number =
-    (raw[0].change * resolution) / (raw[0].continuousEnd - raw[0].timestamp);
+    raw[0].change * resolution / (raw[0].continuousEnd - raw[0].timestamp);
 
   for (let i = 0; i < steps; i++) {
     if (

@@ -6,6 +6,7 @@ import { periodToSeconds } from "../utils/time";
 const start = 1640995200;
 const cliff = 1640995200;
 
+
 const euler: Protocol = {
   "user incentives": distribution,
   "early users": manualCliff(start, 271_828),

@@ -15,7 +15,22 @@ jobs:
         run: |
           npm i
           npm install -g ts-node
-          for i in $(echo ${{ steps.file_changes.outputs.files_modified}} | tr  -d '[]' | tr "," "\n")
+          MODIFIED=${{ steps.file_changes.outputs.files_modified}} \
+            ADDED=${{ steps.file_changes.outputs.files_added}} \
+            ts-node ${{ github.workspace }}/.github/workflows/getTest.ts
+
+          RUN_FILES=$(
+            MODIFIED=${{ steps.file_changes.outputs.files_modified}} \
+            ADDED=${{ steps.file_changes.outputs.files_added}} \
+            ts-node ${{ github.workspace }}/.github/workflows/getFileList.ts
+          )
+
+          if [ "$RUN_FILES" = "[]" ]; then
+            echo "No adapter files were modified"
+            exit 0
+          fi
+
+          for i in $(echo $RUN_FILES | tr  -d '[]' | tr "," "\n")
           do 
             { 
               ts-node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i} true
@@ -25,13 +40,3 @@ jobs:
               echo ' doesnt run'
             }
           done
-          # for i in $(echo ${{ steps.file_changes.outputs.files_added}} | tr  -d '[]' | tr "," "\n")
-          # do 
-          #   { 
-          #     ts-node ${{ github.workspace }}/utils/test.ts ${{ github.workspace }}/${i} true
-          #     ts-node ${{ github.workspace }}/.github/workflows/comment.ts /home/runner/work/emissions-adapters/emissions-adapters/result.txt "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" ${i}
-          #   } || { 
-          #     echo -n $i
-          #     echo ' doesnt run'
-          #   }
-          # done

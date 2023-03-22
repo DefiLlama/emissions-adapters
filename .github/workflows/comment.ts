@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { readFileSync } = require("fs");
+const { readFileSync, unlink } = require("fs");
 const { translate } = require("./../../utils/sendToImageHost");
 const junk = "VPTOH1X0B7rf8od7BGNsQ1z0BJk8iMNLxqrD";
 
@@ -20,6 +20,6 @@ async function main() {
       },
     },
   );
-  console.log(a);
+  unlink(log);
 }
 main();

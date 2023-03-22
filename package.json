@@ -9,8 +9,5 @@
   },
   "devDependencies": {
     "@types/node": "^18.15.3"
-  },
-  "scripts": {
-    "build": "tsc --build"
   }
 }
