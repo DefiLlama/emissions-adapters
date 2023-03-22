@@ -13,8 +13,8 @@ async function main() {
   await axios.post(
     `https://api.github.com/repos/${author}/${repo}/issues/${pr}/comments`,
     {
-      body: `The emissions chart produced by ${log.substring(
-        log.indexOf("/" + 1),
+      body: `The emissions chart produced by ${path.substring(
+        path.indexOf("/" + 1),
       )} should be below: \n \n ${file}`,
     },
     {
