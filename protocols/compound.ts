@@ -6,8 +6,9 @@ const start = 1592222400;
 const qty = 10_000_000;
 
 
+
 const compound: Protocol = {
-  Liquidity_Mining: manualCliff(start, qty * 0.421),
+  Liquidity_Mining: manualLinear(start, start + periodToSeconds.month * 42, qty * 0.421),
   Team_Founders: manualLinear(start, start + periodToSeconds.week * 208, qty * 0.225),
   ShareHolders: manualCliff(start, qty * 0.24),
   Community: manualCliff(start, qty * 0.077),
