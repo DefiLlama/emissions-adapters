@@ -11,7 +11,7 @@ jobs:
           fileOutput: "json"
       - name: Check out repository code
         uses: actions/checkout@v2
-      - name: Run changes files through test script
+      - name: Run changed files through test script
         run: |
           npm i
           npm install -g ts-node

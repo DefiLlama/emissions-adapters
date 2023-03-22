@@ -95,7 +95,7 @@ function continuous(raw: RawResult[], config: ChartConfig): ChartData {
   const dy: number =
     raw[0].change * resolution / (raw[0].continuousEnd - raw[0].timestamp);
 
-  for (let i = 0; i < steps; i++) {
+  for (let i = 0; i < steps + 1; i++) {
     if (
       raw[0].timestamp < workingTimestamp &&
       raw[0].continuousEnd > workingTimestamp
@@ -125,7 +125,7 @@ function discreet(raw: RawResult[], config: ChartConfig): ChartData {
   } = config;
 
   let j = 0; // index of current raw data timestamp
-  for (let i = 0; i < steps; i++) {
+  for (let i = 0; i < steps + 1; i++) {
     // checks if the next data point falls between the previous and next plot times
     if (j < raw.length && raw[j].timestamp < workingTimestamp) {
       workingQuantity += raw[j].change;
