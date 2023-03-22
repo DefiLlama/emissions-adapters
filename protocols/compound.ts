@@ -3,7 +3,7 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1592222400;
-const qty = 1_000_000_000;
+const qty = 10_000_000;
 
 
 const compound: Protocol = {
