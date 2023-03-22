@@ -1,5 +1,5 @@
-# Emissions Adapters
+# Emissions Adapters Guide:
+https://docs.llama.fi/list-your-project/emissions-dashboard
 
-## How to structure adapters
-
-## How to test
+# Further Questions:
+Ask in our Discord, give us a pat on the head and we wont bite.
