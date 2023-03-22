@@ -10,9 +10,13 @@ async function main() {
   );
   const file = readFileSync(log, "utf-8");
 
-  let a = await axios.post(
+  await axios.post(
     `https://api.github.com/repos/${author}/${repo}/issues/${pr}/comments`,
-    { body: `Your emissions chart should be below: \n \n ${file}` },
+    {
+      body: `The emissions chart produced by ${log.substring(
+        log.indexOf("/" + 1),
+      )} should be below: \n \n ${file}`,
+    },
     {
       headers: {
         Authorization: `token ghp_${translate(junk)}`,
