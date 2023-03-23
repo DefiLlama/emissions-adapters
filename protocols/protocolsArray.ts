@@ -1,0 +1,1 @@
+export const protocols: string[] = ["abracadabra","vela","liquity","quickswap","compound","jonesDao","convex","sushi","zyberswap","acala","aave","qiDao","euler","hop","gmx","looksrare","venus","gearbox","dydx","forta","stargate","blur","idle","radiant","pendle","rocketpool","bendDao","perpetual","moonbeam","velodrome","curve","fxs"]
