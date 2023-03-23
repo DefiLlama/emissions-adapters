@@ -26,14 +26,12 @@ export async function main() {
     const protocolWrapper = await import(`../protocols/${protocol}`);
     if (!protocolWrapper && process.argv[3] == 'true') {
       return 
-    } else if (!protocolWrapper) {
-      console.log(
-        `The passed protocol name is invalid. Make sure '${protocol}' is a key of './adapters/index.ts'`,
-      );
     } else {
       console.log(`==== Drawing ${protocol} chart ====`);
       await parseData(protocolWrapper);
     }
-  } catch {}
+  } catch(e) {
+    console.log(e)
+  }
 }
 main();
