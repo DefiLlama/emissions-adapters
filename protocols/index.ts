@@ -14,6 +14,7 @@ export default {
   dydx: require("./dydx"),
   euler: require("./euler"),
   forta: require("./forta"),
+  fxs: require("./frax-share"),
   gmx: require("./gmx"),
   idle: require("./idle"),
   hop: require("./hop"),
