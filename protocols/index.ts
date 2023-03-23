@@ -38,4 +38,6 @@ export default {
   venus: require("./venus"),
   yearn: require("./yearn"),
   zyberswap: require("./zyberswap"),
+  acala: require("./acala"),
+  compound: require("./compound.ts")
 };
