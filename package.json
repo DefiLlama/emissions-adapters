@@ -8,6 +8,7 @@
     "graphql-request": "^5.2.0"
   },
   "devDependencies": {
-    "@types/node": "^18.15.3"
+    "@types/node": "^18.15.3",
+    "ts-node": "^10.9.1"
   }
 }
