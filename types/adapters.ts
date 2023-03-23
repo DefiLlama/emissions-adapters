@@ -20,12 +20,12 @@ export type SubAllocation = {
 };
 export type AdapterResult = {
   type: string;
-  start?: number;
-  end?: number;
+  start?: number | string;
+  end?: number | string;
   amount: number;
   steps?: number;
   cliff?: number;
-  stepDuration?: number;
+  stepDuration?: number | string;
   receiver?: string;
   token?: string;
   confirmed?: boolean;
