@@ -1,6 +1,6 @@
 import { AdapterResult } from "../../types/adapters";
 import { manualCliff, manualLinear } from "../manual";
-import { parseDateString } from "../../utils/time";
+import { stringToTimestamp } from "../../utils/time";
 const eulerSchedule = [
   {
     Epoch: 0,
@@ -498,8 +498,8 @@ function main(totalQty: number): AdapterResult[] {
     const qty = Number(e["EUL Distribution"].replace(/,/g, ""));
     sections.push(
       manualLinear(
-        parseDateString(start),
-        parseDateString(e["Approx Date"]),
+        stringToTimestamp(start, 'DD/MM/YYYY'),
+        stringToTimestamp(e["Approx Date"], 'DD/MM/YYYY'),
         qty,
       ),
     );
@@ -507,7 +507,7 @@ function main(totalQty: number): AdapterResult[] {
     workingQty += qty;
   });
   if (workingQty < totalQty)
-    sections.push(manualCliff(parseDateString(start), totalQty - workingQty));
+    sections.push(manualCliff(stringToTimestamp(start, 'DD/MM/YYYY'), totalQty - workingQty));
   return sections;
 }
 const euler = main(6_795_705);
