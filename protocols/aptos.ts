@@ -48,5 +48,6 @@ const aptos: Protocol = {
   ],
   sources: ["https://aptosfoundation.org/currents/aptos-tokenomics-overview"],
   token: "coingecko:aptos",
+  protocolIds: ["2726"]
 };
 export default aptos;
