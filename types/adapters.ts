@@ -29,6 +29,7 @@ export type AdapterResult = {
   receiver?: string;
   token?: string;
   confirmed?: boolean;
+  dateFormat?: string;
 };
 export type RawResult = {
   timestamp: number;
@@ -41,17 +42,20 @@ export type StepAdapterResult = {
   steps: number;
   amount: number;
   type: string;
+  dateFormat?: string;
 };
 export type CliffAdapterResult = {
   type: string;
   start: number;
   amount: number;
+  dateFormat?: string;
 };
 export type LinearAdapterResult = {
   type: string;
   start: number;
   end: number;
   amount: number;
+  dateFormat?: string;
 };
 export type ChartData = {
   timestamps: number[];

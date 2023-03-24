@@ -32,7 +32,9 @@ export function stringToTimestamp(
   const year = parseDateString(inputDate, format.toLowerCase(), "y");
   const month = parseDateString(inputDate, format.toLowerCase(), "m");
   const day = parseDateString(inputDate, format.toLowerCase(), "d");
-  return readableToSeconds(`${year}-${month}-${day}T00:00:00`);
+  const seconds = readableToSeconds(`${year}-${month}-${day}T00:00:00`);
+  if (isNaN(seconds)) throw new Error(`${inputDate} is not in the format ${format}`)
+  return seconds
 }
 function parseDateString(input: string, format: string, key: string) {
   const result = input.substring(
@@ -43,32 +45,12 @@ function parseDateString(input: string, format: string, key: string) {
   if (key == "y" && result.length == 2) return `20${result}`;
   return result;
 }
-export function normalizeTimes(
-  results: AdapterResult[],
-  dateFormat: string = "YYYY/MM/DD",
-): AdapterResult[] {
-  let newResults: AdapterResult[] = [];
-  const keys: string[] = ["start", "end", "stepDuration"];
-  dateFormat;
-  results.flat().map((result: AdapterResult) => {
-    const convertedTimestamps: { [key: string]: number } = {};
-
-    keys.map((key: string) => {
-      if (!(key in result)) return;
-      let time = result[key as keyof AdapterResult];
-      if (typeof time != "string") return;
-      if (time.search(/([/-])/g) == -1 && time.length == 10) return;
-      convertedTimestamps[key] = stringToTimestamp(time, dateFormat);
-    });
-
-    const newResult: { [key: string]: any } = {};
-    Object.entries(result).map((r: any[]) => {
-      newResult[r[0]] =
-        r[0] in convertedTimestamps ? convertedTimestamps[r[0]] : r[1];
-    });
-
-    newResults.push(<AdapterResult>newResult);
-  });
-
-  return newResults;
+export function normalizeTime(
+  time: string | number,
+  format: string | undefined
+): number {
+  if (typeof time != "string") return time;
+  if (time.search(/([/-])/g) == -1 && time.length == 10) return parseInt(time);
+  const dateFormat = format ?? "YYYY/MM/DD";
+  return stringToTimestamp(time, dateFormat);
 }
