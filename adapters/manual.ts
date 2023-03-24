@@ -40,3 +40,37 @@ export const manualLinear = (
   end: normalizeTime(end, dateFormat),
   amount,
 });
+export const manualLog = (
+  start: number | string,
+  end: number | string,
+  tendsTo: number,
+  periodLength: number,
+  percentDecreasePerPeriod: number,
+  dateFormat: string | undefined = undefined,
+): LinearAdapterResult[] => {
+  let sections: LinearAdapterResult[] = [];
+  let thisStart: number = normalizeTime(start, dateFormat);
+  const periods: number =
+    (normalizeTime(end, dateFormat) - thisStart) / periodLength;
+  let workingQty: number = 100;
+  let sum: number = 0;
+
+  for (let i = 1; i < periods; i++) {
+    const thisQty: number = workingQty * (1 - percentDecreasePerPeriod / 100);
+    sections.push(manualLinear(thisStart, thisStart + periodLength, thisQty));
+
+    sum += thisQty;
+    workingQty = thisQty;
+    thisStart += periodLength;
+  }
+
+  const factor: number = tendsTo / sum;
+  sections = sections.map((s: LinearAdapterResult) => ({
+    type: s.type,
+    start: s.start,
+    end: s.end,
+    amount: (s.amount *= factor),
+  }));
+
+  return sections;
+};
