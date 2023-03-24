@@ -14,7 +14,7 @@ export const index: string[] = [
   "dydx",
   "euler",
   "forta",
-  "fxs",
+  "frax-share",
   "gmx",
   "idle",
   "hop",
