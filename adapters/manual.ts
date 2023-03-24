@@ -43,7 +43,7 @@ export const manualLinear = (
 export const manualLog = (
   start: number | string,
   end: number | string,
-  tendsTo: number,
+  amount: number,
   periodLength: number,
   percentDecreasePerPeriod: number,
   dateFormat: string | undefined = undefined,
@@ -64,7 +64,7 @@ export const manualLog = (
     thisStart += periodLength;
   }
 
-  const factor: number = tendsTo / sum;
+  const factor: number = amount / sum;
   sections = sections.map((s: LinearAdapterResult) => ({
     type: s.type,
     start: s.start,
