@@ -19,7 +19,7 @@ export async function createRawSections(
   let startTime: number = 10_000_000_000;
   let endTime: number = 0;
   const rawSections: RawSection[] = [];
-  let metadata: Metadata = { token: "", sources: [] };
+  let metadata: Metadata = { token: "", sources: [], protocolIds: [] };
 
   await Promise.all(
     Object.entries(adapter.default).map(async (a: any[]) => {
