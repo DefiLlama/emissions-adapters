@@ -23,7 +23,7 @@ const fxs: Protocol = {
     "https://docs.frax.finance/token-distribution/frax-share-fxs-distribution",
   ],
   token: "ethereum:0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0",
-  protocolIds: [""],
+  protocolIds: ["359"],
 };
 
 export default fxs;
