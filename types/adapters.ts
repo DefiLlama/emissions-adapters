@@ -110,5 +110,5 @@ export type Metadata = {
   sources: string[];
   token: string;
   notes?: string[];
-  protocolIds?: string[];
+  protocolIds: string[];
 };
