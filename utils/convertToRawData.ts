@@ -9,8 +9,6 @@ import {
   SectionData,
   Metadata,
 } from "../types/adapters";
-import { normalizeTimes
- } from "./time";
 const excludedKeys = ["sources", "notes", "token", "protocolIds"];
 
 export async function createRawSections(
@@ -30,7 +28,6 @@ export async function createRawSections(
       const section: string = a[0];
       let adapterResults = await a[1];
       if (adapterResults.length == null) adapterResults = [adapterResults];
-      adapterResults = normalizeTimes(adapterResults)
 
       const results: RawResult[] | RawResult[][] = adapterResults
         .flat()

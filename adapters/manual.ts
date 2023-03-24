@@ -3,21 +3,40 @@ import {
   CliffAdapterResult,
   LinearAdapterResult,
 } from "../types/adapters";
+import { normalizeTime } from "../utils/time";
 
 export const manualStep = (
-  start: number,
-  stepDuration: number,
+  start: number | string,
+  stepDuration: number | string,
   steps: number,
   amount: number,
-): StepAdapterResult => ({ type: "step", start, stepDuration, steps, amount });
+  dateFormat: string | undefined = undefined,
+): StepAdapterResult => ({
+  type: "step",
+  start: normalizeTime(start, dateFormat),
+  stepDuration: normalizeTime(stepDuration, dateFormat),
+  steps,
+  amount,
+});
 
 export const manualCliff = (
-  start: number,
+  start: number | string,
   amount: number,
-): CliffAdapterResult => ({ type: "cliff", start, amount });
+  dateFormat: string | undefined = undefined,
+): CliffAdapterResult => ({
+  type: "cliff",
+  start: normalizeTime(start, dateFormat),
+  amount,
+});
 
 export const manualLinear = (
-  start: number,
-  end: number,
+  start: number | string,
+  end: number | string,
   amount: number,
-): LinearAdapterResult => ({ type: "linear", start, end, amount });
+  dateFormat: string | undefined = undefined,
+): LinearAdapterResult => ({
+  type: "linear",
+  start: normalizeTime(start, dateFormat),
+  end: normalizeTime(end, dateFormat),
+  amount,
+});
