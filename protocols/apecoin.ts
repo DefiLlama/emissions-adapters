@@ -36,6 +36,6 @@ const apecoin: Protocol = {
   founders: steps(0.08),
   sources: ["https://aptosfoundation.org/currents/aptos-tokenomics-overview"],
   token: "ethereum:0x4d224452801aced8b2f0aebe155379bb5d594381",
-  protocolId: ["2665"],
+  protocolIds: ["2665"],
 };
 export default apecoin;
