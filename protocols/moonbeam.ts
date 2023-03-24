@@ -75,7 +75,7 @@ const moonbeam: Protocol = {
     (2_083_333 / maxSupply) * 100,
   ),  
   sources: ["https://moonbeam.foundation/glimmer-token/"],
-  token: "moonbeam:TOKEN_ADDRESS_HERE",
+  token: "coingecko:moonbeam",
   protocolIds: [""],
 };
 
