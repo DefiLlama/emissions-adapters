@@ -23,7 +23,10 @@ export async function main() {
       protocol.lastIndexOf(".ts"),
     );
   try {
-    const protocolWrapper = await import(`../protocols/${protocol}`);
+    let protocolWrapper = await import(`../protocols/${protocol}`);
+    if(typeof protocolWrapper?.default === 'function'){
+      protocolWrapper.default = await protocolWrapper.default()
+    }
     if (!protocolWrapper && process.argv[3] == 'true') {
       return 
     } else {

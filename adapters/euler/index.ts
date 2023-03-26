@@ -510,5 +510,5 @@ function main(totalQty: number): AdapterResult[] {
     sections.push(manualCliff(stringToTimestamp(start, 'DD/MM/YYYY'), totalQty - workingQty));
   return sections;
 }
-const euler = main(6_795_705);
+const euler = ()=>main(6_795_705);
 export default euler;
