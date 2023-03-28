@@ -31,7 +31,7 @@ export async function createRawSections(
       let adapterResults = await a[1];
       if (adapterResults.length == null) adapterResults = [adapterResults];
 
-      addResultToEvents(metadata, adapterResults)
+      addResultToEvents(section, metadata, adapterResults)
 
       const results: RawResult[] | RawResult[][] = adapterResults
         .flat()
@@ -68,7 +68,7 @@ export async function createRawSections(
 
   metadata.events.sort((a: Event, b: Event) => a.timestamp - b.timestamp)
   metadata.events.map((m: Event) => console.log(m.description))
-  
+
   if (!("protocolIds" in metadata))
     throw new Error(`protocol must have a 'protocolIds' string[] property`);
   return { rawSections, startTime, endTime, metadata };

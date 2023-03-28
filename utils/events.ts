@@ -10,6 +10,7 @@ import { secondsToReadableDate, ratePerPeriod, isFuture } from "./time";
 const precision: number = 4;
 
 export function addResultToEvents(
+  section: string,
   metadata: Metadata,
   results: AdapterResult[],
 ): Metadata {
@@ -25,7 +26,10 @@ export function addResultToEvents(
         ? "will"
         : "was"} unlock${isFuture(c.start)
         ? ""
-        : "ed"} on ${secondsToReadableDate(c.start, "DD MMM YY")}`,
+        : "ed"} from ${section} on ${secondsToReadableDate(
+        c.start,
+        "DD MMM YY",
+      )}`,
       timestamp: c.start,
     });
   });
@@ -42,7 +46,7 @@ export function addResultToEvents(
         ? "decrease"
         : "increase"}${isFuture(l.end)
         ? ""
-        : "d"} from ${thisRate} to ${nextRate} tokens per week on ${secondsToReadableDate(
+        : "d"} from ${thisRate} to ${nextRate} tokens per week from ${section} on ${secondsToReadableDate(
         l.end,
         "DD MMM YY",
       )}`,
@@ -56,7 +60,9 @@ export function addResultToEvents(
         description: `On ${secondsToReadableDate(
           s.start + i * s.stepDuration,
           "DD MMM YY",
-        )} ${s.amount} tokens ${isFuture(s.start + i * s.stepDuration)
+        )} ${s.amount} of ${section} tokens ${isFuture(
+          s.start + i * s.stepDuration,
+        )
           ? "will be"
           : "were"} unlocked
         `,
