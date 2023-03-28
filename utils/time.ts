@@ -1,15 +1,17 @@
 import dayjs from "dayjs";
-import { AdapterResult } from "../types/adapters";
+import { LinearAdapterResult } from "../types/adapters";
 
 export function readableToSeconds(readableDate: string): number {
   const date = new Date(readableDate);
   return Math.floor(date.getTime() / 1000);
 }
-export function secondsToReadable(
-  datetime: number,
+export function secondsToReadableDate(
+  datetime: number | string,
   format: string = "DD MM YYYY",
   locale: string = "en-US",
 ): string {
+  if (typeof datetime == 'string') datetime = parseInt(datetime)
+  if (datetime < 10 ** 10) datetime *= 1000
   return dayjs(datetime).locale(locale).format(format);
 }
 export function secondsDifference(end: Date, start = new Date()): number {
@@ -53,4 +55,22 @@ export function normalizeTime(
   if (time.search(/([/-])/g) == -1 && time.length == 10) return parseInt(time);
   const dateFormat = format ?? "YYYY/MM/DD";
   return stringToTimestamp(time, dateFormat);
+}
+export const ratePerPeriod = (
+  r: LinearAdapterResult,
+  precision: number,
+  period: number = periodToSeconds.week,
+): string => (r.amount * period / (r.end - r.start)).toPrecision(precision);
+
+export function secondsToReadableDifference(seconds: number) {
+  if (seconds > periodToSeconds.month * 2) {
+    return `${seconds / periodToSeconds.month} months`
+  } else if (seconds > periodToSeconds.week * 2) {
+    return `${seconds / periodToSeconds.week} weeks`
+  } else {
+    return `${seconds / periodToSeconds.day} days`
+  }
+}
+export const isFuture = (timestamp: number) => {
+  return timestamp * 1000 > Date.now()
 }
