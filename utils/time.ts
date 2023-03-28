@@ -60,7 +60,7 @@ export const ratePerPeriod = (
   r: LinearAdapterResult,
   precision: number,
   period: number = periodToSeconds.week,
-): string => (r.amount * period / (r.end - r.start)).toPrecision(precision);
+): string => Number((r.amount * period / (r.end - r.start)).toPrecision(precision)).toFixed();
 
 export function secondsToReadableDifference(seconds: number) {
   if (seconds > periodToSeconds.month * 2) {
