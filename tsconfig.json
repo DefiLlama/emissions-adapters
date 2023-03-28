@@ -31,7 +31,8 @@
   "include": [
     "adapters",
     "protocols",
-    "utils"
+    "utils",
+    "wipProtocols"
   ],
   "exclude": [
     ".github/workflows/**.js",
