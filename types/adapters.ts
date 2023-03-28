@@ -19,7 +19,7 @@ export type SubAllocation = {
   schedule: any;
 };
 export type AdapterResult = {
-  type: string;
+  type: "cliff" | "linear" | "step";
   start?: number | string;
   end?: number | string;
   amount: number;
@@ -41,17 +41,17 @@ export type StepAdapterResult = {
   stepDuration: number;
   steps: number;
   amount: number;
-  type: string;
+  type: "step";
   dateFormat?: string;
 };
 export type CliffAdapterResult = {
-  type: string;
+  type: "cliff";
   start: number;
   amount: number;
   dateFormat?: string;
 };
 export type LinearAdapterResult = {
-  type: string;
+  type: "linear";
   start: number;
   end: number;
   amount: number;
@@ -113,6 +113,11 @@ export type SectionData = {
 export type Metadata = {
   sources: string[];
   token: string;
+  events: Event[];
   notes?: string[];
   protocolIds: string[];
+};
+export type Event = {
+  description: string;
+  timestamp: number;
 };

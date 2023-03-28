@@ -5,7 +5,6 @@ import abi from "./abi";
 export default async function main(
   target: string,
   chain: any,
-  totalQty: number,
 ): Promise<AdapterResult[]> {
   const nextStream = await call({
     abi: abi.getNextStreamId,
@@ -38,20 +37,6 @@ export default async function main(
       token: s.tokenAddress,
     });
     cliff += amount;
-  });
-
-  const amount = results.reduce(
-    (p: number, c: AdapterResult) => Number(p) - Number(c.amount),
-    totalQty,
-  );
-
-  results.push({
-    type: "cliff",
-    start: results[results.length - 1].end,
-    amount,
-    receiver: results[results.length - 1].receiver,
-    token: results[results.length - 1].token,
-    confirmed: false,
   });
 
   return results;

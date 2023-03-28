@@ -8,7 +8,9 @@ import {
   Protocol,
   SectionData,
   Metadata,
+  Event
 } from "../types/adapters";
+import { addResultToEvents } from "./events";
 const excludedKeys = ["sources", "notes", "token", "protocolIds"];
 
 export async function createRawSections(
@@ -17,7 +19,7 @@ export async function createRawSections(
   let startTime: number = 10_000_000_000;
   let endTime: number = 0;
   const rawSections: RawSection[] = [];
-  let metadata: Metadata = { token: "", sources: [], protocolIds: [] };
+  let metadata: Metadata = { token: "", sources: [], protocolIds: [], events: [] };
 
   await Promise.all(
     Object.entries(adapter.default).map(async (a: any[]) => {
@@ -28,6 +30,8 @@ export async function createRawSections(
       const section: string = a[0];
       let adapterResults = await a[1];
       if (adapterResults.length == null) adapterResults = [adapterResults];
+
+      addResultToEvents(metadata, adapterResults)
 
       const results: RawResult[] | RawResult[][] = adapterResults
         .flat()
@@ -62,6 +66,9 @@ export async function createRawSections(
     }),
   );
 
+  metadata.events.sort((a: Event, b: Event) => a.timestamp - b.timestamp)
+  metadata.events.map((m: Event) => console.log(m.description))
+  
   if (!("protocolIds" in metadata))
     throw new Error(`protocol must have a 'protocolIds' string[] property`);
   return { rawSections, startTime, endTime, metadata };
