@@ -40,7 +40,7 @@ const aura: Protocol = async () => {
     protocolIds: ["1918"],
   };
 }
-export default aura;
+//export default aura;
 // hard to identify:
 // 0x45025ebc38647bcf7edd2b40cfdaf3fbfe1538f5
 // 0x2AE1Ee55dfaDAC71EF5F25f093D2f24Fe58961f1
