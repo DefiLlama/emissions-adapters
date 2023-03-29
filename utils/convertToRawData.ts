@@ -67,10 +67,6 @@ export async function createRawSections(
   );
 
   metadata.events.sort((a: Event, b: Event) => a.timestamp - b.timestamp)
-  
-  for (let i = 0; i < Math.min(5, metadata.events.length); i++) {
-    console.log(metadata.events[i].description)
-  }
 
   if (!("protocolIds" in metadata))
     throw new Error(`protocol must have a 'protocolIds' string[] property`);

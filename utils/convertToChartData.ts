@@ -25,7 +25,7 @@ export function createChartData(
 
   return consolidateDuplicateKeys(data, isTest);
 }
-function consolidateDuplicateKeys(data: any[], isTest: boolean) {
+function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   let sortedData: any[] = [];
 
   data.map((d: any) => {
