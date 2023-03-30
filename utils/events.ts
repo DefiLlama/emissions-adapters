@@ -22,7 +22,7 @@ export function addResultToEvents(
 
   cliffs.map((c: CliffAdapterResult) => {
     metadata.events.push({
-      description: `A cliff of ${c.amount} tokens ${isFuture(c.start)
+      description: `A cliff of {tokens[0]} tokens ${isFuture(c.start)
         ? "will"
         : "was"} unlock${isFuture(c.start)
         ? ""
@@ -31,6 +31,7 @@ export function addResultToEvents(
         "DD MMM YY",
       )}`,
       timestamp: c.start,
+      noOfTokens: [c.amount],
     });
   });
 
@@ -46,11 +47,12 @@ export function addResultToEvents(
         ? "decrease"
         : "increase"}${isFuture(l.end)
         ? ""
-        : "d"} from ${thisRate} to ${nextRate} tokens per week from ${section} on ${secondsToReadableDate(
+        : "d"} from {tokens[0]} to {tokens[1]} tokens per week from ${section} on ${secondsToReadableDate(
         l.end,
         "DD MMM YY",
       )}`,
       timestamp: l.end,
+      noOfTokens: [thisRate, nextRate],
     });
   });
 
@@ -60,13 +62,14 @@ export function addResultToEvents(
         description: `On ${secondsToReadableDate(
           s.start + i * s.stepDuration,
           "DD MMM YY",
-        )} ${s.amount} of ${section} tokens ${isFuture(
+        )} {tokens[0]} of ${section} tokens ${isFuture(
           s.start + i * s.stepDuration,
         )
           ? "will be"
           : "were"} unlocked
         `,
         timestamp: s.start + i * s.stepDuration,
+        noOfTokens: [s.amount],
       });
     }
   });
