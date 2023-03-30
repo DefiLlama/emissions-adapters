@@ -5,7 +5,7 @@ import {
   Metadata,
   StepAdapterResult,
 } from "../types/adapters";
-import { secondsToReadableDate, ratePerPeriod, isFuture } from "./time";
+import { ratePerPeriod, isFuture } from "./time";
 
 const precision: number = 4;
 
@@ -26,10 +26,7 @@ export function addResultToEvents(
         ? "will"
         : "was"} unlock${isFuture(c.start)
         ? ""
-        : "ed"} from ${section} on ${secondsToReadableDate(
-        c.start,
-        "DD MMM YY",
-      )}`,
+        : "ed"} from ${section} on {timestamp}`,
       timestamp: c.start,
       noOfTokens: [c.amount],
     });
@@ -47,10 +44,7 @@ export function addResultToEvents(
         ? "decrease"
         : "increase"}${isFuture(l.end)
         ? ""
-        : "d"} from {tokens[0]} to {tokens[1]} tokens per week from ${section} on ${secondsToReadableDate(
-        l.end,
-        "DD MMM YY",
-      )}`,
+        : "d"} from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
       timestamp: l.end,
       noOfTokens: [thisRate, nextRate],
     });
@@ -59,10 +53,7 @@ export function addResultToEvents(
   steps.map((s: StepAdapterResult) => {
     for (let i = 0; i < s.steps, i++; ) {
       metadata.events.push({
-        description: `On ${secondsToReadableDate(
-          s.start + i * s.stepDuration,
-          "DD MMM YY",
-        )} {tokens[0]} of ${section} tokens ${isFuture(
+        description: `On {timestamp} {tokens[0]} of ${section} tokens ${isFuture(
           s.start + i * s.stepDuration,
         )
           ? "will be"
