@@ -120,4 +120,5 @@ export type Metadata = {
 export type Event = {
   description: string;
   timestamp: number;
+  noOfTokens: number[]
 };
