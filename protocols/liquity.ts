@@ -49,7 +49,7 @@ const liquity: Protocol = {
     `The Community reserve allocation (2%) is used for grants, hackathons, events etc. There is no given emissions schedule, so it has been excluded from analysis.`,
   ],
   sources: ["https://medium.com/liquity/liquity-launch-details-4537c5ffa9ea"],
-  token: "ethereum:0x5f98805a4e8be255a32880fdec7f6728c6568ba0",
+  token: "ethereum:0x6dea81c8171d0ba574754ef6f8b412f2ed88c54d",
   protocolIds: ["270"],
 };
 export default liquity;
