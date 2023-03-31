@@ -90,7 +90,7 @@ export async function getChartPng(
     if (err) {
       return console.log(err);
     }
-    console.log(`The file was saved at ${saveLocation}!`);
+    console.log(`\nThe file was saved at ${saveLocation}!\n`);
   });
 }
 function stringifyDate(
