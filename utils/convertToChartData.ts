@@ -1,4 +1,4 @@
-import { periodToSeconds } from "./time";
+import { periodToSeconds, secondsToReadableDate } from "./time";
 import {
   ChartData,
   ChartConfig,
@@ -23,9 +23,11 @@ export function createChartData(
     );
   });
 
-  return consolidateDuplicateKeys(data, isTest);
+  const sortedData: ChartSection[] = consolidateDuplicateKeys(data, isTest);
+  if (isTest) postDebugLogs(sortedData);
+  return sortedData;
 }
-function consolidateDuplicateKeys(data: any[], isTest: boolean) {
+function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   let sortedData: any[] = [];
 
   data.map((d: any) => {
@@ -140,4 +142,22 @@ function discreet(raw: RawResult[], config: ChartConfig): ChartData {
     workingTimestamp += resolution;
   }
   return { timestamps, unlocked, apiData, isContinuous: false };
+}
+function postDebugLogs(data: any[]): void {
+  const format: string = "DD/MM/YY";
+  const end: string = secondsToReadableDate(
+    data[0].data.timestamps.at(-1),
+    format,
+  );
+  let sum: number = 0;
+  data.map((s: any) => {
+    sum += s.data.unlocked.at(-1);
+    console.log(
+      `${s.section} emissions are at ${s.data.unlocked
+        .at(-1)
+        .toFixed()} end at ${end}`,
+    );
+  });
+  console.log(`for a total of ${sum} tokens emitted`);
+  console.log(`(dates are in format ${format})`);
 }
