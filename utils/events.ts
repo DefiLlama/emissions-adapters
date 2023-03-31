@@ -33,25 +33,25 @@ export function addResultToEvents(
   });
 
   linears.map((l: LinearAdapterResult, i: number) => {
-    if (i == linears.length - 1) return;
-    const l2 = linears[i + 1];
-    const thisRate = ratePerPeriod(l, precision);
+    if (i == linears.length) return;
+    const l2 = linears[i];
+    const thisRate = i == 0 ? 0 : ratePerPeriod(l, precision);
     const nextRate = ratePerPeriod(l2, precision);
     metadata.events.push({
-      description: `Linear unlock ${isFuture(l.end) ? "will" : "was"} ${Number(
-        thisRate,
-      ) > Number(nextRate)
+      description: `Linear unlock ${isFuture(l.start)
+        ? "will"
+        : "was"} ${Number(thisRate) > Number(nextRate)
         ? "decrease"
-        : "increase"}${isFuture(l.end)
+        : "increase"}${isFuture(l.start)
         ? ""
         : "d"} from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
-      timestamp: l.end,
+      timestamp: l.start,
       noOfTokens: [thisRate, nextRate],
     });
   });
 
   steps.map((s: StepAdapterResult) => {
-    for (let i = 0; i < s.steps, i++; ) {
+    for (let i = 0; i < s.steps; i++) {
       metadata.events.push({
         description: `On {timestamp} {tokens[0]} of ${section} tokens ${isFuture(
           s.start + i * s.stepDuration,
