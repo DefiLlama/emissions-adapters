@@ -23,7 +23,7 @@ const hop: Protocol = {
   notes: [
     `allocation to the DAO treasury and future team members (63% of supply combined) has no given emissions schedule, therefore they have been excluded from this analysis.`,
   ],
-  sources: ["https://medium.com/pendle/pendle-tokenomics-3a33d9caa0e4"],
+  sources: ["https://docs.hop.exchange/governance/token-distribution"],
   token: "ethereum:0xc5102fe9359fd9a28f877a67e36b0f050d81a3cc",
   protocolIds: ["435"],
 };
