@@ -2,11 +2,13 @@ import { AdapterResult } from "../../types/adapters";
 import { manualCliff, manualLinear } from "../manual";
 import { stringToTimestamp } from "../../utils/time";
 const eulerSchedule = [
+  /* Epoch 0 already counted as early users
   {
     Epoch: 0,
     "Approx Date": "21/03/2022",
     "EUL Distribution": "271,828.18",
   },
+  */
   {
     Epoch: 1,
     "Approx Date": "04/04/2022",
@@ -510,5 +512,5 @@ function main(totalQty: number): AdapterResult[] {
     sections.push(manualCliff(stringToTimestamp(start, 'DD/MM/YYYY'), totalQty - workingQty));
   return sections;
 }
-const euler = main(6_795_705);
+const euler = ()=>main(6_795_705);
 export default euler;

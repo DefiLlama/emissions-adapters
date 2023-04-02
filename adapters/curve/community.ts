@@ -10,9 +10,9 @@ export default function main(
   cliff: number = 0,
 ): AdapterResult[] {
   let amount = startAmount;
-  const results = [];
+  const results: AdapterResult[] = [];
 
-  const periodsInNearFuture = (6 * periodToSeconds.year) / rateReductionPeriod;
+  const periodsInNearFuture = 6 * periodToSeconds.year / rateReductionPeriod;
   for (let i = 0; i < periodsInNearFuture; i++) {
     const end = start + rateReductionPeriod;
     results.push({

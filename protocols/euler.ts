@@ -8,9 +8,9 @@ const cliff = 1640995200;
 
 
 const euler: Protocol = {
-  "user incentives": distribution,
-  "early users": manualCliff(start, 271_828),
   treasury: manualCliff(start, 3_759_791),
+  "early users": manualCliff(start, 271_828),
+  "user incentives": distribution(),
   shareholders: manualLinear(
     cliff,
     cliff + periodToSeconds.month * 18,

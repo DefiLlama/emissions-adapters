@@ -28,9 +28,9 @@ const looksrare: Protocol = {
   
 
   sources: [
-    "https://docs.frax.finance/token-distribution/frax-share-fxs-distribution",
+    "https://docs.looksrare.org/about/looks-tokenomics",
   ],
-  token: "ethereum:0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0",
+  token: "ethereum:0xf4d2888d29D722226FafA5d9B24F9164c092421E",
   protocolIds: ["1229"],
 };
 

@@ -15,15 +15,14 @@ const fxs: Protocol = {
   "Strategic Advisors / Outside Early Contributors": manualLinear(1611104400, 1703030400, totalQty * 0.03),
   "Accredited Private Investors": [
     manualCliff(1608422400, (totalQty * 12) * 0.02),
-    manualLinear(start, start + 1624147200, (totalQty * 0.12)*0.05),
-    manualLinear(start, start + 1639958400, (totalQty * 0.12)*0.05)],
-  
-
-  sources: [
+    manualLinear(start, start + periodToSeconds.month * 6, (totalQty * 0.12)*0.05),
+    manualLinear(start + periodToSeconds.month * 6, start + periodToSeconds.year, (totalQty * 0.12)*0.05)
+  ],
+    sources: [
     "https://docs.frax.finance/token-distribution/frax-share-fxs-distribution",
   ],
   token: "ethereum:0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0",
-  protocolIds: [""],
+  protocolIds: ["359", "2076", "2121", "2221", "2607"],
 };
 
 export default fxs;

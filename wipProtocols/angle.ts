@@ -35,7 +35,7 @@ function incentives(): AdapterResult[] {
 }
 
 const angle: Protocol = {
-  "Liquidity incentives": incentives,
+  "Liquidity incentives": incentives(),
   //   "Strategic partners": 12%
   Team: manualLinear(start, end, qty * 0.18),
   //   "DAO treasury": 20%
@@ -50,4 +50,4 @@ const angle: Protocol = {
   token: "ethereum:0x31429d1856ad1377a8a0079410b297e1a9e214c2",
   protocolIds: ["756"],
 };
-export default angle;
+//export default angle;
