@@ -7,8 +7,9 @@ const qty = 100_000_000_000;
 
 const api3: Protocol = {
   Team: manualLinear(start, start + periodToSeconds.year * 3, qty * 0.3),
-  Contributors: manualLinear(start, start + periodToSeconds.year * 3, qty * 0.10),
-  Seed: manualLinear(start, start + periodToSeconds.year * 2, qty * 0.15),
+  Contributors: manualLinear(start, start + periodToSeconds.year * 3, qty * 0.1),
+  PreSeed: manualLinear(start, start + periodToSeconds.year * 2, qty * 0.05),
+  Seed: manualLinear(start, start + periodToSeconds.year * 2, qty * 0.1),
   Treasury: manualCliff(start, qty * 0.25),
   PublicDistribution: manualCliff(start, qty * 0.2),
   token: "coingecko:api3",
