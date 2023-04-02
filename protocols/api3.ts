@@ -14,6 +14,9 @@ const api3: Protocol = {
   "Public distribution": manualCliff(start, qty * 0.2),
   token: "coingecko:api3",
   sources: ["https://medium.com/api3/api3-public-token-distribution-event-1acb3b6d940"],
+  notes: [
+    `API3 tokens can be staked, giving stakers inflationary staking rewards. Thus, the total amount of 100 Million is not accurate anymore. Rewards are paid out weekly since the introduction of the authoratative DAO in June 2021.`,
+  ],
   protocolIds: [],
 };
 
