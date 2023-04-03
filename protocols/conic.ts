@@ -9,12 +9,12 @@ const end = 1838635200
 
 
 const conic: Protocol = {
-    vlCVX_Holders: manualCliff(start, qty * 0.1),
-    Community_raise: manualCliff(start, qty * 0.3),
-    Staking_Omnipool_LP: manualLog(start, end, 2_500_000 ,periodToSeconds.year * 6 , 60),
+    "vlCVX holders": manualCliff(start, qty * 0.1),
+    "Community raise": manualCliff(start, qty * 0.3),
+    "Staking Omnipool LP": manualLog(start, end, 2_500_000, periodToSeconds.year, 60),
    //Rebalancing_Curve_Pools: manualCliff,
     Treasury: manualLinear(start, start + periodToSeconds.month * 12, qty * 0.05),
-    AMM_Stakers: manualLog(start, end, 1_000_000 ,periodToSeconds.year * 6, 60),
+    "AMM stakers": manualLog(start, end, 1_000_000, periodToSeconds.year, 60),
     Liquidity: manualCliff(start, qty * 0.01),
   notes: [
     `No mention regarding if the team founders have tokens or not.`,
