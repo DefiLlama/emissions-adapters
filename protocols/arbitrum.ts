@@ -1,4 +1,4 @@
-import { manualCliff, manualLinear, manualLog } from "../adapters/manual";
+import { manualCliff, manualLinear, manualLog, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
@@ -13,21 +13,21 @@ const end_team_investors_1year = 1711155671
 const arbitrum: Protocol = {
     "Arbitrum DAO Treasury": manualCliff(start, qty * 0.4278),
     "Advisors Team OffchainLabs": [
-        manualCliff(start, qty * 0.25, "unix"), // 25% cliff after 1 year
-        manualLinear(
+        manualCliff(start, qty_advisors * 0.25), // 25% cliff after 1 year
+        manualStep(
           end_team_investors_1year,
-          end_team_investors_1year + periodToSeconds.month * 12 * 3, 
+          periodToSeconds.month,
+          36, 
           qty_advisors * 0.75 / 36, 
-          "unix"
         ), // monthly steps for the next 3 years
       ],
     Investors: [
-        manualCliff(start, qty * 0.25, "unix"), // 25% cliff after 1 year
-        manualLinear(
+        manualCliff(start, qty_investors * 0.25), // 25% cliff after 1 year
+        manualStep(
           end_team_investors_1year,
-          end_team_investors_1year + periodToSeconds.month * 12 * 3, 
+          periodToSeconds.month,
+          36, 
           qty_investors * 0.75 / 36, 
-          "unix"
         ), // monthly steps for the next 3 years
       ],
     Airdrop: manualCliff(start, qty * 0.1162),
