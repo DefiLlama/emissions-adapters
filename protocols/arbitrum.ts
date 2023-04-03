@@ -33,7 +33,7 @@ const arbitrum: Protocol = {
     Airdrop: manualCliff(start, qty * 0.1162),
     "Ecosystem Development Fund":manualCliff(start, qty * 0.0113),
   notes: [
-    `No clear mention regarding if the team founders and investors have their tokens locked`,
+    `No clear mention regarding if the team founders and investors have their tokens locked (in fact)`,
   ],
   token: "arbitrum:0x912ce59144191c1204e64559fe8253a0e49e6548",
   sources: ["https://docs.arbitrum.foundation/airdrop-eligibility-distribution#initial-token-allocation--airdrop-distribution"],
