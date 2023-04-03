@@ -68,8 +68,6 @@ export async function createRawSections(
 
   metadata.events.sort((a: Event, b: Event) => a.timestamp - b.timestamp)
 
-  if (!("protocolIds" in metadata))
-    throw new Error(`protocol must have a 'protocolIds' string[] property`);
   return { rawSections, startTime, endTime, metadata };
 }
 function stepAdapterToRaw(result: StepAdapterResult): RawResult[] {

@@ -3,11 +3,17 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1606741200;
-const qty = 100_000_000_000;
+const qty = 100_000_000;
 
 const api3: Protocol = {
-  "Founding Team": manualLinear(start, start + periodToSeconds.year * 3, qty * 0.3),
-  "Partners & Contributors": manualLinear(start, start + periodToSeconds.year * 3, qty * 0.1),
+  "Founding Team": [
+    manualCliff(start + periodToSeconds.month * 6, qty * 0.05), 
+    manualLinear(start + periodToSeconds.month * 6, start + periodToSeconds.year * 3, qty * 0.25)
+  ],
+  "Partners & Contributors": [
+    manualCliff(start + periodToSeconds.month * 6, qty * (0.1/6)), 
+    manualLinear(start + periodToSeconds.month * 6, start + periodToSeconds.year * 3, qty * (0.5/6))
+  ],
   "Pre-seed Investors": manualLinear(start, start + periodToSeconds.year * 2, qty * 0.05),
   "Seed Investors": manualLinear(start, start + periodToSeconds.year * 2, qty * 0.1),
   "Ecosystem Fund": manualCliff(start, qty * 0.25),
