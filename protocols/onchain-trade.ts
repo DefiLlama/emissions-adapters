@@ -5,15 +5,14 @@ import { periodToSeconds } from "../utils/time";
 const start = 1680091200;
 const qty = 100_000_000;
 const end = 1837944000 ;
-const start_team = 1688040000
 
 
 
 const OT: Protocol = {
     "IFO": manualCliff(start, qty * 0.1),
-    "Community Incentive":manualLinear(start, end + periodToSeconds.year * 5 , qty * 45_000_000),
-    "Team":manualLinear(start_team, end + periodToSeconds.month * 24 , qty * 20_000_000),
-    "Partnerships & Marketing":manualLinear(start, end + periodToSeconds.year * 5, qty * 5_000_000),
+    "Community Incentive":manualLinear(start, start + periodToSeconds.year * 5 , qty * 0.45),
+    "Team":manualLinear(start + periodToSeconds.month * 3, start + periodToSeconds.month * 27, qty * 0.2 ),
+    "Partnerships & Marketing":manualLinear(start, start + periodToSeconds.year * 1, qty * 0.05),
     "Initial Liquidity": manualCliff(start, qty * 0.025),
     "Treasury": manualCliff(start, qty * 0.175),
   notes: [
