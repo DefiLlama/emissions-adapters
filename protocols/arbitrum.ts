@@ -11,6 +11,8 @@ const end_team_investors_1year = 1711155671
 
 
 const arbitrum: Protocol = {
+    Airdrop: manualCliff(start, qty * 0.1162),
+    "Ecosystem Development Fund":manualCliff(start, qty * 0.0113),
     "Arbitrum DAO Treasury": manualCliff(start, qty * 0.4278),
     "Advisors Team OffchainLabs": [
         manualCliff(start, qty_advisors * 0.25), // 25% cliff after 1 year
@@ -30,8 +32,7 @@ const arbitrum: Protocol = {
           qty_investors * 0.75 / 36, 
         ), // monthly steps for the next 3 years
       ],
-    Airdrop: manualCliff(start, qty * 0.1162),
-    "Ecosystem Development Fund":manualCliff(start, qty * 0.0113),
+    
   notes: [
     `No clear mention regarding if the team founders and investors have their tokens locked (in fact)`,
   ],
