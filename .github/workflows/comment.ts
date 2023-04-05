@@ -15,7 +15,7 @@ async function main() {
     {
       body: `The emissions chart produced by ${path.substring(
         path.indexOf("/" + 1),
-      )} should be below: \n \n ${file}`,
+      )} should be below: \n \n ![emissions schedule](${file})`,
     },
     {
       headers: {
