@@ -37,7 +37,7 @@ const arbitrum: Protocol = {
   ],
   token: "arbitrum:0x912ce59144191c1204e64559fe8253a0e49e6548",
   sources: ["https://docs.arbitrum.foundation/airdrop-eligibility-distribution#initial-token-allocation--airdrop-distribution"],
-  protocolIds: [null], // add listing
+  protocolIds: ['2785'],
 };
 
 export default arbitrum;

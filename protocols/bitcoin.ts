@@ -34,7 +34,7 @@ const bitcoin: Protocol = {
     "https://www.coingecko.com/en/coins/bitcoin/bitcoin-halving",
   ],
   token: "coingecko:bitcoin",
-  protocolIds: [],
+  protocolIds: ["2786"],
   notes: [
     `Future halvenings have at a specified block height, therefore the dates shown are an estimate only.`,
   ],
