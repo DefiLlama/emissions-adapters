@@ -39,7 +39,7 @@ const moonbeam: Protocol = {
   ],
   sources: ["https://moonbeam.foundation/glimmer-token/"],
   token: "coingecko:moonbeam",
-  protocolIds: [""],
+  protocolIds: ["2788"],
 };
 
 export default moonbeam;

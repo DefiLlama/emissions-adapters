@@ -19,7 +19,7 @@ const acala: Protocol = {
   ],
   token: "coingecko:acala",
   sources: ["https://github.com/AcalaNetwork/Acala-white-paper/blob/master/Acala_Token_Economy_Paper.pdf"],
-  protocolIds: null,
+  protocolIds: ["2787"],
 };
 
 export default acala;
