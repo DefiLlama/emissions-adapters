@@ -3,7 +3,7 @@ import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 
 const qty = 150000000;
-const start = 1638316800;
+const start = 1659308400;
 
 const flashstake: Protocol = {
   "Community airdrop": manualCliff(start, qty * 0.1866),
@@ -27,7 +27,6 @@ const flashstake: Protocol = {
     manualLinear(start, start + periodToSeconds.year, qty * 0.1214),
   ],
   sources: ["https://docs.flashstake.io/tokenomics-flash/token-distribution"],
-  notes: [],
   token: "ethereum:0xb1f1f47061a7be15c69f378cb3f69423bd58f2f8",
   protocolIds: ["2115"],
 };
