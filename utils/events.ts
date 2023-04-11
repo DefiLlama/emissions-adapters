@@ -37,6 +37,8 @@ export function addResultToEvents(
     const l2 = linears[i];
     const thisRate = i == 0 ? 0 : ratePerPeriod(l, precision);
     const nextRate = ratePerPeriod(l2, precision);
+    if (Math.abs(Number(thisRate) - Number(nextRate)) / thisRate < 0.001)
+      return;
     metadata.events.push({
       description: `Linear unlock ${isFuture(l.start)
         ? "will"
