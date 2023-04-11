@@ -3,7 +3,7 @@ https://docs.llama.fi/list-your-project/emissions-dashboard
 
 ## Testing
 ```
-npx ts-node utils/test.ts [fileName]
+ts-node utils/test.ts [fileName]
 ```
 
 ## Further Questions:
