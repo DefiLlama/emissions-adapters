@@ -22,7 +22,7 @@ const conic: Protocol = {
   ],
   token: "ethereum:0x9ae380f0272e2162340a5bb646c354271c0f5cfc",
   sources: ["https://docs.conic.finance/conic-finance/usdcnc-token/usdcnc-tokenomics"],
-  protocolIds: ["2626"],
+  protocolIds: ["2616"],
 };
 
 export default conic;
