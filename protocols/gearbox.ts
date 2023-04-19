@@ -3,7 +3,7 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1639526400;
-const qty = 10_000_000_000;
+const qty = 10000000000;
 
 const centrifuge: Protocol = {
   "Community DAO": manualCliff(start, qty * 0.5),
@@ -31,8 +31,21 @@ const centrifuge: Protocol = {
     start + periodToSeconds.year * 2.5,
     qty * 0.1152,
   ),
-  sources: ["https://docs.gearbox.finance/gear-token/gear-overview"],
-  token: "ethereum:0xba3335588d9403515223f109edc4eb7269a9ab5d",
-  protocolIds: ["1108"],
+  meta: {
+    sources: ["https://docs.gearbox.finance/gear-token/gear-overview"],
+    token: "ethereum:0xba3335588d9403515223f109edc4eb7269a9ab5d",
+    protocolIds: ["1108"],
+  },
+  sections: {
+    insiders: [
+      "External contributors",
+      "Early contributors",
+      "Initial core members",
+      "Company wallet",
+    ],
+    airdrop: ["Early Discord Legends", "Early app testers"],
+    farming: ["Credit account mining"],
+    noncirculating: ["Community DAO", "Temporary reserve"],
+  },
 };
 export default centrifuge;
