@@ -2,7 +2,7 @@ import { Protocol } from "../types/adapters";
 import { manualCliff, manualStep } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 
-const totalQty = 1_000_000_000;
+const totalQty = 1000000000;
 const start = 1665529200;
 const aptos: Protocol = {
   community: [
@@ -11,7 +11,7 @@ const aptos: Protocol = {
       start,
       periodToSeconds.month,
       120,
-      (510_217_359.767 - totalQty * 0.125) / 120,
+      (510217359.767 - totalQty * 0.125) / 120,
     ),
   ],
   "core contributors": [
@@ -19,35 +19,41 @@ const aptos: Protocol = {
       start + periodToSeconds.month * 13,
       periodToSeconds.month,
       6,
-      (totalQty * 0.19 * 3) / 48,
+      totalQty * 0.19 * 3 / 48,
     ),
     manualStep(
       start + periodToSeconds.month * 19,
       periodToSeconds.month,
       30,
-      (totalQty * 0.19) / 48,
+      totalQty * 0.19 / 48,
     ),
   ],
   foundation: [
     manualCliff(start, totalQty * 0.005),
-    manualStep(start, periodToSeconds.month, 120, (totalQty * 0.16) / 120),
+    manualStep(start, periodToSeconds.month, 120, totalQty * 0.16 / 120),
   ],
   investors: [
     manualStep(
       start + periodToSeconds.month * 13,
       periodToSeconds.month,
       6,
-      (134_782_640.233 * 3) / 48,
+      134782640.233 * 3 / 48,
     ),
     manualStep(
       start + periodToSeconds.month * 19,
       periodToSeconds.month,
       30,
-      134_782_640.233 / 48,
+      134782640.233 / 48,
     ),
   ],
-  sources: ["https://aptosfoundation.org/currents/aptos-tokenomics-overview"],
-  token: "coingecko:aptos",
-  protocolIds: ["2725"]
+  meta: {
+    sources: ["https://aptosfoundation.org/currents/aptos-tokenomics-overview"],
+    token: "coingecko:aptos",
+    protocolIds: ["2725"],
+  },
+  sections: {
+    insiders: ["investors", "core contributors"],
+    noncirculating: ["foundation", "community"],
+  },
 };
 export default aptos;

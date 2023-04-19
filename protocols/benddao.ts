@@ -3,7 +3,7 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1647734400;
-const qty = 10_000_000_000;
+const qty = 10000000000;
 const benddao: Protocol = {
   team: manualLinear(
     start + 14 * periodToSeconds.month,
@@ -23,9 +23,18 @@ const benddao: Protocol = {
     start + 5 * periodToSeconds.year,
     0.4 * qty,
   ),
-  token: "ethereum:0x0d02755a5700414b26ff040e1de35d337df56218",
-  sources: ["https://docs.benddao.xyz/portal/governance/bendenomics"],
-  protocolIds: ["1773", "2554"],
+  meta: {
+    token: "ethereum:0x0d02755a5700414b26ff040e1de35d337df56218",
+    sources: ["https://docs.benddao.xyz/portal/governance/bendenomics"],
+    protocolIds: ["1773", "2554"],
+  },
+  sections: {
+    insiders: ["team"],
+    airdrop: ["airdrop"],
+    farming: ["Uniswap LP incentive", "Lend/Borrow Incentive"],
+    noncirculating: ["treasury"],
+    publicSale: ["fair launch offering"],
+  },
 };
 
 export default benddao;
