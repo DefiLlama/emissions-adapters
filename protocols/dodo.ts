@@ -27,12 +27,23 @@ const dodo: Protocol = {
   IDO: manualCliff(start, qty * 0.01),
   "Operations, marketing, partners": manualCliff(start, qty * 0.08),
   //   "Community incentives": manualCliff(start, qty * 0.6),
-  sources: ["https://docs.dodoex.io/english/tokenomics/dodo-allocation"],
-  token: "ethereum:0x43dfc4159d86f3a37a5a4b3d4580b888ad7d4ddd",
-  notes: [
-    `Community incentives (60%) are released on an uncofirmed schedule, so have been excluded from this analysis.`,
-  ],
-  protocolIds: ["146"],
+  meta: {
+    sources: ["https://docs.dodoex.io/english/tokenomics/dodo-allocation"],
+    token: "ethereum:0x43dfc4159d86f3a37a5a4b3d4580b888ad7d4ddd",
+    notes: [
+      `Community incentives (60%) are released on an uncofirmed schedule, so have been excluded from this analysis.`,
+    ],
+    protocolIds: ["146"],
+  },
+  sections: {
+    insiders: [
+      "Team & consultants",
+      "Seed investors",
+      "private round investors",
+      "Operations, marketing, partners",
+    ],
+    publicSale: ["IDO"],
+  },
 };
 
 export default dodo;
