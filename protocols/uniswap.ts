@@ -37,4 +37,4 @@ async function uniswap(): Promise<Protocol> {
     },
   };
 }
-export default await uniswap();
+export default uniswap();

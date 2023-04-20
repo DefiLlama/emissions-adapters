@@ -73,4 +73,4 @@ async function yearn(): Promise<Protocol> {
   };
 }
 
-export default await yearn();
+export default yearn();

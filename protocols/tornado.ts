@@ -3,7 +3,7 @@ import { Protocol, AdapterResult } from "../types/adapters";
 import adapter from "./../adapters/tornado/tornado";
 const chain: string = "ethereum";
 
-async function protocol(): Promise<Protocol> {
+async function tornado(): Promise<Protocol> {
   const governance = adapter(
     "0x179f48C78f57A3A78f0608cC9197B8972921d1D2",
     chain,
@@ -55,4 +55,4 @@ async function protocol(): Promise<Protocol> {
     },
   };
 }
-export default await protocol();
+export default tornado();

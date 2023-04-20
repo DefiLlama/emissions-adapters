@@ -59,4 +59,4 @@ async function velodrome(): Promise<Protocol> {
   };
 }
 
-export default await velodrome();
+export default velodrome();
