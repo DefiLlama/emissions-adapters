@@ -3,7 +3,7 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start: number = 1619996400;
-const qty: number = 200_000_000;
+const qty: number = 200000000;
 
 const qiDao: Protocol = {
   Community: [
@@ -29,8 +29,15 @@ const qiDao: Protocol = {
     start + periodToSeconds.year * 3,
     qty * 0.1,
   ),
-  sources: ["https://docs.mai.finance/tokenomics-1/tokenomics"],
-  token: "polygon:0x580a84c73811e1839f75d86d75d88cca0c241ff4",
-  protocolIds: ["449"],
+  meta: {
+    sources: ["https://docs.mai.finance/tokenomics-1/tokenomics"],
+    token: "polygon:0x580a84c73811e1839f75d86d75d88cca0c241ff4",
+    protocolIds: ["449"],
+  },
+  sections: {
+    insiders: ["Strategic partners"],
+    farming: ["Keeper incentives"],
+    noncirculating: ["Community"],
+  },
 };
 export default qiDao;

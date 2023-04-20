@@ -21,13 +21,20 @@ const uxd: Protocol = {
     manualCliff(cliff, qty * 0.286 * 0.25),
     manualStep(cliff, periodToSeconds.month, 36, qty * 0.286 * 0.75 / 36),
   ],
-  sources: ["https://docs.uxd.fi/uxdprotocol/overview/uxp-token-economics"],
-  token: "solana:UXPhBoR3qG4UCiGNJfV7MqhHyFqKN68g45GoYvAeL2M",
-  notes: [
-    `The source material has some conflicting information.`,
-    `Treasury (7.1%) and Community (38.6%) allocations have no given emissions schedule and have therefore been excluded from this analysis.`,
-  ],
-  protocolIds: ["1402"],
+  meta: {
+    sources: ["https://docs.uxd.fi/uxdprotocol/overview/uxp-token-economics"],
+    token: "solana:UXPhBoR3qG4UCiGNJfV7MqhHyFqKN68g45GoYvAeL2M",
+    notes: [
+      `The source material has some conflicting information.`,
+      `Treasury (7.1%) and Community (38.6%) allocations have no given emissions schedule and have therefore been excluded from this analysis.`,
+    ],
+    protocolIds: ["1402"],
+  },
+  sections: {
+    // farming: ["Community"],
+    insiders: ["Seed investors", "Preseed investors", "Team"],
+    publicSale: ["Token sale"],
+  },
 };
 
 export default uxd;

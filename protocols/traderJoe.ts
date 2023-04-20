@@ -1,9 +1,6 @@
-import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
+import { manualLinear } from "../adapters/manual";
 import { Protocol, LinearAdapterResult } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
-
-const start: number = 1625266800;
-const qty: number = 500000000;
 
 const rates = {
   "03/07/2021": 30,
@@ -66,8 +63,17 @@ const traderJoe: Protocol = {
   "Potential strategic investors": schedule(10, 3),
   Team: schedule(20, 3),
   Treasury: schedule(20),
-  sources: ["https://help.traderjoexyz.com/en/trader-joe/platform/tokenomics"],
-  token: "avax:0x6e84a6216ea6dacc71ee8e6b0a5b7322eebc0fdd",
-  protocolIds: ["468"],
+  meta: {
+    sources: [
+      "https://help.traderjoexyz.com/en/trader-joe/platform/tokenomics",
+    ],
+    token: "avax:0x6e84a6216ea6dacc71ee8e6b0a5b7322eebc0fdd",
+    protocolIds: ["468"],
+  },
+  sections: {
+    insiders: ["Potential strategic investors", "Team"],
+    farming: ["Liquidity providers"],
+    noncirculating: ["Treasury"],
+  },
 };
 export default traderJoe;

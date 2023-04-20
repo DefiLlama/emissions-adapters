@@ -3,7 +3,7 @@ import { Protocol, AdapterResult } from "../types/adapters";
 import adapter from "./../adapters/tornado/tornado";
 const chain: string = "ethereum";
 
-export const tornado: Protocol = async () => {
+async function protocol(): Promise<Protocol> {
   const governance = adapter(
     "0x179f48C78f57A3A78f0608cC9197B8972921d1D2",
     chain,
@@ -33,18 +33,26 @@ export const tornado: Protocol = async () => {
   );
   return {
     governance,
-    airdrop: manualCliff(1608260400, 500_000),
+    airdrop: manualCliff(1608260400, 500000),
     "anonymity mining": manualLinear(
       1608262063,
       1608262063 + 31536000,
-      1_000_000,
+      1000000,
     ),
     "team and investors": teamAndInvestors,
-    sources: [
-      "https://etherscan.io/token/0x77777feddddffc19ff86db637967013e6c6a116c#balances",
-    ],
-    token: "ethereum:0x77777feddddffc19ff86db637967013e6c6a116c",
-    protocolIds: ["148"],
+    meta: {
+      sources: [
+        "https://etherscan.io/token/0x77777feddddffc19ff86db637967013e6c6a116c#balances",
+      ],
+      token: "ethereum:0x77777feddddffc19ff86db637967013e6c6a116c",
+      protocolIds: ["148"],
+    },
+    sections: {
+      airdrop: ["airdrop"],
+      noncirculating: ["governance"],
+      farming: ["anonymity mining"],
+      insiders: ["team and investors"],
+    },
   };
 }
-export default tornado;
+export default await protocol();

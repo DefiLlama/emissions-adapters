@@ -2,7 +2,7 @@ import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 
-const qty = 1_000_000_000;
+const qty = 1000000000;
 const start = 1647504000;
 const stargate: Protocol = {
   "core contributors": manualLinear(
@@ -28,15 +28,23 @@ const stargate: Protocol = {
     0.0211 * qty,
   ),
   "STG DEX liquidity": manualCliff(start, 0.0155 * qty),
-  "future incentives (could be emitted at any time)": manualCliff(
-    start,
-    0.3039 * qty,
-  ),
-  sources: [
-    "https://stargateprotocol.gitbook.io/stargate/v/user-docs/tokenomics/allocations-and-lockups",
-  ],
-  token: "ethereum:0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6",
-  protocolIds: ["1013"],
+  // "future incentives": manualCliff(
+  //   start,
+  //   0.3039 * qty,
+  // ),
+  meta: {
+    notes: [`Future incentives (30%) could be emitted at any time.`],
+    sources: [
+      "https://stargateprotocol.gitbook.io/stargate/v/user-docs/tokenomics/allocations-and-lockups",
+    ],
+    token: "ethereum:0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6",
+    protocolIds: ["1013"],
+  },
+  sections: {
+    insiders: ["core contributors", "investors"],
+    farming: ["STG-USDC Curve pool incentives", "initial emissions program"],
+    publicSale: ["STG launch auction purchasers", "STG DEX liquidity"],
+  },
 };
 
 export default stargate;
