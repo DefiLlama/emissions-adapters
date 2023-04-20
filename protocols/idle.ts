@@ -42,7 +42,7 @@ const idle: Protocol = {
     notes: [
       `There is no schedule for 'Long term rewards', since it is managed by DAO governance. So we have estimated a linear emission in a year's time`,
     ],
-    sources: ["https://gmxio.gitbook.io/gmx/tokenomics"],
+    sources: ["https://docs.idle.finance/governance/idle/distribution"],
     token: "arbitrum:0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a",
     protocolIds: ["150"],
   },
