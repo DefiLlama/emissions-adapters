@@ -32,6 +32,9 @@ export async function createRawSections(
       if (excludedKeys.includes(a[0])) return;
 
       const section: string = a[0];
+      if(typeof a[1] === "function"){
+        a[1] = a[1]();
+      }
       let adapterResults = await a[1];
       if (adapterResults.length == null) adapterResults = [adapterResults];
 

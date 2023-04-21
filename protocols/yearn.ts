@@ -3,8 +3,8 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 import adapter from "../adapters/curve/curve";
 
-async function yearn(): Promise<Protocol> {
-  const contributors = Promise.all(
+function yearn(): Protocol {
+  const contributors = async ()=>Promise.all(
     [
       "0xb1a1ae5c34ceec969e1f7e176fe8a0506ce044d6",
       "0xa8823dc09d486718e8e2eeb9b82de4d5d755f1ef",

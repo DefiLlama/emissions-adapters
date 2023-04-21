@@ -5,19 +5,19 @@ import incentives from "../adapters/curve/community";
 import { periodToSeconds } from "../utils/time";
 
 function protocol() {
-  const earlyUsers = adapter(
+  const earlyUsers = async ()=>adapter(
     "0x575CCD8e2D300e2377B43478339E364000318E2c",
     "ethereum",
     0,
     "initial_locked_supply",
   );
-  const employees = adapter(
+  const employees = async ()=>adapter(
     "0x679FCB9b33Fc4AE10Ff4f96caeF49c1ae3F8fA67",
     "ethereum",
     26666666,
     "initial_locked_supply",
   );
-  const teamAndInvestors = Promise.all(
+  const teamAndInvestors = async ()=>Promise.all(
     [
       ["0xf7dbc322d72c1788a1e37eee738e2ea9c7fa875e", 14016820],
       ["0xd2D43555134dC575BF7279F4bA18809645dB0F1D", 0],
@@ -26,7 +26,7 @@ function protocol() {
       adapter(c[0], "ethereum", c[1], "initial_locked_supply"),
     ),
   );
-  const community = incentives(
+  const community = async ()=>incentives(
     "0xd533a949740bb3306d119cc777fa900ba034cd52",
     1597266000,
     274815283,

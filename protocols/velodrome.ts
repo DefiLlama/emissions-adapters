@@ -5,15 +5,15 @@ import incentives from "../adapters/curve/community";
 
 const qty = 400000000;
 const start = 1654066800;
-async function velodrome(): Promise<Protocol> {
-  const velodromeCommunity = incentives(
+function velodrome(): Protocol {
+  const velodromeCommunity = async ()=>incentives(
     "0x3c8B650257cFb5f272f799F5e2b4e65093a11a05",
     1654066800,
     15000000 * 0.97,
     1.0101010101,
     periodToSeconds.week,
   );
-  const velodromeTeam = incentives(
+  const velodromeTeam = async ()=>incentives(
     "0x3c8B650257cFb5f272f799F5e2b4e65093a11a05",
     1654066800 + periodToSeconds.month * 3,
     15000000 * 0.03,

@@ -4,7 +4,7 @@ import { Protocol } from "../types/adapters";
 
 const aave: Protocol = {
   "LEND to AAVE migrator": manualCliff(1601625600, 13000000),
-  "Ecosysten reserve": adapter(
+  "Ecosysten reserve": async ()=>adapter(
     "0x25F2226B597E8F9514B3F68F00f494cF4f286491",
     "ethereum",
     //3_000_000,

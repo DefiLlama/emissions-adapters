@@ -5,8 +5,8 @@ import { periodToSeconds } from "../utils/time";
 
 // some missing from uni somewhere
 const start = 1600106400;
-async function uniswap(): Promise<Protocol> {
-  const community = Promise.all(
+function uniswap(): Protocol {
+  const community = async ()=>Promise.all(
     [
       "0x4750c43867EF5F89869132ecCF19B9b6C4286E1a",
       "0xe3953D9d317B834592aB58AB2c7A6aD22b54075D",
