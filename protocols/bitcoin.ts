@@ -12,32 +12,35 @@ const halveningDates: string[] = [
 ];
 
 function rewards(): LinearAdapterResult[] {
-  const sections: LinearAdapterResult[] = []
+  const sections: LinearAdapterResult[] = [];
   let reward: number = initialReward;
 
   for (let i = 0; i < halveningDates.length - 1; i++) {
-    const qty = reward * 210_000
-    sections.push(
-        manualLinear(halveningDates[i], halveningDates[i+1], qty)
-    );
+    const qty = reward * 210000;
+    sections.push(manualLinear(halveningDates[i], halveningDates[i + 1], qty));
     reward /= 2;
   }
 
-  return sections
+  return sections;
 }
 
 const bitcoin: Protocol = {
   "Mining rewards": rewards(),
-  sources: [
-    "https://cryptoanswers.com/faq/bitcoin-halving-dates-history/",
-    "https://blockstream.info/",
-    "https://www.coingecko.com/en/coins/bitcoin/bitcoin-halving",
-  ],
-  token: "coingecko:bitcoin",
-  protocolIds: ["2786"],
-  notes: [
-    `Future halvenings have at a specified block height, therefore the dates shown are an estimate only.`,
-  ],
+  meta: {
+    sources: [
+      "https://cryptoanswers.com/faq/bitcoin-halving-dates-history/",
+      "https://blockstream.info/",
+      "https://www.coingecko.com/en/coins/bitcoin/bitcoin-halving",
+    ],
+    token: "coingecko:bitcoin",
+    protocolIds: ["2786"],
+    notes: [
+      `Future halvenings have at a specified block height, therefore the dates shown are an estimate only.`,
+    ],
+  },
+  sections: {
+    farming: ["Mining rewards"],
+  },
 };
 
 export default bitcoin;

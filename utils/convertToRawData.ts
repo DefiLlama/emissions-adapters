@@ -8,45 +8,49 @@ import {
   Protocol,
   SectionData,
   Metadata,
-  Event
+  Event,
 } from "../types/adapters";
 import { addResultToEvents } from "./events";
-const excludedKeys = ["sources", "notes", "token", "protocolIds"];
+const excludedKeys = ["meta", "sections"];
 
 export async function createRawSections(
   adapter: Protocol,
 ): Promise<SectionData> {
-  let startTime: number = 10_000_000_000;
+  let startTime: number = 10000000000;
   let endTime: number = 0;
   const rawSections: RawSection[] = [];
-  let metadata: Metadata = { token: "", sources: [], protocolIds: [], events: [] };
-
+  let metadata: Metadata = {
+    token: "",
+    sources: [],
+    protocolIds: [],
+    events: [],
+  };
+  adapter.default = await adapter.default;
   await Promise.all(
     Object.entries(adapter.default).map(async (a: any[]) => {
-      if (excludedKeys.includes(a[0])) {
-        metadata[a[0] as keyof typeof metadata] = a[1];
-        return;
-      }
+      if (a[0] == "meta") metadata = <Metadata>a[1];
+      if (excludedKeys.includes(a[0])) return;
+
       const section: string = a[0];
       let adapterResults = await a[1];
       if (adapterResults.length == null) adapterResults = [adapterResults];
 
-      addResultToEvents(section, metadata, adapterResults)
+      addResultToEvents(section, metadata, adapterResults);
 
-      const results: RawResult[] | RawResult[][] = adapterResults
-        .flat()
-        .map((r: AdapterResult) => {
-          switch (r.type) {
-            case "step":
-              return stepAdapterToRaw(<StepAdapterResult>r);
-            case "cliff":
-              return cliffAdapterToRaw(<CliffAdapterResult>r);
-            case "linear":
-              return linearAdapterToRaw(<LinearAdapterResult>r);
-            default:
-              throw new Error(`invalid adapter type: ${r.type}`);
-          }
-        });
+      const results:
+        | RawResult[]
+        | RawResult[][] = adapterResults.flat().map((r: AdapterResult) => {
+        switch (r.type) {
+          case "step":
+            return stepAdapterToRaw(<StepAdapterResult>r);
+          case "cliff":
+            return cliffAdapterToRaw(<CliffAdapterResult>r);
+          case "linear":
+            return linearAdapterToRaw(<LinearAdapterResult>r);
+          default:
+            throw new Error(`invalid adapter type: ${r.type}`);
+        }
+      });
 
       rawSections.push({ section, results });
 
@@ -59,14 +63,16 @@ export async function createRawSections(
         endTime,
         ...results
           .flat()
-          .map((r: any) =>
-            r.continuousEnd == null ? r.timestamp : r.continuousEnd,
+          .map(
+            (r: any) =>
+              r.continuousEnd == null ? r.timestamp : r.continuousEnd,
           ),
       );
     }),
   );
 
-  metadata.events.sort((a: Event, b: Event) => a.timestamp - b.timestamp)
+  if (metadata && metadata.events)
+    metadata.events.sort((a: Event, b: Event) => a.timestamp - b.timestamp);
 
   return { rawSections, startTime, endTime, metadata };
 }

@@ -3,7 +3,7 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1646092800;
-const qty = 69_420_000_000;
+const qty = 69420000000;
 
 const jpegd: Protocol = {
   team: manualLinear(
@@ -18,10 +18,16 @@ const jpegd: Protocol = {
   ),
   "donation event": manualCliff(start, qty * 0.3),
   treasury: manualCliff(start, qty * 0.35),
-
-  token: "ethereum:0xE80C0cd204D654CEbe8dd64A4857cAb6Be8345a3",
-  sources: ["https://docs.jpegd.io/jpegd-dao/tokenomics/supply-graph"],
-  protocolIds: ["1619"],
+  meta: {
+    token: "ethereum:0xE80C0cd204D654CEbe8dd64A4857cAb6Be8345a3",
+    sources: ["https://docs.jpegd.io/jpegd-dao/tokenomics/supply-graph"],
+    protocolIds: ["1619"],
+  },
+  sections: {
+    insiders: ["team", "advisors"],
+    noncirculating: ["treasury"],
+    publicSale: ["donation event"],
+  },
 };
 
 export default jpegd;

@@ -3,7 +3,7 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1671840000;
-const qty = 50_000_000;
+const qty = 50000000;
 
 const vela: Protocol = {
   //Incentives: manualCliff(start, qty * 0.3),
@@ -21,14 +21,19 @@ const vela: Protocol = {
     start + periodToSeconds.month * 18,
     qty * 0.02,
   ),
-  notes: [
-    `no emission schedule is given for incentives, growth fund, marketing, so we've excluded them from analytics.`,
-  ],
-  token: "arbitrum:0x088cd8f5ef3652623c22d48b1605dcfe860cd704",
-  sources: [
-    "https://vela-exchange.gitbook.io/vela-knowledge-base/token-economy/usdvela-distribution",
-  ],
-  protocolIds: ["2548"],
+  meta: {
+    notes: [
+      `no emission schedule is given for incentives, growth fund, marketing, so we've excluded them from analytics.`,
+    ],
+    token: "arbitrum:0x088cd8f5ef3652623c22d48b1605dcfe860cd704",
+    sources: [
+      "https://vela-exchange.gitbook.io/vela-knowledge-base/token-economy/usdvela-distribution",
+    ],
+    protocolIds: ["2548"],
+  },
+  sections: {
+    insiders: ["Team", "Investors & partners", "Advisors"],
+  },
 };
 
 export default vela;

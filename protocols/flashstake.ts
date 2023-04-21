@@ -26,9 +26,16 @@ const flashstake: Protocol = {
     manualCliff(start, qty * 0.0303),
     manualLinear(start, start + periodToSeconds.year, qty * 0.1214),
   ],
-  sources: ["https://docs.flashstake.io/tokenomics-flash/token-distribution"],
-  token: "ethereum:0xb1f1f47061a7be15c69f378cb3f69423bd58f2f8",
-  protocolIds: ["2115"],
+  meta: {
+    sources: ["https://docs.flashstake.io/tokenomics-flash/token-distribution"],
+    token: "ethereum:0xb1f1f47061a7be15c69f378cb3f69423bd58f2f8",
+    protocolIds: ["2115"],
+  },
+  sections: {
+    airdrop: ["Community airdrop"],
+    insiders: ["Team budget"],
+    noncirculating: ["Blockzero treasury", "Staking budget", "Growth budget"],
+  },
 };
 
 export default flashstake;

@@ -29,16 +29,24 @@ const thala: Protocol = {
     start_vesting + periodToSeconds.month * 24,
     qty * 0.2,
   ),
-  notes: [
-    `Community incentives (35%) emission schedule has been estimated with respect to the chart shown in the supply schedule source.`,
-  ],
-  token:
-    "aptos:0x7fd500c11216f0fe3095d0c4b8aa4d64a4e2e04f83758462f2b127255643615",
-  sources: [
-    "https://docs.thala.fi/thala-protocol-design/thl-governance-token/tokenomics/distribution",
-    "https://docs.thala.fi/thala-protocol-design/thl-governance-token/tokenomics/supply-schedule",
-  ],
-  protocolIds: ["2789"],
+  meta: {
+    notes: [
+      `Community incentives (35%) emission schedule has been estimated with respect to the chart shown in the supply schedule source.`,
+    ],
+    token:
+      "aptos:0x7fd500c11216f0fe3095d0c4b8aa4d64a4e2e04f83758462f2b127255643615",
+    sources: [
+      "https://docs.thala.fi/thala-protocol-design/thl-governance-token/tokenomics/distribution",
+      "https://docs.thala.fi/thala-protocol-design/thl-governance-token/tokenomics/supply-schedule",
+    ],
+    protocolIds: ["2789"],
+  },
+  sections: {
+    noncirculating: ["Treasury"],
+    publicSale: ["Token Generation Event"],
+    farming: ["Community Incentive"],
+    insiders: ["Team & Advisors", "Investors"],
+  },
 };
 
 export default thala;

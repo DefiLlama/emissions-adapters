@@ -3,7 +3,7 @@ import { periodToSeconds } from "../utils/time";
 import type { LinearAdapterResult, Protocol } from "../types/adapters";
 
 const start: number = 1678404995; // birthBlock timestamp
-const maximumSupply: number = 10_000_000_000;
+const maximumSupply: number = 10000000000;
 const rewardYears: number = 10;
 const boostWeeks: number = 4;
 
@@ -55,14 +55,19 @@ const SmarDex: Protocol = {
   "Initial Pool mint": manualCliff(start, maximumSupply * 0.5),
   Farming: rewards(maximumSupply * 0.375),
   Boost: boost(maximumSupply * 0.125),
-  notes: [
-    "There are 3 stages of token emissions:",
-    "1) 50% minted and distributed by initial pool to users.",
-    "2) 12.5% allocated as Boost reward at protocol launch.",
-    "3) 37.5% allocated for Farming rewards.",
-  ],
-  sources: ["https://docs.smardex.io/overview/what-is-smardex/tokenomics"],
-  token: "ethereum:0x5de8ab7e27f6e7a1fff3e5b337584aa43961beef",
-  protocolIds: [],
+  meta: {
+    notes: [
+      "There are 3 stages of token emissions:",
+      "1) 50% minted and distributed by initial pool to users.",
+      "2) 12.5% allocated as Boost reward at protocol launch.",
+      "3) 37.5% allocated for Farming rewards.",
+    ],
+    sources: ["https://docs.smardex.io/overview/what-is-smardex/tokenomics"],
+    token: "ethereum:0x5de8ab7e27f6e7a1fff3e5b337584aa43961beef",
+    protocolIds: [],
+  }, sections: {
+    farming: ['Farming', 'Boost'],
+    publicSale: ["Initial Pool mint"]
+  }
 };
 export default SmarDex;

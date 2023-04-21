@@ -36,9 +36,17 @@ const canto: Protocol = {
   ),
   grants: manualCliff(start, qty * 0.05),
   inflation: inflation(),
-  token: "canto:0x826551890dc65655a0aceca109ab11abdbd7a07b",
-  sources: ["https://docs.canto.io/technical-reference/token-economics"],
-  protocolIds: ["2726"]
+  meta:{
+    token: "canto:0x826551890dc65655a0aceca109ab11abdbd7a07b",
+    sources: ["https://docs.canto.io/technical-reference/token-economics"],
+    protocolIds: ["2726"],
+  },
+  sections:{
+    farming: ["long term liquidity mining", "medium term liquidity mining"],
+    insiders: ["initial contributors"],
+    airdrop: ["testnet users"],
+    noncirculating: ["grants"]
+  }
 };
 
 export default canto;

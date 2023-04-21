@@ -76,7 +76,15 @@ export type ChartYAxisData = {
 };
 export type Protocol = {
   [section: string]: any;
+  meta: Metadata;
+  sections: { [key in SectionType]?: string[] | undefined };
 };
+export type SectionType =
+  | "publicSale"
+  | "insiders"
+  | "airdrop"
+  | "farming"
+  | "noncirculating";
 export type RawSection = {
   section: string;
   results: RawResult[] | RawResult[][];
@@ -113,12 +121,12 @@ export type SectionData = {
 export type Metadata = {
   sources: string[];
   token: string;
-  events: Event[];
+  events?: Event[];
   notes?: string[];
   protocolIds: string[];
 };
 export type Event = {
   description: string;
   timestamp: number;
-  noOfTokens: number[]
+  noOfTokens: number[];
 };

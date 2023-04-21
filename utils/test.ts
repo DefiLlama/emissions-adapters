@@ -20,10 +20,6 @@ export async function parseData(adapter: Protocol): Promise<void> {
 
 function postDebugLogs(data: any[], protocol: string): void {
   const format: string = "DD/MM/YY";
-  const end: string = secondsToReadableDate(
-    data[0].data.timestamps.at(-1),
-    format,
-  );
   let sum: number = 0;
 
   console.log(`The ${protocol} chart produced starts on ${secondsToReadableDate(

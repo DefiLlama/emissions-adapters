@@ -73,15 +73,23 @@ const vector: Protocol = {
     manualCliff(start + periodToSeconds.month * 9, qty * 0.03 * 0.3),
     manualCliff(start + periodToSeconds.month * 12, qty * 0.03 * 0.3),
   ],
-  sources: [
-    "https://docs.vectorfinance.io/getting-started/tokenomics/token-distribution",
-  ],
-  token: "avax:0x5817d4f0b62a59b17f75207da1848c2ce75e7af4",
-  notes: [
-    `Bonus emmissions (15%) are released on an as-needed basis, so havent been included in this analysis.`,
-    `We couldn't find details about the liquidity mining schedule up until Nov '22. So the rate has been interpolated as a linear emission.`,
-  ],
-  protocolIds: ["1525"],
+  meta: {
+    sources: [
+      "https://docs.vectorfinance.io/getting-started/tokenomics/token-distribution",
+    ],
+    token: "avax:0x5817d4f0b62a59b17f75207da1848c2ce75e7af4",
+    notes: [
+      `Bonus emmissions (15%) are released on an as-needed basis, so havent been included in this analysis.`,
+      `We couldn't find details about the liquidity mining schedule up until Nov '22. So the rate has been interpolated as a linear emission.`,
+    ],
+    protocolIds: ["1525"],
+  },
+  sections: {
+    farming: ["Liquidity mining", "Rocket Joe"],
+    insiders: ["Core and future team", "Magnet", "Advisors"],
+    noncirculating: ["Community treasury"],
+    airdrop: ["vePTP airdrop"],
+  },
 };
 
 export default vector;

@@ -2,7 +2,7 @@ import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 
-const qty = 1_000_000_000;
+const qty = 1000000000;
 const start = 1638316800;
 
 const silo: Protocol = {
@@ -35,14 +35,26 @@ const silo: Protocol = {
     qty * 0.063,
   ),
   //"Future contributors & future advisors": Linear vesting for 4 years with 1-year cliff starting after joining the DAO
-  sources: [
-    "https://silopedia.silo.finance/governance/token-allocation-and-vesting",
-  ],
-  notes: [
-    `Future contributors and advisors (10%) have a vesting schedule depending on when they join the DAO. Therefore this secion has been excluded from the analysis.`,
-  ],
-  token: "ethereum:0x6f80310ca7f2c654691d1383149fa1a57d8ab1f8",
-  protocolIds: ["2020"],
+  meta: {
+    sources: [
+      "https://silopedia.silo.finance/governance/token-allocation-and-vesting",
+    ],
+    notes: [
+      `Future contributors and advisors (10%) have a vesting schedule depending on when they join the DAO. Therefore this secion has been excluded from the analysis.`,
+    ],
+    token: "ethereum:0x6f80310ca7f2c654691d1383149fa1a57d8ab1f8",
+    protocolIds: ["2020"],
+  },
+  sections: {
+    publicSale: ["Genesis protocol-owned liquidity"],
+    noncirculating: ["Community treasury"],
+    insiders: [
+      "Early contributors",
+      "Founding contributors",
+      "Early investors & early advisors",
+    ],
+    airdrop: ["Early community rewards"],
+  },
 };
 
 export default silo;

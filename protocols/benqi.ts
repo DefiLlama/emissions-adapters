@@ -23,11 +23,19 @@ const benqi: Protocol = {
     manualStep(1660867200, duration_seconds , 16, totalQty * 0.0125),
   ],
 
-  sources: [
-    "https://docs.benqi.fi/benqinomics/token-distribution",
-  ],
-  token: "avax:0x8729438eb15e2c8b576fcc6aecda6a148776c0f5",
-  protocolIds: ["467"],
+  meta:{
+    sources: [
+      "https://docs.benqi.fi/benqinomics/token-distribution",
+    ],
+    token: "avax:0x8729438eb15e2c8b576fcc6aecda6a148776c0f5",
+    protocolIds: ["467"],
+  },
+  sections:{
+    farming: ["Liquidity Mining Program"],
+    noncirculating: ["Treasury"],
+    insiders: ["Seed Round", "Team"],
+    publicSale: ["Public A"]
+  }
 };
 
 export default benqi;

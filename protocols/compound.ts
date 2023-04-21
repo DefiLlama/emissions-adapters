@@ -13,13 +13,19 @@ const compound: Protocol = {
   // ShareHolders: manualCliff(start, qty * 0.24),
   // Community: manualCliff(start, qty * 0.077),
   // "Future team": manualCliff(start, qty * 0.037),
-  notes: [
-    `No mention regarding if the team founders tokens are vested or not.`,
-    `No information about future team, shareholders, or community vesting schedule, so they've been excluded from this analysis`
-  ],
-  token: "ethereum:0xc00e94cb662c3520282e6f5717214004a7f26888",
-  sources: ["https://medium.com/compound-finance/compound-governance-decentralized-b18659f811e0"],
-  protocolIds: ["114"],
+  meta:{
+    notes: [
+      `No mention regarding if the team founders tokens are vested or not.`,
+      `No information about future team, shareholders, or community vesting schedule, so they've been excluded from this analysis`
+    ],
+    token: "ethereum:0xc00e94cb662c3520282e6f5717214004a7f26888",
+    sources: ["https://medium.com/compound-finance/compound-governance-decentralized-b18659f811e0"],
+    protocolIds: ["114"],
+  },
+  sections:{
+    farming: ["Liquidity mining"],
+    insiders: ["Team founders"]
+  }
 };
 
 export default compound;

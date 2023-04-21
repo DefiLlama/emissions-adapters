@@ -21,6 +21,7 @@ export function addResultToEvents(
   ].map((t: any) => filterResultsByType(results, t));
 
   cliffs.map((c: CliffAdapterResult) => {
+    if (!metadata.events) metadata.events = [];
     metadata.events.push({
       description: `A cliff of {tokens[0]} tokens ${isFuture(c.start)
         ? "will"
@@ -39,6 +40,7 @@ export function addResultToEvents(
     const nextRate = ratePerPeriod(l2, precision);
     if (Math.abs(Number(thisRate) - Number(nextRate)) / thisRate < 0.001)
       return;
+    if (!metadata.events) metadata.events = [];
     metadata.events.push({
       description: `Linear unlock ${isFuture(l.start)
         ? "will"
@@ -54,6 +56,7 @@ export function addResultToEvents(
 
   steps.map((s: StepAdapterResult) => {
     for (let i = 0; i < s.steps; i++) {
+      if (!metadata.events) metadata.events = [];
       metadata.events.push({
         description: `On {timestamp} {tokens[0]} of ${section} tokens ${isFuture(
           s.start + i * s.stepDuration,
