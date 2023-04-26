@@ -14,7 +14,7 @@ const dodo: Protocol = {
   "Seed investors": manualLinear(
     start + periodToSeconds.year,
     start + periodToSeconds.year * 3,
-    qty * 0.6,
+    qty * 0.06,
   ),
   "private round investors": [
     manualCliff(start + periodToSeconds.month * 6, qty * 0.1 * 0.1),
@@ -26,7 +26,7 @@ const dodo: Protocol = {
   ],
   IDO: manualCliff(start, qty * 0.01),
   "Operations, marketing, partners": manualCliff(start, qty * 0.08),
-  //   "Community incentives": manualCliff(start, qty * 0.6),
+  "Community incentives": manualCliff(start, qty * 0.6),
   meta: {
     sources: ["https://docs.dodoex.io/english/tokenomics/dodo-allocation"],
     token: "ethereum:0x43dfc4159d86f3a37a5a4b3d4580b888ad7d4ddd",
