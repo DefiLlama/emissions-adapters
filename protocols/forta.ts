@@ -11,7 +11,7 @@ const nonCommunity = (percentage: number) => [
   manualCliff(start + periodToSeconds.year, totalQty * percentage * 0.25),
 ];
 const totalQty = 1000000000;
-const start = 1655517600;
+const start = 1627776000;
 const forta: Protocol = {
   airdrop: manualCliff(start, totalQty * 0.04),
   "node runner rewards": manualCliff(start, totalQty * 0.002),
