@@ -5,10 +5,12 @@
     "chartjs-node-canvas": "^4.1.6",
     "dayjs": "^1.11.7",
     "form-data": "^4.0.0",
-    "graphql-request": "^5.2.0"
+    "graphql-request": "^5.2.0",
+    "node-fetch": "2.6.6"
   },
   "devDependencies": {
     "@types/node": "^18.15.3",
+    "@types/node-fetch": "^2.6.3",
     "ts-node": "^10.9.1"
   }
 }

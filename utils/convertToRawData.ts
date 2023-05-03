@@ -28,7 +28,17 @@ export async function createRawSections(
   adapter.default = await adapter.default;
   await Promise.all(
     Object.entries(adapter.default).map(async (a: any[]) => {
-      if (a[0] == "meta") metadata = <Metadata>a[1];
+      if (a[0] == "meta") {
+        metadata = <Metadata>a[1];
+        if ("custom" in a[1]) {
+          await Promise.all(
+            Object.entries(a[1].custom).map(async (c: any) => {
+              a[1].custom[c[0]] = await c[1];
+            }),
+          );
+        }
+      }
+
       if (excludedKeys.includes(a[0])) return;
 
       const section: string = a[0];

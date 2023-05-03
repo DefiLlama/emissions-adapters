@@ -124,6 +124,7 @@ export type Metadata = {
   events?: Event[];
   notes?: string[];
   protocolIds: string[];
+  custom?: any;
 };
 export type Event = {
   description: string;
