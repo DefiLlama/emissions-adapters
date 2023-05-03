@@ -20,11 +20,7 @@ const aave: Protocol = {
   "LEND unexpected costs": devSchedule(0.1),
   "LEND public sale": manualCliff(lendSale, lendSaleQty),
   "Ecosysten reserve": async () =>
-    adapter(
-      "0x25F2226B597E8F9514B3F68F00f494cF4f286491",
-      "ethereum",
-      //3_000_000,
-    ), // needs to end on a dashed line
+    adapter("0x25F2226B597E8F9514B3F68F00f494cF4f286491", "ethereum"),
   meta: {
     sources: [
       "https://docs.aave.com/aavenomics/incentives-policy-and-aave-reserve",
@@ -40,6 +36,7 @@ const aave: Protocol = {
   sections: {
     noncirculating: ["Ecosysten reserve"],
     publicSale: ["LEND to AAVE migrator"],
+    unconfirmed: ["Ecosysten reserve"],
   },
 };
 export default aave;

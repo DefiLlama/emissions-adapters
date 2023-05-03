@@ -84,7 +84,8 @@ export type SectionType =
   | "insiders"
   | "airdrop"
   | "farming"
-  | "noncirculating";
+  | "noncirculating"
+  | "unconfirmed";
 export type RawSection = {
   section: string;
   results: RawResult[] | RawResult[][];

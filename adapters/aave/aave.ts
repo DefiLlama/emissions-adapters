@@ -12,7 +12,7 @@ export default async function main(
     target,
   });
   const streamIds = [];
-  for (var i = 100_000; i < nextStream; i++) {
+  for (var i = 100000; i < nextStream; i++) {
     streamIds.push(i);
   }
   const streams = await multiCall({
@@ -21,22 +21,19 @@ export default async function main(
     calls: streamIds.map((params: number) => ({ target, params })),
   });
 
-  let cliff = 0;
   const results: AdapterResult[] = [];
   streams.map((s: any) => {
     const amount = Number(
-      ((s.stopTime - s.startTime) * s.ratePerSecond) / 10 ** 18,
+      (s.stopTime - s.startTime) * s.ratePerSecond / 10 ** 18,
     );
     results.push({
       type: "linear",
       start: s.startTime,
       end: s.stopTime,
       amount,
-      cliff,
       receiver: s.recipient,
       token: s.tokenAddress,
     });
-    cliff += amount;
   });
 
   return results;
