@@ -55,6 +55,7 @@ const api3: Protocol = {
     noncirculating: ["Ecosystem Fund"],
     publicSale: ["Public distribution"],
     farming: ["Staking rewards"],
+    unconfirmed: ["Staking rewards"],
   },
 };
 

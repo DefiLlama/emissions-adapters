@@ -1,6 +1,7 @@
 import { manualCliff, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
+import { daoSchedule, latestDao } from "../adapters/perpetual";
 
 const start: number = 1599260400;
 const v1Launch: number = 1607990400;
@@ -8,7 +9,7 @@ const mainnetLaunch: number = 1623711600;
 const qty: number = 150000000;
 
 const perpetual: Protocol = {
-  // "Ecosystem and rewards": [],
+  "Ecosystem and rewards": daoSchedule(21000000),
   "Seed investors": manualStep(
     v1Launch,
     periodToSeconds.year / 4,
@@ -38,10 +39,14 @@ const perpetual: Protocol = {
     ],
     token: "ethereum:0xbc396689893d065f41bc2c6ecbee5e0085233447",
     protocolIds: ["362"],
+    custom: {
+      latestTimestamp: latestDao(),
+    },
   },
   sections: {
-    farming: ["Balancer LBP"],
+    farming: ["Balancer LBP", "Ecosystem and rewards"],
     insiders: ["Seed investors", "Strategic investors", "Team and advisors"],
+    unconfirmed: ["Ecosystem and rewards"],
   },
 };
 export default perpetual;
