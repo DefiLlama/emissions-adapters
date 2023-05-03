@@ -1,6 +1,7 @@
 import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
+import vesting from "../adapters/uniswap/uniswap";
 
 const qty = 1000000000;
 const start = 1638316800;
@@ -34,7 +35,11 @@ const silo: Protocol = {
     start + periodToSeconds.year * 2.5,
     qty * 0.063,
   ),
-  //"Future contributors & future advisors": Linear vesting for 4 years with 1-year cliff starting after joining the DAO
+  "Future contributors & future advisors": vesting(
+    "0x6e5C8274012d9cb386EF8Dcc71a461B71BD07831",
+    "ethereum",
+    "silo",
+  ),
   meta: {
     sources: [
       "https://silopedia.silo.finance/governance/token-allocation-and-vesting",
@@ -52,6 +57,7 @@ const silo: Protocol = {
       "Early contributors",
       "Founding contributors",
       "Early investors & early advisors",
+      "Future contributors & future advisors",
     ],
     airdrop: ["Early community rewards"],
   },

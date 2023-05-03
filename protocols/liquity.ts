@@ -32,7 +32,7 @@ const rewards = (): LinearAdapterResult[] => {
 const liquity: Protocol = {
   "Stability Pool rewards": rewards(),
   "Uniswap LPs": manualCliff(start, 1333333),
-  //   "Community reserve": manualCliff(start, qty * 0.02),
+  "Community reserve": manualCliff(start, qty * 0.02),
   Endowment: manualCliff(start + periodToSeconds.year, qty * 0.0606),
   "Team and advisors": [
     manualCliff(start + periodToSeconds.year, qty * 0.2665 * 0.25),
@@ -46,16 +46,13 @@ const liquity: Protocol = {
   "Service providers": manualCliff(start + periodToSeconds.year, qty * 0.0104),
   Investors: manualCliff(start + periodToSeconds.year, qty * 0.339),
   meta: {
-    notes: [
-      `The Community reserve allocation (2%) is used for grants, hackathons, events etc. There is no given emissions schedule, so it has been excluded from analysis.`,
-    ],
     sources: ["https://medium.com/liquity/liquity-launch-details-4537c5ffa9ea"],
     token: "ethereum:0x6dea81c8171d0ba574754ef6f8b412f2ed88c54d",
     protocolIds: ["270"],
   },
   sections: {
     farming: ["Stability Pool rewards", "Uniswap LPs"],
-    noncirculating: ["Endowment"],
+    noncirculating: ["Endowment", "Community reserve"],
     insiders: ["Team and advisors", "Service providers", "Investors"],
   },
 };

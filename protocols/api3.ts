@@ -34,7 +34,7 @@ const api3: Protocol = {
   ),
   "Ecosystem Fund": manualCliff(start, qty * 0.25),
   "Public distribution": manualCliff(start, qty * 0.2),
-  "Staking rewards": stakingRewards(),
+  "Staking rewards": stakingRewards(), // needs to end on a dashed line
   meta: {
     token: "coingecko:api3",
     sources: [
