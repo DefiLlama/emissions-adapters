@@ -79,7 +79,7 @@ const vector: Protocol = {
     ],
     token: "avax:0x5817d4f0b62a59b17f75207da1848c2ce75e7af4",
     notes: [
-      `Bonus emmissions (15%) are released on an as-needed basis, so havent been included in this analysis.`,
+      `Bonus emmissions (15%) are minted on an as-needed basis, so havent been included in this analysis.`,
       `We couldn't find details about the liquidity mining schedule up until Nov '22. So the rate has been interpolated as a linear emission.`,
     ],
     protocolIds: ["1525"],
