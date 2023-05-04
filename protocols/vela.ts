@@ -6,9 +6,13 @@ const start = 1671840000;
 const qty = 50000000;
 
 const vela: Protocol = {
-  //Incentives: manualCliff(start, qty * 0.3),
-  //"Growth fund": manualCliff(start, qty * 0.19),
-  //Marketing: manualCliff(start, qty * 0.05),
+  Incentives: manualLinear(start, start + periodToSeconds.year * 20, qty * 0.3),
+  "Growth fund": manualLinear(
+    start,
+    start + periodToSeconds.year * 20,
+    qty * 0.19,
+  ),
+  Marketing: manualLinear(start, start + periodToSeconds.year * 20, qty * 0.05),
   Team: manualLinear(
     start + periodToSeconds.month * 6,
     start + periodToSeconds.month * 42,
@@ -23,7 +27,7 @@ const vela: Protocol = {
   ),
   meta: {
     notes: [
-      `no emission schedule is given for incentives, growth fund, marketing, so we've excluded them from analytics.`,
+      `no emission schedule is given for incentives, growth fund, marketing, so we've interpolated their maximum yearly emissions.`,
     ],
     token: "arbitrum:0x088cd8f5ef3652623c22d48b1605dcfe860cd704",
     sources: [
