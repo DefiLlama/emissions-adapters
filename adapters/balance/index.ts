@@ -9,20 +9,20 @@ type BlockTime = {
   timestamp: number;
 };
 
-const owner: string = "0xd374225abb84dca94e121f0b8a06b93e39ad7a99";
-const target: string = "0xbc396689893d065f41bc2c6ecbee5e0085233447"; // PERP
-const chain: any = "ethereum";
 let res: number;
 
-export async function latestDao(): Promise<number> {
+export async function latestDao(
+  adapter: string,
+  timestampDeployed: number,
+): Promise<number> {
   if (!res)
-    return fetch(`https://api.llama.fi/emission/perpetual`)
+    return fetch(`https://api.llama.fi/emission/${adapter}`)
       .then(r => r.json())
       .then(r => JSON.parse(r.body))
       .then(
         r =>
           r.metadata.custom == null || r.metadata.custom.latestTimestamp == null
-            ? 1612828800 // DAO contract funded timestamp (block 11819930)
+            ? timestampDeployed
             : r.metadata.custom.latestTimestamp,
       );
   return res;
@@ -30,12 +30,17 @@ export async function latestDao(): Promise<number> {
 
 export async function daoSchedule(
   totalAllocation: number,
+  owner: string,
+  target: string,
+  chain: any,
+  adapter: string,
+  timestampDeployed: number,
 ): Promise<CliffAdapterResult[]> {
   let trackedTimestamp: number;
   let decimals: number;
 
   [trackedTimestamp, decimals] = await Promise.all([
-    latestDao(),
+    latestDao(adapter, timestampDeployed),
     call({
       target,
       abi: "erc20:decimals",
@@ -83,7 +88,7 @@ export async function daoSchedule(
 
   if (balances.length != blockHeights.length)
     throw new Error(
-      `block mismatch in perpetual ecosystem and rewards adapter`,
+      `block mismatch in ${adapter} ecosystem and rewards adapter`,
     );
 
   const sections: CliffAdapterResult[] = [];
