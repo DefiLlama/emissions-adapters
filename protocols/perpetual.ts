@@ -12,7 +12,7 @@ const token: string = "0xbc396689893d065f41bc2c6ecbee5e0085233447";
 const perpetual: Protocol = {
   "Ecosystem and rewards": daoSchedule(
     21000000,
-    "0xd374225abb84dca94e121f0b8a06b93e39ad7a99",
+    ["0xd374225abb84dca94e121f0b8a06b93e39ad7a99"],
     token,
     "ethereum",
     "perpetual",

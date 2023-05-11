@@ -1,8 +1,9 @@
+import { multiCall } from "@defillama/sdk/build/abi/abi2";
 import fetch from "node-fetch";
 import { call } from "@defillama/sdk/build/abi/abi2";
 import { CliffAdapterResult } from "../../types/adapters";
-import { getBlock } from "@defillama/sdk/build/computeTVL/blocks";
 import { isFuture, periodToSeconds } from "../../utils/time";
+import { getBlock2 } from "../../utils/block";
 
 type BlockTime = {
   block: number;
@@ -30,7 +31,7 @@ export async function latestDao(
 
 export async function daoSchedule(
   totalAllocation: number,
-  owner: string,
+  owners: string[],
   target: string,
   chain: any,
   adapter: string,
@@ -52,36 +53,30 @@ export async function daoSchedule(
   let currentTimestamp = trackedTimestamp;
 
   while (!isFuture(currentTimestamp)) {
-    currentTimestamp += periodToSeconds.month;
     allTimestamps.push(currentTimestamp);
+    currentTimestamp += periodToSeconds.week;
   }
 
   const blockHeights: BlockTime[] = await Promise.all(
-    allTimestamps.slice(25).map((t: number) => getBlock(chain, t)),
+    allTimestamps.map((t: number) =>
+      getBlock2(chain, t).then((h: number | undefined) => ({
+        timestamp: t,
+        block: h == null ? -1 : h,
+      })),
+    ),
   );
-  //   const blockHeights: BlockTime[] = [
-  //     { block: 15270275, timestamp: 1659540962 },
-  //     { block: 15466186, timestamp: 1662219362 },
-  //     { block: 15668559, timestamp: 1664811362 },
-  //     { block: 15890723, timestamp: 1667493362 },
-  //     { block: 16105518, timestamp: 1670085362 },
-  //     { block: 16327490, timestamp: 1672763762 },
-  //     { block: 16549489, timestamp: 1675442162 },
-  //     {
-  //       block: 16749206,
-  //       timestamp: 1677861362,
-  //     },
-  //     { block: 16969421, timestamp: 1680536162 },
-  //     { block: 17181113, timestamp: 1683128162 },
-  //   ];
+
   let balances = await Promise.all(
     blockHeights.map((b: BlockTime) =>
-      call({
-        target,
-        params: [owner],
+      multiCall({
+        calls: owners.map((o: string) => ({ target, params: [o] })),
         abi: "erc20:balanceOf",
         chain,
         block: b.block,
+        requery: true,
+      }).then((r: (number | null)[]) => {
+        if (r.includes(null)) return null;
+        return r.reduce((p: number, c: any) => Number(p) + Number(c), 0);
       }),
     ),
   );
@@ -92,11 +87,26 @@ export async function daoSchedule(
     );
 
   const sections: CliffAdapterResult[] = [];
+  let workingBalance: number = totalAllocation;
+  let atStart: boolean = true;
   for (let i = 0; i < balances.length; i++) {
-    const previousQty =
-      i == 0 ? totalAllocation : balances[i - 1] / 10 ** decimals;
-    const amount = previousQty - balances[i] / 10 ** decimals;
+    const thisBalance: number | null = balances[i];
+    if ((atStart && thisBalance == 0) || thisBalance == null) continue;
+
+    atStart = false;
+
+    let previousBalance: number = 0;
+    for (let j = 1; j < Math.floor(balances.length / 10); j++) {
+      let a: number | null = balances[i - j];
+      if (a == null) continue;
+      previousBalance = a;
+      break;
+    }
+
+    const amount = workingBalance - thisBalance / 10 ** decimals;
     if (amount == 0) continue;
+
+    workingBalance -= amount;
     const start = blockHeights[i].timestamp;
     sections.push({ type: "cliff", start, amount });
   }

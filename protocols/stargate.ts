@@ -33,7 +33,7 @@ const stargate: Protocol = {
   "STG DEX liquidity": manualCliff(start, 0.0155 * qty),
   "future incentives": daoSchedule(
     0.3039 * qty,
-    "0x65bb797c2b9830d891d87288f029ed8dacc19705",
+    ["0x65bb797c2b9830d891d87288f029ed8dacc19705"],
     token,
     "ethereum",
     "stargate",

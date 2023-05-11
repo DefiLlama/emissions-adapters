@@ -11,7 +11,7 @@ const token = "0x10393c20975cf177a3513071bc110f7962cd67da";
 const jonesDao: Protocol = {
   "Operations & Incentives": daoSchedule(
     qty * 0.57,
-    "0xFa82f1bA00b0697227E2Ad6c668abb4C50CA0b1F",
+    ["0xFa82f1bA00b0697227E2Ad6c668abb4C50CA0b1F"],
     token,
     "arbitrum",
     "jones-dao",
