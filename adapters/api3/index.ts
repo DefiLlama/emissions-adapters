@@ -26,7 +26,7 @@ export async function epochsTracked(): Promise<number> {
       .then(
         r =>
           r.metadata.custom == null || r.metadata.custom.latestEpoch == null
-            ? 0
+            ? 2688 // origin epoch
             : r.metadata.custom.latestEpoch,
       );
   return res;

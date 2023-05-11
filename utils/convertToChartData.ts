@@ -48,6 +48,12 @@ function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
     }
   });
 
+  // filter any erroneous negative values
+  sortedData.map((s: any) => {
+    s.data.unlocked = s.data.unlocked.map((u: number) => (u < 0 ? 0 : u));
+    return s;
+  });
+
   return sortedData;
 }
 export function rawToChartData(
