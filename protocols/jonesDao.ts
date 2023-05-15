@@ -9,14 +9,15 @@ const timestampDeployed = 1642809600;
 const token = "0x10393c20975cf177a3513071bc110f7962cd67da";
 
 const jonesDao: Protocol = {
-  "Operations & Incentives": ()=>daoSchedule(
-    qty * 0.57,
-    ["0xFa82f1bA00b0697227E2Ad6c668abb4C50CA0b1F"],
-    token,
-    "arbitrum",
-    "jones-dao",
-    timestampDeployed,
-  ),
+  "Operations & Incentives": () =>
+    daoSchedule(
+      qty * 0.57,
+      ["0xFa82f1bA00b0697227E2Ad6c668abb4C50CA0b1F"],
+      token,
+      "arbitrum",
+      "jones-dao",
+      timestampDeployed,
+    ),
   "Core contributors": manualLinear(
     start,
     start + periodToSeconds.month * 18,
@@ -42,7 +43,7 @@ const jonesDao: Protocol = {
     ],
     protocolIds: ["1433"],
     custom: {
-      latestTimestamp: ()=>latestDao("jones-dao", timestampDeployed),
+      latestTimestamp: () => latestDao("jones-dao", timestampDeployed),
     },
   },
   sections: {
