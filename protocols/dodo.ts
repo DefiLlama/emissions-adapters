@@ -1,7 +1,7 @@
 import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
-import { daoSchedule, latestDao } from "../adapters/balance";
+import { dodoSchedule, dodoLatest } from "../adapters/balance";
 
 const qty = 1000000000;
 const start = 1597449600;
@@ -30,14 +30,7 @@ const dodo: Protocol = {
   ],
   IDO: manualCliff(start, qty * 0.01),
   "Operations, marketing, partners": manualCliff(start, qty * 0.08),
-  "Community incentives": daoSchedule(
-    qty * 0.6,
-    ["0x4447183c50e82a8b0141718c405381a3b1bad634"],
-    token,
-    chain,
-    "dodo",
-    timestampDeployed,
-  ),
+  "Community incentives": dodoSchedule(),
   meta: {
     sources: ["https://docs.dodoex.io/english/tokenomics/dodo-allocation"],
     token: `${chain}:${token}`,
@@ -46,7 +39,7 @@ const dodo: Protocol = {
     ],
     protocolIds: ["146"],
     custom: {
-      latestTimestamp: latestDao("dodo", timestampDeployed),
+      latestTimestamp: dodoLatest(),
     },
   },
   sections: {
