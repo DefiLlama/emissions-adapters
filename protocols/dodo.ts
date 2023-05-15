@@ -30,7 +30,7 @@ const dodo: Protocol = {
   ],
   IDO: manualCliff(start, qty * 0.01),
   "Operations, marketing, partners": manualCliff(start, qty * 0.08),
-  "Community incentives": daoSchedule(
+  "Community incentives": ()=>daoSchedule(
     qty * 0.6,
     ["0x4447183c50e82a8b0141718c405381a3b1bad634"],
     token,
@@ -46,7 +46,7 @@ const dodo: Protocol = {
     ],
     protocolIds: ["146"],
     custom: {
-      latestTimestamp: latestDao("dodo", timestampDeployed),
+      latestTimestamp: ()=>latestDao("dodo", timestampDeployed),
     },
   },
   sections: {

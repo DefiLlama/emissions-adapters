@@ -31,7 +31,7 @@ const stargate: Protocol = {
     0.0211 * qty,
   ),
   "STG DEX liquidity": manualCliff(start, 0.0155 * qty),
-  "future incentives": daoSchedule(
+  "future incentives": ()=>daoSchedule(
     0.3039 * qty,
     ["0x65bb797c2b9830d891d87288f029ed8dacc19705"],
     token,
@@ -47,7 +47,7 @@ const stargate: Protocol = {
     token: `ethereum:${token}`,
     protocolIds: ["1013"],
     custom: {
-      latestTimestamp: latestDao("stargate", timestampDeployed),
+      latestTimestamp: ()=>latestDao("stargate", timestampDeployed),
     },
   },
   sections: {
