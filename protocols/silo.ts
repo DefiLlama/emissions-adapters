@@ -35,7 +35,7 @@ const silo: Protocol = {
     start + periodToSeconds.year * 2.5,
     qty * 0.063,
   ),
-  "Future contributors & future advisors": vesting(
+  "Future contributors & future advisors": ()=>vesting(
     "0x6e5C8274012d9cb386EF8Dcc71a461B71BD07831",
     "ethereum",
     "silo",

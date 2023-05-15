@@ -20,7 +20,7 @@ const forta: Protocol = {
     manualCliff(start, totalQty * 0.01),
     manualCliff(start + periodToSeconds.year * 2, totalQty * 0.012),
   ],
-  unallocated: unallocated(),
+  unallocated: ()=>unallocated(),
   backers: nonCommunity(0.245),
   "core contributors": nonCommunity(0.2),
   OpenZeppelin: nonCommunity(0.1),
