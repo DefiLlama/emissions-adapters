@@ -1,7 +1,7 @@
 import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
-// import { daoSchedule, latestDao } from "../adapters/balance";
+import { daoSchedule, latestDao } from "../adapters/balance";
 
 const qty = 1000000000;
 const start = 1647504000;
@@ -31,14 +31,15 @@ const stargate: Protocol = {
     0.0211 * qty,
   ),
   "STG DEX liquidity": manualCliff(start, 0.0155 * qty),
-  // "future incentives": daoSchedule(
-  //   0.3039 * qty,
-  //   ["0x65bb797c2b9830d891d87288f029ed8dacc19705"],
-  //   token,
-  //   "ethereum",
-  //   "stargate",
-  //   timestampDeployed,
-  // ),
+  "future incentives": () =>
+    daoSchedule(
+      0.3039 * qty,
+      ["0x65bb797c2b9830d891d87288f029ed8dacc19705"],
+      token,
+      "ethereum",
+      "stargate",
+      timestampDeployed,
+    ),
   meta: {
     notes: [`Future incentives (30%) could be emitted at any time.`],
     sources: [
@@ -46,9 +47,9 @@ const stargate: Protocol = {
     ],
     token: `ethereum:${token}`,
     protocolIds: ["1013"],
-    // custom: {
-    //   latestTimestamp: latestDao("stargate", timestampDeployed),
-    // },
+    custom: {
+      latestTimestamp: () => latestDao("stargate", timestampDeployed),
+    },
   },
   sections: {
     insiders: ["core contributors", "investors"],
