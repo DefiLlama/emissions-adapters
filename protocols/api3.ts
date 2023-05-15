@@ -1,7 +1,7 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
-import { stakingRewards, epochsTracked } from "../adapters/api3";
+// import { stakingRewards, epochsTracked } from "../adapters/api3";
 const start = 1606741200;
 const qty = 100000000;
 
@@ -34,16 +34,16 @@ const api3: Protocol = {
   ),
   "Ecosystem Fund": manualCliff(start, qty * 0.25),
   "Public distribution": manualCliff(start, qty * 0.2),
-  "Staking rewards": stakingRewards(), // needs to end on a dashed line
+  // "Staking rewards": stakingRewards(), // needs to end on a dashed line
   meta: {
     token: "coingecko:api3",
     sources: [
       "https://medium.com/api3/api3-public-token-distribution-event-1acb3b6d940",
     ],
     protocolIds: [],
-    custom: {
-      latestEpoch: epochsTracked(),
-    },
+    // custom: {
+    //   latestEpoch: epochsTracked(),
+    // },
   },
   sections: {
     insiders: [
