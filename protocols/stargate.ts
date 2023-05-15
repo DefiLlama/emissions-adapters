@@ -1,9 +1,12 @@
 import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
+import { daoSchedule, latestDao } from "../adapters/balance";
 
 const qty = 1000000000;
 const start = 1647504000;
+const timestampDeployed = 1647518400;
+const token = "0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6";
 const stargate: Protocol = {
   "core contributors": manualLinear(
     start + periodToSeconds.year,
@@ -28,22 +31,34 @@ const stargate: Protocol = {
     0.0211 * qty,
   ),
   "STG DEX liquidity": manualCliff(start, 0.0155 * qty),
-  // "future incentives": manualCliff(
-  //   start,
-  //   0.3039 * qty,
-  // ),
+  "future incentives": daoSchedule(
+    0.3039 * qty,
+    ["0x65bb797c2b9830d891d87288f029ed8dacc19705"],
+    token,
+    "ethereum",
+    "stargate",
+    timestampDeployed,
+  ),
   meta: {
     notes: [`Future incentives (30%) could be emitted at any time.`],
     sources: [
       "https://stargateprotocol.gitbook.io/stargate/v/user-docs/tokenomics/allocations-and-lockups",
     ],
-    token: "ethereum:0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6",
+    token: `ethereum:${token}`,
     protocolIds: ["1013"],
+    custom: {
+      latestTimestamp: latestDao("stargate", timestampDeployed),
+    },
   },
   sections: {
     insiders: ["core contributors", "investors"],
-    farming: ["STG-USDC Curve pool incentives", "initial emissions program"],
+    farming: [
+      "STG-USDC Curve pool incentives",
+      "initial emissions program",
+      "future incentives",
+    ],
     publicSale: ["STG launch auction purchasers", "STG DEX liquidity"],
+    unconfirmed: ["future incentives"],
   },
 };
 

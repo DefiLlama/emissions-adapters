@@ -1,6 +1,7 @@
 import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
+import { unallocated } from "../adapters/forta";
 
 const nonCommunity = (percentage: number) => [
   manualLinear(
@@ -16,10 +17,10 @@ const forta: Protocol = {
   airdrop: manualCliff(start, totalQty * 0.04),
   "node runner rewards": manualCliff(start, totalQty * 0.002),
   other: [
-    manualCliff(start, 0.01),
-    manualCliff(start + periodToSeconds.year * 2, 0.012),
+    manualCliff(start, totalQty * 0.01),
+    manualCliff(start + periodToSeconds.year * 2, totalQty * 0.012),
   ],
-  // unallocated: manualCliff(start, totalQty * 0.391),
+  unallocated: unallocated(),
   backers: nonCommunity(0.245),
   "core contributors": nonCommunity(0.2),
   OpenZeppelin: nonCommunity(0.1),

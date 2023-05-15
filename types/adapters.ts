@@ -84,7 +84,8 @@ export type SectionType =
   | "insiders"
   | "airdrop"
   | "farming"
-  | "noncirculating";
+  | "noncirculating"
+  | "unconfirmed";
 export type RawSection = {
   section: string;
   results: RawResult[] | RawResult[][];
@@ -124,6 +125,7 @@ export type Metadata = {
   events?: Event[];
   notes?: string[];
   protocolIds: string[];
+  custom?: any;
 };
 export type Event = {
   description: string;
