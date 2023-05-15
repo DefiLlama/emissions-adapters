@@ -22,10 +22,7 @@ const conic: Protocol = {
   "AMM stakers": manualLog(start, end, 1000000, periodToSeconds.year, 60),
   Liquidity: manualCliff(start, qty * 0.01),
   meta: {
-    notes: [
-      `No mention regarding if the team founders have tokens or not.`,
-      "Rebalancing Curve pools (19%) CNC received will be based on the amount deposited. We cant track this",
-    ],
+    notes: [`No mention regarding if the team founders have tokens or not.`],
     token: "ethereum:0x9ae380f0272e2162340a5bb646c354271c0f5cfc",
     sources: [
       "https://docs.conic.finance/conic-finance/usdcnc-token/usdcnc-tokenomics",

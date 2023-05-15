@@ -1,7 +1,7 @@
 import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
-// import { unallocated } from "../adapters/forta";
+import { unallocated } from "../adapters/forta";
 
 const nonCommunity = (percentage: number) => [
   manualLinear(
@@ -20,7 +20,7 @@ const forta: Protocol = {
     manualCliff(start, totalQty * 0.01),
     manualCliff(start + periodToSeconds.year * 2, totalQty * 0.012),
   ],
-  // unallocated: unallocated(),
+  unallocated: () => unallocated(),
   backers: nonCommunity(0.245),
   "core contributors": nonCommunity(0.2),
   OpenZeppelin: nonCommunity(0.1),
