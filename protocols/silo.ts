@@ -45,7 +45,7 @@ const silo: Protocol = {
       "https://silopedia.silo.finance/governance/token-allocation-and-vesting",
     ],
     notes: [
-      `Future contributors and advisors (10%) have a vesting schedule depending on when they join the DAO. Therefore this secion has been excluded from the analysis.`,
+      `Future contributors and advisors (10%) are distributed to the DAO on a linear unlock, and then individuals have a further vesting schedule depending on when they join the DAO. Only the initial vesting schedule has been described in this analysis.`,
     ],
     token: "ethereum:0x6f80310ca7f2c654691d1383149fa1a57d8ab1f8",
     protocolIds: ["2020"],
