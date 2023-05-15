@@ -1,6 +1,7 @@
 import { manualCliff, manualLinear, manualLog } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
+import { rebalancing, latest } from "../adapters/conic";
 
 const start = 1649246400;
 const qty = 10000000;
@@ -16,7 +17,7 @@ const conic: Protocol = {
     periodToSeconds.year,
     60,
   ),
-  //Rebalancing_Curve_Pools: manualCliff,
+  "Rebalancing Curve Pools": () => rebalancing(),
   Treasury: manualLinear(start, start + periodToSeconds.month * 12, qty * 0.05),
   "AMM stakers": manualLog(start, end, 1000000, periodToSeconds.year, 60),
   Liquidity: manualCliff(start, qty * 0.01),
@@ -30,6 +31,9 @@ const conic: Protocol = {
       "https://docs.conic.finance/conic-finance/usdcnc-token/usdcnc-tokenomics",
     ],
     protocolIds: ["2616"],
+    custom: {
+      latestTimestamp: () => latest(),
+    },
   },
   sections: {
     airdrop: ["vlCVX holders"],
