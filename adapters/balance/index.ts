@@ -73,8 +73,8 @@ export async function daoSchedule(
         chain,
         block: b.block,
         requery: true,
-      }).then((r: number[]) => {
-        if (r.find((i: any) => isNaN(i)) != null)
+      }).then((r: (number | null)[]) => {
+        if (r.includes(null))
           throw new Error(`balance call failed for ${adapter}`);
         return r.reduce((p: number, c: any) => Number(p) + Number(c), 0);
       }),
