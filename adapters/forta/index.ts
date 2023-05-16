@@ -1,11 +1,10 @@
-import { daoSchedule } from "../balance";
+import { daoSchedule, latestDao } from "../balance";
 import contracts from "./contracts";
 
 export const unallocated = () =>
   Promise.all(
     Object.keys(contracts).map((k: any) =>
       daoSchedule(
-        391000000,
         contracts[k].owners,
         contracts[k].token,
         k,
@@ -14,3 +13,4 @@ export const unallocated = () =>
       ),
     ),
   );
+export const latest = () => latestDao("forta", 1651356000);

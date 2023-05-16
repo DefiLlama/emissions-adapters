@@ -1,7 +1,7 @@
 import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
-import { unallocated } from "../adapters/forta";
+import { unallocated, latest } from "../adapters/forta";
 
 const nonCommunity = (percentage: number) => [
   manualLinear(
@@ -27,15 +27,17 @@ const forta: Protocol = {
   meta: {
     sources: ["https://docs.forta.network/en/latest/fort-token/"],
     token: "ethereum:0x41545f8b9472d758bb669ed8eaeeecd7a9c4ec29",
-    notes: [
-      "the emission rate of unallocated in unconfirmed. Here we have excluded them from analytics.",
-    ],
     protocolIds: ["2664"],
+    custom: {
+      latestTimestamp: () => latest(),
+    },
   },
   sections: {
     insiders: ["other", "backers", "core contributors", "OpenZeppelin"],
     airdrop: ["airdrop"],
     farming: ["node runner rewards"],
+    noncirculating: ["unallocated"],
   },
+  incompleteSections: [{ key: "unallocated", allocation: 391000000 }],
 };
 export default forta;
