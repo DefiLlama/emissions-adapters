@@ -32,7 +32,6 @@ const dodo: Protocol = {
   "Operations, marketing, partners": manualCliff(start, qty * 0.08),
   "Community incentives": () =>
     daoSchedule(
-      qty * 0.6,
       ["0x4447183c50e82a8b0141718c405381a3b1bad634"],
       token,
       chain,
@@ -59,6 +58,7 @@ const dodo: Protocol = {
     ],
     publicSale: ["IDO"],
   },
+  incompleteSections: [{ key: "Community incentives", allocation: qty * 0.6 }],
 };
 
 export default dodo;
