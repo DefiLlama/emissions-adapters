@@ -12,7 +12,6 @@ const token: string = "0xbc396689893d065f41bc2c6ecbee5e0085233447";
 const perpetual: Protocol = {
   "Ecosystem and rewards": () =>
     daoSchedule(
-      21000000,
       ["0xd374225abb84dca94e121f0b8a06b93e39ad7a99"],
       token,
       "ethereum",
@@ -41,7 +40,6 @@ const perpetual: Protocol = {
   meta: {
     notes: [
       `Seed and strategic investors received either 1/4 or 1/5 of their tokens each quarter. Here we have assumed 1/4 for all.`,
-      `The DAO was allocated 54.8%, with no set emissions schedule, therefore this has been excluded from the analysis.`,
     ],
     sources: [
       "https://support.perp.com/hc/en-us/articles/5748445892761-PERP-Token#heading-1",
@@ -55,7 +53,9 @@ const perpetual: Protocol = {
   sections: {
     farming: ["Balancer LBP", "Ecosystem and rewards"],
     insiders: ["Seed investors", "Strategic investors", "Team and advisors"],
-    unconfirmed: ["Ecosystem and rewards"],
   },
+  incompleteSections: [
+    { key: "Ecosystem and rewards", allocation: qty * 0.548 },
+  ],
 };
 export default perpetual;

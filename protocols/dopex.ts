@@ -1,22 +1,34 @@
 import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
+import { daoSchedule, latestDao } from "../adapters/balance";
 
 const qty = 500000;
 const start = 1633647600;
+const token = "0x6c2c06790b3e3e3c38e12ee22f8183b37a13ee55";
+const timestampDeployed = 1633734000; //1661036400;
+const chain = "arbitrum";
 
 const dopex: Protocol = {
-  "Operational allocation": manualLinear(
-    start,
-    start + periodToSeconds.year * 5,
-    qty * 0.17,
-  ),
+  Treasury: () =>
+    daoSchedule(
+      ["0x2fa6f21ecfe274f594f470c376f5bdd061e08a37"],
+      token,
+      chain,
+      "dopex",
+      timestampDeployed,
+    ),
+  // "Operational allocation": manualLinear(
+  //   start,
+  //   start + periodToSeconds.year * 5,
+  //   qty * 0.17,
+  // ),
   Farming: manualLinear(start, start + periodToSeconds.year * 2, qty * 0.15),
-  "Platform rewards": manualLinear(
-    start,
-    start + periodToSeconds.year * 5,
-    qty * 0.3,
-  ),
+  // "Platform rewards": manualLinear(
+  //   start,
+  //   start + periodToSeconds.year * 5,
+  //   qty * 0.3,
+  // ),
   Founders: [
     manualCliff(start, qty * 0.12 * 0.2),
     manualLinear(start, start + periodToSeconds.year * 2, qty * 0.12 * 0.8),
@@ -29,17 +41,18 @@ const dopex: Protocol = {
   "Token sale": manualCliff(start, qty * 0.15),
   meta: {
     sources: ["https://docs.dopex.io/tokenomics/tokenomics"],
-    token: "ethereum:0xeec2be5c91ae7f8a338e1e5f3b5de49d07afdc81",
-    notes: [
-      `Many of the sections here have no given emission schedule, however in this analysis we inferred from the chart at the source than many of the unlocks are linear.`,
-    ],
+    token: `${chain}:${token}`,
     protocolIds: ["660"],
+    custom: {
+      latestTimestamp: () => latestDao("dopex", timestampDeployed),
+    },
   },
   sections: {
     insiders: ["Founders", "Early investors", "Operational allocations"],
     farming: ["Farming", "Platform rewards"],
     publicSale: ["Token sale"],
   },
+  incompleteSections: [{ key: "Treasury", allocation: qty * 0.47 }],
 };
 
 export default dopex;

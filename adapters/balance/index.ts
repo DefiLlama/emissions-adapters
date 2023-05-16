@@ -30,7 +30,6 @@ export async function latestDao(
 }
 
 export async function daoSchedule(
-  totalAllocation: number,
   owners: string[],
   target: string,
   chain: any,
@@ -74,8 +73,9 @@ export async function daoSchedule(
         chain,
         block: b.block,
         requery: true,
-      }).then((r: (number | null)[]) => {
-        if (r.includes(null)) return null;
+      }).then((r: number[]) => {
+        if (r.find((i: any) => isNaN(i)) != null)
+          throw new Error(`balance call failed for ${adapter}`);
         return r.reduce((p: number, c: any) => Number(p) + Number(c), 0);
       }),
     ),
@@ -87,29 +87,19 @@ export async function daoSchedule(
     );
 
   const sections: CliffAdapterResult[] = [];
-  let workingBalance: number = totalAllocation;
-  let atStart: boolean = true;
+  let depositIndex: number = 0;
   for (let i = 0; i < balances.length; i++) {
-    const thisBalance: number | null = balances[i];
-    if ((atStart && thisBalance == 0) || thisBalance == null) continue;
+    const thisBalance: number = balances[i];
+    if ((depositIndex == 0 && thisBalance == 0) || thisBalance == null)
+      continue;
+    depositIndex += 1;
+    if (depositIndex == 1) continue;
 
-    atStart = false;
+    const amount = (balances[i - 1] - thisBalance) / 10 ** decimals;
+    if (amount <= 0) continue;
 
-    let previousBalance: number = 0;
-    for (let j = 1; j < Math.floor(balances.length / 10); j++) {
-      let a: number | null = balances[i - j];
-      if (a == null) continue;
-      previousBalance = a;
-      break;
-    }
-
-    const amount = workingBalance - thisBalance / 10 ** decimals;
-    if (amount == 0) continue;
-
-    workingBalance -= amount;
     const start = blockHeights[i].timestamp;
     sections.push({ type: "cliff", start, amount });
   }
-
   return sections;
 }

@@ -11,7 +11,6 @@ const token = "0x10393c20975cf177a3513071bc110f7962cd67da";
 const jonesDao: Protocol = {
   "Operations & Incentives": () =>
     daoSchedule(
-      qty * 0.57,
       ["0xFa82f1bA00b0697227E2Ad6c668abb4C50CA0b1F"],
       token,
       "arbitrum",
@@ -50,7 +49,9 @@ const jonesDao: Protocol = {
     insiders: ["Core contributors", "Private sale"],
     airdrop: ["Airdrop"],
     publicSale: ["Public sale"],
-    unconfirmed: ["Operations & Incentives"],
   },
+  incompleteSections: [
+    { key: "Operations & Incentives", allocation: qty * 0.57 },
+  ],
 };
 export default jonesDao;

@@ -78,14 +78,18 @@ export type Protocol = {
   [section: string]: any;
   meta: Metadata;
   sections: { [key in SectionType]?: string[] | undefined };
+  incompleteSections?: IncompleteSection[];
+};
+export type IncompleteSection = {
+  key: string;
+  allocation: number | undefined;
 };
 export type SectionType =
   | "publicSale"
   | "insiders"
   | "airdrop"
   | "farming"
-  | "noncirculating"
-  | "unconfirmed";
+  | "noncirculating";
 export type RawSection = {
   section: string;
   results: RawResult[] | RawResult[][];

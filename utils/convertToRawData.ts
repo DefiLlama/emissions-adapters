@@ -9,9 +9,10 @@ import {
   SectionData,
   Metadata,
   Event,
+  IncompleteSection,
 } from "../types/adapters";
 import { addResultToEvents } from "./events";
-const excludedKeys = ["meta", "sections"];
+const excludedKeys = ["meta", "sections", "incompleteSections"];
 
 export async function createRawSections(
   adapter: Protocol,
@@ -26,6 +27,8 @@ export async function createRawSections(
     events: [],
   };
   adapter.default = await adapter.default;
+
+  const incompleteSections = adapter.default.incompleteSections;
   await Promise.all(
     Object.entries(adapter.default).map(async (a: any[]) => {
       if (a[0] == "meta") {
@@ -88,10 +91,62 @@ export async function createRawSections(
     }),
   );
 
+  if (incompleteSections)
+    completeIncompleteSection(
+      incompleteSections,
+      rawSections,
+      endTime,
+      metadata,
+    );
+
   if (metadata && metadata.events)
     metadata.events.sort((a: Event, b: Event) => a.timestamp - b.timestamp);
 
   return { rawSections, startTime, endTime, metadata };
+}
+function completeIncompleteSection(
+  incompleteSections: any,
+  rawSections: any,
+  continuousEnd: any,
+  metadata: any,
+) {
+  rawSections.map((r: any) => {
+    if (
+      !incompleteSections
+        .map((i: IncompleteSection) => i.key)
+        .includes(r.section)
+    )
+      return;
+
+    const incompleteSection = incompleteSections.find(
+      (i: any) => i.key == r.section,
+    );
+
+    const totalEmitted = r.results
+      .map((a: any[]) =>
+        a.map((b: any) => b.change).reduce((a: number, b: number) => a + b, 0),
+      )
+      .reduce((a: number, b: number) => a + b, 0);
+
+    const timestamp = Math.max(
+      r.results[r.results.length - 1].map((r: any) => r.timestamp),
+    );
+
+    if (incompleteSection.allocation == null) return;
+
+    r.results.push([
+      {
+        timestamp,
+        change: incompleteSection.allocation - totalEmitted,
+        continuousEnd,
+      },
+    ]);
+
+    if (!("notes" in metadata)) metadata.notes = [];
+    metadata.notes.push(
+      `Only past ${r.section} unlocks have been included in this analysis, because ${r.section} allocation is unlocked adhoc. Future unlocks have been interpolated, which may not be accurate.`,
+    );
+  });
 }
 function stepAdapterToRaw(result: StepAdapterResult): RawResult[] {
   const output: RawResult[] = [];
