@@ -73,8 +73,8 @@ export async function daoSchedule(
         chain,
         block: b.block,
         requery: true,
-      }).then((r: number[]) => {
-        if (r.find((i: any) => isNaN(i)) != null)
+      }).then((r: (number | null)[]) => {
+        if (r.includes(null))
           throw new Error(`balance call failed for ${adapter}`);
         return r.reduce((p: number, c: any) => Number(p) + Number(c), 0);
       }),
@@ -90,8 +90,8 @@ export async function daoSchedule(
   let depositIndex: number = 0;
   for (let i = 0; i < balances.length; i++) {
     const thisBalance: number = balances[i];
-    if ((depositIndex == 0 && thisBalance == 0) || thisBalance == null)
-      continue;
+    if (depositIndex == 0 && thisBalance == 0) continue;
+
     depositIndex += 1;
     if (depositIndex == 1) continue;
 
