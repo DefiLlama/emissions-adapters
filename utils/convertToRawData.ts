@@ -123,9 +123,12 @@ function completeIncompleteSection(
     );
 
     const totalEmitted = r.results
-      .map((a: any[]) =>
-        a.map((b: any) => b.change).reduce((a: number, b: number) => a + b, 0),
-      )
+      .map((a: any[]) => {
+        console.log(a);
+        return a
+          .map((b: any) => b.change)
+          .reduce((a: number, b: number) => a + b, 0);
+      })
       .reduce((a: number, b: number) => a + b, 0);
 
     const timestamp = Math.max(
