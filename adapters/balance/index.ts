@@ -91,12 +91,10 @@ export async function daoSchedule(
   for (let i = 0; i < balances.length; i++) {
     const thisBalance: number = balances[i];
     if (depositIndex == 0 && thisBalance == 0) continue;
-    console.log(`FIRST DEPOSIT: ${thisBalance}, i: ${i}`);
+
     depositIndex += 1;
     if (depositIndex == 1) continue;
-    console.log(`SECOND DEPOSIT: ${thisBalance}, i: ${i}`);
 
-    console.log(`i: ${i}, prevBal: ${balances[i - 1]}, nowBal: ${thisBalance}`);
     const amount = (balances[i - 1] - thisBalance) / 10 ** decimals;
     if (amount <= 0) continue;
 
