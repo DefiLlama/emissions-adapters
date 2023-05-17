@@ -36,7 +36,7 @@ export async function createRawSections(
         if ("custom" in a[1]) {
           await Promise.all(
             Object.entries(a[1].custom).map(async (c: any) => {
-              a[1].custom[c[0]] = await c[1];
+              a[1].custom[c[0]] = await c[1]();
             }),
           );
         }
