@@ -2,8 +2,9 @@ import { multiCall } from "@defillama/sdk/build/abi/abi2";
 import fetch from "node-fetch";
 import { call } from "@defillama/sdk/build/abi/abi2";
 import { CliffAdapterResult } from "../../types/adapters";
-import { isFuture, periodToSeconds } from "../../utils/time";
+import { isFuture } from "../../utils/time";
 import { getBlock2 } from "../../utils/block";
+import { INCOMPLETE_SECTION_STEP } from "../../utils/constants";
 
 type BlockTime = {
   block: number;
@@ -22,9 +23,10 @@ export async function latestDao(
       .then(r => JSON.parse(r.body))
       .then(
         r =>
-          r.metadata.custom == null || r.metadata.custom.latestTimestamp == null
+          r.metadata.incompleteSections == null ||
+          r.metadata.incompleteSections.lastRecord == null
             ? timestampDeployed
-            : r.metadata.custom.latestTimestamp,
+            : r.metadata.incompleteSections.lastRecord,
       );
   return res;
 }
@@ -53,7 +55,7 @@ export async function daoSchedule(
 
   while (!isFuture(currentTimestamp)) {
     allTimestamps.push(currentTimestamp);
-    currentTimestamp += periodToSeconds.week;
+    currentTimestamp += INCOMPLETE_SECTION_STEP;
   }
 
   const blockHeights: BlockTime[] = await Promise.all(

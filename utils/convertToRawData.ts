@@ -1,3 +1,4 @@
+import fetch from "node-fetch";
 import {
   AdapterResult,
   StepAdapterResult,
@@ -13,13 +14,14 @@ import {
 } from "../types/adapters";
 import { addResultToEvents } from "./events";
 const excludedKeys = ["meta", "sections", "incompleteSections"];
+import { INCOMPLETE_SECTION_STEP } from "../utils/constants";
 
 export async function createRawSections(
   adapter: Protocol,
 ): Promise<SectionData> {
   let startTime: number = 10000000000;
   let endTime: number = 0;
-  const rawSections: RawSection[] = [];
+  let rawSections: RawSection[] = [];
   let metadata: Metadata = {
     token: "",
     sources: [],
@@ -33,10 +35,12 @@ export async function createRawSections(
     Object.entries(adapter.default).map(async (a: any[]) => {
       if (a[0] == "meta") {
         metadata = <Metadata>a[1];
-        if ("custom" in a[1]) {
+        if ("incompleteSections" in a[1]) {
           await Promise.all(
-            Object.entries(a[1].custom).map(async (c: any) => {
-              a[1].custom[c[0]] = await c[1]();
+            Object.entries(a[1].incompleteSections).map(async (c: any) => {
+              a[1].incompleteSections[
+                c[0]
+              ].lastRecord = await a[1].incompleteSections[c[0]].lastRecord();
             }),
           );
         }
@@ -92,7 +96,7 @@ export async function createRawSections(
   );
 
   if (incompleteSections)
-    completeIncompleteSection(
+    completeIncompleteSections(
       incompleteSections,
       rawSections,
       endTime,
@@ -104,7 +108,7 @@ export async function createRawSections(
 
   return { rawSections, startTime, endTime, metadata };
 }
-function completeIncompleteSection(
+function completeIncompleteSections(
   incompleteSections: any,
   rawSections: any,
   continuousEnd: any,
@@ -146,6 +150,7 @@ function completeIncompleteSection(
     metadata.notes.push(
       `Only past ${r.section} unlocks have been included in this analysis, because ${r.section} allocation is unlocked adhoc. Future unlocks have been interpolated, which may not be accurate.`,
     );
+    metadata.custom.latestTimestamp = timestamp + INCOMPLETE_SECTION_STEP;
   });
 }
 function stepAdapterToRaw(result: StepAdapterResult): RawResult[] {

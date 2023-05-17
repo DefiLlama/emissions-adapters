@@ -78,11 +78,11 @@ export type Protocol = {
   [section: string]: any;
   meta: Metadata;
   sections: { [key in SectionType]?: string[] | undefined };
-  incompleteSections?: IncompleteSection[];
 };
 export type IncompleteSection = {
   key: string;
   allocation: number | undefined;
+  lastRecord: any;
 };
 export type SectionType =
   | "publicSale"
@@ -95,7 +95,6 @@ export type RawSection = {
   results: RawResult[] | RawResult[][];
 };
 export type ChartConfig = {
-  resolution: number;
   steps: number;
   timestamps: number[];
   unlocked: number[];
@@ -105,6 +104,8 @@ export type ChartConfig = {
   roundedEnd: number;
   isTest: boolean;
   apiData: ApiChartData[];
+  incompleteSection?: IncompleteSection;
+  protocol: string;
 };
 export type ChartSection = {
   data: ChartData;
@@ -129,7 +130,7 @@ export type Metadata = {
   events?: Event[];
   notes?: string[];
   protocolIds: string[];
-  custom?: any;
+  incompleteSections?: IncompleteSection[];
 };
 export type Event = {
   description: string;
