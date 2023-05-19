@@ -61,6 +61,7 @@ const dodo: Protocol = {
       "Operations, marketing, partners",
     ],
     publicSale: ["IDO"],
+    noncirculating: ["Community incentives"],
   },
 };
 

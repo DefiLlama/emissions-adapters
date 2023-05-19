@@ -43,16 +43,20 @@ const dopex: Protocol = {
     sources: ["https://docs.dopex.io/tokenomics/tokenomics"],
     token: `${chain}:${token}`,
     protocolIds: ["660"],
-    custom: {
-      latestTimestamp: () => latestDao("dopex", timestampDeployed),
-    },
+    incompleteSections: [
+      {
+        key: "Treasury",
+        allocation: qty * 0.47,
+        lastRecord: () => latestDao("dopex", timestampDeployed),
+      },
+    ],
   },
   sections: {
     insiders: ["Founders", "Early investors", "Operational allocations"],
     farming: ["Farming", "Platform rewards"],
     publicSale: ["Token sale"],
+    noncirculating: ["Treasury"],
   },
-  incompleteSections: [{ key: "Treasury", allocation: qty * 0.47 }],
 };
 
 export default dopex;

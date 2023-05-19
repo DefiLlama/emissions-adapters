@@ -28,14 +28,23 @@ const conic: Protocol = {
       "https://docs.conic.finance/conic-finance/usdcnc-token/usdcnc-tokenomics",
     ],
     protocolIds: ["2616"],
-    custom: {
-      latestTimestamp: () => latest(),
-    },
+    incompleteSections: [
+      {
+        key: "Rebalancing Curve Pools",
+        allocation: qty * 0.19,
+        lastRecord: () => latest(),
+      },
+    ],
   },
   sections: {
     airdrop: ["vlCVX holders"],
     publicSale: ["Community raise"],
-    farming: ["Staking Omnipool LP", "AMM stakers", "Liquidity"],
+    farming: [
+      "Staking Omnipool LP",
+      "AMM stakers",
+      "Liquidity",
+      "Rebalancing Curve Pools",
+    ],
     noncirculating: ["Treasury"],
   },
 };

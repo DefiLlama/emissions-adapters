@@ -1,7 +1,7 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
-import { stakingRewards, epochsTracked } from "../adapters/api3";
+import { stakingRewards, latest } from "../adapters/api3";
 const start = 1606741200;
 const qty = 100000000;
 
@@ -42,9 +42,13 @@ const api3: Protocol = {
       `Inflationary staking rewards has no set allocation. In this analysis we can only look at past unlocks.`,
     ],
     protocolIds: [],
-    custom: {
-      latestEpoch: () => epochsTracked(),
-    },
+    incompleteSections: [
+      {
+        key: "Staking rewards",
+        allocation: undefined,
+        lastRecord: () => latest(),
+      },
+    ],
   },
   sections: {
     insiders: [
@@ -57,7 +61,6 @@ const api3: Protocol = {
     publicSale: ["Public distribution"],
     farming: ["Staking rewards"],
   },
-  incompleteSections: [{ key: "Staking rewards", allocation: undefined }],
 };
 
 export default api3;

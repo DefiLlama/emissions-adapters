@@ -24,11 +24,11 @@ const jonesDao: Protocol = {
   ),
   "Public sale": manualCliff(start, qty * 0.17),
   "Private sale": [
-    manualCliff(start + periodToSeconds.month * 3, qty * 0.1297 / 3),
+    manualCliff(start + periodToSeconds.month * 3, (qty * 0.1297) / 3),
     manualLinear(
       start + periodToSeconds.month * 3,
       start + periodToSeconds.month * 9,
-      qty * 0.1297 * 2 / 3,
+      (qty * 0.1297 * 2) / 3,
     ),
   ],
   Airdrop: manualCliff(start, qty * 0.01),
@@ -41,17 +41,18 @@ const jonesDao: Protocol = {
       `OlympusDAO's allocation is to be held in perpetuity (effectively burnt) so it has been excluded from our analysis.`,
     ],
     protocolIds: ["1433"],
-    custom: {
-      latestTimestamp: () => latestDao("jones-dao", timestampDeployed),
-    },
+    incompleteSections: [
+      {
+        key: "Operations & Incentives",
+        allocation: qty * 0.57,
+        lastRecord: () => latestDao("jones-dao", timestampDeployed),
+      },
+    ],
   },
   sections: {
     insiders: ["Core contributors", "Private sale"],
     airdrop: ["Airdrop"],
     publicSale: ["Public sale"],
   },
-  incompleteSections: [
-    { key: "Operations & Incentives", allocation: qty * 0.57 },
-  ],
 };
 export default jonesDao;

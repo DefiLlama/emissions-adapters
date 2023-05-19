@@ -45,9 +45,13 @@ const stargate: Protocol = {
     ],
     token: `ethereum:${token}`,
     protocolIds: ["1013"],
-    custom: {
-      latestTimestamp: () => latestDao("stargate", timestampDeployed),
-    },
+    incompleteSections: [
+      {
+        key: "future incentives",
+        allocation: qty * 0.3039,
+        lastRecord: () => latestDao("stargate", timestampDeployed),
+      },
+    ],
   },
   sections: {
     insiders: ["core contributors", "investors"],
@@ -58,7 +62,6 @@ const stargate: Protocol = {
     ],
     publicSale: ["STG launch auction purchasers", "STG DEX liquidity"],
   },
-  incompleteSections: [{ key: "future incentives", allocation: 0.3039 * qty }],
 };
 
 export default stargate;
