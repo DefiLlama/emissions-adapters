@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import {
   AdapterResult,
   StepAdapterResult,
@@ -38,9 +37,8 @@ export async function createRawSections(
         if ("incompleteSections" in a[1]) {
           await Promise.all(
             Object.entries(a[1].incompleteSections).map(async (c: any) => {
-              a[1].incompleteSections[
-                c[0]
-              ].lastRecord = await a[1].incompleteSections[c[0]].lastRecord();
+              a[1].incompleteSections[c[0]].lastRecord =
+                await a[1].incompleteSections[c[0]].lastRecord();
             }),
           );
         }
@@ -54,27 +52,27 @@ export async function createRawSections(
       }
       let adapterResults = await a[1];
       if (adapterResults.length == null) adapterResults = [adapterResults];
-      adapterResults = adapterResults.map(
-        (r: any) => (typeof r === "function" ? r().then() : r),
+      adapterResults = adapterResults.map((r: any) =>
+        typeof r === "function" ? r().then() : r,
       );
       adapterResults = await Promise.all(adapterResults);
 
       addResultToEvents(section, metadata, adapterResults);
 
-      const results:
-        | RawResult[]
-        | RawResult[][] = adapterResults.flat().map((r: AdapterResult) => {
-        switch (r.type) {
-          case "step":
-            return stepAdapterToRaw(<StepAdapterResult>r);
-          case "cliff":
-            return cliffAdapterToRaw(<CliffAdapterResult>r);
-          case "linear":
-            return linearAdapterToRaw(<LinearAdapterResult>r);
-          default:
-            throw new Error(`invalid adapter type: ${r.type}`);
-        }
-      });
+      const results: RawResult[] | RawResult[][] = adapterResults
+        .flat()
+        .map((r: AdapterResult) => {
+          switch (r.type) {
+            case "step":
+              return stepAdapterToRaw(<StepAdapterResult>r);
+            case "cliff":
+              return cliffAdapterToRaw(<CliffAdapterResult>r);
+            case "linear":
+              return linearAdapterToRaw(<LinearAdapterResult>r);
+            default:
+              throw new Error(`invalid adapter type: ${r.type}`);
+          }
+        });
 
       rawSections.push({ section, results });
 
@@ -87,9 +85,8 @@ export async function createRawSections(
         endTime,
         ...results
           .flat()
-          .map(
-            (r: any) =>
-              r.continuousEnd == null ? r.timestamp : r.continuousEnd,
+          .map((r: any) =>
+            r.continuousEnd == null ? r.timestamp : r.continuousEnd,
           ),
       );
     }),

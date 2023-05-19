@@ -1,4 +1,3 @@
-import { periodToSeconds } from "./time";
 import {
   ChartData,
   ChartConfig,
@@ -22,18 +21,50 @@ export async function createChartData(
   },
   isTest: boolean = true,
 ): Promise<ChartSection[]> {
-  protocol;
   const chartData: any[] = [];
-  await Promise.all(data.rawSections.map(async (r: any) => {
-    await Promise.all(r.results.map(async (d: any) =>
-      chartData.push({
-        data: await rawToChartData(protocol, d, data.startTime, data.endTime, data.metadata.incompleteSections?.find((s: IncompleteSection) => s.key == r.section) ?? undefined, isTest),
+  data.rawSections.map((r: any) => {
+    r.results.map((d: any) => {
+      return chartData.push({
+        data: rawToChartData(protocol, d, data.startTime, data.endTime, isTest),
         section: r.section,
-      }),
-    ));
-  }));
+      });
+    });
+  });
 
+  await finishIncompleteSections(chartData, protocol, data);
   return consolidateDuplicateKeys(chartData, isTest);
+}
+async function finishIncompleteSections(
+  chartData: ChartSection[],
+  protocol: string,
+  data: {
+    rawSections: RawSection[];
+    metadata: Metadata;
+    startTime: number;
+    endTime: number;
+  },
+) {
+  const incompleteSections = data.metadata.incompleteSections;
+  if (incompleteSections == null || incompleteSections.length == 0) return;
+
+  const res = (
+    await fetch(`https://api.llama.fi/emission/${protocol}`)
+      .then((r) => r.json())
+      .then((r) => JSON.parse(r.body))
+  ).data;
+
+  incompleteSections.map((i: IncompleteSection) => {
+    const apiData: ApiChartData[] = res.find(
+      (s: ApiChartData) => s.label == i.key,
+    ).data;
+    const timestamps: number[] = apiData.map((d: ApiChartData) => d.timestamp);
+    const unlocked: number[] = apiData.map((d: ApiChartData) => d.unlocked);
+
+    chartData.push({
+      data: { isContinuous: false, timestamps, unlocked, apiData },
+      section: i.key,
+    });
+  });
 }
 function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   let sortedData: any[] = [];
@@ -66,16 +97,17 @@ function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
 
   return sortedData;
 }
-export async function rawToChartData(
+export function rawToChartData(
   protocol: string,
   raw: RawResult[],
   start: number,
   end: number,
-  incompleteSection: IncompleteSection | undefined,
   isTest: boolean = true,
-): Promise<ChartData> {
-  const roundedStart: number = Math.floor(start / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
-  const roundedEnd: number = Math.ceil(end / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
+): ChartData {
+  const roundedStart: number =
+    Math.floor(start / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
+  const roundedEnd: number =
+    Math.ceil(end / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
   let config: ChartConfig = {
     roundedStart,
     roundedEnd,
@@ -86,12 +118,11 @@ export async function rawToChartData(
     workingTimestamp: roundedStart,
     isTest,
     apiData: [],
-    incompleteSection, 
-    protocol
+    protocol,
   };
   raw.sort((r: RawResult) => r.timestamp);
 
-  return raw[0].continuousEnd ? continuous(raw, config) : await discreet(raw, config);
+  return raw[0].continuousEnd ? continuous(raw, config) : discreet(raw, config);
 }
 function continuous(raw: RawResult[], config: ChartConfig): ChartData {
   let {
@@ -110,7 +141,8 @@ function continuous(raw: RawResult[], config: ChartConfig): ChartData {
     );
 
   const dy: number =
-    raw[0].change * RESOLUTION_SECONDS / (raw[0].continuousEnd - raw[0].timestamp);
+    (raw[0].change * RESOLUTION_SECONDS) /
+    (raw[0].continuousEnd - raw[0].timestamp);
 
   for (let i = 0; i < steps + 1; i++) {
     if (
@@ -129,7 +161,7 @@ function continuous(raw: RawResult[], config: ChartConfig): ChartData {
   }
   return { timestamps, unlocked, apiData, isContinuous: true };
 }
-async function discreet(raw: RawResult[], config: ChartConfig): Promise<ChartData> {
+function discreet(raw: RawResult[], config: ChartConfig): ChartData {
   let {
     steps,
     timestamps,
@@ -138,19 +170,8 @@ async function discreet(raw: RawResult[], config: ChartConfig): Promise<ChartDat
     workingTimestamp,
     isTest,
     apiData,
-    incompleteSection,
-    protocol
   } = config;
 
-  const res = (await fetch(`https://api.llama.fi/emission/${protocol}`)
-  .then(r => r.json())
-  .then(r => JSON.parse(r.body))).data.find((s: any) => s.label == incompleteSection?.key).data
-
-  if (res != null) {
-    apiData = res
-    unlocked = res.map((r: ApiChartData) => r.unlocked)
-    timestamps = res.map((r: ApiChartData) => r.timestamp)
-  }
   let j = 0; // index of current raw data timestamp
   for (let i = 0; i < steps + 1; i++) {
     // checks if the next data point falls between the previous and next plot times

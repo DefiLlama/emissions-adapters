@@ -10,26 +10,26 @@ const chain = "ethereum";
 const timestampDeployed = 1602457200;
 
 const dodo: Protocol = {
-  // "Team & consultants": manualLinear(
-  //   start + periodToSeconds.year,
-  //   start + periodToSeconds.year * 3,
-  //   qty * 0.15,
-  // ),
-  // "Seed investors": manualLinear(
-  //   start + periodToSeconds.year,
-  //   start + periodToSeconds.year * 3,
-  //   qty * 0.06,
-  // ),
-  // "private round investors": [
-  //   manualCliff(start + periodToSeconds.month * 6, qty * 0.1 * 0.1),
-  //   manualLinear(
-  //     start + periodToSeconds.month * 6,
-  //     start + periodToSeconds.month * 18,
-  //     qty * 0.1 * 0.9,
-  //   ),
-  // ],
-  // IDO: manualCliff(start, qty * 0.01),
-  // "Operations, marketing, partners": manualCliff(start, qty * 0.08),
+  "Team & consultants": manualLinear(
+    start + periodToSeconds.year,
+    start + periodToSeconds.year * 3,
+    qty * 0.15,
+  ),
+  "Seed investors": manualLinear(
+    start + periodToSeconds.year,
+    start + periodToSeconds.year * 3,
+    qty * 0.06,
+  ),
+  "private round investors": [
+    manualCliff(start + periodToSeconds.month * 6, qty * 0.1 * 0.1),
+    manualLinear(
+      start + periodToSeconds.month * 6,
+      start + periodToSeconds.month * 18,
+      qty * 0.1 * 0.9,
+    ),
+  ],
+  IDO: manualCliff(start, qty * 0.01),
+  "Operations, marketing, partners": manualCliff(start, qty * 0.08),
   "Community incentives": () =>
     daoSchedule(
       ["0x4447183c50e82a8b0141718c405381a3b1bad634"],
