@@ -51,10 +51,9 @@ export async function stakingRewards(): Promise<CliffAdapterResult[]> {
     }),
   ]);
 
-  const trackedEpoch: number =
-    Math.floor(trackedEpochTimestamp / periodToSeconds.week) *
-    periodToSeconds.week;
-
+  const trackedEpoch: number = Math.floor(
+    trackedEpochTimestamp / periodToSeconds.week,
+  );
   const allEpochs: number[] = [];
   for (let i = trackedEpoch; i <= latestEpoch; i++) {
     allEpochs.push(i);
