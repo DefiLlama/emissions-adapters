@@ -75,7 +75,7 @@ async function appendMissingDataSections(
       unlocked = apiDataWithoutForecast.map((d: ApiChartData) => d.unlocked);
       appendOldApiData(chartData, unlocked, apiData, i, timestamps);
     }
-    appendForecast(chartData, unlocked, apiData, i, data, isTest);
+    appendForecast(chartData, unlocked, i, data, isTest);
   });
 }
 function appendOldApiData(
@@ -93,7 +93,6 @@ function appendOldApiData(
 function appendForecast(
   chartData: ChartSection[],
   unlocked: number[],
-  apiData: ApiChartData[],
   incompleteSection: IncompleteSection,
   data: {
     rawSections: RawSection[];
@@ -112,9 +111,12 @@ function appendForecast(
     (d: ChartSection) => d.section == incompleteSection.key,
   );
 
+  const reference: number =
+    unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
+
   let emitted: number | undefined = relatedSections
-    .map((d: ChartSection) => d.data.unlocked[apiData.length - 1])
-    .reduce((p: number, c: number) => p + c, unlocked[unlocked.length - 1]);
+    .map((d: ChartSection) => d.data.unlocked[d.data.unlocked.length - 1])
+    .reduce((p: number, c: number) => p + c, reference);
   if (!emitted) emitted = 0;
 
   chartData.push({
