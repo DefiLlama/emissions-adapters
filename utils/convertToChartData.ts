@@ -9,7 +9,7 @@ import {
   ApiChartData,
 } from "../types/adapters";
 import fetch from "node-fetch";
-import { RESOLUTION_SECONDS } from "./constants";
+import { RESOLUTION_SECONDS, INCOMPLETE_SECTION_STEP } from "./constants";
 
 export async function createChartData(
   protocol: string,
@@ -24,10 +24,18 @@ export async function createChartData(
   const chartData: any[] = [];
   data.rawSections.map((r: any) => {
     r.results.map((d: any) => {
-      return chartData.push({
-        data: rawToChartData(protocol, d, data.startTime, data.endTime, isTest),
-        section: r.section,
-      });
+      if (r.section == "Community incentives") {
+        return chartData.push({
+          data: rawToChartData(
+            protocol,
+            d,
+            data.startTime,
+            data.endTime,
+            isTest,
+          ),
+          section: r.section,
+        });
+      }
     });
   });
 
@@ -128,6 +136,13 @@ function appendForecast(
     ),
     section: incompleteSection.key,
   });
+
+  if (!("notes" in data.metadata)) data.metadata.notes = [];
+  data.metadata.notes?.push(
+    `Only past ${incompleteSection.key} unlocks have been included in this analysis, because ${incompleteSection.key} allocation is unlocked adhoc. Future unlocks have been interpolated, which may not be accurate.`,
+  );
+  // this timestamp will be queried on the next run
+  incompleteSection.lastRecord = finalTimestamp + INCOMPLETE_SECTION_STEP;
 }
 function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   let sortedData: any[] = [];

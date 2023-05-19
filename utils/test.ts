@@ -12,7 +12,7 @@ if (process.argv.length < 3) {
 let protocol = process.argv[2];
 
 export async function parseData(adapter: Protocol): Promise<void> {
-  const rawData = await createRawSections(adapter);
+  let rawData = await createRawSections(adapter);
   const chartData = await createChartData(protocol, rawData);
   if (process.argv[3] != "true") postDebugLogs(chartData, protocol);
   await getChartPng(chartData, process.argv[3] == "true");
