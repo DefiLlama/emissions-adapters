@@ -10,6 +10,7 @@ import {
 } from "../types/adapters";
 import fetch from "node-fetch";
 import { RESOLUTION_SECONDS, INCOMPLETE_SECTION_STEP } from "./constants";
+import { unixTimestampNow } from "./time";
 
 export async function createChartData(
   protocol: string,
@@ -23,20 +24,12 @@ export async function createChartData(
 ): Promise<ChartSection[]> {
   const chartData: any[] = [];
   data.rawSections.map((r: any) => {
-    r.results.map((d: any) => {
-      if (r.section == "Community incentives") {
-        return chartData.push({
-          data: rawToChartData(
-            protocol,
-            d,
-            data.startTime,
-            data.endTime,
-            isTest,
-          ),
-          section: r.section,
-        });
-      }
-    });
+    r.results.map((d: any) =>
+      chartData.push({
+        data: rawToChartData(protocol, d, data.startTime, data.endTime, isTest),
+        section: r.section,
+      }),
+    );
   });
 
   await appendMissingDataSections(chartData, protocol, data, isTest);
@@ -78,25 +71,24 @@ async function appendMissingDataSections(
       (d: ApiChartData) => d.unlocked,
     );
 
-    appendForecast(chartData, timestamps, unlocked, apiData, i, data, isTest);
-    appendOldApiData(chartData, timestamps, unlocked, apiData, i.key);
+    appendForecast(chartData, unlocked, apiData, i, data, isTest);
+    appendOldApiData(chartData, unlocked, apiData, i, timestamps);
   });
 }
 function appendOldApiData(
   chartData: ChartSection[],
-  timestamps: number[],
   unlocked: number[],
   apiData: ApiChartData[],
-  section: string,
+  incompleteSection: IncompleteSection,
+  timestamps: number[],
 ) {
   chartData.push({
     data: { isContinuous: false, timestamps, unlocked, apiData },
-    section,
+    section: incompleteSection.key,
   });
 }
 function appendForecast(
   chartData: ChartSection[],
-  timestamps: number[],
   unlocked: number[],
   apiData: ApiChartData[],
   incompleteSection: IncompleteSection,
@@ -110,7 +102,8 @@ function appendForecast(
 ) {
   if (!incompleteSection.allocation) return;
 
-  const lastKnownTimestamp = timestamps[timestamps.length - 1];
+  const timestamp =
+    Math.floor(unixTimestampNow() / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
   const finalTimestamp = apiData[apiData.length - 1].timestamp;
 
   const relatedSections = chartData.filter(
@@ -125,7 +118,7 @@ function appendForecast(
       "",
       [
         {
-          timestamp: lastKnownTimestamp,
+          timestamp,
           change: incompleteSection.allocation - emitted,
           continuousEnd: finalTimestamp,
         },
@@ -142,7 +135,7 @@ function appendForecast(
     `Only past ${incompleteSection.key} unlocks have been included in this analysis, because ${incompleteSection.key} allocation is unlocked adhoc. Future unlocks have been interpolated, which may not be accurate.`,
   );
   // this timestamp will be queried on the next run
-  incompleteSection.lastRecord = finalTimestamp + INCOMPLETE_SECTION_STEP;
+  incompleteSection.lastRecord = timestamp + INCOMPLETE_SECTION_STEP;
 }
 function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   let sortedData: any[] = [];

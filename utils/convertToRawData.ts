@@ -29,7 +29,6 @@ export async function createRawSections(
 
   await Promise.all(
     Object.entries(adapter.default).map(async (a: any[]) => {
-      console.log(a[0]);
       if (a[0] == "meta") {
         metadata = <Metadata>a[1];
         if ("incompleteSections" in a[1]) {
