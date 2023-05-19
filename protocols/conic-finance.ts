@@ -1,7 +1,7 @@
 import { manualCliff, manualLinear, manualLog } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
-import { rebalancing, latest } from "../adapters/conic";
+import { rebalancing, latest } from "../adapters/conic-finance";
 
 const start = 1649246400;
 const qty = 10000000;

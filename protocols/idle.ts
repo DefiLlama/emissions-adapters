@@ -7,7 +7,8 @@ const qty = 13000000;
 const start = 1603670400;
 const token = "0x875773784Af8135eA0ef43b5a374AaD105c5D39e";
 const chain = "ethereum";
-const timestampDeployed = 1684510000;
+const timestampDeployed = 1683068400;
+const timestampDeployed2 = 1612310400;
 
 const idle: Protocol = {
   "early LPs": manualCliff(start, qty * 0.04),
@@ -16,11 +17,10 @@ const idle: Protocol = {
     start + periodToSeconds.day * 30,
     qty * 0.03,
   ),
-  "Liquidity mining": manualLinear(
-    start,
-    start + periodToSeconds.year * 2,
-    qty * 0.18,
-  ),
+  "Liquidity mining": [
+    manualLinear(start, start + periodToSeconds.year * 2, qty * 0.18),
+    manualCliff(1779218596, 1),
+  ],
   "Long-term rewards": daoSchedule(
     ["0x107A369bc066c77FF061c7d2420618a6ce31B925"],
     token,
@@ -44,11 +44,14 @@ const idle: Protocol = {
       (qty * 0.227 * 2) / 3,
     ),
   ],
-  "Ecosystem fund": manualCliff(start, qty * 0.15),
+  "Ecosystem fund": daoSchedule(
+    ["0xb0aA1f98523Ec15932dd5fAAC5d86e57115571C7"],
+    token,
+    chain,
+    "idle",
+    timestampDeployed2,
+  ),
   meta: {
-    notes: [
-      `There is no schedule for 'Long term rewards', since it is managed by DAO governance. So we have estimated a linear emission in a year's time`,
-    ],
     sources: ["https://docs.idle.finance/governance/idle/distribution"],
     token: `${chain}:${token}`,
     protocolIds: ["150"],
@@ -57,6 +60,11 @@ const idle: Protocol = {
         key: "Long-term rewards",
         allocation: qty * 0.2,
         lastRecord: () => latestDao("idle", timestampDeployed),
+      },
+      {
+        key: "Ecosystem fund",
+        allocation: qty * 0.15,
+        lastRecord: () => latestDao("idle", timestampDeployed2),
       },
     ],
   },
