@@ -31,10 +31,10 @@ export async function createChartData(
     });
   });
 
-  await finishIncompleteSections(chartData, protocol, data);
+  await appendMissingDataSections(chartData, protocol, data, isTest);
   return consolidateDuplicateKeys(chartData, isTest);
 }
-async function finishIncompleteSections(
+async function appendMissingDataSections(
   chartData: ChartSection[],
   protocol: string,
   data: {
@@ -43,6 +43,7 @@ async function finishIncompleteSections(
     startTime: number;
     endTime: number;
   },
+  isTest: boolean,
 ) {
   const incompleteSections = data.metadata.incompleteSections;
   if (incompleteSections == null || incompleteSections.length == 0) return;
@@ -57,13 +58,75 @@ async function finishIncompleteSections(
     const apiData: ApiChartData[] = res.find(
       (s: ApiChartData) => s.label == i.key,
     ).data;
-    const timestamps: number[] = apiData.map((d: ApiChartData) => d.timestamp);
-    const unlocked: number[] = apiData.map((d: ApiChartData) => d.unlocked);
 
-    chartData.push({
-      data: { isContinuous: false, timestamps, unlocked, apiData },
-      section: i.key,
-    });
+    // i.lastRecord will be included in the next fetch
+    const apiDataWithoutForecast: ApiChartData[] = apiData.filter(
+      (a: ApiChartData) => a.timestamp < i.lastRecord,
+    );
+    const timestamps: number[] = apiDataWithoutForecast.map(
+      (d: ApiChartData) => d.timestamp,
+    );
+    const unlocked: number[] = apiDataWithoutForecast.map(
+      (d: ApiChartData) => d.unlocked,
+    );
+
+    appendForecast(chartData, timestamps, unlocked, apiData, i, data, isTest);
+    appendOldApiData(chartData, timestamps, unlocked, apiData, i.key);
+  });
+}
+function appendOldApiData(
+  chartData: ChartSection[],
+  timestamps: number[],
+  unlocked: number[],
+  apiData: ApiChartData[],
+  section: string,
+) {
+  chartData.push({
+    data: { isContinuous: false, timestamps, unlocked, apiData },
+    section,
+  });
+}
+function appendForecast(
+  chartData: ChartSection[],
+  timestamps: number[],
+  unlocked: number[],
+  apiData: ApiChartData[],
+  incompleteSection: IncompleteSection,
+  data: {
+    rawSections: RawSection[];
+    metadata: Metadata;
+    startTime: number;
+    endTime: number;
+  },
+  isTest: boolean,
+) {
+  if (!incompleteSection.allocation) return;
+
+  const lastKnownTimestamp = timestamps[timestamps.length - 1];
+  const finalTimestamp = apiData[apiData.length - 1].timestamp;
+
+  const relatedSections = chartData.filter(
+    (d: ChartSection) => d.section == incompleteSection.key,
+  );
+  const emitted = relatedSections
+    .map((d: ChartSection) => d.data.unlocked[apiData.length - 1])
+    .reduce((p: number, c: number) => p + c, unlocked[unlocked.length - 1]);
+
+  chartData.push({
+    data: rawToChartData(
+      "",
+      [
+        {
+          timestamp: lastKnownTimestamp,
+          change: incompleteSection.allocation - emitted,
+          continuousEnd: finalTimestamp,
+        },
+      ],
+      data.startTime,
+      data.endTime,
+      isTest,
+    ),
+    section: incompleteSection.key,
   });
 }
 function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {

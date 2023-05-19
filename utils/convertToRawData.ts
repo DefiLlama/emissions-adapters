@@ -147,6 +147,7 @@ function completeIncompleteSections(
     metadata.notes.push(
       `Only past ${r.section} unlocks have been included in this analysis, because ${r.section} allocation is unlocked adhoc. Future unlocks have been interpolated, which may not be accurate.`,
     );
+    // this timestamp will be queried on the next run
     metadata.custom.latestTimestamp = timestamp + INCOMPLETE_SECTION_STEP;
   });
 }
