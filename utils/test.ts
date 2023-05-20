@@ -6,7 +6,7 @@ import { secondsToReadableDate } from "./time";
 
 if (process.argv.length < 3) {
   console.error(`Missing argument, you need to provide the adapter name.
-    Eg: ts-node utils/test.ts aave`);
+    Eg: npm test aave`);
   process.exit(1);
 }
 let protocol = process.argv[2];

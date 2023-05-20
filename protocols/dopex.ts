@@ -6,7 +6,7 @@ import { daoSchedule, latestDao } from "../adapters/balance";
 const qty = 500000;
 const start = 1633647600;
 const token = "0x6c2c06790b3e3e3c38e12ee22f8183b37a13ee55";
-const timestampDeployed = 1633734000; //1661036400;
+const timestampDeployed = 1655766000;
 const chain = "arbitrum";
 
 const dopex: Protocol = {

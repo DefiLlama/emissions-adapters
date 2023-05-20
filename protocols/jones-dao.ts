@@ -5,7 +5,7 @@ import { daoSchedule, latestDao } from "../adapters/balance";
 
 const start = 1642896000;
 const qty = 10000000;
-const timestampDeployed = 1642809600;
+const timestampDeployed = 1643500800;
 const token = "0x10393c20975cf177a3513071bc110f7962cd67da";
 
 const jonesDao: Protocol = {
