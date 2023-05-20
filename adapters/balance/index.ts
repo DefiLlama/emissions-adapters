@@ -19,17 +19,17 @@ export async function latestDao(
 ): Promise<number> {
   if (!res)
     return fetch(`https://api.llama.fi/emission/${adapter}`)
-      .then(r => r.json())
-      .then(r => JSON.parse(r.body))
-      .then(
-        r =>
-          r.metadata.incompleteSections == null ||
-          r.metadata.incompleteSections.lastRecord == null
-            ? timestampDeployed
-            : r.metadata.incompleteSections.lastRecord,
+      .then((r) => r.json())
+      .then((r) => JSON.parse(r.body))
+      .then((r) =>
+        r.metadata.incompleteSections == null ||
+        r.metadata.incompleteSections.lastRecord == null
+          ? timestampDeployed
+          : r.metadata.incompleteSections.lastRecord,
       );
   return res;
 }
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function daoSchedule(
   owners: string[],
@@ -67,21 +67,38 @@ export async function daoSchedule(
     ),
   );
 
-  let balances = await Promise.all(
-    blockHeights.map((b: BlockTime) =>
-      multiCall({
-        calls: owners.map((o: string) => ({ target, params: [o] })),
-        abi: "erc20:balanceOf",
-        chain,
-        block: b.block,
-        requery: true,
-      }).then((r: (number | null)[]) => {
-        if (r.includes(null))
-          throw new Error(`balance call failed for ${adapter}`);
-        return r.reduce((p: number, c: any) => Number(p) + Number(c), 0);
-      }),
-    ),
-  );
+  let balances: any[] = [];
+  try {
+    balances = await Promise.all(
+      blockHeights.map((b: BlockTime) =>
+        multiCall({
+          calls: owners.map((o: string) => ({ target, params: [o] })),
+          abi: "erc20:balanceOf",
+          chain,
+          block: b.block,
+          requery: true,
+        }).then((r: (number | null)[]) => {
+          if (r.includes(null))
+            throw new Error(`balance call failed for ${adapter}`);
+          return r.reduce((p: number, c: any) => Number(p) + Number(c), 0);
+        }),
+      ),
+    );
+  } catch {
+    for (let block of blockHeights) {
+      console.log("tick");
+      await sleep(2000);
+      balances.push(
+        await multiCall({
+          calls: owners.map((o: string) => ({ target, params: [o] })),
+          abi: "erc20:balanceOf",
+          chain,
+          block: block.block,
+          requery: true,
+        }),
+      );
+    }
+  }
 
   if (balances.length != blockHeights.length)
     throw new Error(
