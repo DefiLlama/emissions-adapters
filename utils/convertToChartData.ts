@@ -82,6 +82,10 @@ function appendOldApiData(
   incompleteSection: IncompleteSection,
   timestamps: number[],
 ) {
+  while (apiData.length > unlocked.length) {
+    unlocked.push(0);
+    timestamps.push(timestamps[timestamps.length - 1] + RESOLUTION_SECONDS);
+  }
   chartData.push({
     data: { isContinuous: false, timestamps, unlocked, apiData },
     section: incompleteSection.key,
