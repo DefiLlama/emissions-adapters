@@ -28,9 +28,13 @@ const forta: Protocol = {
     sources: ["https://docs.forta.network/en/latest/fort-token/"],
     token: "ethereum:0x41545f8b9472d758bb669ed8eaeeecd7a9c4ec29",
     protocolIds: ["2664"],
-    custom: {
-      latestTimestamp: () => latest(),
-    },
+    incompleteSections: [
+      {
+        key: "unallocated",
+        allocation: totalQty * 0.391,
+        lastRecord: () => latest(),
+      },
+    ],
   },
   sections: {
     insiders: ["other", "backers", "core contributors", "OpenZeppelin"],
@@ -38,6 +42,5 @@ const forta: Protocol = {
     farming: ["node runner rewards"],
     noncirculating: ["unallocated"],
   },
-  incompleteSections: [{ key: "unallocated", allocation: 391000000 }],
 };
 export default forta;

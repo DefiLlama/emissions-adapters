@@ -14,13 +14,13 @@ let res: number;
 export async function latest(): Promise<number> {
   if (!res)
     return fetch(`https://api.llama.fi/emission/conic-finance`)
-      .then(r => r.json())
-      .then(r => JSON.parse(r.body))
-      .then(
-        r =>
-          r.metadata.custom == null || r.metadata.custom.latestTimestamp == null
-            ? 1677715200
-            : r.metadata.custom.latestTimestamp,
+      .then((r) => r.json())
+      .then((r) => JSON.parse(r.body))
+      .then((r) =>
+        r.metadata.incompleteSections == null ||
+        r.metadata.incompleteSections.lastRecord == null
+          ? 1677715200
+          : r.metadata.incompleteSections.lastRecord,
       );
   return res;
 }

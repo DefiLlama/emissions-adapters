@@ -22,14 +22,14 @@ const perpetual: Protocol = {
     v1Launch,
     periodToSeconds.year / 4,
     4,
-    qty * 0.042 / 4,
+    (qty * 0.042) / 4,
   ),
   "Balancer LBP": manualCliff(start, qty * 0.05),
   "Strategic investors": manualStep(
     v1Launch,
     periodToSeconds.year / 4,
     4,
-    qty * 0.15 / 4,
+    (qty * 0.15) / 4,
   ),
   "Team and advisors": manualStep(
     mainnetLaunch + periodToSeconds.month * 6,
@@ -46,16 +46,17 @@ const perpetual: Protocol = {
     ],
     token: `ethereum:${token}`,
     protocolIds: ["362"],
-    custom: {
-      latestTimestamp: () => latestDao("perpetual", timestampDeployed),
-    },
+    incompleteSections: [
+      {
+        key: "Ecosystem and rewards",
+        allocation: qty * 0.548,
+        lastRecord: () => latestDao("perpetual", timestampDeployed),
+      },
+    ],
   },
   sections: {
     farming: ["Balancer LBP", "Ecosystem and rewards"],
     insiders: ["Seed investors", "Strategic investors", "Team and advisors"],
   },
-  incompleteSections: [
-    { key: "Ecosystem and rewards", allocation: qty * 0.548 },
-  ],
 };
 export default perpetual;

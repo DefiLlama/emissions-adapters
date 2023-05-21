@@ -6,7 +6,7 @@ import { daoSchedule, latestDao } from "../adapters/balance";
 const qty = 500000;
 const start = 1633647600;
 const token = "0x6c2c06790b3e3e3c38e12ee22f8183b37a13ee55";
-const timestampDeployed = 1633734000; //1661036400;
+const timestampDeployed = 1655766000;
 const chain = "arbitrum";
 
 const dopex: Protocol = {
@@ -43,16 +43,20 @@ const dopex: Protocol = {
     sources: ["https://docs.dopex.io/tokenomics/tokenomics"],
     token: `${chain}:${token}`,
     protocolIds: ["660"],
-    custom: {
-      latestTimestamp: () => latestDao("dopex", timestampDeployed),
-    },
+    incompleteSections: [
+      {
+        key: "Treasury",
+        allocation: qty * 0.47,
+        lastRecord: () => latestDao("dopex", timestampDeployed),
+      },
+    ],
   },
   sections: {
     insiders: ["Founders", "Early investors", "Operational allocations"],
     farming: ["Farming", "Platform rewards"],
     publicSale: ["Token sale"],
+    noncirculating: ["Treasury"],
   },
-  incompleteSections: [{ key: "Treasury", allocation: qty * 0.47 }],
 };
 
 export default dopex;

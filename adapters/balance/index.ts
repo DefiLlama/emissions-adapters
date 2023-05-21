@@ -2,8 +2,9 @@ import { multiCall } from "@defillama/sdk/build/abi/abi2";
 import fetch from "node-fetch";
 import { call } from "@defillama/sdk/build/abi/abi2";
 import { CliffAdapterResult } from "../../types/adapters";
-import { isFuture, periodToSeconds } from "../../utils/time";
+import { isFuture } from "../../utils/time";
 import { getBlock2 } from "../../utils/block";
+import { INCOMPLETE_SECTION_STEP } from "../../utils/constants";
 
 type BlockTime = {
   block: number;
@@ -18,16 +19,17 @@ export async function latestDao(
 ): Promise<number> {
   if (!res)
     return fetch(`https://api.llama.fi/emission/${adapter}`)
-      .then(r => r.json())
-      .then(r => JSON.parse(r.body))
-      .then(
-        r =>
-          r.metadata.custom == null || r.metadata.custom.latestTimestamp == null
-            ? timestampDeployed
-            : r.metadata.custom.latestTimestamp,
+      .then((r) => r.json())
+      .then((r) => JSON.parse(r.body))
+      .then((r) =>
+        r.metadata.incompleteSections == null ||
+        r.metadata.incompleteSections.lastRecord == null
+          ? timestampDeployed
+          : r.metadata.incompleteSections.lastRecord,
       );
   return res;
 }
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function daoSchedule(
   owners: string[],
@@ -53,7 +55,7 @@ export async function daoSchedule(
 
   while (!isFuture(currentTimestamp)) {
     allTimestamps.push(currentTimestamp);
-    currentTimestamp += periodToSeconds.week;
+    currentTimestamp += INCOMPLETE_SECTION_STEP;
   }
 
   const blockHeights: BlockTime[] = await Promise.all(
@@ -65,21 +67,38 @@ export async function daoSchedule(
     ),
   );
 
-  let balances = await Promise.all(
-    blockHeights.map((b: BlockTime) =>
-      multiCall({
-        calls: owners.map((o: string) => ({ target, params: [o] })),
-        abi: "erc20:balanceOf",
-        chain,
-        block: b.block,
-        requery: true,
-      }).then((r: (number | null)[]) => {
-        if (r.includes(null))
-          throw new Error(`balance call failed for ${adapter}`);
-        return r.reduce((p: number, c: any) => Number(p) + Number(c), 0);
-      }),
-    ),
-  );
+  let balances: any[] = [];
+  try {
+    balances = await Promise.all(
+      blockHeights.map((b: BlockTime) =>
+        multiCall({
+          calls: owners.map((o: string) => ({ target, params: [o] })),
+          abi: "erc20:balanceOf",
+          chain,
+          block: b.block,
+          requery: true,
+        }).then((r: (number | null)[]) => {
+          if (r.includes(null))
+            throw new Error(`balance call failed for ${adapter}`);
+          return r.reduce((p: number, c: any) => Number(p) + Number(c), 0);
+        }),
+      ),
+    );
+  } catch {
+    for (let block of blockHeights) {
+      console.log("tick");
+      await sleep(2000);
+      balances.push(
+        await multiCall({
+          calls: owners.map((o: string) => ({ target, params: [o] })),
+          abi: "erc20:balanceOf",
+          chain,
+          block: block.block,
+          requery: true,
+        }),
+      );
+    }
+  }
 
   if (balances.length != blockHeights.length)
     throw new Error(

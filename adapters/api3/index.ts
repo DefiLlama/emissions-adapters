@@ -3,6 +3,7 @@ import { call, multiCall } from "@defillama/sdk/build/abi/abi2";
 import { CliffAdapterResult } from "../../types/adapters";
 import { abi } from "./abi";
 import { getTimestamp } from "@defillama/sdk/build/util/index";
+import { periodToSeconds } from "../../utils/time";
 
 type RewardsRes = {
   atBlock: string;
@@ -18,27 +19,26 @@ const token: string = "0x0b38210ea11411557c13457D4dA7dC6ea731B88a";
 const chain: any = "ethereum";
 let res: number;
 
-export async function epochsTracked(): Promise<number> {
+export async function latest(): Promise<number> {
   if (!res)
     return fetch(`https://api.llama.fi/emission/api3`)
-      .then(r => r.json())
-      .then(r => JSON.parse(r.body))
-      .then(
-        r =>
-          r.metadata.custom == null || r.metadata.custom.latestEpoch == null
-            ? 2688 // origin epoch
-            : r.metadata.custom.latestEpoch,
+      .then((r) => r.json())
+      .then((r) => JSON.parse(r.body))
+      .then((r) =>
+        r.metadata.custom == null || r.metadata.custom.lastRecord == null
+          ? 2688 * periodToSeconds.week // origin epoch * length
+          : r.metadata.custom.lastRecord,
       );
   return res;
 }
 
 export async function stakingRewards(): Promise<CliffAdapterResult[]> {
-  let trackedEpoch: number;
+  let trackedEpochTimestamp: number;
   let latestEpoch: number;
   let decimals: number;
 
-  [trackedEpoch, latestEpoch, decimals] = await Promise.all([
-    epochsTracked(),
+  [trackedEpochTimestamp, latestEpoch, decimals] = await Promise.all([
+    latest(),
     call({
       target,
       abi: abi.epochIndexOfLastReward,
@@ -51,19 +51,24 @@ export async function stakingRewards(): Promise<CliffAdapterResult[]> {
     }),
   ]);
 
+  const trackedEpoch: number = Math.floor(
+    trackedEpochTimestamp / periodToSeconds.week,
+  );
   const allEpochs: number[] = [];
   for (let i = trackedEpoch; i <= latestEpoch; i++) {
     allEpochs.push(i);
   }
 
-  const rewards: RewardsRes[] = (await multiCall({
-    calls: allEpochs.map((n: number) => ({
-      target,
-      params: n,
-    })),
-    abi: abi.epochIndexToReward,
-    chain,
-  })).filter((r: any) => r.amount != 0);
+  const rewards: RewardsRes[] = (
+    await multiCall({
+      calls: allEpochs.map((n: number) => ({
+        target,
+        params: n,
+      })),
+      abi: abi.epochIndexToReward,
+      chain,
+    })
+  ).filter((r: any) => r.amount != 0);
 
   const blockHeights: number[] = rewards.map((r: any) => Number(r.atBlock));
   const blockTimes: BlockTime[] = await Promise.all(

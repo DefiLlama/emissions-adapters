@@ -45,9 +45,13 @@ const dodo: Protocol = {
       `Community incentives (60%) are released on an uncofirmed schedule, so have been excluded from this analysis.`,
     ],
     protocolIds: ["146"],
-    custom: {
-      latestTimestamp: () => latestDao("dodo", timestampDeployed),
-    },
+    incompleteSections: [
+      {
+        key: "Community incentives",
+        allocation: qty * 0.6,
+        lastRecord: () => latestDao("dodo", timestampDeployed),
+      },
+    ],
   },
   sections: {
     insiders: [
@@ -57,8 +61,8 @@ const dodo: Protocol = {
       "Operations, marketing, partners",
     ],
     publicSale: ["IDO"],
+    noncirculating: ["Community incentives"],
   },
-  incompleteSections: [{ key: "Community incentives", allocation: qty * 0.6 }],
 };
 
 export default dodo;

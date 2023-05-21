@@ -1,29 +1,148 @@
-import { periodToSeconds } from "./time";
 import {
   ChartData,
   ChartConfig,
   RawResult,
   RawSection,
   ChartSection,
+  Metadata,
+  IncompleteSection,
+  ApiChartData,
 } from "../types/adapters";
+import fetch from "node-fetch";
+import { RESOLUTION_SECONDS, INCOMPLETE_SECTION_STEP } from "./constants";
+import { unixTimestampNow } from "./time";
 
-export function createChartData(
-  rawSections: RawSection[],
-  startTime: number,
-  endTime: number,
+export async function createChartData(
+  protocol: string,
+  data: {
+    rawSections: RawSection[];
+    metadata: Metadata;
+    startTime: number;
+    endTime: number;
+  },
   isTest: boolean = true,
-): ChartSection[] {
-  const data: any[] = [];
-  rawSections.map((r: any) => {
+): Promise<ChartSection[]> {
+  const chartData: any[] = [];
+  data.rawSections.map((r: any) => {
     r.results.map((d: any) =>
-      data.push({
-        data: rawToChartData(d, startTime, endTime, isTest),
+      chartData.push({
+        data: rawToChartData(protocol, d, data.startTime, data.endTime, isTest),
         section: r.section,
       }),
     );
   });
 
-  return consolidateDuplicateKeys(data, isTest);
+  await appendMissingDataSections(chartData, protocol, data, isTest);
+  return consolidateDuplicateKeys(chartData, isTest);
+}
+async function appendMissingDataSections(
+  chartData: ChartSection[],
+  protocol: string,
+  data: {
+    rawSections: RawSection[];
+    metadata: Metadata;
+    startTime: number;
+    endTime: number;
+  },
+  isTest: boolean,
+) {
+  const incompleteSections = data.metadata.incompleteSections;
+  if (incompleteSections == null || incompleteSections.length == 0) return;
+
+  const res = (
+    await fetch(`https://api.llama.fi/emission/${protocol}`)
+      .then((r) => r.json())
+      .then((r) => JSON.parse(r.body))
+  ).data;
+
+  incompleteSections.map((i: IncompleteSection) => {
+    const sectionRes: any = res.find((s: ApiChartData) => s.label == i.key);
+
+    let unlocked: number[] = [];
+    let timestamps: number[] = [];
+    let apiData: ApiChartData[] = [];
+    if (sectionRes) {
+      apiData = sectionRes.data;
+
+      // i.lastRecord will be included in the next fetch
+      const apiDataWithoutForecast: ApiChartData[] = apiData.filter(
+        (a: ApiChartData) => a.timestamp < i.lastRecord,
+      );
+      timestamps = apiDataWithoutForecast.map((d: ApiChartData) => d.timestamp);
+      unlocked = apiDataWithoutForecast.map((d: ApiChartData) => d.unlocked);
+      appendOldApiData(chartData, unlocked, apiData, i, timestamps);
+    }
+    appendForecast(chartData, unlocked, i, data, isTest);
+  });
+}
+function appendOldApiData(
+  chartData: ChartSection[],
+  unlocked: number[],
+  apiData: ApiChartData[],
+  incompleteSection: IncompleteSection,
+  timestamps: number[],
+) {
+  while (apiData.length > unlocked.length) {
+    unlocked.push(0);
+    timestamps.push(timestamps[timestamps.length - 1] + RESOLUTION_SECONDS);
+  }
+  chartData.push({
+    data: { isContinuous: false, timestamps, unlocked, apiData },
+    section: incompleteSection.key,
+  });
+}
+function appendForecast(
+  chartData: ChartSection[],
+  unlocked: number[],
+  incompleteSection: IncompleteSection,
+  data: {
+    rawSections: RawSection[];
+    metadata: Metadata;
+    startTime: number;
+    endTime: number;
+  },
+  isTest: boolean,
+) {
+  const timestamp =
+    Math.floor(unixTimestampNow() / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
+
+  if (incompleteSection.allocation) {
+    const relatedSections = chartData.filter(
+      (d: ChartSection) => d.section == incompleteSection.key,
+    );
+
+    const reference: number =
+      unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
+
+    let emitted: number | undefined = relatedSections
+      .map((d: ChartSection) => d.data.unlocked[d.data.unlocked.length - 1])
+      .reduce((p: number, c: number) => p + c, reference);
+    if (!emitted) emitted = 0;
+
+    chartData.push({
+      data: rawToChartData(
+        "",
+        [
+          {
+            timestamp,
+            change: incompleteSection.allocation - emitted,
+            continuousEnd: data.endTime,
+          },
+        ],
+        data.startTime,
+        data.endTime,
+        isTest,
+      ),
+      section: incompleteSection.key,
+    });
+  }
+
+  if (!("notes" in data.metadata)) data.metadata.notes = [];
+  data.metadata.notes?.push(
+    `Only past ${incompleteSection.key} unlocks have been included in this analysis, because ${incompleteSection.key} allocation is unlocked adhoc. Future unlocks have been interpolated, which may not be accurate.`,
+  );
+
+  incompleteSection.lastRecord = timestamp + INCOMPLETE_SECTION_STEP;
 }
 function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   let sortedData: any[] = [];
@@ -57,25 +176,27 @@ function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   return sortedData;
 }
 export function rawToChartData(
+  protocol: string,
   raw: RawResult[],
   start: number,
   end: number,
   isTest: boolean = true,
-  resolution: number = periodToSeconds.day,
 ): ChartData {
-  const roundedStart: number = Math.floor(start / resolution) * resolution;
-  const roundedEnd: number = Math.ceil(end / resolution) * resolution;
+  const roundedStart: number =
+    Math.floor(start / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
+  const roundedEnd: number =
+    Math.ceil(end / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
   let config: ChartConfig = {
-    resolution,
     roundedStart,
     roundedEnd,
-    steps: (roundedEnd - roundedStart) / resolution,
+    steps: (roundedEnd - roundedStart) / RESOLUTION_SECONDS,
     timestamps: [],
     unlocked: [],
     workingQuantity: 0,
     workingTimestamp: roundedStart,
     isTest,
     apiData: [],
+    protocol,
   };
   raw.sort((r: RawResult) => r.timestamp);
 
@@ -83,7 +204,6 @@ export function rawToChartData(
 }
 function continuous(raw: RawResult[], config: ChartConfig): ChartData {
   let {
-    resolution,
     steps,
     timestamps,
     unlocked,
@@ -99,7 +219,8 @@ function continuous(raw: RawResult[], config: ChartConfig): ChartData {
     );
 
   const dy: number =
-    raw[0].change * resolution / (raw[0].continuousEnd - raw[0].timestamp);
+    (raw[0].change * RESOLUTION_SECONDS) /
+    (raw[0].continuousEnd - raw[0].timestamp);
 
   for (let i = 0; i < steps + 1; i++) {
     if (
@@ -114,13 +235,12 @@ function continuous(raw: RawResult[], config: ChartConfig): ChartData {
     } else {
       apiData.push({ timestamp: workingTimestamp, unlocked: workingQuantity });
     }
-    workingTimestamp += resolution;
+    workingTimestamp += RESOLUTION_SECONDS;
   }
   return { timestamps, unlocked, apiData, isContinuous: true };
 }
 function discreet(raw: RawResult[], config: ChartConfig): ChartData {
   let {
-    resolution,
     steps,
     timestamps,
     unlocked,
@@ -143,7 +263,7 @@ function discreet(raw: RawResult[], config: ChartConfig): ChartData {
     } else {
       apiData.push({ timestamp: workingTimestamp, unlocked: workingQuantity });
     }
-    workingTimestamp += resolution;
+    workingTimestamp += RESOLUTION_SECONDS;
   }
   return { timestamps, unlocked, apiData, isContinuous: false };
 }
