@@ -8,8 +8,8 @@ const lendSaleQty = 10000000;
 const lendSale = 1512777600;
 
 const devSchedule = (portion: number) => [
-  manualCliff(lendSale, lendDevQty * portion / 5),
-  manualStep(lendSale, periodToSeconds.year / 2, 4, lendDevQty * portion / 5),
+  manualCliff(lendSale, (lendDevQty * portion) / 5),
+  manualStep(lendSale, periodToSeconds.year / 2, 4, (lendDevQty * portion) / 5),
 ];
 
 const aave: Protocol = {
@@ -29,11 +29,17 @@ const aave: Protocol = {
     ],
     token: "ethereum:0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
     protocolIds: ["111", "1599", "1838", "1839"],
+    incompleteSections: [
+      {
+        key: "Ecosysten reserve",
+        allocation: lendDevQty,
+        lastRecord: () => 0,
+      },
+    ],
   },
   sections: {
     noncirculating: ["Ecosysten reserve"],
     publicSale: ["LEND to AAVE migrator"],
   },
-  incompleteSections: [{ key: "Ecosysten reserve", allocation: lendDevQty }],
 };
 export default aave;

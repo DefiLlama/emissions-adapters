@@ -49,14 +49,11 @@ async function appendMissingDataSections(
   const incompleteSections = data.metadata.incompleteSections;
   if (incompleteSections == null || incompleteSections.length == 0) return;
 
-  // const res = (
-  //   await fetch(`https://api.llama.fi/emission/${protocol}`)
-  //     .then((r) => r.json())
-  //     .then((r) => JSON.parse(r.body))
-  // ).data;
-
-  protocol;
-  const res: any[] = [];
+  const res = (
+    await fetch(`https://api.llama.fi/emission/${protocol}`)
+      .then((r) => r.json())
+      .then((r) => JSON.parse(r.body))
+  ).data;
 
   incompleteSections.map((i: IncompleteSection) => {
     const sectionRes: any = res.find((s: ApiChartData) => s.label == i.key);
@@ -102,52 +99,46 @@ function appendForecast(
   },
   isTest: boolean,
 ) {
-  if (!incompleteSection.allocation) return;
-
   const timestamp =
     Math.floor(unixTimestampNow() / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
 
-  const relatedSections = chartData.filter(
-    (d: ChartSection) => d.section == incompleteSection.key,
-  );
+  if (incompleteSection.allocation) {
+    const relatedSections = chartData.filter(
+      (d: ChartSection) => d.section == incompleteSection.key,
+    );
 
-  const reference: number =
-    unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
+    const reference: number =
+      unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
 
-  let emitted: number | undefined = relatedSections
-    .map((d: ChartSection) => d.data.unlocked[d.data.unlocked.length - 1])
-    .reduce((p: number, c: number) => p + c, reference);
-  if (!emitted) emitted = 0;
+    let emitted: number | undefined = relatedSections
+      .map((d: ChartSection) => d.data.unlocked[d.data.unlocked.length - 1])
+      .reduce((p: number, c: number) => p + c, reference);
+    if (!emitted) emitted = 0;
 
-  chartData.push({
-    data: rawToChartData(
-      "",
-      [
-        {
-          timestamp,
-          change: incompleteSection.allocation - emitted,
-          continuousEnd: data.endTime,
-        },
-      ],
-      data.startTime,
-      data.endTime,
-      isTest,
-    ),
-    section: incompleteSection.key,
-  });
+    chartData.push({
+      data: rawToChartData(
+        "",
+        [
+          {
+            timestamp,
+            change: incompleteSection.allocation - emitted,
+            continuousEnd: data.endTime,
+          },
+        ],
+        data.startTime,
+        data.endTime,
+        isTest,
+      ),
+      section: incompleteSection.key,
+    });
+  }
 
   if (!("notes" in data.metadata)) data.metadata.notes = [];
   data.metadata.notes?.push(
     `Only past ${incompleteSection.key} unlocks have been included in this analysis, because ${incompleteSection.key} allocation is unlocked adhoc. Future unlocks have been interpolated, which may not be accurate.`,
   );
 
-  // MAKE SURE THIS IS ALL UPDATING NICELY
   incompleteSection.lastRecord = timestamp + INCOMPLETE_SECTION_STEP;
-
-  // const sectionIndex = data.metadata.incompleteSections?.indexOf(incompleteSection)
-  // // this timestamp will be queried on the next run
-  // if (data.metadata.incompleteSections?[sectionIndex] != null)
-  // data.metadata.incompleteSections?[sectionIndex].lastRecord = timestamp + INCOMPLETE_SECTION_STEP;
 }
 function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   let sortedData: any[] = [];
