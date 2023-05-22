@@ -21,7 +21,7 @@ const idle: Protocol = {
     manualLinear(start, start + periodToSeconds.year * 2, qty * 0.18),
     manualCliff(1779218596, 1),
   ],
-  "Long-term rewards": daoSchedule(
+  "Long-term rewards": ()=>daoSchedule(
     ["0x107A369bc066c77FF061c7d2420618a6ce31B925"],
     token,
     chain,
@@ -44,7 +44,7 @@ const idle: Protocol = {
       (qty * 0.227 * 2) / 3,
     ),
   ],
-  "Ecosystem fund": daoSchedule(
+  "Ecosystem fund": ()=>daoSchedule(
     ["0xb0aA1f98523Ec15932dd5fAAC5d86e57115571C7"],
     token,
     chain,
