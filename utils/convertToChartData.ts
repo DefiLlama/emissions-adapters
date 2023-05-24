@@ -78,13 +78,14 @@ async function appendMissingDataSections(
       );
       timestamps = apiDataWithoutForecast.map((d: ApiChartData) => d.timestamp);
       unlocked = apiDataWithoutForecast.map((d: ApiChartData) => d.unlocked);
-      appendOldApiData(
-        chartData,
-        unlocked,
-        apiDataWithoutForecast,
-        i,
-        timestamps,
-      );
+      if (apiDataWithoutForecast.length > 0 && unlocked.length > 0)
+        appendOldApiData(
+          chartData,
+          unlocked,
+          apiDataWithoutForecast,
+          i,
+          timestamps,
+        );
     }
     appendForecast(chartData, unlocked, i, data, isTest);
   });
