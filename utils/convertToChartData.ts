@@ -168,7 +168,7 @@ function appendForecast(
 
   if (!("notes" in data.metadata)) data.metadata.notes = [];
   data.metadata.notes?.push(
-    `Only past ${incompleteSection.key} unlocks have been included in this analysis, because ${incompleteSection.key} allocation is unlocked adhoc. Future unlocks have been interpolated, which may not be accurate.`,
+    `Only past ${incompleteSection.key} unlocks have been included in this analysis, because ${incompleteSection.key} allocation is unlocked adhoc. Future unlocks have been extrapolated, which may not be accurate.`,
   );
 
   incompleteSection.lastRecord = timestamp + INCOMPLETE_SECTION_STEP;
