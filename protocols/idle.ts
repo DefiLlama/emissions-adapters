@@ -19,7 +19,6 @@ const idle: Protocol = {
   ),
   "Liquidity mining": [
     manualLinear(start, start + periodToSeconds.year * 2, qty * 0.18),
-    manualCliff(1779218596, 1),
   ],
   "Long-term rewards": ()=>daoSchedule(
     ["0x107A369bc066c77FF061c7d2420618a6ce31B925"],
@@ -32,7 +31,7 @@ const idle: Protocol = {
     manualCliff(start + periodToSeconds.month * 6, qty * 0.173 * 0.25),
     manualLinear(
       start + periodToSeconds.month * 6,
-      periodToSeconds.month * 18,
+      start + periodToSeconds.month * 18,
       qty * 0.173 * 0.75,
     ),
   ],
