@@ -13,11 +13,11 @@ const paraswap: Protocol = {
     qty * 0.15,
   ),
   Investors: [
-    manualCliff(start + periodToSeconds.month * 4, qty * 0.14 / 6),
+    manualCliff(start + periodToSeconds.month * 4, (qty * 0.14) / 6),
     manualLinear(
       start + periodToSeconds.month * 4,
       start + periodToSeconds.year * 2,
-      qty * 0.14 * 5 / 6,
+      (qty * 0.14 * 5) / 6,
     ),
   ],
   Team: [
@@ -55,7 +55,7 @@ const paraswap: Protocol = {
   ],
   meta: {
     notes: [
-      `The paraswap docs contain conflicting information. Here we have used our best judgement to infer the true vesting schedule.`,
+      `Future team members (5%) have no set vesting schedule and therefore has been excluded from this analysis.`,
     ],
     token: "ethereum:0xcafe001067cdef266afb7eb5a286dcfd277f3de5",
     sources: ["https://doc.paraswap.network/psp-token/token-overview"],
@@ -65,7 +65,7 @@ const paraswap: Protocol = {
     airdrop: ["Airdrop"],
     insiders: ["Investors", "Team", "Future team members"],
     farming: ["Initial liquidity mining"],
-    noncirculating: ["Reserves", "Ecosystem"],
+    noncirculating: ["Reserves"],
   },
 };
 
