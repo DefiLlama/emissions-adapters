@@ -79,19 +79,22 @@ export type Protocol = {
   meta: Metadata;
   sections: { [key in SectionType]?: string[] | undefined };
 };
+export type IncompleteSection = {
+  key: string;
+  allocation: number | undefined;
+  lastRecord: any;
+};
 export type SectionType =
   | "publicSale"
   | "insiders"
   | "airdrop"
   | "farming"
-  | "noncirculating"
-  | "unconfirmed";
+  | "noncirculating";
 export type RawSection = {
   section: string;
   results: RawResult[] | RawResult[][];
 };
 export type ChartConfig = {
-  resolution: number;
   steps: number;
   timestamps: number[];
   unlocked: number[];
@@ -101,6 +104,8 @@ export type ChartConfig = {
   roundedEnd: number;
   isTest: boolean;
   apiData: ApiChartData[];
+  incompleteSection?: IncompleteSection;
+  protocol: string;
 };
 export type ChartSection = {
   data: ChartData;
@@ -125,7 +130,7 @@ export type Metadata = {
   events?: Event[];
   notes?: string[];
   protocolIds: string[];
-  custom?: any;
+  incompleteSections?: IncompleteSection[];
 };
 export type Event = {
   description: string;

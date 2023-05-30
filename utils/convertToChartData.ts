@@ -1,35 +1,208 @@
-import { periodToSeconds } from "./time";
 import {
   ChartData,
   ChartConfig,
   RawResult,
   RawSection,
   ChartSection,
+  Metadata,
+  IncompleteSection,
+  ApiChartData,
 } from "../types/adapters";
+import fetch from "node-fetch";
+import { RESOLUTION_SECONDS, INCOMPLETE_SECTION_STEP } from "./constants";
+import { periodToSeconds, unixTimestampNow } from "./time";
 
-export function createChartData(
-  rawSections: RawSection[],
-  startTime: number,
-  endTime: number,
+export async function createChartData(
+  protocol: string,
+  data: {
+    rawSections: RawSection[];
+    metadata: Metadata;
+    startTime: number;
+    endTime: number;
+  },
   isTest: boolean = true,
-): ChartSection[] {
-  const data: any[] = [];
-  rawSections.map((r: any) => {
-    r.results.map((d: any) =>
-      data.push({
-        data: rawToChartData(d, startTime, endTime, isTest),
-        section: r.section,
-      }),
-    );
+): Promise<ChartSection[]> {
+  const chartData: any[] = [];
+  data.rawSections.map((r: any) => {
+    r.results.map((s: any[]) => {
+      s.map((d: any) =>
+        chartData.push({
+          data: rawToChartData(
+            protocol,
+            d,
+            data.startTime,
+            data.endTime,
+            isTest,
+          ),
+          section: r.section,
+        }),
+      );
+    });
   });
 
-  return consolidateDuplicateKeys(data, isTest);
+  await appendMissingDataSections(chartData, protocol, data, isTest);
+  return consolidateDuplicateKeys(chartData, isTest);
+}
+async function appendMissingDataSections(
+  chartData: ChartSection[],
+  protocol: string,
+  data: {
+    rawSections: RawSection[];
+    metadata: Metadata;
+    startTime: number;
+    endTime: number;
+  },
+  isTest: boolean,
+) {
+  const incompleteSections = data.metadata.incompleteSections;
+  if (incompleteSections == null || incompleteSections.length == 0) return;
+
+  const res = (
+    await fetch(`https://api.llama.fi/emission/${protocol}`)
+      .then((r) => r.json())
+      .then((r) => JSON.parse(r.body))
+  ).data;
+
+  incompleteSections.map((i: IncompleteSection) => {
+    const sectionRes: any = res.find((s: ApiChartData) => s.label == i.key);
+
+    let unlocked: number[] = [];
+    let timestamps: number[] = [];
+    let apiData: ApiChartData[] = [];
+    if (sectionRes) {
+      apiData = sectionRes.data;
+
+      // i.lastRecord will be included in the next fetch
+      const apiDataWithoutForecast: ApiChartData[] = apiData.filter(
+        (a: ApiChartData) => a.timestamp < i.lastRecord,
+      );
+      timestamps = apiDataWithoutForecast.map((d: ApiChartData) => d.timestamp);
+      unlocked = apiDataWithoutForecast.map((d: ApiChartData) => d.unlocked);
+      if (apiDataWithoutForecast.length > 0 && unlocked.length > 0)
+        appendOldApiData(
+          chartData,
+          unlocked,
+          apiDataWithoutForecast,
+          i,
+          timestamps,
+        );
+    }
+    appendForecast(chartData, unlocked, i, data, isTest);
+  });
+}
+function appendOldApiData(
+  chartData: ChartSection[],
+  unlocked: number[],
+  apiData: ApiChartData[],
+  incompleteSection: IncompleteSection,
+  timestamps: number[],
+) {
+  chartData.push({
+    data: { isContinuous: false, timestamps, unlocked, apiData },
+    section: incompleteSection.key,
+  });
+}
+function appendForecast(
+  chartData: ChartSection[],
+  unlocked: number[],
+  incompleteSection: IncompleteSection,
+  data: {
+    rawSections: RawSection[];
+    metadata: Metadata;
+    startTime: number;
+    endTime: number;
+  },
+  isTest: boolean,
+) {
+  const timestamp =
+    Math.floor(unixTimestampNow() / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
+
+  if (incompleteSection.allocation) {
+    const relatedSections = chartData.filter(
+      (d: ChartSection) => d.section == incompleteSection.key,
+    );
+
+    const startTimestamps: any = relatedSections.map((r: ChartSection) => {
+      if (isTest) return r.data.timestamps[0];
+      let apiData: any = r.data.apiData;
+      if (apiData) apiData = apiData[0];
+      if (apiData) return apiData.timestamp;
+    });
+    const start = Math.min(...startTimestamps);
+
+    const reference: number =
+      unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
+
+    let emitted: number | undefined = relatedSections
+      .map((d: ChartSection) =>
+        !isTest && d.data.apiData != null
+          ? d.data.apiData[d.data.apiData.length - 1].unlocked
+          : d.data.unlocked[d.data.unlocked.length - 1],
+      )
+      .reduce((p: number, c: number) => p + c, reference);
+    if (!emitted) emitted = 0;
+
+    const gradient: number = emitted / (timestamp - start);
+    const change: number = incompleteSection.allocation - emitted;
+    const continuousEnd: number = Math.round(
+      Math.min(
+        timestamp + change / gradient,
+        timestamp + periodToSeconds.year * 5,
+      ),
+    );
+    chartData.push({
+      data: rawToChartData(
+        "",
+        {
+          timestamp,
+          change,
+          continuousEnd,
+        },
+        data.startTime,
+        continuousEnd,
+        isTest,
+      ),
+      section: incompleteSection.key,
+    });
+  }
+
+  if (!("notes" in data.metadata)) data.metadata.notes = [];
+  data.metadata.notes?.push(
+    `Only past ${incompleteSection.key} unlocks have been included in this analysis, because ${incompleteSection.key} allocation is unlocked adhoc. Future unlocks have been extrapolated, which may not be accurate.`,
+  );
+
+  incompleteSection.lastRecord = timestamp + INCOMPLETE_SECTION_STEP;
 }
 function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   let sortedData: any[] = [];
 
+  const sectionLengths = data.map((s: any) =>
+    isTest ? s.data.unlocked.length : s.data.apiData.length,
+  );
+  const maxSectionLength: number = Math.max(...sectionLengths);
+
   data.map((d: any) => {
     const sortedKeys = sortedData.map((s: any) => s.section);
+
+    // normalize to extrapolations
+    let targetLength = isTest
+      ? d.data.timestamps.length
+      : d.data.apiData.length;
+    while (targetLength < maxSectionLength - 1) {
+      targetLength = isTest ? d.data.timestamps.length : d.data.apiData.length;
+      if (isTest) {
+        d.data.timestamps.push(
+          d.data.timestamps[targetLength - 1] + RESOLUTION_SECONDS,
+        );
+        d.data.unlocked.push(d.data.unlocked[targetLength - 2]);
+      } else {
+        d.data.apiData.push({
+          timestamp:
+            d.data.apiData[targetLength - 1].timestamp + RESOLUTION_SECONDS,
+          unlocked: d.data.apiData[targetLength - 2].unlocked,
+        });
+      }
+    }
 
     if (sortedKeys.includes(d.section)) {
       if (isTest) {
@@ -57,33 +230,33 @@ function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   return sortedData;
 }
 export function rawToChartData(
-  raw: RawResult[],
+  protocol: string,
+  raw: RawResult,
   start: number,
   end: number,
   isTest: boolean = true,
-  resolution: number = periodToSeconds.day,
 ): ChartData {
-  const roundedStart: number = Math.floor(start / resolution) * resolution;
-  const roundedEnd: number = Math.ceil(end / resolution) * resolution;
+  const roundedStart: number =
+    Math.floor(start / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
+  const roundedEnd: number =
+    Math.ceil(end / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
   let config: ChartConfig = {
-    resolution,
     roundedStart,
     roundedEnd,
-    steps: (roundedEnd - roundedStart) / resolution,
+    steps: (roundedEnd - roundedStart) / RESOLUTION_SECONDS,
     timestamps: [],
     unlocked: [],
     workingQuantity: 0,
     workingTimestamp: roundedStart,
     isTest,
     apiData: [],
+    protocol,
   };
-  raw.sort((r: RawResult) => r.timestamp);
 
-  return raw[0].continuousEnd ? continuous(raw, config) : discreet(raw, config);
+  return raw.continuousEnd ? continuous(raw, config) : discreet(raw, config);
 }
-function continuous(raw: RawResult[], config: ChartConfig): ChartData {
+function continuous(raw: RawResult, config: ChartConfig): ChartData {
   let {
-    resolution,
     steps,
     timestamps,
     unlocked,
@@ -93,18 +266,18 @@ function continuous(raw: RawResult[], config: ChartConfig): ChartData {
     apiData,
   } = config;
 
-  if (raw[0].continuousEnd == null)
+  if (raw.continuousEnd == null)
     throw new Error(
       `some noncontinuous data has entered the continuous function`,
     );
 
   const dy: number =
-    raw[0].change * resolution / (raw[0].continuousEnd - raw[0].timestamp);
+    (raw.change * RESOLUTION_SECONDS) / (raw.continuousEnd - raw.timestamp);
 
   for (let i = 0; i < steps + 1; i++) {
     if (
-      raw[0].timestamp < workingTimestamp &&
-      raw[0].continuousEnd > workingTimestamp
+      raw.timestamp < workingTimestamp &&
+      raw.continuousEnd > workingTimestamp
     ) {
       workingQuantity += dy;
     }
@@ -112,15 +285,24 @@ function continuous(raw: RawResult[], config: ChartConfig): ChartData {
       unlocked.push(workingQuantity);
       timestamps.push(workingTimestamp);
     } else {
-      apiData.push({ timestamp: workingTimestamp, unlocked: workingQuantity });
+      apiData.push({
+        timestamp: workingTimestamp,
+        unlocked: workingQuantity,
+      });
     }
-    workingTimestamp += resolution;
+    workingTimestamp += RESOLUTION_SECONDS;
   }
+
+  if (isTest) {
+    unlocked[unlocked.length - 1] = raw.change;
+  } else {
+    apiData[apiData.length - 1].unlocked = raw.change;
+  }
+
   return { timestamps, unlocked, apiData, isContinuous: true };
 }
-function discreet(raw: RawResult[], config: ChartConfig): ChartData {
+function discreet(raw: RawResult, config: ChartConfig): ChartData {
   let {
-    resolution,
     steps,
     timestamps,
     unlocked,
@@ -130,20 +312,21 @@ function discreet(raw: RawResult[], config: ChartConfig): ChartData {
     apiData,
   } = config;
 
-  let j = 0; // index of current raw data timestamp
   for (let i = 0; i < steps + 1; i++) {
     // checks if the next data point falls between the previous and next plot times
-    if (j < raw.length && raw[j].timestamp < workingTimestamp) {
-      workingQuantity += raw[j].change;
-      j += 1;
-    }
+    if (
+      workingTimestamp - RESOLUTION_SECONDS <= raw.timestamp &&
+      raw.timestamp < workingTimestamp
+    )
+      workingQuantity += raw.change;
+
     if (isTest) {
       unlocked.push(workingQuantity);
       timestamps.push(workingTimestamp);
     } else {
       apiData.push({ timestamp: workingTimestamp, unlocked: workingQuantity });
     }
-    workingTimestamp += resolution;
+    workingTimestamp += RESOLUTION_SECONDS;
   }
   return { timestamps, unlocked, apiData, isContinuous: false };
 }

@@ -1,5 +1,5 @@
 import adapter from "../adapters/aave/aave";
-import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
+import { manualCliff, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
@@ -8,8 +8,8 @@ const lendSaleQty = 10000000;
 const lendSale = 1512777600;
 
 const devSchedule = (portion: number) => [
-  manualCliff(lendSale, lendDevQty * portion / 5),
-  manualStep(lendSale, periodToSeconds.year / 2, 4, lendDevQty * portion / 5),
+  manualCliff(lendSale, (lendDevQty * portion) / 5),
+  manualStep(lendSale, periodToSeconds.year / 2, 4, (lendDevQty * portion) / 5),
 ];
 
 const aave: Protocol = {
@@ -27,16 +27,19 @@ const aave: Protocol = {
       "https://etherscan.io/tx/0x751c299f081d1a763cb6eff46616574a822b7d3376168e406e25ba03293e17b2",
       "https://github.com/ETHLend/Documentation/blob/master/ETHLendWhitePaper.md#token-distribution",
     ],
-    notes: [
-      "not all ecosystem reserve funds have been given an emission schedule. Any undefined ecosystem reserve emissions have been excluded from this analysis.",
-    ],
     token: "ethereum:0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
     protocolIds: ["111", "1599", "1838", "1839"],
+    incompleteSections: [
+      {
+        key: "Ecosysten reserve",
+        allocation: lendDevQty,
+        lastRecord: () => 0,
+      },
+    ],
   },
   sections: {
     noncirculating: ["Ecosysten reserve"],
     publicSale: ["LEND to AAVE migrator"],
-    unconfirmed: ["Ecosysten reserve"],
   },
 };
 export default aave;

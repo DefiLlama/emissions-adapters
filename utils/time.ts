@@ -5,13 +5,16 @@ export function readableToSeconds(readableDate: string): number {
   const date = new Date(readableDate);
   return Math.floor(date.getTime() / 1000);
 }
+export function unixTimestampNow() {
+  return Math.floor(new Date().getTime() / 1000);
+}
 export function secondsToReadableDate(
   datetime: number | string,
   format: string = "DD MM YYYY",
   locale: string = "en-US",
 ): string {
-  if (typeof datetime == 'string') datetime = parseInt(datetime)
-  if (datetime < 10 ** 10) datetime *= 1000
+  if (typeof datetime == "string") datetime = parseInt(datetime);
+  if (datetime < 10 ** 10) datetime *= 1000;
   return dayjs(datetime).locale(locale).format(format);
 }
 export function secondsDifference(end: Date, start = new Date()): number {
@@ -35,8 +38,9 @@ export function stringToTimestamp(
   const month = parseDateString(inputDate, format.toLowerCase(), "m");
   const day = parseDateString(inputDate, format.toLowerCase(), "d");
   const seconds = readableToSeconds(`${year}-${month}-${day}T00:00:00`);
-  if (isNaN(seconds)) throw new Error(`${inputDate} is not in the format ${format}`)
-  return seconds
+  if (isNaN(seconds))
+    throw new Error(`${inputDate} is not in the format ${format}`);
+  return seconds;
 }
 function parseDateString(input: string, format: string, key: string) {
   const result = input.substring(
@@ -49,7 +53,7 @@ function parseDateString(input: string, format: string, key: string) {
 }
 export function normalizeTime(
   time: string | number,
-  format: string | undefined
+  format: string | undefined,
 ): number {
   if (typeof time != "string") return time;
   if (time.search(/([/-])/g) == -1 && time.length == 10) return parseInt(time);
@@ -60,17 +64,18 @@ export const ratePerPeriod = (
   r: LinearAdapterResult,
   precision: number,
   period: number = periodToSeconds.week,
-): number => Number((r.amount * period / (r.end - r.start)).toPrecision(precision));
+): number =>
+  Number(((r.amount * period) / (r.end - r.start)).toPrecision(precision));
 
 export function secondsToReadableDifference(seconds: number) {
   if (seconds > periodToSeconds.month * 2) {
-    return `${seconds / periodToSeconds.month} months`
+    return `${seconds / periodToSeconds.month} months`;
   } else if (seconds > periodToSeconds.week * 2) {
-    return `${seconds / periodToSeconds.week} weeks`
+    return `${seconds / periodToSeconds.week} weeks`;
   } else {
-    return `${seconds / periodToSeconds.day} days`
+    return `${seconds / periodToSeconds.day} days`;
   }
 }
 export const isFuture = (timestamp: number) => {
-  return timestamp * 1000 > Date.now()
-}
+  return timestamp * 1000 > Date.now();
+};

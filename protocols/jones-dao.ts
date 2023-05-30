@@ -5,13 +5,12 @@ import { daoSchedule, latestDao } from "../adapters/balance";
 
 const start = 1642896000;
 const qty = 10000000;
-const timestampDeployed = 1642809600;
+const timestampDeployed = 1643500800;
 const token = "0x10393c20975cf177a3513071bc110f7962cd67da";
 
 const jonesDao: Protocol = {
   "Operations & Incentives": () =>
     daoSchedule(
-      qty * 0.57,
       ["0xFa82f1bA00b0697227E2Ad6c668abb4C50CA0b1F"],
       token,
       "arbitrum",
@@ -25,11 +24,11 @@ const jonesDao: Protocol = {
   ),
   "Public sale": manualCliff(start, qty * 0.17),
   "Private sale": [
-    manualCliff(start + periodToSeconds.month * 3, qty * 0.1297 / 3),
+    manualCliff(start + periodToSeconds.month * 3, (qty * 0.1297) / 3),
     manualLinear(
       start + periodToSeconds.month * 3,
       start + periodToSeconds.month * 9,
-      qty * 0.1297 * 2 / 3,
+      (qty * 0.1297 * 2) / 3,
     ),
   ],
   Airdrop: manualCliff(start, qty * 0.01),
@@ -42,15 +41,18 @@ const jonesDao: Protocol = {
       `OlympusDAO's allocation is to be held in perpetuity (effectively burnt) so it has been excluded from our analysis.`,
     ],
     protocolIds: ["1433"],
-    custom: {
-      latestTimestamp: () => latestDao("jones-dao", timestampDeployed),
-    },
+    incompleteSections: [
+      {
+        key: "Operations & Incentives",
+        allocation: qty * 0.57,
+        lastRecord: () => latestDao("jones-dao", timestampDeployed),
+      },
+    ],
   },
   sections: {
     insiders: ["Core contributors", "Private sale"],
     airdrop: ["Airdrop"],
     publicSale: ["Public sale"],
-    unconfirmed: ["Operations & Incentives"],
   },
 };
 export default jonesDao;

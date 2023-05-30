@@ -11,14 +11,14 @@ import {
   Event,
 } from "../types/adapters";
 import { addResultToEvents } from "./events";
-const excludedKeys = ["meta", "sections"];
+const excludedKeys = ["meta", "sections", "incompleteSections"];
 
 export async function createRawSections(
   adapter: Protocol,
 ): Promise<SectionData> {
   let startTime: number = 10000000000;
   let endTime: number = 0;
-  const rawSections: RawSection[] = [];
+  let rawSections: RawSection[] = [];
   let metadata: Metadata = {
     token: "",
     sources: [],
@@ -26,14 +26,16 @@ export async function createRawSections(
     events: [],
   };
   adapter.default = await adapter.default;
+
   await Promise.all(
     Object.entries(adapter.default).map(async (a: any[]) => {
       if (a[0] == "meta") {
         metadata = <Metadata>a[1];
-        if ("custom" in a[1]) {
+        if ("incompleteSections" in a[1]) {
           await Promise.all(
-            Object.entries(a[1].custom).map(async (c: any) => {
-              a[1].custom[c[0]] = await c[1];
+            Object.entries(a[1].incompleteSections).map(async (c: any) => {
+              a[1].incompleteSections[c[0]].lastRecord =
+                await a[1].incompleteSections[c[0]].lastRecord();
             }),
           );
         }
@@ -47,27 +49,27 @@ export async function createRawSections(
       }
       let adapterResults = await a[1];
       if (adapterResults.length == null) adapterResults = [adapterResults];
-      adapterResults = adapterResults.map(
-        (r: any) => (typeof r === "function" ? r().then() : r),
+      adapterResults = adapterResults.map((r: any) =>
+        typeof r === "function" ? r().then() : r,
       );
       adapterResults = await Promise.all(adapterResults);
 
       addResultToEvents(section, metadata, adapterResults);
 
-      const results:
-        | RawResult[]
-        | RawResult[][] = adapterResults.flat().map((r: AdapterResult) => {
-        switch (r.type) {
-          case "step":
-            return stepAdapterToRaw(<StepAdapterResult>r);
-          case "cliff":
-            return cliffAdapterToRaw(<CliffAdapterResult>r);
-          case "linear":
-            return linearAdapterToRaw(<LinearAdapterResult>r);
-          default:
-            throw new Error(`invalid adapter type: ${r.type}`);
-        }
-      });
+      const results: RawResult[] | RawResult[][] = adapterResults
+        .flat()
+        .map((r: AdapterResult) => {
+          switch (r.type) {
+            case "step":
+              return stepAdapterToRaw(<StepAdapterResult>r);
+            case "cliff":
+              return cliffAdapterToRaw(<CliffAdapterResult>r);
+            case "linear":
+              return linearAdapterToRaw(<LinearAdapterResult>r);
+            default:
+              throw new Error(`invalid adapter type: ${r.type}`);
+          }
+        });
 
       rawSections.push({ section, results });
 
@@ -80,9 +82,8 @@ export async function createRawSections(
         endTime,
         ...results
           .flat()
-          .map(
-            (r: any) =>
-              r.continuousEnd == null ? r.timestamp : r.continuousEnd,
+          .map((r: any) =>
+            r.continuousEnd == null ? r.timestamp : r.continuousEnd,
           ),
       );
     }),

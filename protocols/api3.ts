@@ -1,7 +1,7 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
-import { stakingRewards, epochsTracked } from "../adapters/api3";
+import { stakingRewards, latest } from "../adapters/api3";
 const start = 1606741200;
 const qty = 100000000;
 
@@ -39,11 +39,16 @@ const api3: Protocol = {
     token: "coingecko:api3",
     sources: [
       "https://medium.com/api3/api3-public-token-distribution-event-1acb3b6d940",
+      `Inflationary staking rewards has no set allocation. In this analysis we can only look at past unlocks.`,
     ],
     protocolIds: [],
-    custom: {
-      latestEpoch: () => epochsTracked(),
-    },
+    incompleteSections: [
+      {
+        key: "Staking rewards",
+        allocation: undefined,
+        lastRecord: () => latest(),
+      },
+    ],
   },
   sections: {
     insiders: [
@@ -55,7 +60,6 @@ const api3: Protocol = {
     noncirculating: ["Ecosystem Fund"],
     publicSale: ["Public distribution"],
     farming: ["Staking rewards"],
-    unconfirmed: ["Staking rewards"],
   },
 };
 

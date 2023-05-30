@@ -5,7 +5,7 @@ import { daoSchedule, latestDao } from "../adapters/balance";
 
 const qty = 1000000000;
 const start = 1647504000;
-const timestampDeployed = 1647518400;
+const timestampDeployed = 1648252800;
 const token = "0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6";
 const stargate: Protocol = {
   "core contributors": manualLinear(
@@ -33,7 +33,6 @@ const stargate: Protocol = {
   "STG DEX liquidity": manualCliff(start, 0.0155 * qty),
   "future incentives": () =>
     daoSchedule(
-      0.3039 * qty,
       ["0x65bb797c2b9830d891d87288f029ed8dacc19705"],
       token,
       "ethereum",
@@ -41,15 +40,18 @@ const stargate: Protocol = {
       timestampDeployed,
     ),
   meta: {
-    notes: [`Future incentives (30%) could be emitted at any time.`],
     sources: [
       "https://stargateprotocol.gitbook.io/stargate/v/user-docs/tokenomics/allocations-and-lockups",
     ],
     token: `ethereum:${token}`,
     protocolIds: ["1013"],
-    custom: {
-      latestTimestamp: () => latestDao("stargate", timestampDeployed),
-    },
+    incompleteSections: [
+      {
+        key: "future incentives",
+        allocation: qty * 0.3039,
+        lastRecord: () => latestDao("stargate", timestampDeployed),
+      },
+    ],
   },
   sections: {
     insiders: ["core contributors", "investors"],
@@ -59,7 +61,6 @@ const stargate: Protocol = {
       "future incentives",
     ],
     publicSale: ["STG launch auction purchasers", "STG DEX liquidity"],
-    unconfirmed: ["future incentives"],
   },
 };
 
