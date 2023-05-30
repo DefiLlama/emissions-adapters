@@ -9,7 +9,11 @@ import {
   ApiChartData,
 } from "../types/adapters";
 import fetch from "node-fetch";
-import { RESOLUTION_SECONDS, INCOMPLETE_SECTION_STEP } from "./constants";
+import {
+  RESOLUTION_SECONDS,
+  INCOMPLETE_SECTION_STEP,
+  GRADIENT_LENGTH,
+} from "./constants";
 import { periodToSeconds, unixTimestampNow } from "./time";
 
 export async function createChartData(
@@ -133,16 +137,16 @@ function appendForecast(
     const reference: number =
       unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
 
-    let emitted: number | undefined = relatedSections
-      .map((d: ChartSection) =>
-        !isTest && d.data.apiData != null
-          ? d.data.apiData[d.data.apiData.length - 1].unlocked
-          : d.data.unlocked[d.data.unlocked.length - 1],
-      )
-      .reduce((p: number, c: number) => p + c, reference);
-    if (!emitted) emitted = 0;
+    // let emitted: number;
+    // let gradientLength: number;
+    const { emitted, gradientLength } = findPreviouslyEmitted(
+      relatedSections,
+      reference,
+      isTest,
+    );
 
-    const gradient: number = emitted / (timestamp - start);
+    const gradient: number =
+      emitted / (timestamp - gradientLength * RESOLUTION_SECONDS);
     const change: number = incompleteSection.allocation - emitted;
     const continuousEnd: number = Math.round(
       Math.min(
@@ -172,6 +176,40 @@ function appendForecast(
   );
 
   incompleteSection.lastRecord = timestamp + INCOMPLETE_SECTION_STEP;
+}
+function findPreviouslyEmitted(
+  relatedSections: ChartSection[],
+  reference: number,
+  isTest: boolean,
+): {
+  emitted: number;
+  gradientLength: number;
+} {
+  reference;
+  let gradientLength: number = GRADIENT_LENGTH;
+  const findUnlocked = (d: any, isTest: boolean) =>
+    isTest
+      ? d.data.unlocked
+      : d.data.apiData.map((u: ApiChartData) => u.unlocked);
+
+  const emitted = relatedSections.map((d: ChartSection) => {
+    const unlocked: number[] = findUnlocked(d, isTest);
+    const length: number = unlocked.length;
+    if (GRADIENT_LENGTH > length) {
+      gradientLength = length;
+      return unlocked[length - 1];
+    }
+    let a = unlocked[length - 1];
+    let b = unlocked[Math.floor(length - GRADIENT_LENGTH)];
+    let c = a - b;
+    return (
+      unlocked[length - 1] - unlocked[Math.floor(length - GRADIENT_LENGTH)]
+    );
+  });
+  // .reduce((p: number, c: number) => p + c, reference);
+
+  return { emitted: 1, gradientLength };
+  // return { emitted: !emitted ? 0 : emitted, gradientLength };
 }
 function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   let sortedData: any[] = [];

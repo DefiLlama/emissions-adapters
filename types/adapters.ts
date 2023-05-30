@@ -137,3 +137,7 @@ export type Event = {
   timestamp: number;
   noOfTokens: number[];
 };
+export type BlockTime = {
+  block: number;
+  timestamp: number;
+};
