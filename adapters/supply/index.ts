@@ -100,11 +100,3 @@ export async function supply(
   }
   return sections;
 }
-supply(
-  "ethereum",
-  "0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b",
-  1621292400,
-  "convex-finance",
-  50000000,
-); // 1621242000 CVX May 17 21
-// ts-node adapters/convex/convex.ts

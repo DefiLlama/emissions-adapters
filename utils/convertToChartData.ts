@@ -29,7 +29,8 @@ export async function createChartData(
   const chartData: any[] = [];
   data.rawSections.map((r: any) => {
     r.results.map((s: any[]) => {
-      s.map((d: any) =>
+      s.map((d: any) => {
+        // if (r.section != "Ecosystem and rewards") return;
         chartData.push({
           data: rawToChartData(
             protocol,
@@ -39,8 +40,8 @@ export async function createChartData(
             isTest,
           ),
           section: r.section,
-        }),
-      );
+        });
+      });
     });
   });
 
@@ -137,23 +138,18 @@ function appendForecast(
     const reference: number =
       unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
 
-    // let emitted: number;
-    // let gradientLength: number;
-    const { emitted, gradientLength } = findPreviouslyEmitted(
-      relatedSections,
-      reference,
-      isTest,
-    );
+    const { recentlyEmitted, totalEmitted, gradientLength } =
+      findPreviouslyEmitted(relatedSections, reference, isTest);
 
     const gradient: number =
-      emitted / (timestamp - gradientLength * RESOLUTION_SECONDS);
-    const change: number = incompleteSection.allocation - emitted;
+      recentlyEmitted / (timestamp - gradientLength * RESOLUTION_SECONDS);
+    const change: number = incompleteSection.allocation - totalEmitted;
     const continuousEnd: number = Math.round(
       Math.min(
         timestamp + change / gradient,
         timestamp + periodToSeconds.year * 5,
       ),
-    );
+    ); // npm test perpetual-protocol
     chartData.push({
       data: rawToChartData(
         "",
@@ -182,7 +178,8 @@ function findPreviouslyEmitted(
   reference: number,
   isTest: boolean,
 ): {
-  emitted: number;
+  recentlyEmitted: number;
+  totalEmitted: number;
   gradientLength: number;
 } {
   reference;
@@ -192,24 +189,35 @@ function findPreviouslyEmitted(
       ? d.data.unlocked
       : d.data.apiData.map((u: ApiChartData) => u.unlocked);
 
-  const emitted = relatedSections.map((d: ChartSection) => {
-    const unlocked: number[] = findUnlocked(d, isTest);
-    const length: number = unlocked.length;
-    if (GRADIENT_LENGTH > length) {
-      gradientLength = length;
-      return unlocked[length - 1];
-    }
-    let a = unlocked[length - 1];
-    let b = unlocked[Math.floor(length - GRADIENT_LENGTH)];
-    let c = a - b;
-    return (
-      unlocked[length - 1] - unlocked[Math.floor(length - GRADIENT_LENGTH)]
-    );
-  });
-  // .reduce((p: number, c: number) => p + c, reference);
+  const recentlyEmitted = relatedSections
+    .map((d: ChartSection) => {
+      const unlocked: number[] = findUnlocked(d, isTest);
+      const length: number = unlocked.length;
+      if (GRADIENT_LENGTH > length) {
+        gradientLength = length;
+        return unlocked[length - 1];
+      }
+      let a = unlocked[length - 1];
+      let b = unlocked[Math.floor(length - GRADIENT_LENGTH)];
+      let c = a - b;
+      if (c != 0) {
+        console.log("bang");
+      }
+      return (
+        unlocked[length - 1] - unlocked[Math.floor(length - GRADIENT_LENGTH)]
+      );
+    })
+    .reduce((p: number, c: number) => p + c, reference);
 
-  return { emitted: 1, gradientLength };
-  // return { emitted: !emitted ? 0 : emitted, gradientLength };
+  const totalEmitted: number | undefined = relatedSections
+    .map((d: ChartSection) =>
+      !isTest && d.data.apiData != null
+        ? d.data.apiData[d.data.apiData.length - 1].unlocked
+        : d.data.unlocked[d.data.unlocked.length - 1],
+    )
+    .reduce((p: number, c: number) => p + c, reference);
+
+  return { recentlyEmitted, totalEmitted, gradientLength };
 }
 function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   let sortedData: any[] = [];

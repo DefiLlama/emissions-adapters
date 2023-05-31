@@ -9,13 +9,14 @@ const mainnetLaunch: number = 1623711600;
 const qty: number = 150000000;
 const timestampDeployed: number = 1612828800;
 const token: string = "0xbc396689893d065f41bc2c6ecbee5e0085233447";
+
 const perpetual: Protocol = {
   "Ecosystem and rewards": () =>
     daoSchedule(
       ["0xd374225abb84dca94e121f0b8a06b93e39ad7a99"],
       token,
       "ethereum",
-      "perpetual",
+      "perpetual-protocol",
       timestampDeployed,
     ),
   "Seed investors": manualStep(
@@ -50,7 +51,7 @@ const perpetual: Protocol = {
       {
         key: "Ecosystem and rewards",
         allocation: qty * 0.548,
-        lastRecord: () => latestDao("perpetual", timestampDeployed),
+        lastRecord: () => latestDao("perpetual-protocol", timestampDeployed),
       },
     ],
   },
