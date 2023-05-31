@@ -32,9 +32,6 @@ const convex: Protocol = {
       "https://docs.convexfinance.com/convexfinance/general-information/tokenomics",
     ],
     token: `${chain}:${CVX}`,
-    notes: [
-      "calculating the rate of future LP rewards is not possible, since it relies on the number of CRV accumulated. Therefore this section has been excluded from analytics.",
-    ],
     protocolIds: ["319"],
     incompleteSections: [
       {

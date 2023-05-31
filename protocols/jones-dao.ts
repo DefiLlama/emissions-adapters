@@ -37,7 +37,6 @@ const jonesDao: Protocol = {
     sources: ["https://docs.jonesdao.io/jones-dao/jones-token/tokenomics"],
     token: `arbitrum:${token}`,
     notes: [
-      `Operations and Incentives allocations are emitted at a dynamic rate from a shared contract, so here they have been combined into one section of the distribution.`,
       `OlympusDAO's allocation is to be held in perpetuity (effectively burnt) so it has been excluded from our analysis.`,
     ],
     protocolIds: ["1433"],

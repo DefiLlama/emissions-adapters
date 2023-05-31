@@ -41,9 +41,6 @@ const dodo: Protocol = {
   meta: {
     sources: ["https://docs.dodoex.io/english/tokenomics/dodo-allocation"],
     token: `${chain}:${token}`,
-    notes: [
-      `Community incentives (60%) are released on an uncofirmed schedule, so have been excluded from this analysis.`,
-    ],
     protocolIds: ["146"],
     incompleteSections: [
       {
