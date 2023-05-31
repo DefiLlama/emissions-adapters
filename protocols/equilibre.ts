@@ -4,7 +4,7 @@ import { periodToSeconds } from '../utils/time';
 
 const initialSupply = 40000000;
 const weeklyDecayRate = 0.01;
-const startTimestamp = 1654066800;  // Replace with the actual start timestamp
+const startTimestamp = 1654066800;  
 const oneWeekInSeconds = periodToSeconds.week;
 
 const weeklyDecay = (supply: number, weeks: number): number => {
