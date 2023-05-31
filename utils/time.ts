@@ -79,3 +79,4 @@ export function secondsToReadableDifference(seconds: number) {
 export const isFuture = (timestamp: number) => {
   return timestamp * 1000 > Date.now();
 };
+export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));

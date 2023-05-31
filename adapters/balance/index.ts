@@ -1,16 +1,10 @@
 import { multiCall } from "@defillama/sdk/build/abi/abi2";
 import fetch from "node-fetch";
 import { call } from "@defillama/sdk/build/abi/abi2";
-import { CliffAdapterResult } from "../../types/adapters";
-import { isFuture } from "../../utils/time";
+import { CliffAdapterResult, BlockTime } from "../../types/adapters";
+import { isFuture, sleep } from "../../utils/time";
 import { getBlock2 } from "../../utils/block";
 import { INCOMPLETE_SECTION_STEP } from "../../utils/constants";
-
-type BlockTime = {
-  block: number;
-  timestamp: number;
-};
-
 let res: number;
 
 export async function latestDao(
@@ -29,7 +23,6 @@ export async function latestDao(
       );
   return res;
 }
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function daoSchedule(
   owners: string[],
@@ -101,9 +94,7 @@ export async function daoSchedule(
   }
 
   if (balances.length != blockHeights.length)
-    throw new Error(
-      `block mismatch in ${adapter} ecosystem and rewards adapter`,
-    );
+    throw new Error(`block mismatch in ${adapter} balance adapter`);
 
   const sections: CliffAdapterResult[] = [];
   let depositIndex: number = 0;

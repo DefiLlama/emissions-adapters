@@ -36,7 +36,7 @@ const stargate: Protocol = {
       ["0x65bb797c2b9830d891d87288f029ed8dacc19705"],
       token,
       "ethereum",
-      "stargate",
+      "stargate-finance",
       timestampDeployed,
     ),
   meta: {
@@ -49,7 +49,7 @@ const stargate: Protocol = {
       {
         key: "future incentives",
         allocation: qty * 0.3039,
-        lastRecord: () => latestDao("stargate", timestampDeployed),
+        lastRecord: () => latestDao("stargate-finance", timestampDeployed),
       },
     ],
   },

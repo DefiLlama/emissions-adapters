@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import { call, multiCall } from "@defillama/sdk/build/abi/abi2";
-import { CliffAdapterResult } from "../../types/adapters";
+import { CliffAdapterResult, BlockTime } from "../../types/adapters";
 import { abi } from "./abi";
 import { getTimestamp } from "@defillama/sdk/build/util/index";
 import { periodToSeconds } from "../../utils/time";
@@ -9,11 +9,6 @@ type RewardsRes = {
   atBlock: string;
   amount: string;
 };
-type BlockTime = {
-  block: number;
-  timestamp: number;
-};
-
 const target: string = "0x6dd655f10d4b9E242aE186D9050B68F725c76d76";
 const token: string = "0x0b38210ea11411557c13457D4dA7dC6ea731B88a";
 const chain: any = "ethereum";

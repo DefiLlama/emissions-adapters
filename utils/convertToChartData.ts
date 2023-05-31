@@ -9,7 +9,11 @@ import {
   ApiChartData,
 } from "../types/adapters";
 import fetch from "node-fetch";
-import { RESOLUTION_SECONDS, INCOMPLETE_SECTION_STEP } from "./constants";
+import {
+  RESOLUTION_SECONDS,
+  INCOMPLETE_SECTION_STEP,
+  GRADIENT_LENGTH,
+} from "./constants";
 import { periodToSeconds, unixTimestampNow } from "./time";
 
 export async function createChartData(
@@ -25,7 +29,8 @@ export async function createChartData(
   const chartData: any[] = [];
   data.rawSections.map((r: any) => {
     r.results.map((s: any[]) => {
-      s.map((d: any) =>
+      s.map((d: any) => {
+        // if (r.section != "") return; // for debug!
         chartData.push({
           data: rawToChartData(
             protocol,
@@ -35,8 +40,8 @@ export async function createChartData(
             isTest,
           ),
           section: r.section,
-        }),
-      );
+        });
+      });
     });
   });
 
@@ -122,34 +127,21 @@ function appendForecast(
       (d: ChartSection) => d.section == incompleteSection.key,
     );
 
-    const startTimestamps: any = relatedSections.map((r: ChartSection) => {
-      if (isTest) return r.data.timestamps[0];
-      let apiData: any = r.data.apiData;
-      if (apiData) apiData = apiData[0];
-      if (apiData) return apiData.timestamp;
-    });
-    const start = Math.min(...startTimestamps);
-
     const reference: number =
       unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
 
-    let emitted: number | undefined = relatedSections
-      .map((d: ChartSection) =>
-        !isTest && d.data.apiData != null
-          ? d.data.apiData[d.data.apiData.length - 1].unlocked
-          : d.data.unlocked[d.data.unlocked.length - 1],
-      )
-      .reduce((p: number, c: number) => p + c, reference);
-    if (!emitted) emitted = 0;
+    const { recentlyEmitted, totalEmitted, gradientLength } =
+      findPreviouslyEmitted(relatedSections, reference, isTest);
 
-    const gradient: number = emitted / (timestamp - start);
-    const change: number = incompleteSection.allocation - emitted;
+    const gradient: number =
+      recentlyEmitted / (timestamp - gradientLength * RESOLUTION_SECONDS);
+    const change: number = incompleteSection.allocation - totalEmitted;
     const continuousEnd: number = Math.round(
       Math.min(
         timestamp + change / gradient,
         timestamp + periodToSeconds.year * 5,
       ),
-    );
+    ); // npm test perpetual-protocol
     chartData.push({
       data: rawToChartData(
         "",
@@ -172,6 +164,48 @@ function appendForecast(
   );
 
   incompleteSection.lastRecord = timestamp + INCOMPLETE_SECTION_STEP;
+}
+function findPreviouslyEmitted(
+  relatedSections: ChartSection[],
+  reference: number,
+  isTest: boolean,
+): {
+  recentlyEmitted: number;
+  totalEmitted: number;
+  gradientLength: number;
+} {
+  let gradientLength: number = GRADIENT_LENGTH;
+
+  const findUnlocked = (d: any, isTest: boolean) =>
+    isTest
+      ? d.data.unlocked
+      : d.data.apiData.map((u: ApiChartData) => u.unlocked);
+
+  const recentlyEmitted = relatedSections
+    .map((d: ChartSection) => {
+      const unlocked: number[] = findUnlocked(d, isTest);
+      const length: number = unlocked.length;
+
+      if (GRADIENT_LENGTH > length) {
+        gradientLength = length;
+        return unlocked[length - 1];
+      }
+
+      return (
+        unlocked[length - 1] - unlocked[Math.floor(length - GRADIENT_LENGTH)]
+      );
+    })
+    .reduce((p: number, c: number) => p + c, reference);
+
+  const totalEmitted: number | undefined = relatedSections
+    .map((d: ChartSection) =>
+      !isTest && d.data.apiData != null
+        ? d.data.apiData[d.data.apiData.length - 1].unlocked
+        : d.data.unlocked[d.data.unlocked.length - 1],
+    )
+    .reduce((p: number, c: number) => p + c, reference);
+
+  return { recentlyEmitted, totalEmitted, gradientLength };
 }
 function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   let sortedData: any[] = [];

@@ -1,13 +1,8 @@
 import fetch from "node-fetch";
 import { call } from "@defillama/sdk/build/abi/abi2";
-import { CliffAdapterResult } from "../../types/adapters";
+import { CliffAdapterResult, BlockTime } from "../../types/adapters";
 import { isFuture, periodToSeconds } from "../../utils/time";
 import { getBlock2 } from "../../utils/block";
-
-type BlockTime = {
-  block: number;
-  timestamp: number;
-};
 
 let res: number;
 
