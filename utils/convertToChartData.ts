@@ -30,7 +30,7 @@ export async function createChartData(
   data.rawSections.map((r: any) => {
     r.results.map((s: any[]) => {
       s.map((d: any) => {
-        // if (r.section != "Ecosystem and rewards") return;
+        // if (r.section != "") return; // for debug!
         chartData.push({
           data: rawToChartData(
             protocol,
@@ -127,14 +127,6 @@ function appendForecast(
       (d: ChartSection) => d.section == incompleteSection.key,
     );
 
-    const startTimestamps: any = relatedSections.map((r: ChartSection) => {
-      if (isTest) return r.data.timestamps[0];
-      let apiData: any = r.data.apiData;
-      if (apiData) apiData = apiData[0];
-      if (apiData) return apiData.timestamp;
-    });
-    const start = Math.min(...startTimestamps);
-
     const reference: number =
       unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
 
@@ -182,8 +174,8 @@ function findPreviouslyEmitted(
   totalEmitted: number;
   gradientLength: number;
 } {
-  reference;
   let gradientLength: number = GRADIENT_LENGTH;
+
   const findUnlocked = (d: any, isTest: boolean) =>
     isTest
       ? d.data.unlocked
@@ -193,16 +185,12 @@ function findPreviouslyEmitted(
     .map((d: ChartSection) => {
       const unlocked: number[] = findUnlocked(d, isTest);
       const length: number = unlocked.length;
+
       if (GRADIENT_LENGTH > length) {
         gradientLength = length;
         return unlocked[length - 1];
       }
-      let a = unlocked[length - 1];
-      let b = unlocked[Math.floor(length - GRADIENT_LENGTH)];
-      let c = a - b;
-      if (c != 0) {
-        console.log("bang");
-      }
+
       return (
         unlocked[length - 1] - unlocked[Math.floor(length - GRADIENT_LENGTH)]
       );
