@@ -30,7 +30,6 @@ export async function createChartData(
   data.rawSections.map((r: any) => {
     r.results.map((s: any[]) => {
       s.map((d: any) => {
-        // if (r.section != "") return; // for debug!
         chartData.push({
           data: rawToChartData(
             protocol,
@@ -141,7 +140,7 @@ function appendForecast(
         timestamp + change / gradient,
         timestamp + periodToSeconds.year * 5,
       ),
-    ); // npm test perpetual-protocol
+    );
     chartData.push({
       data: rawToChartData(
         "",
