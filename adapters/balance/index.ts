@@ -7,7 +7,7 @@ import { getBlock2 } from "../../utils/block";
 import { INCOMPLETE_SECTION_STEP } from "../../utils/constants";
 let res: number;
 
-export async function latestDao(
+export async function latest(
   adapter: string,
   timestampDeployed: number,
 ): Promise<number> {
@@ -24,7 +24,7 @@ export async function latestDao(
   return res;
 }
 
-export async function daoSchedule(
+export async function balance(
   owners: string[],
   target: string,
   chain: any,
@@ -35,7 +35,7 @@ export async function daoSchedule(
   let decimals: number;
 
   [trackedTimestamp, decimals] = await Promise.all([
-    latestDao(adapter, timestampDeployed),
+    latest(adapter, timestampDeployed),
     call({
       target,
       abi: "erc20:decimals",

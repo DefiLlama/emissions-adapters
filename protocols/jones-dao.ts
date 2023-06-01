@@ -1,7 +1,7 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
-import { daoSchedule, latestDao } from "../adapters/balance";
+import { balance, latest } from "../adapters/balance";
 
 const start = 1642896000;
 const qty = 10000000;
@@ -10,7 +10,7 @@ const token = "0x10393c20975cf177a3513071bc110f7962cd67da";
 
 const jonesDao: Protocol = {
   "Operations & Incentives": () =>
-    daoSchedule(
+    balance(
       ["0xFa82f1bA00b0697227E2Ad6c668abb4C50CA0b1F"],
       token,
       "arbitrum",
@@ -44,7 +44,7 @@ const jonesDao: Protocol = {
       {
         key: "Operations & Incentives",
         allocation: qty * 0.57,
-        lastRecord: () => latestDao("jones-dao", timestampDeployed),
+        lastRecord: () => latest("jones-dao", timestampDeployed),
       },
     ],
   },

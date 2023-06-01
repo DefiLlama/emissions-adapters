@@ -1,7 +1,7 @@
 import { manualCliff, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
-import { daoSchedule, latestDao } from "../adapters/balance";
+import { balance, latest } from "../adapters/balance";
 
 const start: number = 1599260400;
 const v1Launch: number = 1607990400;
@@ -12,7 +12,7 @@ const token: string = "0xbc396689893d065f41bc2c6ecbee5e0085233447";
 
 const perpetual: Protocol = {
   "Ecosystem and rewards": () =>
-    daoSchedule(
+    balance(
       ["0xd374225abb84dca94e121f0b8a06b93e39ad7a99"],
       token,
       "ethereum",
@@ -51,7 +51,7 @@ const perpetual: Protocol = {
       {
         key: "Ecosystem and rewards",
         allocation: qty * 0.548,
-        lastRecord: () => latestDao("perpetual-protocol", timestampDeployed),
+        lastRecord: () => latest("perpetual-protocol", timestampDeployed),
       },
     ],
   },

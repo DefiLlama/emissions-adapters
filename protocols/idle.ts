@@ -1,7 +1,7 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
-import { daoSchedule, latestDao } from "../adapters/balance";
+import { balance, latest } from "../adapters/balance";
 
 const qty = 13000000;
 const start = 1603670400;
@@ -20,13 +20,14 @@ const idle: Protocol = {
   "Liquidity mining": [
     manualLinear(start, start + periodToSeconds.year * 2, qty * 0.18),
   ],
-  "Long-term rewards": ()=>daoSchedule(
-    ["0x107A369bc066c77FF061c7d2420618a6ce31B925"],
-    token,
-    chain,
-    "idle",
-    timestampDeployed,
-  ),
+  "Long-term rewards": () =>
+    balance(
+      ["0x107A369bc066c77FF061c7d2420618a6ce31B925"],
+      token,
+      chain,
+      "idle",
+      timestampDeployed,
+    ),
   Investors: [
     manualCliff(start + periodToSeconds.month * 6, qty * 0.173 * 0.25),
     manualLinear(
@@ -43,13 +44,14 @@ const idle: Protocol = {
       (qty * 0.227 * 2) / 3,
     ),
   ],
-  "Ecosystem fund": ()=>daoSchedule(
-    ["0xb0aA1f98523Ec15932dd5fAAC5d86e57115571C7"],
-    token,
-    chain,
-    "idle",
-    timestampDeployed2,
-  ),
+  "Ecosystem fund": () =>
+    balance(
+      ["0xb0aA1f98523Ec15932dd5fAAC5d86e57115571C7"],
+      token,
+      chain,
+      "idle",
+      timestampDeployed2,
+    ),
   meta: {
     sources: ["https://docs.idle.finance/governance/idle/distribution"],
     token: `${chain}:${token}`,
@@ -58,12 +60,12 @@ const idle: Protocol = {
       {
         key: "Long-term rewards",
         allocation: qty * 0.2,
-        lastRecord: () => latestDao("idle", timestampDeployed),
+        lastRecord: () => latest("idle", timestampDeployed),
       },
       {
         key: "Ecosystem fund",
         allocation: qty * 0.15,
-        lastRecord: () => latestDao("idle", timestampDeployed2),
+        lastRecord: () => latest("idle", timestampDeployed2),
       },
     ],
   },
