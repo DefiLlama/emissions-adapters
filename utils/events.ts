@@ -14,20 +14,17 @@ export function addResultToEvents(
   metadata: Metadata,
   results: AdapterResult[],
 ): Metadata {
-  const [cliffs, steps, linears]: any = [
-    "cliff",
-    "step",
-    "linear",
-  ].map((t: any) => filterResultsByType(results, t));
+  const [cliffs, steps, linears]: any = ["cliff", "step", "linear"].map(
+    (t: any) => filterResultsByType(results, t),
+  );
 
   cliffs.map((c: CliffAdapterResult) => {
     if (!metadata.events) metadata.events = [];
+    if (c.amount.toFixed(2) == "0.00") return;
     metadata.events.push({
-      description: `A cliff of {tokens[0]} tokens ${isFuture(c.start)
-        ? "will"
-        : "was"} unlock${isFuture(c.start)
-        ? ""
-        : "ed"} from ${section} on {timestamp}`,
+      description: `A cliff of {tokens[0]} tokens ${
+        isFuture(c.start) ? "will" : "was"
+      } unlock${isFuture(c.start) ? "" : "ed"} from ${section} on {timestamp}`,
       timestamp: c.start,
       noOfTokens: [c.amount],
     });
@@ -42,13 +39,11 @@ export function addResultToEvents(
       return;
     if (!metadata.events) metadata.events = [];
     metadata.events.push({
-      description: `Linear unlock ${isFuture(l.start)
-        ? "will"
-        : "was"} ${Number(thisRate) > Number(nextRate)
-        ? "decrease"
-        : "increase"}${isFuture(l.start)
-        ? ""
-        : "d"} from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
+      description: `Linear unlock ${isFuture(l.start) ? "will" : "was"} ${
+        Number(thisRate) > Number(nextRate) ? "decrease" : "increase"
+      }${
+        isFuture(l.start) ? "" : "d"
+      } from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
       timestamp: l.start,
       noOfTokens: [thisRate, nextRate],
     });
@@ -58,11 +53,9 @@ export function addResultToEvents(
     for (let i = 0; i < s.steps; i++) {
       if (!metadata.events) metadata.events = [];
       metadata.events.push({
-        description: `On {timestamp} {tokens[0]} of ${section} tokens ${isFuture(
-          s.start + i * s.stepDuration,
-        )
-          ? "will be"
-          : "were"} unlocked
+        description: `On {timestamp} {tokens[0]} of ${section} tokens ${
+          isFuture(s.start + i * s.stepDuration) ? "will be" : "were"
+        } unlocked
         `,
         timestamp: s.start + i * s.stepDuration,
         noOfTokens: [s.amount],
