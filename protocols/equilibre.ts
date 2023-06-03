@@ -21,15 +21,6 @@ function equilibre(): Protocol {
   // Calculate the weeks since the start of the protocol
   const weeksSinceStart = (Date.now() / 1000 - startTimestamp) / oneWeekInSeconds;
 
-  // Fetch incentives for the Equilibre community
-  const equilibreCommunity = async ()=>incentives(
-    "0xE1da44C0dA55B075aE8E2e4b6986AdC76Ac77d73",
-    startTimestamp,
-    initialSupply,
-    weeklyDecayRate,
-    periodToSeconds.week,
-  );
-
   // Return the protocol data
   return {
     // Define community with linear emission schedule
@@ -57,9 +48,7 @@ function equilibre(): Protocol {
     // Define airdrop with cliff emission schedule
     airdrop: manualCliff(startTimestamp, initialSupply * 0.0125),  // 1.25% allocation for airdrop
     // Define liquidity with cliff emission schedule
-    liquidity: manualCliff(startTimestamp, initialSupply * 0.0025),  // 0.25% allocation for liquidity
-    // Define the method for continuing emissions
-    "continuing emissions": equilibreCommunity,
+    liquidity: manualCliff(startTimestamp, initialSupply * 0.0025),  // 0.25% allocation for liquidity    
     // Define meta information
     meta: {
       sources: ["https://equilibre-finance.gitbook.io/equilibre-v1/protocol-overview/tokenomics/emissions", "https://equilibre-finance.gitbook.io/equilibre-v1/protocol-overview/tokenomics/initial-distribution"],
@@ -77,5 +66,5 @@ function equilibre(): Protocol {
 }
 
 // Export the equilibre function as the default export
-export default equilibre;
+export default equilibre();
 
