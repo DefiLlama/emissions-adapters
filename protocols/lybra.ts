@@ -8,7 +8,7 @@ const token = "0xf1182229b71e79e504b1d2bf076c15a277311e05";
 const chain = "ethereum";
 
 const lybra: Protocol = {
-  "Mining Pool": manualCliff(start, qty * 0.6), // dynamic
+  // "Mining Pool": manualCliff(start, qty * 0.6), // dynamic
   Team: [
     manualCliff(start + periodToSeconds.month * 6, qty * 0.085 * 0.2),
     manualLinear(
@@ -43,7 +43,6 @@ const lybra: Protocol = {
     ],
     notes: [
       "Mining Pool allocation (60%) has a dynamic unlock schedule, and has therefore been excluded from this analysis.",
-      "Messages from mods in the Lybra Discord indicate that the sources here may be outdated.",
     ],
     protocolIds: ["2904"],
   },
