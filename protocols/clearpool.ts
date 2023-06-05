@@ -8,13 +8,13 @@ const qty = 10000000;
 const token = "0x66761fa41377003622aee3c7675fc7b5c1c2fac5";
 const chain = "ethereum";
 
-const balanceAllocation = (address: string) =>
+const balanceAllocation = (address: string) => () =>
   balance([address], token, chain, "clearpool", start);
 
 const incompleteSection = (key: string, allocation: number) => ({
   key: key,
   allocation: qty * allocation,
-  lastRecord: latest("clearpool", start),
+  lastRecord: () => latest("clearpool", start),
 });
 
 const clearpool: Protocol = {
