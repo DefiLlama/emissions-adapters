@@ -1,4 +1,4 @@
-import { balance, latest } from "../balance";
+import { balance, latest as late } from "../balance";
 import contracts from "./contracts";
 
 export const unallocated = () =>
@@ -7,4 +7,4 @@ export const unallocated = () =>
       balance(contracts[k].owners, contracts[k].token, k, "forta", 1651356000),
     ),
   );
-export const latest = () => latest("forta", 1651356000);
+export const latest = () => late("forta", 1651356000);
