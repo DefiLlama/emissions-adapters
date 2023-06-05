@@ -12,16 +12,15 @@ export async function latest(
   timestampDeployed: number,
 ): Promise<number> {
   if (!res) {
-    const r = await fetch(`https://api.llama.fi/emission/${adapter}`).then(
-      (r) => r.json(),
+    let r = await fetch(`https://api.llama.fi/emission/${adapter}`).then((r) =>
+      r.json(),
     );
     if (!r.body) return timestampDeployed;
-    return JSON.parse(r.body).then((r: any) =>
-      r.metadata.incompleteSections == null ||
+    r = JSON.parse(r.body);
+    return r.metadata.incompleteSections == null ||
       r.metadata.incompleteSections.lastRecord == null
-        ? timestampDeployed
-        : r.metadata.incompleteSections.lastRecord,
-    );
+      ? timestampDeployed
+      : r.metadata.incompleteSections.lastRecord;
   }
   return res;
 }

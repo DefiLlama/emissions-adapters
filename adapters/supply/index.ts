@@ -9,16 +9,15 @@ let res: number;
 
 export async function latest(key: string, reference: number): Promise<number> {
   if (!res) {
-    const r = await fetch(`https://api.llama.fi/emission/${key}`).then((r) =>
+    let r = await fetch(`https://api.llama.fi/emission/${key}`).then((r) =>
       r.json(),
     );
     if (!r.body) return reference;
-    return JSON.parse(r.body).then((r: any) =>
-      r.metadata.incompleteSections == null ||
+    r = JSON.parse(r.body);
+    return r.metadata.incompleteSections == null ||
       r.metadata.incompleteSections.lastRecord == null
-        ? reference
-        : r.metadata.incompleteSections.lastRecord,
-    );
+      ? reference
+      : r.metadata.incompleteSections.lastRecord;
   }
   return res;
 }
