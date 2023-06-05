@@ -1,7 +1,7 @@
 import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
-import { daoSchedule, latestDao } from "../adapters/balance";
+import { balance, latest } from "../adapters/balance";
 
 const qty = 1000000000;
 const start = 1647504000;
@@ -32,7 +32,7 @@ const stargate: Protocol = {
   ),
   "STG DEX liquidity": manualCliff(start, 0.0155 * qty),
   "future incentives": () =>
-    daoSchedule(
+    balance(
       ["0x65bb797c2b9830d891d87288f029ed8dacc19705"],
       token,
       "ethereum",
@@ -49,7 +49,7 @@ const stargate: Protocol = {
       {
         key: "future incentives",
         allocation: qty * 0.3039,
-        lastRecord: () => latestDao("stargate-finance", timestampDeployed),
+        lastRecord: () => latest("stargate-finance", timestampDeployed),
       },
     ],
   },

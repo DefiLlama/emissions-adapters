@@ -1,7 +1,7 @@
 import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
-import { daoSchedule, latestDao } from "../adapters/balance";
+import { balance, latest } from "../adapters/balance";
 
 const qty = 500000;
 const start = 1633647600;
@@ -11,7 +11,7 @@ const chain = "arbitrum";
 
 const dopex: Protocol = {
   Treasury: () =>
-    daoSchedule(
+    balance(
       ["0x2fa6f21ecfe274f594f470c376f5bdd061e08a37"],
       token,
       chain,
@@ -47,7 +47,7 @@ const dopex: Protocol = {
       {
         key: "Treasury",
         allocation: qty * 0.47,
-        lastRecord: () => latestDao("dopex", timestampDeployed),
+        lastRecord: () => latest("dopex", timestampDeployed),
       },
     ],
   },
