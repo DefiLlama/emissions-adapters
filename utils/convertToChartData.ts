@@ -61,11 +61,10 @@ async function appendMissingDataSections(
   const incompleteSections = data.metadata.incompleteSections;
   if (incompleteSections == null || incompleteSections.length == 0) return;
 
-  const res = (
-    await fetch(`https://api.llama.fi/emission/${protocol}`)
-      .then((r) => r.json())
-      .then((r) => JSON.parse(r.body))
-  ).data;
+  let res = await fetch(`https://api.llama.fi/emission/${protocol}`).then((r) =>
+    r.json(),
+  );
+  res = res.body ? JSON.parse(res.body).data : [];
 
   incompleteSections.map((i: IncompleteSection) => {
     const sectionRes: any = res.find((s: ApiChartData) => s.label == i.key);

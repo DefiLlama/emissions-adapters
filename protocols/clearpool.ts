@@ -24,7 +24,7 @@ const clearpool: Protocol = {
     qty * 0.0333,
   ),
   "Private Investors": [
-    manualCliff(start + periodToSeconds.month * 3, qty * 0.9 * 0.2),
+    manualCliff(start + periodToSeconds.month * 3, qty * 0.09 * 0.2),
     manualLinear(
       start + periodToSeconds.month * 3,
       start + periodToSeconds.month * 15,
