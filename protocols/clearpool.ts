@@ -4,7 +4,7 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1642982400;
-const qty = 10000000;
+const qty = 1000000000;
 const token = "0x66761fa41377003622aee3c7675fc7b5c1c2fac5";
 const chain = "ethereum";
 
