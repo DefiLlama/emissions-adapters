@@ -1,6 +1,7 @@
-import { Protocol } from "../types/adapters";
+import { NormalAllocations, Protocol } from "../types/adapters";
 import { createChartData } from "./convertToChartData";
 import { createRawSections } from "./convertToRawData";
+import { createCategoryData } from "./sectionData";
 import { getChartPng } from "./chart";
 import { secondsToReadableDate } from "./time";
 
@@ -14,11 +15,17 @@ let protocol = process.argv[2];
 export async function parseData(adapter: Protocol): Promise<void> {
   let rawData = await createRawSections(adapter);
   const chartData = await createChartData(protocol, rawData);
-  if (process.argv[3] != "true") postDebugLogs(chartData, protocol);
+  const categoryData = createCategoryData(chartData, rawData.categories);
+  if (process.argv[3] != "true")
+    postDebugLogs(chartData, categoryData, protocol);
   await getChartPng(chartData, process.argv[3] == "true");
 }
 
-function postDebugLogs(data: any[], protocol: string): void {
+function postDebugLogs(
+  data: any[],
+  categoryData: { [categories: string]: NormalAllocations },
+  protocol: string,
+): void {
   const format: string = "DD/MM/YY";
   let sum: number = 0;
 
@@ -38,7 +45,15 @@ function postDebugLogs(data: any[], protocol: string): void {
       `${s.section} emissions total ${s.data.unlocked.at(-1).toFixed()}`,
     );
   });
-  console.log(`for an overall of ${sum} tokens emitted`);
+  console.log(`for an overall of ${sum} tokens emitted \n`);
+
+  Object.keys(categoryData).map((time: string) => {
+    let log: string = `${time} category allocations:\t`;
+    Object.keys(categoryData[time]).map((c: string) => {
+      log += `${categoryData[time][c]}% ${c}\t`;
+    });
+    console.log(log);
+  });
 }
 
 export async function main() {

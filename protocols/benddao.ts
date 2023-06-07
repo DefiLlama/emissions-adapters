@@ -28,7 +28,7 @@ const benddao: Protocol = {
     sources: ["https://docs.benddao.xyz/portal/governance/bendenomics"],
     protocolIds: ["1773", "2554"],
   },
-  sections: {
+  categories: {
     insiders: ["team"],
     airdrop: ["airdrop"],
     farming: ["Uniswap LP incentive", "Lend/Borrow Incentive"],

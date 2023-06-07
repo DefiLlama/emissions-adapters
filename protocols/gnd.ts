@@ -23,7 +23,7 @@ const gnd: Protocol = {
       "Treasury (15%) tokens are unlocked on an adhoc basis, therefore they have been excluded from this analysis.",
     ],
   },
-  sections: {
+  categories: {
     farming: ["Incentives"],
     insiders: ["Team"],
     publicSale: ["Liquidity", "Community"],

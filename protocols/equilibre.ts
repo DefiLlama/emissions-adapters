@@ -52,7 +52,7 @@ const equilibre: Protocol = {
     token: "vara:0xE1da44C0dA55B075aE8E2e4b6986AdC76Ac77d73",
     protocolIds: ["566"],
   },
-  sections: {
+  categories: {
     farming: ["Community"],
     publicSale: ["Liquidity"],
     airdrop: ["Airdrop"],

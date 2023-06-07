@@ -35,7 +35,7 @@ const vela: Protocol = {
     ],
     protocolIds: ["2548"],
   },
-  sections: {
+  categories: {
     insiders: ["Team", "Investors & partners", "Advisors"],
   },
 };

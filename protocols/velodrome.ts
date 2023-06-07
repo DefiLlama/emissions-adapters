@@ -6,20 +6,22 @@ import incentives from "../adapters/curve/community";
 const qty = 400000000;
 const start = 1654066800;
 function velodrome(): Protocol {
-  const velodromeCommunity = async ()=>incentives(
-    "0x3c8B650257cFb5f272f799F5e2b4e65093a11a05",
-    1654066800,
-    15000000 * 0.97,
-    1.0101010101,
-    periodToSeconds.week,
-  );
-  const velodromeTeam = async ()=>incentives(
-    "0x3c8B650257cFb5f272f799F5e2b4e65093a11a05",
-    1654066800 + periodToSeconds.month * 3,
-    15000000 * 0.03,
-    1.0101010101,
-    periodToSeconds.week,
-  );
+  const velodromeCommunity = async () =>
+    incentives(
+      "0x3c8B650257cFb5f272f799F5e2b4e65093a11a05",
+      1654066800,
+      15000000 * 0.97,
+      1.0101010101,
+      periodToSeconds.week,
+    );
+  const velodromeTeam = async () =>
+    incentives(
+      "0x3c8B650257cFb5f272f799F5e2b4e65093a11a05",
+      1654066800 + periodToSeconds.month * 3,
+      15000000 * 0.03,
+      1.0101010101,
+      periodToSeconds.week,
+    );
   return {
     community: manualCliff(start, qty * 0.6),
     protocols: manualCliff(start, qty * 0.18),
@@ -50,7 +52,7 @@ function velodrome(): Protocol {
       token: "optimism:0x3c8b650257cfb5f272f799f5e2b4e65093a11a05",
       protocolIds: ["1799"],
     },
-    sections: {
+    categories: {
       farming: ["community", "Genesis liquidity pools", "continuing emissions"],
       airdrop: ["protocols"],
       noncirculating: ["grants"],

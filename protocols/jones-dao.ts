@@ -48,7 +48,7 @@ const jonesDao: Protocol = {
       },
     ],
   },
-  sections: {
+  categories: {
     insiders: ["Core contributors", "Private sale"],
     airdrop: ["Airdrop"],
     publicSale: ["Public sale"],

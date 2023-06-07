@@ -41,7 +41,7 @@ const thala: Protocol = {
     ],
     protocolIds: ["2789"],
   },
-  sections: {
+  categories: {
     noncirculating: ["Treasury"],
     publicSale: ["Token Generation Event"],
     farming: ["Community Incentive"],

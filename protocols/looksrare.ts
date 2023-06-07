@@ -37,7 +37,7 @@ const looksrare: Protocol = {
     token: "ethereum:0xf4d2888d29D722226FafA5d9B24F9164c092421E",
     protocolIds: ["1229"],
   },
-  sections: {
+  categories: {
     airdrop: ["Airdrop"],
     farming: ["Volume Rewards", "Staking Rewards"],
     insiders: ["Strategic Sale", "Founding Team"],

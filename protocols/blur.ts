@@ -44,7 +44,7 @@ const blur: Protocol = {
     ],
     protocolIds: ["2414"],
   },
-  sections: {
+  categories: {
     airdrop: ["airdrop"],
     noncirculating: ["community treasury"],
     insiders: ["advisors", "contributors", "investors"],

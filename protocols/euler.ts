@@ -38,7 +38,7 @@ const euler: Protocol = {
     ],
     protocolIds: ["1183"],
   },
-  sections: {
+  categories: {
     insiders: [
       "employees, advisors, consultants",
       "Encode incubator",

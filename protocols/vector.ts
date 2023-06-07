@@ -35,27 +35,27 @@ const vector: Protocol = {
     ...lmEmissions(),
   ],
   "Core and future team": [
-    manualCliff(start + periodToSeconds.month * 3, qty * 0.08 * 1 / 7),
+    manualCliff(start + periodToSeconds.month * 3, (qty * 0.08 * 1) / 7),
     manualLinear(
       start + periodToSeconds.month * 3,
       start + periodToSeconds.month * 18,
-      0.08 * 6 / 7,
+      (0.08 * 6) / 7,
     ),
   ],
   Magnet: [
-    manualCliff(start + periodToSeconds.month * 3, qty * 0.08 * 1 / 7),
+    manualCliff(start + periodToSeconds.month * 3, (qty * 0.08 * 1) / 7),
     manualLinear(
       start + periodToSeconds.month * 3,
       start + periodToSeconds.month * 18,
-      qty * 0.08 * 6 / 7,
+      (qty * 0.08 * 6) / 7,
     ),
   ],
   Advisors: [
-    manualCliff(start + periodToSeconds.month * 3, qty * 0.015 * 1 / 7),
+    manualCliff(start + periodToSeconds.month * 3, (qty * 0.015 * 1) / 7),
     manualLinear(
       start + periodToSeconds.month * 3,
       start + periodToSeconds.month * 18,
-      qty * 0.015 * 6 / 7,
+      (qty * 0.015 * 6) / 7,
     ),
   ],
   "Rocket Joe": [
@@ -84,7 +84,7 @@ const vector: Protocol = {
     ],
     protocolIds: ["1525"],
   },
-  sections: {
+  categories: {
     farming: ["Liquidity mining", "Rocket Joe"],
     insiders: ["Core and future team", "Magnet", "Advisors"],
     noncirculating: ["Community treasury"],

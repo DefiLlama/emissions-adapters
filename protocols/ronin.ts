@@ -161,7 +161,7 @@ const ronin: Protocol = {
     notes: [],
     protocolIds: [],
   },
-  sections: {
+  categories: {
     farming: [],
   },
 };

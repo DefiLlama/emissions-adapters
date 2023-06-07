@@ -32,7 +32,7 @@ const acala: Protocol = {
     ],
     protocolIds: ["2787"],
   },
-  sections: {
+  categories: {
     noncirculating: ["Treasury", "Ecosystem"],
     farming: ["Rewards"],
     insiders: ["Team", "Investors"],

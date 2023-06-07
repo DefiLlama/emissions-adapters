@@ -23,7 +23,7 @@ const agility: Protocol = {
     sources: ["https://docs.agilitylsd.com/tokenomics"],
     protocolIds: ["2817"],
   },
-  sections: {
+  categories: {
     farming: ["Liquidity Incentive"],
     insiders: ["Marketing"],
     noncirculating: ["Treasury"],

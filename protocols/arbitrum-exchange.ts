@@ -24,7 +24,7 @@ const arbidex: Protocol = {
     ],
     protocolIds: ["2685"],
   },
-  sections: {
+  categories: {
     publicSale: ["Initial Mint"],
     farming: ["Liquidity Incentives"],
     insiders: ["Team"],

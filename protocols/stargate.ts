@@ -53,7 +53,7 @@ const stargate: Protocol = {
       },
     ],
   },
-  sections: {
+  categories: {
     insiders: ["core contributors", "investors"],
     farming: [
       "STG-USDC Curve pool incentives",

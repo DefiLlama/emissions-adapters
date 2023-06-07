@@ -45,7 +45,7 @@ function schedule(
   let amount: number = 0;
 
   for (let i = 0; i < dates.length - 1; i++) {
-    amount += Object.values(rates)[i] * periodToSeconds.month * portion / 100;
+    amount += (Object.values(rates)[i] * periodToSeconds.month * portion) / 100;
 
     if (i < cliffMonths) {
       continue;
@@ -70,7 +70,7 @@ const traderJoe: Protocol = {
     token: "avax:0x6e84a6216ea6dacc71ee8e6b0a5b7322eebc0fdd",
     protocolIds: ["468"],
   },
-  sections: {
+  categories: {
     insiders: ["Potential strategic investors", "Team"],
     farming: ["Liquidity providers"],
     noncirculating: ["Treasury"],

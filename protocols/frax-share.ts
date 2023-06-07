@@ -43,7 +43,7 @@ const fxs: Protocol = {
     token: "ethereum:0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0",
     protocolIds: ["359", "2076", "2121", "2221", "2607"],
   },
-  sections: {
+  categories: {
     insiders: [
       "Accredited Private Investors",
       "Strategic Advisors / Outside Early Contributors",

@@ -14,19 +14,19 @@ const silo: Protocol = {
     qty * 0.45,
   ),
   "Early contributors": [
-    manualCliff(start + periodToSeconds.month * 6, qty * 0.0675 / 8),
+    manualCliff(start + periodToSeconds.month * 6, (qty * 0.0675) / 8),
     manualLinear(
       start + periodToSeconds.month * 6,
       start + periodToSeconds.year * 4,
-      qty * 0.0675 * 7 / 8,
+      (qty * 0.0675 * 7) / 8,
     ),
   ],
   "Founding contributors": [
-    manualCliff(start + periodToSeconds.month * 6, qty * 0.2175 / 6),
+    manualCliff(start + periodToSeconds.month * 6, (qty * 0.2175) / 6),
     manualLinear(
       start + periodToSeconds.month * 6,
       start + periodToSeconds.year * 3,
-      qty * 0.2175 * 5 / 6,
+      (qty * 0.2175 * 5) / 6,
     ),
   ],
   "Early community rewards": manualCliff("2022-01-01", qty * 0.002),
@@ -35,11 +35,12 @@ const silo: Protocol = {
     start + periodToSeconds.year * 2.5,
     qty * 0.063,
   ),
-  "Future contributors & future advisors": ()=>vesting(
-    "0x6e5C8274012d9cb386EF8Dcc71a461B71BD07831",
-    "ethereum",
-    "siloToken",
-  ),
+  "Future contributors & future advisors": () =>
+    vesting(
+      "0x6e5C8274012d9cb386EF8Dcc71a461B71BD07831",
+      "ethereum",
+      "siloToken",
+    ),
   meta: {
     sources: [
       "https://silopedia.silo.finance/governance/token-allocation-and-vesting",
@@ -50,7 +51,7 @@ const silo: Protocol = {
     token: "ethereum:0x6f80310ca7f2c654691d1383149fa1a57d8ab1f8",
     protocolIds: ["2020"],
   },
-  sections: {
+  categories: {
     publicSale: ["Genesis protocol-owned liquidity"],
     noncirculating: ["Community treasury"],
     insiders: [

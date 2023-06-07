@@ -23,7 +23,7 @@ const jpegd: Protocol = {
     sources: ["https://docs.jpegd.io/jpegd-dao/tokenomics/supply-graph"],
     protocolIds: ["1619"],
   },
-  sections: {
+  categories: {
     insiders: ["team", "advisors"],
     noncirculating: ["treasury"],
     publicSale: ["donation event"],

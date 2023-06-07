@@ -46,7 +46,7 @@ const lybra: Protocol = {
     ],
     protocolIds: ["2904"],
   },
-  sections: {
+  secticategoriesons: {
     farming: ["Mining Pool", "Ecosystem Incentives"],
     publicSale: ["IDO", "LP Reserve"],
     insiders: ["Team", "Advisors"],

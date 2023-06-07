@@ -31,7 +31,7 @@ const flashstake: Protocol = {
     token: "ethereum:0xb1f1f47061a7be15c69f378cb3f69423bd58f2f8",
     protocolIds: ["2115"],
   },
-  sections: {
+  categories: {
     airdrop: ["Community airdrop"],
     insiders: ["Team budget"],
     noncirculating: ["Blockzero treasury", "Staking budget", "Growth budget"],

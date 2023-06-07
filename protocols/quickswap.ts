@@ -14,7 +14,7 @@ const quickswap: Protocol = {
     token: "polygon:0xb5c064f955d8e7f38fe0460c556a72987494ee17",
     protocolIds: ["306"],
   },
-  sections: {
+  categories: {
     insiders: ["Team and marketing"],
     airdrop: ["Airdrop"],
     farming: ["Community"],

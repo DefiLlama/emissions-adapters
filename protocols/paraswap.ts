@@ -61,7 +61,7 @@ const paraswap: Protocol = {
     sources: ["https://doc.paraswap.network/psp-token/token-overview"],
     protocolIds: ["894"],
   },
-  sections: {
+  categories: {
     airdrop: ["Airdrop"],
     insiders: ["Investors", "Team", "Future team members"],
     farming: ["Initial liquidity mining"],
