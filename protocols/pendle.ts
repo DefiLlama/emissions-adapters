@@ -25,6 +25,14 @@ const incentives = () => {
 };
 
 const pendle: Protocol = {
+  Incentives: incentives(),
+  Investors: manualStep(start, periodToSeconds.month * 3, 4, (qty * 0.15) / 4),
+  Advisors: manualStep(start, periodToSeconds.month * 3, 4, (qty * 0.01) / 4),
+  "Liquidity bootstrapping": manualCliff(start, qty * 0.07),
+  "Ecosystem fund": [
+    manualCliff(start, qty * 0.09),
+    manualCliff(start + periodToSeconds.year, qty * 0.09),
+  ],
   Team: [
     manualCliff(start + periodToSeconds.year, qty * 0.11),
     manualStep(
@@ -34,14 +42,6 @@ const pendle: Protocol = {
       (qty * 0.11) / 4,
     ),
   ],
-  "Ecosystem fund": [
-    manualCliff(start, qty * 0.09),
-    manualCliff(start + periodToSeconds.year, qty * 0.09),
-  ],
-  Incentives: incentives(),
-  Investors: manualStep(start, periodToSeconds.month * 3, 4, (qty * 0.15) / 4),
-  Advisors: manualStep(start, periodToSeconds.month * 3, 4, (qty * 0.01) / 4),
-  "Liquidity bootstrapping": manualCliff(start, qty * 0.07),
   meta: {
     sources: ["https://medium.com/pendle/pendle-tokenomics-3a33d9caa0e4"],
     token: "ethereum:0x808507121b80c02388fad14726482e061b8da827",

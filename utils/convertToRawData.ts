@@ -11,7 +11,7 @@ import {
   Event,
 } from "../types/adapters";
 import { addResultToEvents } from "./events";
-const excludedKeys = ["meta", "sections", "incompleteSections"];
+const excludedKeys = ["meta", "categories", "incompleteSections"];
 
 export async function createRawSections(
   adapter: Protocol,
@@ -42,7 +42,7 @@ export async function createRawSections(
         }
       }
 
-      if (a[0] == "sections") categories = a[1];
+      if (a[0] == "categories") categories = a[1];
 
       if (excludedKeys.includes(a[0])) return;
 
