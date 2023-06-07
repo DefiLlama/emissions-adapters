@@ -2,25 +2,24 @@ import {
   Categories,
   ChartSection,
   TransposedApiChartData,
-  NormalAllocations,
+  Allocations,
 } from "../types/adapters";
 import { RESOLUTION_SECONDS } from "./constants";
 import { unixTimestampNow } from "./time";
 
-type RawAllocations = { [category: string]: number };
 type Unlocks = { current: number; final: number };
 
-function normalizeAllocations(
-  rawAllocations: RawAllocations,
-): NormalAllocations {
+function normalizeAllocations(rawAllocations: Allocations): Allocations {
   const total: number = Object.values(rawAllocations).reduce(
     (p: number, c: number) => p + c,
     0,
   );
-  const normalAllocations: NormalAllocations = {};
+  const normalAllocations: Allocations = {};
 
   Object.keys(rawAllocations).map((c: string) => {
-    normalAllocations[c] = ((100 * rawAllocations[c]) / total).toFixed(1);
+    normalAllocations[c] = Number(
+      ((100 * rawAllocations[c]) / total).toFixed(1),
+    );
   });
 
   return normalAllocations;
@@ -30,9 +29,9 @@ export function createCategoryData(
   data: any,
   categories: Categories,
   isTest: boolean = true,
-): { [allocations: string]: NormalAllocations } {
-  const rawCurrentAllocations: RawAllocations = {};
-  const rawFinalAllocations: RawAllocations = {};
+): { [allocations: string]: Allocations } {
+  const rawCurrentAllocations: Allocations = {};
+  const rawFinalAllocations: Allocations = {};
 
   Object.keys(categories).map((c: string) => {
     rawCurrentAllocations[c] = 0;

@@ -149,4 +149,4 @@ export type BlockTime = {
   block: number;
   timestamp: number;
 };
-export type NormalAllocations = { [category: string]: string };
+export type Allocations = { [category: string]: number };

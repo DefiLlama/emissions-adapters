@@ -1,4 +1,4 @@
-import { NormalAllocations, Protocol } from "../types/adapters";
+import { Allocations, Protocol } from "../types/adapters";
 import { createChartData } from "./convertToChartData";
 import { createRawSections } from "./convertToRawData";
 import { createCategoryData } from "./categoryData";
@@ -23,7 +23,7 @@ export async function parseData(adapter: Protocol): Promise<void> {
 
 function postDebugLogs(
   data: any[],
-  categoryData: { [categories: string]: NormalAllocations },
+  categoryData: { [categories: string]: Allocations },
   protocol: string,
 ): void {
   const format: string = "DD/MM/YY";
