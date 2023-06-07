@@ -1,7 +1,7 @@
 import { NormalAllocations, Protocol } from "../types/adapters";
 import { createChartData } from "./convertToChartData";
 import { createRawSections } from "./convertToRawData";
-import { createCategoryData } from "./sectionData";
+import { createCategoryData } from "./categoryData";
 import { getChartPng } from "./chart";
 import { secondsToReadableDate } from "./time";
 
