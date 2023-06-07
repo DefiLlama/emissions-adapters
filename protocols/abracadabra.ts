@@ -18,7 +18,7 @@ const abracadabra: Protocol = {
     sources: ["https://abracadabramoney.gitbook.io/learn/tokens/tokenomics"],
     protocolIds: ["347"],
   },
-  sections: {
+  categories: {
     insiders: ["Team"],
     publicSale: ["IDO"],
   },

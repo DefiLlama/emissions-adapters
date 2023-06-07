@@ -29,7 +29,7 @@ const compound: Protocol = {
     ],
     protocolIds: ["114"],
   },
-  sections: {
+  categories: {
     farming: ["Liquidity mining"],
     insiders: ["Team founders"],
   },

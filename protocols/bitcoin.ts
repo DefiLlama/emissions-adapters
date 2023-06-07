@@ -38,7 +38,7 @@ const bitcoin: Protocol = {
       `Future halvenings have at a specified block height, therefore the dates shown are an estimate only.`,
     ],
   },
-  sections: {
+  categories: {
     farming: ["Mining rewards"],
   },
 };

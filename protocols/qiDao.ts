@@ -34,7 +34,7 @@ const qiDao: Protocol = {
     token: "polygon:0x580a84c73811e1839f75d86d75d88cca0c241ff4",
     protocolIds: ["449"],
   },
-  sections: {
+  categories: {
     insiders: ["Strategic partners"],
     farming: ["Keeper incentives"],
     noncirculating: ["Community"],

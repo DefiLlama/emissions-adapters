@@ -11,7 +11,7 @@ import {
   Event,
 } from "../types/adapters";
 import { addResultToEvents } from "./events";
-const excludedKeys = ["meta", "sections", "incompleteSections"];
+const excludedKeys = ["meta", "categories", "incompleteSections"];
 
 export async function createRawSections(
   adapter: Protocol,
@@ -25,6 +25,7 @@ export async function createRawSections(
     protocolIds: [],
     events: [],
   };
+  let categories: { [category: string]: string[] } = {};
   adapter.default = await adapter.default;
 
   await Promise.all(
@@ -40,6 +41,8 @@ export async function createRawSections(
           );
         }
       }
+
+      if (a[0] == "categories") categories = a[1];
 
       if (excludedKeys.includes(a[0])) return;
 
@@ -92,7 +95,7 @@ export async function createRawSections(
   if (metadata && metadata.events)
     metadata.events.sort((a: Event, b: Event) => a.timestamp - b.timestamp);
 
-  return { rawSections, startTime, endTime, metadata };
+  return { rawSections, startTime, endTime, metadata, categories };
 }
 function stepAdapterToRaw(result: StepAdapterResult): RawResult[] {
   const output: RawResult[] = [];

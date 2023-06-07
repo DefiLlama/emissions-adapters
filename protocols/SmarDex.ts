@@ -7,7 +7,6 @@ const maximumSupply: number = 10000000000;
 const rewardYears: number = 10;
 const boostWeeks: number = 4;
 
-
 const boost = (amountAllocated: number): LinearAdapterResult[] => {
   let sections: LinearAdapterResult[] = [];
   let thisStart: number = start;
@@ -16,11 +15,7 @@ const boost = (amountAllocated: number): LinearAdapterResult[] => {
     const qty: number = amountAllocated * (0.4 - 0.1 * week);
 
     sections.push(
-      manualLinear(
-        thisStart,
-        thisStart + periodToSeconds.week,
-        qty,
-      ),
+      manualLinear(thisStart, thisStart + periodToSeconds.week, qty),
     );
 
     thisStart += periodToSeconds.week;
@@ -35,14 +30,13 @@ const rewards = (amountAllocated: number): LinearAdapterResult[] => {
   const lastYearCorrection = 2989767;
 
   for (let year = 1; year <= rewardYears; year++) {
-    const qty: number = year === 10 ? amountAllocated * 0.5 ** (year -1) - lastYearCorrection : amountAllocated * 0.5 ** year;
+    const qty: number =
+      year === 10
+        ? amountAllocated * 0.5 ** (year - 1) - lastYearCorrection
+        : amountAllocated * 0.5 ** year;
 
     sections.push(
-      manualLinear(
-        thisStart,
-        thisStart + periodToSeconds.year,
-        qty,
-      ),
+      manualLinear(thisStart, thisStart + periodToSeconds.year, qty),
     );
 
     thisStart += periodToSeconds.year;
@@ -65,9 +59,10 @@ const SmarDex: Protocol = {
     sources: ["https://docs.smardex.io/overview/what-is-smardex/tokenomics"],
     token: "ethereum:0x5de8ab7e27f6e7a1fff3e5b337584aa43961beef",
     protocolIds: [],
-  }, sections: {
-    farming: ['Farming', 'Boost'],
-    publicSale: ["Initial Pool mint"]
-  }
+  },
+  categories: {
+    farming: ["Farming", "Boost"],
+    publicSale: ["Initial Pool mint"],
+  },
 };
 export default SmarDex;

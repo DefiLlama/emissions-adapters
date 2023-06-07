@@ -36,7 +36,7 @@ const forta: Protocol = {
       },
     ],
   },
-  sections: {
+  categories: {
     insiders: ["other", "backers", "core contributors", "OpenZeppelin"],
     airdrop: ["airdrop"],
     farming: ["node runner rewards"],

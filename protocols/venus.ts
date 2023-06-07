@@ -17,7 +17,7 @@ const quickswap: Protocol = {
     token: "bsc:0xcf6bb5389c92bdda8a3747ddb454cb7a64626c63",
     protocolIds: ["212"],
   },
-  sections: {
+  categories: {
     farming: ["Binance LaunchPool", "Incentives"],
     noncirculating: ["Ecosystem grants"],
   },

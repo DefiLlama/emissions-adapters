@@ -13,7 +13,7 @@ const zyberswap: Protocol = {
     sources: ["https://docs.zyberswap.io/tokenomics/zyber-token"],
     protocolIds: ["2467", "2530", "2602"],
   },
-  sections: {
+  categories: {
     farming: ["liquidity incentives"],
     insiders: ["team", "marketing"],
     publicSale: ["initial liquidity"],

@@ -41,7 +41,7 @@ const convex: Protocol = {
       },
     ],
   },
-  sections: {
+  categories: {
     insiders: ["Investors", "Team"],
     noncirculating: ["Treasury"],
     airdrop: ["veCRV voters", "veCRV holders"],

@@ -24,23 +24,18 @@ const immutable: Protocol = {
     18,
     (qty * 0.1426) / 18,
   ),
-  "public sale": manualStep(
-    start,
-    periodToSeconds.month,
-    6,
-    (qty * 0.05) / 6,
-  ),
+  "public sale": manualStep(start, periodToSeconds.month, 6, (qty * 0.05) / 6),
   "foundation reserve": manualCliff(start, qty * 0.04),
 
   meta: {
     token: "ethereum:0xF57e7e7C23978C3cAEC3C3548E3D615c346e79fF",
     sources: [
-        "https://www.digitalworldsnfts.com/imx-token", 
-        "https://assets.website-files.com/646557ee455c3e16e4a9bcb3/646557ee455c3e16e4a9be87_Immutable%20X%20Whitepaper.pdf"
+      "https://www.digitalworldsnfts.com/imx-token",
+      "https://assets.website-files.com/646557ee455c3e16e4a9bcb3/646557ee455c3e16e4a9be87_Immutable%20X%20Whitepaper.pdf",
     ],
     protocolIds: [],
   },
-  sections: {
+  categories: {
     insiders: ["project development", "private sale"],
     noncirculating: [],
     publicSale: ["public sale"],

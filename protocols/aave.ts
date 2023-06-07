@@ -37,7 +37,7 @@ const aave: Protocol = {
       },
     ],
   },
-  sections: {
+  categories: {
     noncirculating: ["Ecosysten reserve"],
     publicSale: ["LEND to AAVE migrator"],
   },

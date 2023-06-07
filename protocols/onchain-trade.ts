@@ -35,7 +35,7 @@ const OT: Protocol = {
     ],
     protocolIds: ["2752"],
   },
-  sections: {
+  categories: {
     insiders: ["Team", "Partnerships & Marketing"],
     publicSale: ["IFO", "Initial Liquidity"],
     farming: ["Community Incentive"],

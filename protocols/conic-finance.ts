@@ -36,7 +36,7 @@ const conic: Protocol = {
       },
     ],
   },
-  sections: {
+  categories: {
     airdrop: ["vlCVX holders"],
     publicSale: ["Community raise"],
     farming: [

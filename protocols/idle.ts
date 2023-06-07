@@ -69,7 +69,7 @@ const idle: Protocol = {
       },
     ],
   },
-  sections: {
+  categories: {
     insiders: ["Team", "Investors"],
     farming: ["Long-term rewards", "Liquidity mining", "early LPs"],
     publicSale: ["Liquidity bootstrap"],

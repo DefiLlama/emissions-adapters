@@ -10,13 +10,13 @@ const moonbeam: Protocol = {
     1600815600 + periodToSeconds.month * 3,
     periodToSeconds.month,
     21,
-    qty * 0.14 / 21,
+    (qty * 0.14) / 21,
   ),
   "Strategic funding": manualStep(
     1617058800,
     periodToSeconds.month,
     10,
-    qty * 0.12 / 10,
+    (qty * 0.12) / 10,
   ),
   "Take Flight community event": manualCliff(1631023200, 98211164),
   "2021 Moonbeam crowdloan": [
@@ -31,7 +31,7 @@ const moonbeam: Protocol = {
     start,
     periodToSeconds.month,
     24,
-    qty * 0.0355 / 24,
+    (qty * 0.0355) / 24,
   ),
   "Key partners and advisors": [
     manualStep(
@@ -57,7 +57,7 @@ const moonbeam: Protocol = {
     start + periodToSeconds.month * 7,
     periodToSeconds.month,
     17,
-    qty * 0.014 / 17,
+    (qty * 0.014) / 17,
   ),
   "Founders and early employees": [
     manualCliff(start + periodToSeconds.year, qty * 0.025),
@@ -65,16 +65,16 @@ const moonbeam: Protocol = {
       start + periodToSeconds.year,
       periodToSeconds.month,
       36,
-      qty * 0.075 / 36,
+      (qty * 0.075) / 36,
     ),
   ],
   "Future employee incentives": [
-    manualCliff(start + periodToSeconds.year, qty * 0.046 / 4),
+    manualCliff(start + periodToSeconds.year, (qty * 0.046) / 4),
     manualStep(
       start + periodToSeconds.year,
       periodToSeconds.month,
       36,
-      qty * 0.046 * 3 / (36 * 4),
+      (qty * 0.046 * 3) / (36 * 4),
     ),
   ],
   meta: {
@@ -87,7 +87,7 @@ const moonbeam: Protocol = {
     token: "coingecko:moonbeam",
     protocolIds: ["2788"],
   },
-  sections: {
+  categories: {
     insiders: [
       "Seed funding",
       "Strategic funding",

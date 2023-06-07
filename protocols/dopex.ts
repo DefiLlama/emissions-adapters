@@ -51,7 +51,7 @@ const dopex: Protocol = {
       },
     ],
   },
-  sections: {
+  categories: {
     insiders: ["Founders", "Early investors", "Operational allocations"],
     farming: ["Farming", "Platform rewards"],
     publicSale: ["Token sale"],

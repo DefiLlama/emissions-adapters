@@ -15,19 +15,19 @@ const dydx: Protocol = {
       1704067200,
       periodToSeconds.month,
       6,
-      quantities.futureEmployees * 0.4 / 6,
+      (quantities.futureEmployees * 0.4) / 6,
     ),
     manualStep(
       1719788400,
       periodToSeconds.month,
       12,
-      quantities.futureEmployees * 0.2 / 12,
+      (quantities.futureEmployees * 0.2) / 12,
     ),
     manualStep(
       1751324400,
       periodToSeconds.month,
       12,
-      quantities.futureEmployees * 0.1 / 12,
+      (quantities.futureEmployees * 0.1) / 12,
     ),
   ],
   "employees and consultants": [
@@ -37,19 +37,19 @@ const dydx: Protocol = {
       1704067200,
       periodToSeconds.month,
       6,
-      quantities.employees * 0.4 / 6,
+      (quantities.employees * 0.4) / 6,
     ),
     manualStep(
       1719788400,
       periodToSeconds.month,
       12,
-      quantities.employees * 0.2 / 12,
+      (quantities.employees * 0.2) / 12,
     ),
     manualStep(
       1751324400,
       periodToSeconds.month,
       12,
-      quantities.employees * 0.1 / 12,
+      (quantities.employees * 0.1) / 12,
     ),
   ],
   investors: [
@@ -59,19 +59,19 @@ const dydx: Protocol = {
       1704067200,
       periodToSeconds.month,
       6,
-      quantities.investors * 0.4 / 6,
+      (quantities.investors * 0.4) / 6,
     ),
     manualStep(
       1719788400,
       periodToSeconds.month,
       12,
-      quantities.investors * 0.2 / 12,
+      (quantities.investors * 0.2) / 12,
     ),
     manualStep(
       1751324400,
       periodToSeconds.month,
       12,
-      quantities.investors * 0.1 / 12,
+      (quantities.investors * 0.1) / 12,
     ),
   ],
   "safety module": manualStep(
@@ -107,7 +107,7 @@ const dydx: Protocol = {
     token: "ethereum:0x92d6c1e31e14520e676a687f0a93788b716beff5",
     protocolIds: ["144"],
   },
-  sections: {
+  categories: {
     insiders: [
       "future employees & consultants",
       "employees and consultants",

@@ -50,7 +50,7 @@ const dodo: Protocol = {
       },
     ],
   },
-  sections: {
+  categories: {
     insiders: [
       "Team & consultants",
       "Seed investors",

@@ -16,7 +16,7 @@ const spaceFi: Protocol = {
     token: "evmos:0x4e2d4f33d759976381d9dee04b197bf52f6bc1fc",
     protocolIds: ["1759"],
   },
-  sections: {
+  categories: {
     airdrop: ["Community airdrop"],
     noncirculating: ["DAO treasury"],
     insiders: ["Team"],

@@ -55,7 +55,7 @@ const perpetual: Protocol = {
       },
     ],
   },
-  sections: {
+  categories: {
     farming: ["Balancer LBP", "Ecosystem and rewards"],
     insiders: ["Seed investors", "Strategic investors", "Team and advisors"],
   },

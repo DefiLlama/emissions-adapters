@@ -68,6 +68,10 @@ export type ApiChartData = {
   unlocked: number;
   label?: string;
 };
+export type TransposedApiChartData = {
+  label: string;
+  data: any;
+};
 export type ChartYAxisData = {
   start: number;
   increment: number;
@@ -77,7 +81,7 @@ export type ChartYAxisData = {
 export type Protocol = {
   [section: string]: any;
   meta: Metadata;
-  sections: { [key in SectionType]?: string[] | undefined };
+  categories: { [key in SectionType]?: string[] | undefined };
 };
 export type IncompleteSection = {
   key: string;
@@ -123,6 +127,10 @@ export type SectionData = {
   startTime: number;
   endTime: number;
   metadata: Metadata;
+  categories: Categories;
+};
+export type Categories = {
+  [category: string]: string[];
 };
 export type Metadata = {
   sources: string[];
@@ -141,3 +149,4 @@ export type BlockTime = {
   block: number;
   timestamp: number;
 };
+export type Allocations = { [category: string]: number };

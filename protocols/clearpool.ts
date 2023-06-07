@@ -60,7 +60,7 @@ const clearpool: Protocol = {
       incompleteSection("Reserves", 0.1717),
     ],
   },
-  sections: {
+  categories: {
     noncirculating: ["Ecosystem", "Partnerships", "Reserves"],
     farming: ["Rewards"],
     publicSale: ["Liquidity"],

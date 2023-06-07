@@ -40,7 +40,7 @@ const liquity: Protocol = {
       start + periodToSeconds.year,
       periodToSeconds.month,
       27,
-      qty * 0.2665 * 0.75 / 27,
+      (qty * 0.2665 * 0.75) / 27,
     ),
   ],
   "Service providers": manualCliff(start + periodToSeconds.year, qty * 0.0104),
@@ -50,7 +50,7 @@ const liquity: Protocol = {
     token: "ethereum:0x6dea81c8171d0ba574754ef6f8b412f2ed88c54d",
     protocolIds: ["270"],
   },
-  sections: {
+  categories: {
     farming: ["Stability Pool rewards", "Uniswap LPs"],
     noncirculating: ["Endowment", "Community reserve"],
     insiders: ["Team and advisors", "Service providers", "Investors"],

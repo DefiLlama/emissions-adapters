@@ -9,17 +9,17 @@ const uxd: Protocol = {
   //   Community: [],
   "Seed investors": [
     manualCliff(cliff, qty * 0.143 * 0.25),
-    manualStep(cliff, periodToSeconds.month, 36, qty * 0.143 * 0.75 / 36),
+    manualStep(cliff, periodToSeconds.month, 36, (qty * 0.143 * 0.75) / 36),
   ],
   "Preseed investors": [
     manualCliff(cliff, qty * 0.071 * 0.25),
-    manualStep(cliff, periodToSeconds.month, 24, qty * 0.071 * 0.75 / 24),
+    manualStep(cliff, periodToSeconds.month, 24, (qty * 0.071 * 0.75) / 24),
   ],
   //   Treasury: [],
   "Token sale": manualCliff(start, qty * 0.043),
   Team: [
     manualCliff(cliff, qty * 0.286 * 0.25),
-    manualStep(cliff, periodToSeconds.month, 36, qty * 0.286 * 0.75 / 36),
+    manualStep(cliff, periodToSeconds.month, 36, (qty * 0.286 * 0.75) / 36),
   ],
   meta: {
     sources: ["https://docs.uxd.fi/uxdprotocol/overview/uxp-token-economics"],
@@ -30,7 +30,7 @@ const uxd: Protocol = {
     ],
     protocolIds: ["1402"],
   },
-  sections: {
+  categories: {
     // farming: ["Community"],
     insiders: ["Seed investors", "Preseed investors", "Team"],
     publicSale: ["Token sale"],

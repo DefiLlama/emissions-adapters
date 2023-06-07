@@ -25,7 +25,7 @@ const premia: Protocol = {
     ],
     protocolIds: ["381"],
   },
-  sections: {
+  categories: {
     insiders: ["Strategic Partnerships"],
     farming: ["Bootstrap Distribution", "Community Incentive"],
     noncirculating: ["Premian Republic - Operator"],

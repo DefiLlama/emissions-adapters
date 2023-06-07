@@ -19,25 +19,25 @@ const aptos: Protocol = {
       start + periodToSeconds.month * 13,
       periodToSeconds.month,
       6,
-      totalQty * 0.19 * 3 / 48,
+      (totalQty * 0.19 * 3) / 48,
     ),
     manualStep(
       start + periodToSeconds.month * 19,
       periodToSeconds.month,
       30,
-      totalQty * 0.19 / 48,
+      (totalQty * 0.19) / 48,
     ),
   ],
   foundation: [
     manualCliff(start, totalQty * 0.005),
-    manualStep(start, periodToSeconds.month, 120, totalQty * 0.16 / 120),
+    manualStep(start, periodToSeconds.month, 120, (totalQty * 0.16) / 120),
   ],
   investors: [
     manualStep(
       start + periodToSeconds.month * 13,
       periodToSeconds.month,
       6,
-      134782640.233 * 3 / 48,
+      (134782640.233 * 3) / 48,
     ),
     manualStep(
       start + periodToSeconds.month * 19,
@@ -51,7 +51,7 @@ const aptos: Protocol = {
     token: "coingecko:aptos",
     protocolIds: ["2725"],
   },
-  sections: {
+  categories: {
     insiders: ["investors", "core contributors"],
     noncirculating: ["foundation", "community"],
   },

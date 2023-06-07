@@ -26,7 +26,7 @@ const cetus: Protocol = {
     notes: [],
     protocolIds: ["2289"],
   },
-  sections: {
+  categories: {
     farming: ["Community"],
     publicSale: ["Liquidity Treasury"],
     insiders: ["Team & Advisors", "Investors"],

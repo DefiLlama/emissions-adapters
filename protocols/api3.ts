@@ -50,7 +50,7 @@ const api3: Protocol = {
       },
     ],
   },
-  sections: {
+  categories: {
     insiders: [
       "Founding Team",
       "Partners & Contributors",

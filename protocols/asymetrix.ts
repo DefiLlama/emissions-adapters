@@ -27,7 +27,7 @@ const asymetrix: Protocol = {
     ],
     protocolIds: ["2885"],
   },
-  sections: {
+  categories: {
     farming: ["Community"],
     insiders: ["Team", "Investors"],
   },
