@@ -2,7 +2,12 @@ import { multiCall } from "@defillama/sdk/build/abi/abi2";
 import fetch from "node-fetch";
 import { call } from "@defillama/sdk/build/abi/abi2";
 import { CliffAdapterResult, BlockTime } from "../../types/adapters";
-import { isFuture, sleep } from "../../utils/time";
+import {
+  isFuture,
+  periodToSeconds,
+  sleep,
+  unixTimestampNow,
+} from "../../utils/time";
 import { getBlock2 } from "../../utils/block";
 import { INCOMPLETE_SECTION_STEP } from "../../utils/constants";
 let res: number;
@@ -112,5 +117,14 @@ export async function balance(
     const start = blockHeights[i].timestamp;
     sections.push({ type: "cliff", start, amount });
   }
+
+  if (sections.length == 0)
+    return [
+      {
+        type: "cliff",
+        start: unixTimestampNow() - periodToSeconds.week,
+        amount: 0,
+      },
+    ];
   return sections;
 }
