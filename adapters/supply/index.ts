@@ -72,7 +72,6 @@ export async function supply(
     );
   } catch {
     for (let block of blockHeights.map((b: BlockTime) => b.block)) {
-      console.log("tick");
       await sleep(2000);
       const supply = await call({
         block,
