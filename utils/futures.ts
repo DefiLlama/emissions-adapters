@@ -1,18 +1,12 @@
 import fetch from "node-fetch";
 import { sleep } from "./time";
+import { FuturesData } from "../types/adapters";
 const burl: string = "https://open-api.coinglass.com";
 
 type Res = {
   openInterest: number;
   avgFundingRateByVol: number;
   exchangeName: string;
-};
-
-type FuturesData = {
-  openInterest: number;
-  fundingRate: number;
-  success: boolean;
-  ratelimited?: boolean;
 };
 
 export async function createFuturesData(
