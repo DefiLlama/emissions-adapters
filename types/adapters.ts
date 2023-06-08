@@ -139,12 +139,11 @@ export type Metadata = {
   notes?: string[];
   protocolIds: string[];
   incompleteSections?: IncompleteSection[];
-  futures?: FuturesData;
 };
 export type FuturesData = {
   openInterest: number;
   fundingRate: number;
-  success: boolean;
+  success?: boolean;
   ratelimited?: boolean;
 };
 export type Event = {

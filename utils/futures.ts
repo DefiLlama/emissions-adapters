@@ -23,7 +23,7 @@ export async function createFuturesData(
   }
   if (!data.success) return undefined;
 
-  return data;
+  return { openInterest: data.openInterest, fundingRate: data.fundingRate };
 }
 
 async function fetchCoinGlass(symbol: string): Promise<FuturesData> {
