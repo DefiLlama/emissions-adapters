@@ -26,7 +26,6 @@ export async function createRawSections(
     events: [],
   };
   let categories: { [category: string]: string[] } = {};
-  adapter.default = await adapter.default;
 
   await Promise.all(
     Object.entries(adapter.default).map(async (a: any[]) => {
