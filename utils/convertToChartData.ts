@@ -64,8 +64,8 @@ async function appendMissingDataSections(
   let res = await fetch(`https://api.llama.fi/emission/${protocol}`).then((r) =>
     r.json(),
   );
-  res = res.body ? JSON.parse(res.body).data : [];
-
+  // res = res.body ? JSON.parse(res.body).data : [];
+  res = [];
   incompleteSections.map((i: IncompleteSection) => {
     const sectionRes: any = res.find((s: ApiChartData) => s.label == i.key);
 

@@ -13,14 +13,6 @@ const token = "0x912ce59144191c1204e64559fe8253a0e49e6548";
 const chain = "arbitrum";
 const arbitrum: Protocol = {
   Airdrop: manualCliff(start, qty * 0.1162),
-  "Ecosystem Development Fund": balance([], token, chain, "arbitrum", 0),
-  "Arbitrum DAO Treasury": balance(
-    ["0xF3FC178157fb3c87548bAA86F9d24BA38E649B58"],
-    token,
-    chain,
-    "arbitrum",
-    1686132532, // no outflows at this time
-  ),
   "Advisors Team OffchainLabs": [
     manualCliff(start + periodToSeconds.year, qty_advisors * 0.25), // 25% cliff after 1 year
     manualStep(
@@ -39,6 +31,20 @@ const arbitrum: Protocol = {
       (qty_investors * 0.75) / 36,
     ), // monthly steps for the next 3 years
   ],
+  "Ecosystem Development Fund": balance(
+    [],
+    token,
+    chain,
+    "arbitrum",
+    1686132532,
+  ),
+  "Arbitrum DAO Treasury": balance(
+    ["0xF3FC178157fb3c87548bAA86F9d24BA38E649B58"],
+    token,
+    chain,
+    "arbitrum",
+    1686132532, // no outflows at this time
+  ),
   meta: {
     token: `${chain}:${token}`,
     sources: [
@@ -54,7 +60,7 @@ const arbitrum: Protocol = {
       {
         key: "Ecosystem Development Fund",
         allocation: qty * 0.0113,
-        lastRecord: () => latest("arbitrum", 0),
+        lastRecord: () => latest("arbitrum", 1686132532),
       },
     ],
   },
