@@ -85,7 +85,6 @@ export async function balance(
     );
   } catch {
     for (let block of blockHeights) {
-      console.log("tick");
       await sleep(2000);
       balances.push(
         await multiCall({
