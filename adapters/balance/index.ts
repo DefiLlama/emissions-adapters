@@ -30,6 +30,8 @@ export async function latest(
   return res;
 }
 
+let blockHeightsSto: { [timestamp: number]: BlockTime } = {};
+
 export async function balance(
   owners: string[],
   target: string,
@@ -57,13 +59,23 @@ export async function balance(
     currentTimestamp += INCOMPLETE_SECTION_STEP;
   }
 
-  const blockHeights: BlockTime[] = await Promise.all(
-    allTimestamps.map((t: number) =>
-      getBlock2(chain, t).then((h: number | undefined) => ({
-        timestamp: t,
-        block: h == null ? -1 : h,
-      })),
-    ),
+  await Promise.all(
+    allTimestamps.map(async (t: number) => {
+      if (blockHeightsSto[t]) {
+        console.log("saved");
+        return;
+      }
+      blockHeightsSto[t] = await getBlock2(chain, t).then(
+        (h: number | undefined) => ({
+          timestamp: t,
+          block: h == null ? -1 : h,
+        }),
+      );
+    }),
+  );
+
+  const blockHeights: BlockTime[] = allTimestamps.map(
+    (t: number) => blockHeightsSto[t],
   );
 
   let balances: any[] = [];
