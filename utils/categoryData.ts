@@ -71,12 +71,14 @@ export function createCategoryData(
         );
         if (!s) return { current: 0, final: 0 };
 
-        const current: number = s.data.find(
-          (t: any) =>
-            timestampNow - RESOLUTION_SECONDS < t.timestamp &&
-            t.timestamp < timestampNow,
-        ).unlocked;
         const final: number = s.data[s.data.length - 1].unlocked;
+        const current: number =
+          s.data.find(
+            (t: any) =>
+              timestampNow - RESOLUTION_SECONDS < t.timestamp &&
+              t.timestamp < timestampNow,
+          )?.unlocked ?? final;
+
         return { current, final };
       }
 
