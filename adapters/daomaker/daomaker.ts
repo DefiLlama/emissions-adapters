@@ -90,7 +90,7 @@ export default async function daoMaker(api: DaoMakerApiRes): Promise<Protocol> {
       token: `coingecko:${api.coingecko_api_id}`,
       sources: [api.link],
       notes: [`Data used in this analysis has been supplied by DAO Maker`],
-      protocolIds: [], // need
+      protocolIds: [],
     },
     categories: {}, // need
   };
