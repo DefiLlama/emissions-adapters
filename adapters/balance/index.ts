@@ -10,24 +10,29 @@ import {
 } from "../../utils/time";
 import { getBlock2 } from "../../utils/block";
 import { INCOMPLETE_SECTION_STEP } from "../../utils/constants";
+import { PromisePool } from "@supercharge/promise-pool";
+import { lookupBlock } from "@defillama/sdk/build/util";
+
 let res: number;
 
 export async function latest(
   adapter: string,
   timestampDeployed: number,
 ): Promise<number> {
-  if (!res) {
-    let r = await fetch(`https://api.llama.fi/emission/${adapter}`).then((r) =>
-      r.json(),
-    );
-    if (!r.body) return timestampDeployed;
-    r = JSON.parse(r.body);
-    return r.metadata.incompleteSections == null ||
-      r.metadata.incompleteSections.lastRecord == null
-      ? timestampDeployed
-      : r.metadata.incompleteSections.lastRecord;
-  }
-  return res;
+  // if (!res) {
+  //   let r = await fetch(`https://api.llama.fi/emission/${adapter}`).then((r) =>
+  //     r.json(),
+  //   );
+  //   if (!r.body) return timestampDeployed;
+  //   r = JSON.parse(r.body);
+  //   return r.metadata.incompleteSections == null ||
+  //     r.metadata.incompleteSections[0].lastRecord == null
+  //     ? timestampDeployed
+  //     : r.metadata.incompleteSections[0].lastRecord;
+  // }
+  // return res;
+  adapter;
+  return timestampDeployed;
 }
 
 let blockHeightsSto: { [timestamp: number]: BlockTime } = {};
@@ -59,30 +64,34 @@ export async function balance(
     currentTimestamp += INCOMPLETE_SECTION_STEP;
   }
 
-  await Promise.all(
-    allTimestamps.map(async (t: number) => {
+  let i = 0;
+
+  const fails = [];
+  await PromisePool.withConcurrency(10)
+    .for(allTimestamps)
+    .process(async (t) => {
       if (blockHeightsSto[t]) {
-        console.log("saved");
+        console.log(`${i} saved`);
+        i++;
         return;
       }
-      blockHeightsSto[t] = await getBlock2(chain, t).then(
-        (h: number | undefined) => ({
-          timestamp: t,
-          block: h == null ? -1 : h,
-        }),
-      );
-    }),
-  );
+      try {
+        blockHeightsSto[t] = await lookupBlock(t, { chain });
+      } catch {
+        fails.push(t);
+      }
+    });
 
   const blockHeights: BlockTime[] = allTimestamps.map(
     (t: number) => blockHeightsSto[t],
   );
 
   let balances: any[] = [];
-  try {
-    balances = await Promise.all(
-      blockHeights.map((b: BlockTime) =>
-        multiCall({
+  await PromisePool.withConcurrency(10)
+    .for(blockHeights)
+    .process(async (b) => {
+      balances.push(
+        await multiCall({
           calls: owners.map((o: string) => ({ target, params: [o] })),
           abi: "erc20:balanceOf",
           chain,
@@ -93,26 +102,13 @@ export async function balance(
             throw new Error(`balance call failed for ${adapter}`);
           return r.reduce((p: number, c: any) => Number(p) + Number(c), 0);
         }),
-      ),
-    );
-  } catch {
-    for (let block of blockHeights) {
-      await sleep(2000);
-      balances.push(
-        await multiCall({
-          calls: owners.map((o: string) => ({ target, params: [o] })),
-          abi: "erc20:balanceOf",
-          chain,
-          block: block.block,
-          requery: true,
-        }),
       );
-    }
-  }
+    });
 
   if (balances.length != blockHeights.length)
     throw new Error(`block mismatch in ${adapter} balance adapter`);
 
+  // totally mad balance values here
   const sections: CliffAdapterResult[] = [];
   let depositIndex: number = 0;
   for (let i = 0; i < balances.length; i++) {
@@ -133,7 +129,7 @@ export async function balance(
     return [
       {
         type: "cliff",
-        start: unixTimestampNow() - periodToSeconds.week,
+        start: unixTimestampNow() - INCOMPLETE_SECTION_STEP,
         amount: 0,
       },
     ];
