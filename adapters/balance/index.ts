@@ -86,6 +86,7 @@ export async function balance(
     (t: number) => blockHeightsSto[t],
   );
 
+  let a = await call({ target, params: owners[0], abi: "erc20:balanceOf" });
   let balances: any[] = [];
   await PromisePool.withConcurrency(10)
     .for(blockHeights)
@@ -118,6 +119,7 @@ export async function balance(
     depositIndex += 1;
     if (depositIndex == 1) continue;
 
+    if (thisBalance == 0) continue;
     const amount = (balances[i - 1] - thisBalance) / 10 ** decimals;
     if (amount <= 0) continue;
 
