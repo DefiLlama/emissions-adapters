@@ -1,10 +1,8 @@
-import fetch from "node-fetch";
 import { Protocol } from "../../types/adapters";
 import { AdapterResult } from "../../types/adapters";
 import { stringToTimestamp } from "../../utils/time";
 import { CliffAdapterResult } from "../../types/adapters";
 import { periodToSeconds } from "../../utils/time";
-let res: any;
 
 type Vesting = {
   tokenName: string;
@@ -18,7 +16,7 @@ type VestingMode = {
   tgeUnlock?: number;
   totalVestedLinear?: number;
 };
-type DaoMakerApiRes = {
+export type DaoMakerApiRes = {
   coingecko_api_id: string;
   link: string;
   title: string;
@@ -27,16 +25,10 @@ type DaoMakerApiRes = {
   tge: string;
 };
 
-async function vestings(): Promise<DaoMakerApiRes[]> {
-  if (!res)
-    return fetch(`https://api.daomaker.com/defillama/company/vestings`).then(
-      (r) => r.json(),
-    );
-  return res;
-}
 function processEpochsData(
   vestings: Vesting,
   tge: number,
+  title: string,
 ): CliffAdapterResult[] {
   let workingQty: number = 0;
   const section: CliffAdapterResult[] = [];
@@ -63,7 +55,7 @@ function processEpochsData(
 
   if (workingQty < vestings.totalCount * 0.99)
     throw new Error(
-      `The accumulated unlocks for ${vestings.tokenName} does not match the total count.`,
+      `The accumulated unlocks for ${vestings.tokenName} in ${title} does not match the total count.`,
     );
 
   return section;
@@ -71,13 +63,14 @@ function processEpochsData(
 function processLinearData(
   vestings: Vesting,
   tge: number,
+  title: string,
   mode: VestingMode,
 ): AdapterResult[] {
   const section: AdapterResult[] = [];
 
   if (!mode.cliff || !mode.lastDay || !mode.totalVestedLinear)
     throw new Error(
-      `unable to parse ${vestings.tokenName} because expected linear props are missing`,
+      `unable to parse ${vestings.tokenName} in ${title} because expected linear props are missing`,
     );
   if (mode.tgeUnlock)
     section.push({ type: "cliff", start: tge, amount: mode.tgeUnlock });
@@ -91,14 +84,8 @@ function processLinearData(
 
   return section;
 }
-export async function daoMakerApi(title: string): Promise<Protocol> {
-  const res: DaoMakerApiRes[] = await vestings();
-  const api: DaoMakerApiRes | undefined = res.find(
-    (r: DaoMakerApiRes) => r.title.toLowerCase() == title.toLowerCase(),
-  );
-  if (!api) throw new Error(`unable to find project of title ${title}`);
-
-  const exp: Protocol = {
+export default async function daoMaker(api: DaoMakerApiRes): Promise<Protocol> {
+  const protocol: Protocol = {
     meta: {
       token: `coingecko:${api.coingecko_api_id}`,
       sources: [api.link],
@@ -109,29 +96,23 @@ export async function daoMakerApi(title: string): Promise<Protocol> {
   };
 
   const tge: number = stringToTimestamp(api.tge);
-  api.vestings
-    // .filter(
-    //   (v: Vesting) =>
-    //     v.tokenName == "DAO Managed Foundation" ||
-    //     v.tokenName == "Customer incentives",
-    // )
-    .map((v: Vesting, i: number) => {
-      const mode = api.vestingsMode[i];
-      let sectionData: AdapterResult[];
+  api.vestings.map((v: Vesting, i: number) => {
+    const mode = api.vestingsMode[i];
+    let sectionData: AdapterResult[];
 
-      switch (mode.mode) {
-        case "epoch":
-          sectionData = processEpochsData(v, tge);
-          break;
-        case "linear":
-          sectionData = processLinearData(v, tge, mode);
-          break;
-        default:
-          throw new Error(`unknown vesting mode`);
-      }
+    switch (mode.mode) {
+      case "epoch":
+        sectionData = processEpochsData(v, tge, api.title);
+        break;
+      case "linear":
+        sectionData = processLinearData(v, tge, api.title, mode);
+        break;
+      default:
+        throw new Error(`unknown vesting mode`);
+    }
 
-      exp[v.tokenName] = sectionData;
-    });
+    protocol[v.tokenName] = sectionData;
+  });
 
-  return exp;
+  return protocol;
 }

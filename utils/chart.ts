@@ -77,16 +77,17 @@ function buildOptionsObject(data: ChartSection[]): Object {
 export async function getChartPng(
   data: ChartSection[],
   isCI: boolean,
+  i: number,
 ): Promise<void> {
   const path: string = resolve(__dirname);
   const options: Object = buildOptionsObject(data);
   let image: Buffer | string = await draw(options, isCI);
-  let saveLocation = `${path}/result.png`;
+  let saveLocation = `${path}/testCharts/result${i}.png`;
   if (typeof image == "string") {
     image = await sendToImageHost(image);
-    saveLocation = `result.txt`;
+    saveLocation = `result${i}.txt`;
   }
-  fs.writeFile(saveLocation, image, function(err) {
+  fs.writeFile(saveLocation, image, function (err) {
     if (err) {
       return console.log(err);
     }
