@@ -50,7 +50,7 @@ export async function balance(
   ]);
 
   const allTimestamps: number[] = [];
-  let currentTimestamp = trackedTimestamp;
+  let currentTimestamp = Math.max(trackedTimestamp, timestampDeployed);
 
   while (!isFuture(currentTimestamp)) {
     allTimestamps.push(currentTimestamp);
