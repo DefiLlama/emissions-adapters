@@ -53,8 +53,12 @@ export function createCategoryData(
           (t: number) =>
             timestampNow - RESOLUTION_SECONDS < t && t < timestampNow,
         );
-        const current = s.data.unlocked[currentEntryIndex];
-        const final = s.data.unlocked[s.data.unlocked.length - 1];
+        const finalEntryIndex = s.data.unlocked.length - 1;
+        const current =
+          s.data.unlocked[
+            currentEntryIndex == -1 ? finalEntryIndex : currentEntryIndex
+          ];
+        const final = s.data.unlocked[finalEntryIndex];
         return { current, final };
       }
 
