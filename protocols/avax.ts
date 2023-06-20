@@ -21,7 +21,11 @@ const avax: Protocol = {
   Team: manualStep(mainnet, periodToSeconds.month * 3, 16, 72e6 / 16), // mixed for later hires
   Airdrop: manualStep(mainnet, periodToSeconds.month * 3, 16, 18e6 / 16), // mixed date
   Foundation: manualStep(mainnet, periodToSeconds.month * 3, 40, 1667e3),
-  "Staking Rewards": manualLinear(mainnet, periodToSeconds.day * 6000, 360e6), // as measured on 20/06/23
+  "Staking Rewards": manualLinear(
+    mainnet,
+    mainnet + periodToSeconds.day * 6000,
+    360e6,
+  ), // as measured on 20/06/23
   "Testnet Incentive Program": manualStep(
     mainnet,
     periodToSeconds.month * 3,
