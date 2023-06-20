@@ -151,8 +151,10 @@ export type Event = {
   timestamp: number;
   noOfTokens: number[];
 };
-export type BlockTime = {
-  block: number;
-  timestamp: number;
+export type TimeSeriesChainData = {
+  [block: string]: {
+    timestamp: number;
+    result?: any;
+  };
 };
 export type Allocations = { [category: string]: number };
