@@ -1,4 +1,4 @@
 /node_modules
 **/**/*.js
-/utils/result.png
+/utils/testCharts
 result.txt

@@ -28,7 +28,7 @@ export async function createRawSections(
   let categories: { [category: string]: string[] } = {};
 
   await Promise.all(
-    Object.entries(adapter.default).map(async (a: any[]) => {
+    Object.entries(adapter).map(async (a: any[]) => {
       if (a[0] == "meta") {
         metadata = <Metadata>a[1];
         if ("incompleteSections" in a[1]) {

@@ -9,9 +9,9 @@ export async function latest(key: string, reference: number): Promise<number> {
       .then((r) => JSON.parse(r.body))
       .then((r) =>
         r.metadata.incompleteSections == null ||
-        r.metadata.incompleteSections.lastRecord == null
+        r.metadata.incompleteSections[0].lastRecord == null
           ? reference
-          : r.metadata.incompleteSections.lastRecord,
+          : r.metadata.incompleteSections[0].lastRecord,
       );
   return res;
 }

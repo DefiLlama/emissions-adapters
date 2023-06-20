@@ -12,13 +12,13 @@ if (process.argv.length < 3) {
 }
 let protocol = process.argv[2];
 
-export async function parseData(adapter: Protocol): Promise<void> {
+export async function parseData(adapter: Protocol, i: number): Promise<void> {
   let rawData = await createRawSections(adapter);
   const chartData = await createChartData(protocol, rawData);
   const categoryData = createCategoryData(chartData, rawData.categories);
   if (process.argv[3] != "true")
     postDebugLogs(chartData, categoryData, protocol);
-  await getChartPng(chartData, process.argv[3] == "true");
+  await getChartPng(chartData, process.argv[3] == "true", i);
 }
 
 function postDebugLogs(
@@ -55,7 +55,14 @@ function postDebugLogs(
     console.log(log);
   });
 }
-
+async function iterate(adapter: Protocol): Promise<void> {
+  if (typeof adapter.default === "function")
+    adapter.default = await adapter.default();
+  if (!adapter.default.length) adapter.default = [adapter.default];
+  await Promise.all(
+    adapter.default.map((a: Protocol, i: number) => parseData(a, i)),
+  );
+}
 export async function main() {
   if (protocol.includes("/"))
     protocol = protocol.substring(
@@ -68,7 +75,7 @@ export async function main() {
       return;
     } else {
       console.log(`==== Processing ${protocol} chart ==== \n`);
-      await parseData(protocolWrapper);
+      await iterate(protocolWrapper);
     }
   } catch (e) {
     console.log(e);
