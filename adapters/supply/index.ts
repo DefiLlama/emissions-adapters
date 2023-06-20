@@ -1,9 +1,8 @@
 import fetch from "node-fetch";
 import { call } from "@defillama/sdk/build/abi/abi2";
-import { isFuture, sleep } from "../../utils/time";
-import { getBlock2 } from "../../utils/block";
-import { INCOMPLETE_SECTION_STEP } from "../../utils/constants";
-import { CliffAdapterResult, BlockTime } from "../../types/adapters";
+import { CliffAdapterResult } from "../../types/adapters";
+import { findBlockHeightArray } from "../../utils/chainCalls";
+import { PromisePool } from "@supercharge/promise-pool";
 
 let res: number;
 
@@ -41,62 +40,37 @@ export async function supply(
     }),
   ]);
 
-  const allTimestamps: number[] = [];
-  let currentTimestamp = trackedTimestamp;
+  const chainData = await findBlockHeightArray(trackedTimestamp, chain);
 
-  while (!isFuture(currentTimestamp)) {
-    allTimestamps.push(currentTimestamp);
-    currentTimestamp += INCOMPLETE_SECTION_STEP;
-  }
-
-  const blockHeights: BlockTime[] = await Promise.all(
-    allTimestamps.map((t: number) =>
-      getBlock2(chain, t).then((h: number | undefined) => ({
-        timestamp: t,
-        block: h == null ? -1 : h,
-      })),
-    ),
-  );
-
-  let supplies: number[] = [];
-  try {
-    supplies = await Promise.all(
-      blockHeights.map((b: BlockTime) =>
-        call({
+  await PromisePool.withConcurrency(10)
+    .for(Object.keys(chainData))
+    .process(
+      async (block) =>
+        await call({
           target,
           chain,
           abi: "erc20:totalSupply",
-          block: b.block,
-        }).then((res: number) => res / 10 ** decimals - excluded),
-      ),
+          block,
+        }).then((res: number) => {
+          chainData[block].result = res / 10 ** decimals - excluded;
+        }),
     );
-  } catch {
-    for (let block of blockHeights.map((b: BlockTime) => b.block)) {
-      await sleep(2000);
-      const supply = await call({
-        block,
-        target,
-        chain,
-        abi: "erc20:totalSupply",
-      });
-      supplies.push(supply / 10 ** decimals - excluded);
-    }
-  }
-
-  if (supplies.length != blockHeights.length) throw new Error(`block mismatch`);
 
   const sections: CliffAdapterResult[] = [];
   let supplyIndex: number = 0;
+  const supplies = Object.values(chainData);
+
   for (let i = 0; i < supplies.length; i++) {
-    const thisBalance: number = supplies[i];
-    if (supplyIndex == 0 && thisBalance == 0) continue;
+    const thisSupply: number = supplies[i].result;
+    if (supplyIndex == 0 && thisSupply == 0) continue;
     supplyIndex += 1;
 
-    const amount = thisBalance - supplies[i - 1];
+    const amount = thisSupply - supplies[i - 1].result;
     if (amount <= 0) continue;
 
-    const start = blockHeights[i].timestamp;
+    const start = supplies[i].timestamp;
     sections.push({ type: "cliff", start, amount });
   }
+
   return sections;
 }

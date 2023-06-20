@@ -1,8 +1,8 @@
 import fetch from "node-fetch";
 import { call } from "@defillama/sdk/build/abi/abi2";
-import { CliffAdapterResult, BlockTime } from "../../types/adapters";
-import { isFuture, periodToSeconds } from "../../utils/time";
-import { getBlock2 } from "../../utils/block";
+import { CliffAdapterResult } from "../../types/adapters";
+import { filterRawAmounts, findBlockHeightArray } from "../../utils/chainCalls";
+import { PromisePool } from "@supercharge/promise-pool";
 
 let res: number;
 
@@ -24,59 +24,44 @@ export async function rebalancing(): Promise<CliffAdapterResult[]> {
   const target: string = "0x017f5f86df6aa8d5b3c01e47e410d66f356a94a6";
   const chain: string = "ethereum";
   const decimals: number = 18;
-  const trackedTimestamp: number = await latest();
 
-  const allTimestamps: number[] = [];
-  let currentTimestamp = trackedTimestamp;
+  const chainData = await findBlockHeightArray(await latest(), chain);
 
-  while (!isFuture(currentTimestamp)) {
-    allTimestamps.push(currentTimestamp);
-    currentTimestamp += periodToSeconds.week;
-  }
+  await PromisePool.withConcurrency(10)
+    .for(Object.keys(chainData))
+    .process(
+      async (block) =>
+        await call({
+          target,
+          abi: {
+            inputs: [],
+            name: "totalCncMinted",
+            outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+            stateMutability: "view",
+            type: "function",
+          },
+          chain,
+          block,
+        }).then((r: number | null) => {
+          chainData[block].result = r;
+        }),
+    );
 
-  const blockHeights: BlockTime[] = await Promise.all(
-    allTimestamps.map((t: number) =>
-      getBlock2(chain, t).then((h: number | undefined) => ({
-        timestamp: t,
-        block: h == null ? -1 : h,
-      })),
-    ),
-  );
+  // const sections: CliffAdapterResult[] = [];
+  // let atStart: boolean = true;
+  // for (let i = 0; i < emitted.length; i++) {
+  //   const thisBalance: number | null = emitted[i];
 
-  const emitted = await Promise.all(
-    blockHeights.map((b: BlockTime) =>
-      call({
-        target,
-        abi: {
-          inputs: [],
-          name: "totalCncMinted",
-          outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-          stateMutability: "view",
-          type: "function",
-        },
-        chain,
-        block: b.block,
-      }),
-    ),
-  );
+  //   if ((atStart && thisBalance == 0) || thisBalance == null) continue;
+  //   atStart = false;
 
-  if (emitted.length != blockHeights.length)
-    throw new Error(`block mismatch in conic adapter`);
+  //   const amount = (thisBalance - emitted[i - 1]) / 10 ** decimals;
+  //   if (amount == 0) continue;
 
-  const sections: CliffAdapterResult[] = [];
-  let atStart: boolean = true;
-  for (let i = 0; i < emitted.length; i++) {
-    const thisBalance: number | null = emitted[i];
+  //   const start = blockHeights[i].timestamp;
+  //   sections.push({ type: "cliff", start, amount });
+  // }
 
-    if ((atStart && thisBalance == 0) || thisBalance == null) continue;
-    atStart = false;
-
-    const amount = (thisBalance - emitted[i - 1]) / 10 ** decimals;
-    if (amount == 0) continue;
-
-    const start = blockHeights[i].timestamp;
-    sections.push({ type: "cliff", start, amount });
-  }
-
-  return sections;
+  // return sections;
+  return filterRawAmounts(chainData, decimals);
 }
