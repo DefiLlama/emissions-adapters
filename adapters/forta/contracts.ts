@@ -1,9 +1,11 @@
 type chainContracts = {
   owners: string[];
   token: string;
+  timestamp: number;
 };
 const contracts: { [chain: string]: chainContracts } = {
   ethereum: {
+    timestamp: 1651356000,
     owners: [
       "0xcf7b521dc1a0c9c52f5455ec44f64da3555ab9f0",
       "0x54716b0e8263e6797cfc3fe075fe347256c9411c",
@@ -31,6 +33,7 @@ const contracts: { [chain: string]: chainContracts } = {
     token: "0x41545f8b9472d758bb669ed8eaeeecd7a9c4ec29",
   },
   polygon: {
+    timestamp: 1646524800,
     owners: ["0xc99884be6eee5533be08152c40df0464b3fae877"],
     token: "0x9ff62d1FC52A907B6DCbA8077c2DDCA6E6a9d3e1",
   },

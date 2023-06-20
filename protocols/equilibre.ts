@@ -49,8 +49,8 @@ const equilibre: Protocol = {
       "https://equilibre-finance.gitbook.io/equilibre/emissions",
       "https://equilibre-finance.gitbook.io/equilibre/initial-distribution",
     ],
-    token: "vara:0xE1da44C0dA55B075aE8E2e4b6986AdC76Ac77d73",
-    protocolIds: ["566"],
+    token: "kava:0xE1da44C0dA55B075aE8E2e4b6986AdC76Ac77d73",
+    protocolIds: ["2586"],
   },
   categories: {
     farming: ["Community"],

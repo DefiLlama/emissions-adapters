@@ -53,8 +53,12 @@ export function createCategoryData(
           (t: number) =>
             timestampNow - RESOLUTION_SECONDS < t && t < timestampNow,
         );
-        const current = s.data.unlocked[currentEntryIndex];
-        const final = s.data.unlocked[s.data.unlocked.length - 1];
+        const finalEntryIndex = s.data.unlocked.length - 1;
+        const current =
+          s.data.unlocked[
+            currentEntryIndex == -1 ? finalEntryIndex : currentEntryIndex
+          ];
+        const final = s.data.unlocked[finalEntryIndex];
         return { current, final };
       }
 
@@ -67,12 +71,14 @@ export function createCategoryData(
         );
         if (!s) return { current: 0, final: 0 };
 
-        const current: number = s.data.find(
-          (t: any) =>
-            timestampNow - RESOLUTION_SECONDS < t.timestamp &&
-            t.timestamp < timestampNow,
-        ).unlocked;
         const final: number = s.data[s.data.length - 1].unlocked;
+        const current: number =
+          s.data.find(
+            (t: any) =>
+              timestampNow - RESOLUTION_SECONDS < t.timestamp &&
+              t.timestamp < timestampNow,
+          )?.unlocked ?? final;
+
         return { current, final };
       }
 
