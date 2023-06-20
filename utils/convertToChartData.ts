@@ -65,9 +65,8 @@ async function appendMissingDataSections(
   let res = await fetch(`https://api.llama.fi/emission/${protocol}`).then((r) =>
     r.json(),
   );
-  // res = res.body ? JSON.parse(res.body).data : [];
+  res = res.body ? JSON.parse(res.body).data : [];
 
-  res = [];
   incompleteSections.map((i: IncompleteSection) => {
     const sectionRes: any = res.find((s: ApiChartData) => s.label == i.key);
 
@@ -218,7 +217,6 @@ function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   const maxSectionLength: number = Math.max(...sectionLengths);
 
   data.map((d: any) => {
-    // if (d.section != "Rewards") return;
     const sortedKeys = sortedData.map((s: any) => s.section);
 
     // normalize to extrapolations
