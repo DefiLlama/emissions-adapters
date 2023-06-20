@@ -56,6 +56,7 @@ const solana: Protocol = {
     sources: [
       "https://coinlist.co/solana",
       "https://docs.solana.com/inflation/inflation_schedule",
+      "https://medium.com/solana-labs/solana-foundation-transparency-report-1-b267fe8595c0",
     ],
     token: "coingecko:solana",
     protocolIds: [],
