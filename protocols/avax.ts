@@ -21,7 +21,7 @@ const avax: Protocol = {
   Team: manualStep(mainnet, periodToSeconds.month * 3, 16, 72e6 / 16), // mixed for later hires
   Airdrop: manualStep(mainnet, periodToSeconds.month * 3, 16, 18e6 / 16), // mixed date
   Foundation: manualStep(mainnet, periodToSeconds.month * 3, 40, 1667e3),
-  // "Staking Rewards": [],
+  "Staking Rewards": manualLinear(mainnet, periodToSeconds.day * 6000, 360e6), // as measured on 20/06/23
   "Testnet Incentive Program": manualStep(
     mainnet,
     periodToSeconds.month * 3,
@@ -43,6 +43,7 @@ const avax: Protocol = {
   meta: {
     notes: [
       `Exact dates for Seed and Private sales couldn't be found, so we've given them the latest dates described.`,
+      `Staking reward unlocks depend on the amount of AVAX staked. Since this can't be predicted, we have extrapolated the past rate of rewards.`,
     ],
     sources: [
       "https://web.archive.org/web/20210920192748/https://info.avax.network/",
