@@ -72,7 +72,7 @@ export async function stakingRewards(): Promise<CliffAdapterResult[]> {
 
   await Promise.all(
     amounts.map((r: any) =>
-      getTimestamp(r.atBlock, chain).then((timestamp: number) => {
+      getTimestamp(Number(r.atBlock), chain).then((timestamp: number) => {
         chainData[r.atBlock] = { timestamp, result: r.amount };
       }),
     ),
