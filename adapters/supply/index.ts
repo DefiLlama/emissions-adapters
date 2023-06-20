@@ -14,9 +14,9 @@ export async function latest(key: string, reference: number): Promise<number> {
     if (!r.body) return reference;
     r = JSON.parse(r.body);
     return r.metadata.incompleteSections == null ||
-      r.metadata.incompleteSections.lastRecord == null
+      r.metadata.incompleteSections[0].lastRecord == null
       ? reference
-      : r.metadata.incompleteSections.lastRecord;
+      : r.metadata.incompleteSections[0].lastRecord;
   }
   return res;
 }
