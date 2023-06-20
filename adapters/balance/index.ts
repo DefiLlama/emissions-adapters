@@ -23,9 +23,9 @@ export async function latest(
     if (!r.body) return timestampDeployed;
     r = JSON.parse(r.body);
     return r.metadata.incompleteSections == null ||
-      r.metadata.incompleteSections.lastRecord == null
+      r.metadata.incompleteSections[0].lastRecord == null
       ? timestampDeployed
-      : r.metadata.incompleteSections.lastRecord;
+      : r.metadata.incompleteSections[0].lastRecord;
   }
   return res;
 }

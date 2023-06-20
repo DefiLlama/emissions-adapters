@@ -13,9 +13,9 @@ export async function latest(): Promise<number> {
       .then((r) => JSON.parse(r.body))
       .then((r) =>
         r.metadata.incompleteSections == null ||
-        r.metadata.incompleteSections.lastRecord == null
+        r.metadata.incompleteSections[0].lastRecord == null
           ? 1677715200
-          : r.metadata.incompleteSections.lastRecord,
+          : r.metadata.incompleteSections[0].lastRecord,
       );
   return res;
 }
