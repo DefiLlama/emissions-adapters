@@ -31,20 +31,16 @@ const arbitrum: Protocol = {
       (qty_investors * 0.75) / 36,
     ), // monthly steps for the next 3 years
   ],
-  "Ecosystem Development Fund": balance(
-    [],
-    token,
-    chain,
-    "arbitrum",
-    1686132532,
-  ),
-  "Arbitrum DAO Treasury": balance(
-    ["0xF3FC178157fb3c87548bAA86F9d24BA38E649B58"],
-    token,
-    chain,
-    "arbitrum",
-    1686132532, // no outflows at this time
-  ),
+  "Ecosystem Development Fund": () =>
+    balance([], token, chain, "arbitrum", 1686132532),
+  "Arbitrum DAO Treasury": () =>
+    balance(
+      ["0xF3FC178157fb3c87548bAA86F9d24BA38E649B58"],
+      token,
+      chain,
+      "arbitrum",
+      1686132532, // no outflows at this time
+    ),
   meta: {
     token: `${chain}:${token}`,
     sources: [

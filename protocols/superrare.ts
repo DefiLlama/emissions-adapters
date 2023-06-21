@@ -30,13 +30,14 @@ const clev: Protocol = {
   //       qty * 0.145 * 0.75,
   //     ),
   //   ],
-  "Team, Investors, Strategic Partners & Future Contributors": balance(
-    ["0x860a80d33E85e97888F1f0C75c6e5BBD60b48DA9"],
-    token,
-    chain,
-    "looksrare",
-    start + periodToSeconds.day,
-  ),
+  "Team, Investors, Strategic Partners & Future Contributors": () =>
+    balance(
+      ["0x860a80d33E85e97888F1f0C75c6e5BBD60b48DA9"],
+      token,
+      chain,
+      "looksrare",
+      start + periodToSeconds.day,
+    ),
   meta: {
     token: `coingecko:superrare`,
     sources: [
