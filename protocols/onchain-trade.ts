@@ -1,4 +1,4 @@
-import { manualCliff, manualLinear, manualLog } from "../adapters/manual";
+import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 

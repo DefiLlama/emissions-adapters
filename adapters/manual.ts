@@ -46,6 +46,8 @@ export const manualLog = (
   amount: number,
   periodLength: number,
   percentDecreasePerPeriod: number,
+  converging: boolean = true,
+  percentInFirstPeriod: number | undefined = undefined,
   dateFormat: string | undefined = undefined,
 ): LinearAdapterResult[] => {
   let sections: LinearAdapterResult[] = [];
@@ -56,7 +58,10 @@ export const manualLog = (
   let sum: number = 0;
 
   for (let i = 1; i < periods; i++) {
-    const thisQty: number = workingQty * (1 - percentDecreasePerPeriod / 100);
+    const thisQty: number =
+      percentInFirstPeriod && i == 1
+        ? amount * (percentInFirstPeriod / 100)
+        : workingQty * (1 - percentDecreasePerPeriod / 100);
     sections.push(manualLinear(thisStart, thisStart + periodLength, thisQty));
 
     sum += thisQty;
@@ -64,13 +69,15 @@ export const manualLog = (
     thisStart += periodLength;
   }
 
-  const factor: number = amount / sum;
-  sections = sections.map((s: LinearAdapterResult) => ({
-    type: s.type,
-    start: s.start,
-    end: s.end,
-    amount: (s.amount *= factor),
-  }));
+  if (converging) {
+    const factor: number = amount / sum;
+    sections = sections.map((s: LinearAdapterResult) => ({
+      type: s.type,
+      start: s.start,
+      end: s.end,
+      amount: (s.amount *= factor),
+    }));
+  }
 
   return sections;
 };
