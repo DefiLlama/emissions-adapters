@@ -1,9 +1,11 @@
 import fetch from "node-fetch";
 import { call, multiCall } from "@defillama/sdk/build/abi/abi2";
-import { CliffAdapterResult, BlockTime } from "../../types/adapters";
+import { CliffAdapterResult, TimeSeriesChainData } from "../../types/adapters";
 import { abi } from "./abi";
 import { getTimestamp } from "@defillama/sdk/build/util/index";
 import { periodToSeconds } from "../../utils/time";
+import { PromisePool } from "@supercharge/promise-pool";
+import { filterRawAmounts, findBlockHeightArray } from "../../utils/chainCalls";
 
 type RewardsRes = {
   atBlock: string;
@@ -20,9 +22,10 @@ export async function latest(): Promise<number> {
       .then((r) => r.json())
       .then((r) => JSON.parse(r.body))
       .then((r) =>
-        r.metadata.custom == null || r.metadata.custom.lastRecord == null
+        r.metadata.incompleteSections == null ||
+        r.metadata.incompleteSections[0].lastRecord == null
           ? 2688 * periodToSeconds.week // origin epoch * length
-          : r.metadata.custom.lastRecord,
+          : r.metadata.incompleteSections[0].lastRecord,
       );
   return res;
 }
@@ -54,7 +57,9 @@ export async function stakingRewards(): Promise<CliffAdapterResult[]> {
     allEpochs.push(i);
   }
 
-  const rewards: RewardsRes[] = (
+  const chainData: TimeSeriesChainData = {};
+
+  const amounts = (
     await multiCall({
       calls: allEpochs.map((n: number) => ({
         target,
@@ -65,19 +70,19 @@ export async function stakingRewards(): Promise<CliffAdapterResult[]> {
     })
   ).filter((r: any) => r.amount != 0);
 
-  const blockHeights: number[] = rewards.map((r: any) => Number(r.atBlock));
-  const blockTimes: BlockTime[] = await Promise.all(
-    blockHeights.map((h: number) =>
-      getTimestamp(h, chain).then((r: number) => ({ block: h, timestamp: r })),
+  await Promise.all(
+    amounts.map((r: any) =>
+      getTimestamp(Number(r.atBlock), chain).then((timestamp: number) => {
+        chainData[r.atBlock] = { timestamp, result: r.amount };
+      }),
     ),
   );
 
   const sections: CliffAdapterResult[] = [];
-  blockTimes.map((t: BlockTime, i: number) => {
-    if (Number(rewards[i].atBlock) != t.block)
-      throw new Error(`block mismatch in API3 staking rewards adapter`);
-    const amount: number = Number(rewards[i].amount) / 10 ** decimals;
-    sections.push({ type: "cliff", start: t.timestamp, amount });
+  Object.values(chainData).map((v: any) => {
+    const amount: number = v.result / 10 ** decimals;
+    sections.push({ type: "cliff", start: v.timestamp, amount });
   });
+
   return sections;
 }

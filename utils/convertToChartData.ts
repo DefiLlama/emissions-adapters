@@ -30,6 +30,7 @@ export async function createChartData(
   data.rawSections.map((r: any) => {
     r.results.map((s: any[]) => {
       s.map((d: any) => {
+        // if (r.section != "Rewards") return;
         chartData.push({
           data: rawToChartData(
             protocol,
@@ -64,8 +65,9 @@ async function appendMissingDataSections(
   let res = await fetch(`https://api.llama.fi/emission/${protocol}`).then((r) =>
     r.json(),
   );
-  res = res.body ? JSON.parse(res.body).data : [];
+  // res = res.body ? JSON.parse(res.body).data : [];
 
+  res = [];
   incompleteSections.map((i: IncompleteSection) => {
     const sectionRes: any = res.find((s: ApiChartData) => s.label == i.key);
 
@@ -134,6 +136,8 @@ function appendForecast(
     const gradient: number =
       recentlyEmitted / (timestamp - gradientLength * RESOLUTION_SECONDS);
     const change: number = incompleteSection.allocation - totalEmitted;
+    if (change < 0) return;
+
     const continuousEnd: number = Math.round(
       Math.min(
         timestamp + change / gradient,
@@ -214,6 +218,7 @@ function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
   const maxSectionLength: number = Math.max(...sectionLengths);
 
   data.map((d: any) => {
+    // if (d.section != "Rewards") return;
     const sortedKeys = sortedData.map((s: any) => s.section);
 
     // normalize to extrapolations
