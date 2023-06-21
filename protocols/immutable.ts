@@ -33,7 +33,7 @@ const immutable: Protocol = {
       "https://www.digitalworldsnfts.com/imx-token",
       "https://assets.website-files.com/646557ee455c3e16e4a9bcb3/646557ee455c3e16e4a9be87_Immutable%20X%20Whitepaper.pdf",
     ],
-    protocolIds: [],
+    protocolIds: ["3139"],
   },
   categories: {
     insiders: ["project development", "private sale"],

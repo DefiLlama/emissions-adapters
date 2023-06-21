@@ -35,7 +35,7 @@ const clev: Protocol = {
       ["0x860a80d33E85e97888F1f0C75c6e5BBD60b48DA9"],
       token,
       chain,
-      "looksrare",
+      "superrare",
       start + periodToSeconds.day,
     ),
   meta: {
@@ -44,7 +44,7 @@ const clev: Protocol = {
       `https://docs.superrare.com/whitepapers/master/the-rare-token/token-distribution`,
       `https://discord.com/channels/666318003972997136/868174870389878865/950417363801624626`,
     ],
-    protocolIds: ["1707"],
+    protocolIds: ["3144"],
   },
   categories: {
     insiders: ["Team, Investors, Strategic Partners & Future Contributors"],

@@ -54,7 +54,7 @@ const avax: Protocol = {
       "https://medium.com/avalancheavax/avalanche-raises-42m-in-4-5-hours-for-its-first-public-sale-d09362bf3efc",
     ],
     token: "coingecko:avalanche-2",
-    protocolIds: [],
+    protocolIds: ["3140"],
   },
   categories: {},
 };
