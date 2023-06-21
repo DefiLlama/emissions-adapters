@@ -4,7 +4,7 @@ import {
   manualLog,
   manualStep,
 } from "../adapters/manual";
-import { LinearAdapterResult, Protocol } from "../types/adapters";
+import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1665529200;
@@ -34,8 +34,8 @@ const clev: Protocol = {
   AlladinDAO: manualLinear(start, start + periodToSeconds.year * 2, qty * 0.3),
   "Initial Liquidity": manualCliff(start, qty * 0.01),
   "Strategic Partnerships": manualLinear(
-    bribes,
-    bribes + periodToSeconds.month * 3,
+    start,
+    start + periodToSeconds.month * 3,
     qty * 0.015,
   ),
   "Beta bonus": manualCliff(start, 0.0025),
