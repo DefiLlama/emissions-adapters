@@ -3,31 +3,64 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const totalQty = 1000000000;
-
+const teamUnlock = 1655766000;
+const start = teamUnlock - periodToSeconds.day * 180;
 const looksrare: Protocol = {
-  Airdrop: manualCliff(1642204800, totalQty * 0.12),
-  "Liquidity Management": manualCliff(1642204800, totalQty * 0.017),
+  Airdrop: manualCliff(start, totalQty * 0.12),
+  "Liquidity Management": manualCliff(start, totalQty * 0.017),
   "Volume Rewards": [
-    manualLinear(1642204800, 1652227200, totalQty * 0.11025),
-    manualLinear(1652227200, 1672617600, totalQty * 0.11025),
-    manualLinear(1672617600, 1700956800, totalQty * 0.11025),
-    manualLinear(1700956800, 1700956800, totalQty * 0.11025),
+    manualLinear(
+      start,
+      start + periodToSeconds.day * 30,
+      totalQty * 0.441 * 0.25,
+    ),
+    manualLinear(
+      start + periodToSeconds.day * 30,
+      start + periodToSeconds.day * 120,
+      totalQty * 0.441 * 0.25,
+    ),
+    manualLinear(
+      start + periodToSeconds.day * 120,
+      start + periodToSeconds.day * 360,
+      totalQty * 0.441 * 0.25,
+    ),
+    manualLinear(
+      start + periodToSeconds.day * 360,
+      start + periodToSeconds.day * 720,
+      totalQty * 0.441 * 0.25,
+    ),
   ],
   "Staking Rewards": [
-    manualLinear(1642204800, 1652227200, totalQty * 0.04725),
-    manualLinear(1652227200, 1672617600, totalQty * 0.04725),
-    manualLinear(1672617600, 1700956800, totalQty * 0.04725),
-    manualLinear(1700956800, 1700956800, totalQty * 0.04725),
+    manualLinear(
+      start,
+      start + periodToSeconds.day * 30,
+      totalQty * 0.189 * 0.25,
+    ),
+    manualLinear(
+      start + periodToSeconds.day * 30,
+      start + periodToSeconds.day * 120,
+      totalQty * 0.189 * 0.25,
+    ),
+    manualLinear(
+      start + periodToSeconds.day * 120,
+      start + periodToSeconds.day * 360,
+      totalQty * 0.189 * 0.25,
+    ),
+    manualLinear(
+      start + periodToSeconds.day * 360,
+      start + periodToSeconds.day * 720,
+      totalQty * 0.189 * 0.25,
+    ),
   ],
-  "Strategic Sale": manualCliff(1657843200, totalQty * 0.033),
+  "Strategic Sale": manualCliff(teamUnlock, totalQty * 0.033),
   "Founding Team": manualStep(
-    1642204800,
+    teamUnlock,
     periodToSeconds.day * 180,
     4,
     totalQty * 0.025,
   ),
   Treasury: manualStep(
-    1642204800,
+    start + periodToSeconds.day * 90,
     periodToSeconds.day * 90,
     8,
     totalQty * 0.0125,
