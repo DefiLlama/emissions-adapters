@@ -37,7 +37,7 @@ const convex: Protocol = {
       {
         key: "Curve LP rewards",
         allocation: 50000000,
-        lastRecord: () => latest("convex-finance", deployTime),
+        lastRecord: () => deployTime, // latest("convex-finance", deployTime),
       },
     ],
   },
