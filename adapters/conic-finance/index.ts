@@ -47,21 +47,5 @@ export async function rebalancing(): Promise<CliffAdapterResult[]> {
         }),
     );
 
-  // const sections: CliffAdapterResult[] = [];
-  // let atStart: boolean = true;
-  // for (let i = 0; i < emitted.length; i++) {
-  //   const thisBalance: number | null = emitted[i];
-
-  //   if ((atStart && thisBalance == 0) || thisBalance == null) continue;
-  //   atStart = false;
-
-  //   const amount = (thisBalance - emitted[i - 1]) / 10 ** decimals;
-  //   if (amount == 0) continue;
-
-  //   const start = blockHeights[i].timestamp;
-  //   sections.push({ type: "cliff", start, amount });
-  // }
-
-  // return sections;
   return filterRawAmounts(chainData, decimals);
 }
