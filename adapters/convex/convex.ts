@@ -1,6 +1,7 @@
 import { call, multiCall } from "@defillama/sdk/build/abi/abi2";
-import { periodToSeconds, unixTimestampNow } from "../../utils/time";
+import { unixTimestampNow } from "../../utils/time";
 import abi from "./abi";
+import { RESOLUTION_SECONDS } from "../../utils/constants";
 
 const cliffQty = 100000 * 1e18;
 const cliffCount = 1000;
@@ -15,11 +16,11 @@ export default async function convex(
   let timestamp = start;
   const results = [];
   const timestampNow = unixTimestampNow();
-  while (timestamp > timestampNow) {
+  while (timestamp < timestampNow) {
     try {
       emission = await getCvxEmitted(chain, target, timestamp);
-      results.push(await getCvxEmitted(chain, target, timestamp));
-      timestamp += periodToSeconds.day;
+      results.push(emission);
+      timestamp += RESOLUTION_SECONDS;
     } catch {
       return results;
     }
