@@ -1,5 +1,5 @@
 import convex from "./convex";
-
+import fetch from "node-fetch";
 let res: number;
 
 export async function latest(key: string, reference: number): Promise<number> {
