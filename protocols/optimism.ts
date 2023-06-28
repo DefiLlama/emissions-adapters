@@ -46,7 +46,7 @@ const optimism: Protocol = {
       `Ecosystem fund and Retroactive Public Goods Funding unlocks have been estimated in the referenced spreadsheet.`,
       `Futures airdrops (14%) are unpredictable and have therefore been excluded from analysis.`,
     ],
-    token: "ethereum:",
+    token: "optimism:0x4200000000000000000000000000000000000042",
     sources: [
       "https://docs.google.com/spreadsheets/d/1qVMhLmmch3s6XSbiBe8hgD4ntMkPIOhc1WrhsYsQc7M/edit#gid=1283480580",
       "https://community.optimism.io/docs/governance/allocations/",
