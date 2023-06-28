@@ -3,7 +3,7 @@ import { Protocol } from "../types/adapters";
 
 const chain: any = "ethereum";
 const ANKR: string = "0x8290333ceF9e6D528dD5618Fb97a76f268f3EDD4";
-const convex: Protocol = {
+const ankr: Protocol = {
   "Private Sale 1": manualCliff("2018-06-01", 300e6),
   "Private Sale 2": manualCliff("2018-07-01", 1200e6),
   "Private Sale 3": manualCliff("2018-08-01", 1500e6),
@@ -37,4 +37,4 @@ const convex: Protocol = {
     farming: ["Mining Rewards"],
   },
 };
-export default convex;
+export default ankr;
