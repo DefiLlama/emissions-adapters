@@ -43,7 +43,7 @@ export function filterRawAmounts(
     if (thisBalance == 0) continue;
 
     const amount = (data[i - 1].result - thisBalance) / 10 ** decimals;
-    if (amount == 0) continue;
+    if (amount < 0) continue;
     const start = data[i].timestamp;
 
     sections.push({ type: "cliff", start, amount });
