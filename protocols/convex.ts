@@ -25,7 +25,8 @@ const convex: Protocol = {
     deployTime + 4 * periodToSeconds.year,
     25000000,
   ),
-  "Curve LP rewards": () => supply(chain, CVX, deployTime, "convex", 50000000),
+  "Curve LP rewards": () =>
+    supply(chain, CVX, deployTime, "convex-finance", 50000000),
   meta: {
     sources: [
       "https://docs.convexfinance.com/convexfinance/general-information/tokenomics",
@@ -36,7 +37,7 @@ const convex: Protocol = {
       {
         key: "Curve LP rewards",
         allocation: 50000000,
-        lastRecord: () => deployTime, // latest("convex-finance", deployTime),
+        lastRecord: () => latest("convex-finance", deployTime),
       },
     ],
   },
