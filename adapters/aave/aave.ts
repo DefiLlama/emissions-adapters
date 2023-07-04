@@ -15,16 +15,19 @@ export default async function main(
   for (var i = 100000; i < nextStream; i++) {
     streamIds.push(i);
   }
-  const streams = await multiCall({
-    abi: abi.getStream,
-    chain,
-    calls: streamIds.map((params: number) => ({ target, params })),
-  });
+  const streams = (
+    await multiCall({
+      abi: abi.getStream,
+      chain,
+      calls: streamIds.map((params: number) => ({ target, params })),
+      permitFailure: true,
+    })
+  ).filter((s: any) => s != null);
 
   const results: AdapterResult[] = [];
   streams.map((s: any) => {
     const amount = Number(
-      (s.stopTime - s.startTime) * s.ratePerSecond / 10 ** 18,
+      ((s.stopTime - s.startTime) * s.ratePerSecond) / 10 ** 18,
     );
     results.push({
       type: "linear",
