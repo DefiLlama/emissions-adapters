@@ -124,6 +124,7 @@ export type Dataset = {
 };
 export type SectionData = {
   rawSections: RawSection[];
+  realTime: RawSection[];
   startTime: number;
   endTime: number;
   metadata: Metadata;

@@ -14,8 +14,10 @@ let protocol = process.argv[2];
 
 export async function parseData(adapter: Protocol, i: number): Promise<void> {
   let rawData = await createRawSections(adapter);
-  const chartData = await createChartData(protocol, rawData);
+  const { chartData, realTime } = await createChartData(protocol, rawData);
+
   const categoryData = createCategoryData(chartData, rawData.categories);
+  const realTimeCategoryData = createCategoryData(realTime, rawData.categories);
   if (process.argv[3] != "true")
     postDebugLogs(chartData, categoryData, protocol);
   await getChartPng(chartData, process.argv[3] == "true", i);

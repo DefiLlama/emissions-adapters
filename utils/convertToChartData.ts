@@ -20,33 +20,40 @@ export async function createChartData(
   protocol: string,
   data: {
     rawSections: RawSection[];
+    realTime: RawSection[];
     metadata: Metadata;
     startTime: number;
     endTime: number;
   },
   isTest: boolean = true,
-): Promise<ChartSection[]> {
-  const chartData: any[] = [];
-  data.rawSections.map((r: any) => {
-    r.results.map((s: any[]) => {
-      s.map((d: any) => {
-        // if (r.section != "Rewards") return;
-        chartData.push({
-          data: rawToChartData(
-            protocol,
-            d,
-            data.startTime,
-            data.endTime,
-            isTest,
-          ),
-          section: r.section,
+): Promise<{ [key: string]: ChartSection[] }> {
+  const chartData = await iterateThroughSections(data.rawSections);
+  const realTimeData = await iterateThroughSections(data.realTime);
+  return { chartData, realTimeData };
+
+  async function iterateThroughSections(sections: RawSection[]) {
+    const chartData: any[] = [];
+    sections.map((r: any) => {
+      r.results.map((s: any[]) => {
+        s.map((d: any) => {
+          // if (r.section != "Rewards") return;
+          chartData.push({
+            data: rawToChartData(
+              protocol,
+              d,
+              data.startTime,
+              data.endTime,
+              isTest,
+            ),
+            section: r.section,
+          });
         });
       });
     });
-  });
 
-  await appendMissingDataSections(chartData, protocol, data, isTest);
-  return consolidateDuplicateKeys(chartData, isTest);
+    await appendMissingDataSections(chartData, protocol, data, isTest);
+    return consolidateDuplicateKeys(chartData, isTest);
+  }
 }
 async function appendMissingDataSections(
   chartData: ChartSection[],
