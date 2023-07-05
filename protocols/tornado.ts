@@ -5,7 +5,7 @@ const chain: string = "ethereum";
 
 function tornado(): Protocol {
   const governance = async () =>
-    adapter("0x179f48C78f57A3A78f0608cC9197B8972921d1D2", chain, {
+    adapter(["0x179f48C78f57A3A78f0608cC9197B8972921d1D2"], chain, {
       // cliff at 1616038233
       beforeCliff: 1616025600,
       afterCliff: 1616040000,
@@ -19,15 +19,17 @@ function tornado(): Protocol {
     beforeStep: 1641859200,
     afterStep: 1642118400,
   };
-  const teamAndInvestors: () => Promise<AdapterResult[][]> = async () =>
-    Promise.all(
+  const teamAndInvestors: () => Promise<AdapterResult[]> = async () =>
+    adapter(
       [
         "0x5f48c2a71b2cc96e3f0ccae4e39318ff0dc375b2",
         "0x00d5ec4cdf59374b2a47e842b799027356eac02b",
         "0x77c08248c93ab53ff734ac555c932f8b9089d4c9",
         "0xc3877028655ebe90b9447dd33de391c955ead267",
         "0xb43432ec23e228fb7cb0fa52968949458b509f4f",
-      ].map((a: string) => adapter(a, chain, investorTimestamps)),
+      ],
+      chain,
+      investorTimestamps,
     );
   return {
     governance,
