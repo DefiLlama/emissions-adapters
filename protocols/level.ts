@@ -33,9 +33,9 @@ const level: Protocol = {
   Team: manualStep("2023-12-26", periodToSeconds.year, 3, qty * 0.2),
   "Liquidity Bootstrap": manualCliff("2022-12-12", 1e6),
   "Strategic Sale 1": manualCliff("2024-01-09", 1e6),
-  "Strategic Sale 2": manualLinear("2023-07-11", "2024-02-11", 2e5),
-  "Strategic Sale 3": manualLinear("2023-07-12", "2024-02-12", 121212),
-  "Strategic Sale 4": manualLinear("2023-07-15", "2024-02-15", 47e3),
+  "Strategic Sale 2": manualLinear("2023-08-11", "2024-02-11", 2e5),
+  "Strategic Sale 3": manualLinear("2023-08-12", "2024-02-12", 121212),
+  "Strategic Sale 4": manualLinear("2023-08-15", "2024-02-15", 47e3),
   "Ladder Incentives": manualLinear("2023-04-26", "2027-04-26", 4 * 365 * 1e4),
   meta: {
     notes: [
