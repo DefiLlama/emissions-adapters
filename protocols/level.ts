@@ -30,7 +30,7 @@ const level: Protocol = {
     manualLinear("2023-01-16", "2023-01-23", 7 * 36e3),
     manualLinear("2023-01-23", "2023-01-28", 5 * 18e3),
   ],
-  Team: manualStep("2023-12-26", periodToSeconds.year, 3, qty * 0.2),
+  Team: manualStep("2023-12-26", periodToSeconds.year, 3, (qty * 0.2) / 3),
   "Liquidity Bootstrap": manualCliff("2022-12-12", 1e6),
   "Strategic Sale 1": manualCliff("2024-01-09", 1e6),
   "Strategic Sale 2": manualLinear("2023-08-11", "2024-02-11", 2e5),
@@ -39,7 +39,8 @@ const level: Protocol = {
   "Ladder Incentives": manualLinear("2023-04-26", "2027-04-26", 4 * 365 * 1e4),
   meta: {
     notes: [
-      `The unlocks schedule for ladder has assumed that all 10k LVL are claimed each day`,
+      `Around 40% of total supply have not been allocated yet as per the source materials.`,
+      `The unlocks schedule for ladder has assumed that all 10k LVL are claimed each day.`,
       `LVL auctions and Referrral incentives are unpredictable and have therefore been excluded from this analysis.`,
     ],
     token: "bsc:0xB64E280e9D1B5DbEc4AcceDb2257A87b400DB149",
