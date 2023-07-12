@@ -1,11 +1,9 @@
 import { balance, latest } from "../adapters/balance";
-import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
+import { manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
-import { periodToSeconds } from "../utils/time";
 
 const qty: number = 1e9;
 const token: string = "0x5a98fcbea516cf06857215779fd812ca3bef1b32";
-const start: number = 1554073200;
 const timestampDeployed: number = 1609804800;
 const chain: string = "ethereum";
 
@@ -37,6 +35,14 @@ const lido: Protocol = {
       },
     ],
   },
-  categories: {},
+  categories: {
+    insiders: [
+      "Investors",
+      "Validators & Signature Holders",
+      "Initial Lido Devlopers",
+      "Founders & Future Employees",
+    ],
+    noncirculating: ["DAO Treasury"],
+  },
 };
 export default lido;
