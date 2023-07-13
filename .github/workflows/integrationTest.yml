@@ -1,0 +1,18 @@
+name: Test_Integration
+on:
+  push:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Run changed files through test script
+        run: |
+          npm i
+          npm install -g ts-node
+          ts-node ${{ github.workspace }}/.github/workflows/testImports.ts
+        env:
+          ETHEREUM_RPC: ETHEREUM_RPC
