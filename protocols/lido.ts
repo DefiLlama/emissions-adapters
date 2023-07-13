@@ -15,7 +15,7 @@ const lido: Protocol = {
   "Validators & Signature Holders": schedule(0.065),
   "Initial Lido Devlopers": schedule(0.2),
   "Founders & Future Employees": schedule(0.15),
-  "DAO Treasury": ()=>balance(
+  "DAO Treasury": balance(
     ["0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c"],
     token,
     chain,
