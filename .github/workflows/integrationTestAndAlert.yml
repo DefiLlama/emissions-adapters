@@ -1,0 +1,21 @@
+name: Test_Integration_And_Alert
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  testAndDeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Try to import all files
+        run: |
+          npm i
+          npm install -g ts-node
+          ts-node ${{ github.workspace }}/.github/workflows/testImports.ts
+        env:
+          ETHEREUM_RPC: ETHEREUM_RPC
+      - name: Deploy to server
+        run: curl https://born-to-llama.herokuapp.com/rebuild-server
