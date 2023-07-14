@@ -15,13 +15,14 @@ const lido: Protocol = {
   "Validators & Signature Holders": schedule(0.065),
   "Initial Lido Devlopers": schedule(0.2),
   "Founders & Future Employees": schedule(0.15),
-  "DAO Treasury": ()=>balance(
-    ["0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c"],
-    token,
-    chain,
-    "lido-dao",
-    timestampDeployed,
-  ),
+  "DAO Treasury": () =>
+    balance(
+      ["0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c"],
+      token,
+      chain,
+      "lido",
+      timestampDeployed,
+    ),
   meta: {
     notes: [],
     sources: [`https://blog.lido.fi/introducing-ldo/`],
@@ -31,7 +32,7 @@ const lido: Protocol = {
       {
         key: "DAO Treasury",
         allocation: qty * 0.3632,
-        lastRecord: () => latest("lido-dao", timestampDeployed),
+        lastRecord: () => latest("lido", timestampDeployed),
       },
     ],
   },
