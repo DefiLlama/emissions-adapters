@@ -20,7 +20,7 @@ export async function createChartData(
   protocol: string,
   data: {
     rawSections: RawSection[];
-    realTime: RawSection[];
+    documented: RawSection[];
     metadata: Metadata;
     startTime: number;
     endTime: number;
@@ -28,8 +28,8 @@ export async function createChartData(
   isTest: boolean = true,
 ): Promise<{ [key: string]: ChartSection[] }> {
   const chartData = await iterateThroughSections(data.rawSections);
-  const realTimeData = await iterateThroughSections(data.realTime);
-  return { chartData, realTimeData };
+  const documentedData = await iterateThroughSections(data.documented);
+  return { chartData, documentedData };
 
   async function iterateThroughSections(sections: RawSection[]) {
     const chartData: any[] = [];

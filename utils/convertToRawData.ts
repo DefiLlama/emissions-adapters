@@ -11,7 +11,7 @@ import {
   Event,
 } from "../types/adapters";
 import { addResultToEvents } from "./events";
-const excludedKeys = ["meta", "categories", "realTime"];
+const excludedKeys = ["meta", "categories", "documented"];
 
 export async function createRawSections(
   adapter: Protocol,
@@ -19,7 +19,7 @@ export async function createRawSections(
   let startTime: number = 10000000000;
   let endTime: number = 0;
   let rawSections: RawSection[] = [];
-  let realTime: RawSection[] = [];
+  let documented: RawSection[] = [];
   let metadata: Metadata = {
     token: "",
     sources: [],
@@ -43,10 +43,11 @@ export async function createRawSections(
       }
 
       if (a[0] == "categories") categories = a[1];
-      if (a[0] == "realTime") {
+      if (a[0] == "documented") {
         await Promise.all(
           Object.entries(a[1]).map(async (b: any[]) => {
-            await sectionToRaw(realTime, b, true);
+            if (b[0] == "replaces") return;
+            await sectionToRaw(documented, b, true);
           }),
         );
       }
@@ -113,7 +114,7 @@ export async function createRawSections(
   if (metadata && metadata.events)
     metadata.events.sort((a: Event, b: Event) => a.timestamp - b.timestamp);
 
-  return { rawSections, realTime, startTime, endTime, metadata, categories };
+  return { rawSections, documented, startTime, endTime, metadata, categories };
 }
 function stepAdapterToRaw(result: StepAdapterResult): RawResult[] {
   const output: RawResult[] = [];

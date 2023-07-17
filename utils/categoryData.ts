@@ -25,13 +25,27 @@ function normalizeAllocations(rawAllocations: Allocations): Allocations {
   return normalAllocations;
 }
 
+function swapInDocumentedData(
+  data: any,
+  supplementary: any,
+  replaces: string[],
+) {
+  supplementary.push(...data.filter((d: any) => !replaces.includes(d.section)));
+  return supplementary;
+}
+
 export function createCategoryData(
   data: any,
   categories: Categories,
+  documentedData: any = [],
+  replaces: string[] = [],
   isTest: boolean = true,
 ): { [allocations: string]: Allocations } {
   const rawCurrentAllocations: Allocations = {};
   const rawFinalAllocations: Allocations = {};
+
+  if (documentedData.length)
+    data = swapInDocumentedData(data, documentedData, replaces);
 
   Object.keys(categories).map((c: string) => {
     rawCurrentAllocations[c] = 0;
