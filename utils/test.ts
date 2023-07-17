@@ -14,26 +14,31 @@ let protocol = process.argv[2];
 
 export async function parseData(adapter: Protocol, i: number): Promise<void> {
   let rawData = await createRawSections(adapter);
-  const { chartData, documentedData } = await createChartData(
+  const { realTimeData, documentedData } = await createChartData(
     protocol,
     rawData,
   );
 
-  const categoryData = createCategoryData(chartData, rawData.categories);
+  const categoryData = createCategoryData(
+    realTimeData,
+    rawData.categories,
+    true,
+  );
   const documentedCategoryData = documentedData.length
     ? createCategoryData(
-        chartData,
+        realTimeData,
         rawData.categories,
+        true,
         documentedData,
         adapter.documented?.replaces,
       )
     : {};
 
   if (process.argv[3] != "true")
-    postDebugLogs(chartData, categoryData, protocol, documentedCategoryData);
+    postDebugLogs(realTimeData, categoryData, protocol, documentedCategoryData);
 
   await Promise.all([
-    getChartPng(chartData, process.argv[3] == "true", i),
+    getChartPng(realTimeData, process.argv[3] == "true", i),
     documentedData.length
       ? getChartPng(documentedData, process.argv[3] == "true", i + 0.5)
       : [],

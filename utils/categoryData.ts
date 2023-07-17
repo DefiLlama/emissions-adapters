@@ -37,9 +37,9 @@ function swapInDocumentedData(
 export function createCategoryData(
   data: any[],
   categories: Categories,
+  isTest: boolean,
   documentedData: ChartSection[] = [],
   replaces: string[] = [],
-  isTest: boolean = true,
 ): { [allocations: string]: Allocations } {
   const rawCurrentAllocations: Allocations = {};
   const rawFinalAllocations: Allocations = {};

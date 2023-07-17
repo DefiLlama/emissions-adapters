@@ -26,10 +26,10 @@ export async function createChartData(
     endTime: number;
   },
   isTest: boolean = true,
-): Promise<{ [key: string]: ChartSection[] }> {
-  const chartData = await iterateThroughSections(data.rawSections);
+): Promise<{ realTimeData: ChartSection[]; documentedData: ChartSection[] }> {
+  const realTimeData = await iterateThroughSections(data.rawSections);
   const documentedData = await iterateThroughSections(data.documented);
-  return { chartData, documentedData };
+  return { realTimeData, documentedData };
 
   async function iterateThroughSections(sections: RawSection[]) {
     const chartData: any[] = [];
