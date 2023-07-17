@@ -20,7 +20,7 @@ const lido: Protocol = {
       ["0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c"],
       token,
       chain,
-      "lido",
+      "lido#",
       timestampDeployed,
     ),
   meta: {
@@ -32,7 +32,7 @@ const lido: Protocol = {
       {
         key: "DAO Treasury",
         allocation: qty * 0.3632,
-        lastRecord: () => latest("lido", timestampDeployed),
+        lastRecord: () => latest("lido#", timestampDeployed),
       },
     ],
   },
