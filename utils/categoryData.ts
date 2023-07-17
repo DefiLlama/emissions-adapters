@@ -26,18 +26,18 @@ function normalizeAllocations(rawAllocations: Allocations): Allocations {
 }
 
 function swapInDocumentedData(
-  data: any,
-  supplementary: any,
+  data: any[],
+  supplementary: ChartSection[],
   replaces: string[],
-) {
+): any[] {
   supplementary.push(...data.filter((d: any) => !replaces.includes(d.section)));
   return supplementary;
 }
 
 export function createCategoryData(
-  data: any,
+  data: any[],
   categories: Categories,
-  documentedData: any = [],
+  documentedData: ChartSection[] = [],
   replaces: string[] = [],
   isTest: boolean = true,
 ): { [allocations: string]: Allocations } {

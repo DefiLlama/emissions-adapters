@@ -25,7 +25,7 @@ export async function parseData(adapter: Protocol, i: number): Promise<void> {
         chartData,
         rawData.categories,
         documentedData,
-        adapter.documented.replaces,
+        adapter.documented?.replaces,
       )
     : {};
 
@@ -75,15 +75,13 @@ function postDebugLogs(
     console.log(log);
   });
 
-  if (Object.keys(documentedCategoryData).length) {
-    Object.keys(categoryData).map((time: string) => {
-      let log: string = `${time} documented category allocations:\t`;
-      Object.keys(categoryData[time]).map((c: string) => {
-        log += `${categoryData[time][c]}% ${c}\t`;
-      });
-      console.log(log);
+  Object.keys(documentedCategoryData).map((time: string) => {
+    let log: string = `${time} documented category allocations:\t`;
+    Object.keys(documentedCategoryData[time]).map((c: string) => {
+      log += `${documentedCategoryData[time][c]}% ${c}\t`;
     });
-  }
+    console.log(log);
+  });
 }
 async function iterate(adapter: Protocol): Promise<void> {
   if (typeof adapter.default === "function")

@@ -80,8 +80,13 @@ export type ChartYAxisData = {
 };
 export type Protocol = {
   [section: string]: any;
+  documented?: Documented;
   meta: Metadata;
   categories: { [key in SectionType]?: string[] | undefined };
+};
+export type Documented = {
+  replaces: string[];
+  [section: string]: any;
 };
 export type IncompleteSection = {
   key: string;
