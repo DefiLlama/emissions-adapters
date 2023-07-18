@@ -17,21 +17,12 @@ export async function parseData(adapter: Protocol, i: number): Promise<void> {
   const { realTimeData, documentedData } = await createChartData(
     protocol,
     rawData,
+    adapter.documented?.replaces ?? [],
   );
 
-  const categoryData = createCategoryData(
-    realTimeData,
-    rawData.categories,
-    true,
-  );
+  const categoryData = createCategoryData(realTimeData, rawData.categories);
   const documentedCategoryData = documentedData.length
-    ? createCategoryData(
-        realTimeData,
-        rawData.categories,
-        true,
-        documentedData,
-        adapter.documented?.replaces,
-      )
+    ? createCategoryData(documentedData, rawData.categories)
     : {};
 
   if (process.argv[3] != "true")

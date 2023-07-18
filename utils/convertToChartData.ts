@@ -16,6 +16,15 @@ import {
 } from "./constants";
 import { periodToSeconds, unixTimestampNow } from "./time";
 
+export function swapInDocumentedData(
+  data: any[],
+  supplementary: ChartSection[],
+  replaces: string[],
+): any[] {
+  supplementary.push(...data.filter((d: any) => !replaces.includes(d.section)));
+  return supplementary;
+}
+
 export async function createChartData(
   protocol: string,
   data: {
@@ -25,10 +34,17 @@ export async function createChartData(
     startTime: number;
     endTime: number;
   },
+  replaces: string[],
   isTest: boolean = true,
 ): Promise<{ realTimeData: ChartSection[]; documentedData: ChartSection[] }> {
   const realTimeData = await iterateThroughSections(data.rawSections);
-  const documentedData = await iterateThroughSections(data.documented);
+  let documentedData = await iterateThroughSections(data.documented);
+  if (documentedData.length)
+    documentedData = swapInDocumentedData(
+      realTimeData,
+      documentedData,
+      replaces,
+    );
   return { realTimeData, documentedData };
 
   async function iterateThroughSections(sections: RawSection[]) {
