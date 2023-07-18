@@ -21,9 +21,10 @@ export async function parseData(adapter: Protocol, i: number): Promise<void> {
   );
 
   const categoryData = createCategoryData(realTimeData, rawData.categories);
-  const documentedCategoryData = documentedData.length
-    ? createCategoryData(documentedData, rawData.categories)
-    : {};
+  const documentedCategoryData = createCategoryData(
+    documentedData,
+    rawData.categories,
+  );
 
   if (process.argv[3] != "true")
     postDebugLogs(realTimeData, categoryData, protocol, documentedCategoryData);

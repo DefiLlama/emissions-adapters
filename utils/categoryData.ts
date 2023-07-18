@@ -30,6 +30,7 @@ export function createCategoryData(
   categories: Categories,
   isTest: boolean = true,
 ): { [allocations: string]: Allocations } {
+  if (!data.length) return {};
   const rawCurrentAllocations: Allocations = {};
   const rawFinalAllocations: Allocations = {};
 
