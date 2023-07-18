@@ -48,6 +48,7 @@ export async function createChartData(
   return { realTimeData, documentedData };
 
   async function iterateThroughSections(sections: RawSection[]) {
+    if (!sections.length) return [];
     const chartData: any[] = [];
     sections.map((r: any) => {
       r.results.map((s: any[]) => {
