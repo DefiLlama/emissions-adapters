@@ -111,7 +111,6 @@ export type ChartConfig = {
   workingTimestamp: number;
   roundedStart: number;
   roundedEnd: number;
-  isTest: boolean;
   apiData: ApiChartData[];
   incompleteSection?: IncompleteSection;
   protocol: string;

@@ -28,7 +28,6 @@ function normalizeAllocations(rawAllocations: Allocations): Allocations {
 export function createCategoryData(
   data: any[],
   categories: Categories,
-  isTest: boolean = true,
 ): { [allocations: string]: Allocations } {
   if (!data.length) return {};
   const rawCurrentAllocations: Allocations = {};
@@ -41,9 +40,7 @@ export function createCategoryData(
     categories[c].map((section: string) => {
       const timestampNow: number = unixTimestampNow();
 
-      const { current, final } = isTest
-        ? findRawAllocationTest()
-        : findRawAllocationServer();
+      const { current, final } = findRawAllocationTest();
 
       function findRawAllocationTest(): Unlocks {
         const testData: ChartSection[] = <ChartSection[]>data;
@@ -60,27 +57,6 @@ export function createCategoryData(
             currentEntryIndex == -1 ? finalEntryIndex : currentEntryIndex
           ];
         const final = s.data.unlocked[finalEntryIndex];
-        return { current, final };
-      }
-
-      function findRawAllocationServer(): Unlocks {
-        const serverData: TransposedApiChartData[] = <TransposedApiChartData[]>(
-          data
-        );
-        const s: TransposedApiChartData | undefined = serverData.find(
-          (d: any) => d.section == section,
-        );
-        if (!s) return { current: 0, final: 0 };
-
-        const final: number =
-          s.data.apiData[s.data.apiData.length - 1].unlocked;
-        const current: number =
-          s.data.apiData.find(
-            (t: any) =>
-              timestampNow - RESOLUTION_SECONDS < t.timestamp &&
-              t.timestamp < timestampNow,
-          )?.unlocked ?? final;
-
         return { current, final };
       }
 
