@@ -7,6 +7,7 @@ import { PromisePool } from "@supercharge/promise-pool";
 let res: number;
 
 export async function latest(key: string, reference: number): Promise<number> {
+  return reference
   if (!res) {
     let r = await fetch(`https://api.llama.fi/emission/${key}`).then((r) =>
       r.json(),
