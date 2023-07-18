@@ -81,13 +81,14 @@ export function createCategoryData(
           data
         );
         const s: TransposedApiChartData | undefined = serverData.find(
-          (d: any) => d.label == section,
+          (d: any) => d.section == section,
         );
         if (!s) return { current: 0, final: 0 };
 
-        const final: number = s.data[s.data.length - 1].unlocked;
+        const final: number =
+          s.data.apiData[s.data.apiData.length - 1].unlocked;
         const current: number =
-          s.data.find(
+          s.data.apiData.find(
             (t: any) =>
               timestampNow - RESOLUTION_SECONDS < t.timestamp &&
               t.timestamp < timestampNow,
