@@ -16,37 +16,54 @@ import {
 } from "./constants";
 import { periodToSeconds, unixTimestampNow } from "./time";
 
+export function swapInDocumentedData(
+  data: any[],
+  supplementary: ChartSection[],
+  replaces: string[],
+): any[] {
+  supplementary.push(...data.filter((d: any) => !replaces.includes(d.section)));
+  return supplementary;
+}
+
 export async function createChartData(
   protocol: string,
   data: {
     rawSections: RawSection[];
+    documented: RawSection[];
     metadata: Metadata;
     startTime: number;
     endTime: number;
   },
-  isTest: boolean = true,
-): Promise<ChartSection[]> {
-  const chartData: any[] = [];
-  data.rawSections.map((r: any) => {
-    r.results.map((s: any[]) => {
-      s.map((d: any) => {
-        // if (r.section != "Rewards") return;
-        chartData.push({
-          data: rawToChartData(
-            protocol,
-            d,
-            data.startTime,
-            data.endTime,
-            isTest,
-          ),
-          section: r.section,
+  replaces: string[],
+): Promise<{ realTimeData: ChartSection[]; documentedData: ChartSection[] }> {
+  const realTimeData = await iterateThroughSections(data.rawSections);
+  let documentedData = await iterateThroughSections(data.documented);
+  if (documentedData.length)
+    documentedData = swapInDocumentedData(
+      realTimeData,
+      documentedData,
+      replaces,
+    );
+  return { realTimeData, documentedData };
+
+  async function iterateThroughSections(sections: RawSection[]) {
+    if (!sections.length) return [];
+    const chartData: any[] = [];
+    sections.map((r: any) => {
+      r.results.map((s: any[]) => {
+        s.map((d: any) => {
+          // if (r.section != "Rewards") return;
+          chartData.push({
+            data: rawToChartData(protocol, d, data.startTime, data.endTime),
+            section: r.section,
+          });
         });
       });
     });
-  });
 
-  await appendMissingDataSections(chartData, protocol, data, isTest);
-  return consolidateDuplicateKeys(chartData, isTest);
+    await appendMissingDataSections(chartData, protocol, data);
+    return consolidateDuplicateKeys(chartData);
+  }
 }
 async function appendMissingDataSections(
   chartData: ChartSection[],
@@ -57,7 +74,6 @@ async function appendMissingDataSections(
     startTime: number;
     endTime: number;
   },
-  isTest: boolean,
 ) {
   const incompleteSections = data.metadata.incompleteSections;
   if (incompleteSections == null || incompleteSections.length == 0) return;
@@ -91,7 +107,7 @@ async function appendMissingDataSections(
           timestamps,
         );
     }
-    appendForecast(chartData, unlocked, i, data, isTest);
+    appendForecast(chartData, unlocked, i, data);
   });
 }
 function appendOldApiData(
@@ -116,7 +132,6 @@ function appendForecast(
     startTime: number;
     endTime: number;
   },
-  isTest: boolean,
 ) {
   const timestamp =
     Math.floor(unixTimestampNow() / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
@@ -130,7 +145,7 @@ function appendForecast(
       unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
 
     const { recentlyEmitted, totalEmitted, gradientLength } =
-      findPreviouslyEmitted(relatedSections, reference, isTest);
+      findPreviouslyEmitted(relatedSections, reference);
 
     const gradient: number =
       recentlyEmitted / (timestamp - gradientLength * RESOLUTION_SECONDS);
@@ -153,7 +168,6 @@ function appendForecast(
         },
         data.startTime,
         continuousEnd,
-        isTest,
       ),
       section: incompleteSection.key,
     });
@@ -169,7 +183,6 @@ function appendForecast(
 function findPreviouslyEmitted(
   relatedSections: ChartSection[],
   reference: number,
-  isTest: boolean,
 ): {
   recentlyEmitted: number;
   totalEmitted: number;
@@ -177,14 +190,9 @@ function findPreviouslyEmitted(
 } {
   let gradientLength: number = GRADIENT_LENGTH;
 
-  const findUnlocked = (d: any, isTest: boolean) =>
-    isTest
-      ? d.data.unlocked
-      : d.data.apiData.map((u: ApiChartData) => u.unlocked);
-
   const recentlyEmitted = relatedSections
     .map((d: ChartSection) => {
-      const unlocked: number[] = findUnlocked(d, isTest);
+      const unlocked: number[] = d.data.unlocked;
       const length: number = unlocked.length;
 
       if (GRADIENT_LENGTH > length) {
@@ -199,58 +207,35 @@ function findPreviouslyEmitted(
     .reduce((p: number, c: number) => p + c, reference);
 
   const totalEmitted: number | undefined = relatedSections
-    .map((d: ChartSection) =>
-      !isTest && d.data.apiData != null
-        ? d.data.apiData[d.data.apiData.length - 1].unlocked
-        : d.data.unlocked[d.data.unlocked.length - 1],
-    )
+    .map((d: ChartSection) => d.data.unlocked[d.data.unlocked.length - 1])
     .reduce((p: number, c: number) => p + c, reference);
 
   return { recentlyEmitted, totalEmitted, gradientLength };
 }
-function consolidateDuplicateKeys(data: ChartSection[], isTest: boolean) {
+function consolidateDuplicateKeys(data: ChartSection[]) {
   let sortedData: any[] = [];
 
-  const sectionLengths = data.map((s: any) =>
-    isTest ? s.data.unlocked.length : s.data.apiData.length,
-  );
+  const sectionLengths = data.map((s: any) => s.data.unlocked.length);
   const maxSectionLength: number = Math.max(...sectionLengths);
 
   data.map((d: any) => {
     const sortedKeys = sortedData.map((s: any) => s.section);
 
     // normalize to extrapolations
-    let targetLength = isTest
-      ? d.data.timestamps.length
-      : d.data.apiData.length;
+    let targetLength = d.data.timestamps.length;
     while (targetLength < maxSectionLength - 1) {
-      targetLength = isTest ? d.data.timestamps.length : d.data.apiData.length;
-      if (isTest) {
-        d.data.timestamps.push(
-          d.data.timestamps[targetLength - 1] + RESOLUTION_SECONDS,
-        );
-        d.data.unlocked.push(d.data.unlocked[targetLength - 2]);
-      } else {
-        d.data.apiData.push({
-          timestamp:
-            d.data.apiData[targetLength - 1].timestamp + RESOLUTION_SECONDS,
-          unlocked: d.data.apiData[targetLength - 2].unlocked,
-        });
-      }
+      targetLength = d.data.timestamps.length;
+      d.data.timestamps.push(
+        d.data.timestamps[targetLength - 1] + RESOLUTION_SECONDS,
+      );
+      d.data.unlocked.push(d.data.unlocked[targetLength - 2]);
     }
 
     if (sortedKeys.includes(d.section)) {
-      if (isTest) {
-        d.data.unlocked.map((a: any, i: number) => {
-          const j = sortedKeys.indexOf(d.section);
-          sortedData[j].data.unlocked[i] += a;
-        });
-      } else {
-        d.data.apiData.map((a: any, i: number) => {
-          const j = sortedKeys.indexOf(d.section);
-          sortedData[j].data.apiData[i].unlocked += a.unlocked;
-        });
-      }
+      d.data.unlocked.map((a: any, i: number) => {
+        const j = sortedKeys.indexOf(d.section);
+        sortedData[j].data.unlocked[i] += a;
+      });
     } else {
       sortedData.push(d);
     }
@@ -269,7 +254,6 @@ export function rawToChartData(
   raw: RawResult,
   start: number,
   end: number,
-  isTest: boolean = true,
 ): ChartData {
   const roundedStart: number =
     Math.floor(start / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
@@ -283,7 +267,6 @@ export function rawToChartData(
     unlocked: [],
     workingQuantity: 0,
     workingTimestamp: roundedStart,
-    isTest,
     apiData: [],
     protocol,
   };
@@ -297,7 +280,6 @@ function continuous(raw: RawResult, config: ChartConfig): ChartData {
     unlocked,
     workingQuantity,
     workingTimestamp,
-    isTest,
     apiData,
   } = config;
 
@@ -316,23 +298,12 @@ function continuous(raw: RawResult, config: ChartConfig): ChartData {
     ) {
       workingQuantity += dy;
     }
-    if (isTest) {
-      unlocked.push(workingQuantity);
-      timestamps.push(workingTimestamp);
-    } else {
-      apiData.push({
-        timestamp: workingTimestamp,
-        unlocked: workingQuantity,
-      });
-    }
+    unlocked.push(workingQuantity);
+    timestamps.push(workingTimestamp);
     workingTimestamp += RESOLUTION_SECONDS;
   }
 
-  if (isTest) {
-    unlocked[unlocked.length - 1] = raw.change;
-  } else {
-    apiData[apiData.length - 1].unlocked = raw.change;
-  }
+  unlocked[unlocked.length - 1] = raw.change;
 
   return { timestamps, unlocked, apiData, isContinuous: true };
 }
@@ -343,7 +314,6 @@ function discreet(raw: RawResult, config: ChartConfig): ChartData {
     unlocked,
     workingQuantity,
     workingTimestamp,
-    isTest,
     apiData,
   } = config;
 
@@ -355,13 +325,25 @@ function discreet(raw: RawResult, config: ChartConfig): ChartData {
     )
       workingQuantity += raw.change;
 
-    if (isTest) {
-      unlocked.push(workingQuantity);
-      timestamps.push(workingTimestamp);
-    } else {
-      apiData.push({ timestamp: workingTimestamp, unlocked: workingQuantity });
-    }
+    unlocked.push(workingQuantity);
+    timestamps.push(workingTimestamp);
+
     workingTimestamp += RESOLUTION_SECONDS;
   }
   return { timestamps, unlocked, apiData, isContinuous: false };
+}
+
+export function mapToServerData(testData: ChartSection[]) {
+  const serverData: any[] = testData.map((s: ChartSection) => {
+    const label = s.section;
+
+    const data = s.data.timestamps.map((timestamp: number, i: number) => ({
+      timestamp,
+      unlocked: s.data.unlocked[i],
+    }));
+
+    return { label, data };
+  });
+
+  return serverData;
 }

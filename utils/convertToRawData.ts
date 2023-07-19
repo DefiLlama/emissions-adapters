@@ -11,7 +11,7 @@ import {
   Event,
 } from "../types/adapters";
 import { addResultToEvents } from "./events";
-const excludedKeys = ["meta", "categories", "incompleteSections"];
+const excludedKeys = ["meta", "categories", "documented"];
 
 export async function createRawSections(
   adapter: Protocol,
@@ -19,6 +19,7 @@ export async function createRawSections(
   let startTime: number = 10000000000;
   let endTime: number = 0;
   let rawSections: RawSection[] = [];
+  let documented: RawSection[] = [];
   let metadata: Metadata = {
     token: "",
     sources: [],
@@ -42,59 +43,78 @@ export async function createRawSections(
       }
 
       if (a[0] == "categories") categories = a[1];
+      if (a[0] == "documented") {
+        await Promise.all(
+          Object.entries(a[1]).map(async (b: any[]) => {
+            if (b[0] == "replaces") return;
+            await sectionToRaw(documented, b, true);
+          }),
+        );
+      }
 
       if (excludedKeys.includes(a[0])) return;
 
-      const section: string = a[0];
-      if (typeof a[1] === "function") {
-        a[1] = a[1]();
-      }
-      let adapterResults = await a[1];
-      if (adapterResults.length == null) adapterResults = [adapterResults];
-      adapterResults = adapterResults.map((r: any) =>
-        typeof r === "function" ? r().then() : r,
-      );
-      adapterResults = await Promise.all(adapterResults);
+      await sectionToRaw(rawSections, a);
 
-      addResultToEvents(section, metadata, adapterResults);
+      async function sectionToRaw(
+        key: RawSection[],
+        entry: any[],
+        hi: boolean = false,
+      ) {
+        const section: string = entry[0];
+        if (typeof entry[1] === "function") {
+          entry[1] = entry[1]();
+        }
+        let adapterResults = await entry[1];
+        if (adapterResults.length == null) adapterResults = [adapterResults];
+        adapterResults = adapterResults.map((r: any) =>
+          typeof r === "function" ? r().then() : r,
+        );
+        adapterResults = await Promise.all(adapterResults);
 
-      const results: RawResult[] | RawResult[][] = adapterResults
-        .flat()
-        .map((r: AdapterResult) => {
-          switch (r.type) {
-            case "step":
-              return stepAdapterToRaw(<StepAdapterResult>r);
-            case "cliff":
-              return cliffAdapterToRaw(<CliffAdapterResult>r);
-            case "linear":
-              return linearAdapterToRaw(<LinearAdapterResult>r);
-            default:
-              throw new Error(`invalid adapter type: ${r.type}`);
-          }
-        });
+        addResultToEvents(section, metadata, adapterResults);
 
-      rawSections.push({ section, results });
-
-      startTime = Math.min(
-        startTime,
-        ...adapterResults.flat().map((r: AdapterResult) => r.start!),
-      );
-
-      endTime = Math.max(
-        endTime,
-        ...results
+        if (hi) {
+          console.log();
+        }
+        const results: RawResult[] | RawResult[][] = adapterResults
           .flat()
-          .map((r: any) =>
-            r.continuousEnd == null ? r.timestamp : r.continuousEnd,
-          ),
-      );
+          .map((r: AdapterResult) => {
+            switch (r.type) {
+              case "step":
+                return stepAdapterToRaw(<StepAdapterResult>r);
+              case "cliff":
+                return cliffAdapterToRaw(<CliffAdapterResult>r);
+              case "linear":
+                return linearAdapterToRaw(<LinearAdapterResult>r);
+              default:
+                throw new Error(`invalid adapter type: ${r.type}`);
+            }
+          });
+
+        key.push({ section, results });
+
+        startTime = Math.min(
+          startTime,
+          ...adapterResults.flat().map((r: AdapterResult) => r.start!),
+        );
+
+        endTime = Math.max(
+          endTime,
+          ...results
+            .flat()
+            .map((r: any) =>
+              r.continuousEnd == null ? r.timestamp : r.continuousEnd,
+            ),
+        );
+      }
     }),
   );
 
   if (metadata && metadata.events)
     metadata.events.sort((a: Event, b: Event) => a.timestamp - b.timestamp);
 
-  return { rawSections, startTime, endTime, metadata, categories };
+  return { rawSections, documented, startTime, endTime, metadata, categories };
 }
 function stepAdapterToRaw(result: StepAdapterResult): RawResult[] {
   const output: RawResult[] = [];

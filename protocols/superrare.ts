@@ -17,19 +17,6 @@ const clev: Protocol = {
     manualCliff(start, qty * 0.4 * 0.25),
     manualStep(start, periodToSeconds.month, 96, (qty * 0.4 * 0.75) / 96),
   ],
-  //   Team: manualLinear(
-  //     start + periodToSeconds.year,
-  //     start + periodToSeconds.year * 4,
-  //     qty * 0.255,
-  //   ),
-  //   Investors: [
-  //     manualCliff(start, qty * 0.145 * 0.25),
-  //     manualLinear(
-  //       start + periodToSeconds.year,
-  //       start + periodToSeconds.year * 4,
-  //       qty * 0.145 * 0.75,
-  //     ),
-  //   ],
   "Team, Investors, Strategic Partners & Future Contributors": () =>
     balance(
       ["0x860a80d33E85e97888F1f0C75c6e5BBD60b48DA9"],
@@ -38,6 +25,22 @@ const clev: Protocol = {
       "superrare",
       start + periodToSeconds.day,
     ),
+  documented: {
+    replaces: ["Team, Investors, Strategic Partners & Future Contributors"],
+    Team: manualLinear(
+      start + periodToSeconds.year,
+      start + periodToSeconds.year * 4,
+      qty * 0.255,
+    ),
+    Investors: [
+      manualCliff(start, qty * 0.145 * 0.25),
+      manualLinear(
+        start + periodToSeconds.year,
+        start + periodToSeconds.year * 4,
+        qty * 0.145 * 0.75,
+      ),
+    ],
+  },
   meta: {
     token: `coingecko:superrare`,
     sources: [
@@ -47,7 +50,11 @@ const clev: Protocol = {
     protocolIds: ["3144"],
   },
   categories: {
-    insiders: ["Team, Investors, Strategic Partners & Future Contributors"],
+    insiders: [
+      "Team",
+      "Investors",
+      "Team, Investors, Strategic Partners & Future Contributors",
+    ],
     noncirculating: ["Community treasury"],
     airdrop: ["Retroactive airdrop"],
   },

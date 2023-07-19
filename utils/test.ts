@@ -14,17 +14,34 @@ let protocol = process.argv[2];
 
 export async function parseData(adapter: Protocol, i: number): Promise<void> {
   let rawData = await createRawSections(adapter);
-  const chartData = await createChartData(protocol, rawData);
-  const categoryData = createCategoryData(chartData, rawData.categories);
+  const { realTimeData, documentedData } = await createChartData(
+    protocol,
+    rawData,
+    adapter.documented?.replaces ?? [],
+  );
+
+  const categoryData = createCategoryData(realTimeData, rawData.categories);
+  const documentedCategoryData = createCategoryData(
+    documentedData,
+    rawData.categories,
+  );
+
   if (process.argv[3] != "true")
-    postDebugLogs(chartData, categoryData, protocol);
-  await getChartPng(chartData, process.argv[3] == "true", i);
+    postDebugLogs(realTimeData, categoryData, protocol, documentedCategoryData);
+
+  await Promise.all([
+    getChartPng(realTimeData, process.argv[3] == "true", i),
+    documentedData.length
+      ? getChartPng(documentedData, process.argv[3] == "true", i + 0.5)
+      : [],
+  ]);
 }
 
 function postDebugLogs(
   data: any[],
   categoryData: { [categories: string]: Allocations },
   protocol: string,
+  documentedCategoryData: { [categories: string]: Allocations },
 ): void {
   const format: string = "DD/MM/YY";
   let sum: number = 0;
@@ -51,6 +68,14 @@ function postDebugLogs(
     let log: string = `${time} category allocations:\t`;
     Object.keys(categoryData[time]).map((c: string) => {
       log += `${categoryData[time][c]}% ${c}\t`;
+    });
+    console.log(log);
+  });
+
+  Object.keys(documentedCategoryData).map((time: string) => {
+    let log: string = `${time} documented category allocations:\t`;
+    Object.keys(documentedCategoryData[time]).map((c: string) => {
+      log += `${documentedCategoryData[time][c]}% ${c}\t`;
     });
     console.log(log);
   });

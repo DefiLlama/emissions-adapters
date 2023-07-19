@@ -80,8 +80,13 @@ export type ChartYAxisData = {
 };
 export type Protocol = {
   [section: string]: any;
+  documented?: Documented;
   meta: Metadata;
   categories: { [key in SectionType]?: string[] | undefined };
+};
+export type Documented = {
+  replaces: string[];
+  [section: string]: any;
 };
 export type IncompleteSection = {
   key: string;
@@ -106,7 +111,6 @@ export type ChartConfig = {
   workingTimestamp: number;
   roundedStart: number;
   roundedEnd: number;
-  isTest: boolean;
   apiData: ApiChartData[];
   incompleteSection?: IncompleteSection;
   protocol: string;
@@ -124,6 +128,7 @@ export type Dataset = {
 };
 export type SectionData = {
   rawSections: RawSection[];
+  documented: RawSection[];
   startTime: number;
   endTime: number;
   metadata: Metadata;
