@@ -24,7 +24,26 @@ export function swapInDocumentedData(
   supplementary.push(...data.filter((d: any) => !replaces.includes(d.section)));
   return supplementary;
 }
-
+export function nullFinder(data: any[], key: string) {
+  let nulls = false;
+  data.map((s: any) => {
+    if (key == "realTimeData" && s.data.unlocked.indexOf(null) != -1)
+      nulls = true;
+    if (
+      key == "rawSections" &&
+      s.results.map((r: any) => r.change).indexOf(null) != -1
+    )
+      nulls = true;
+    if (key == "preappend" && s.data.unlocked.indexOf(null) != -1) nulls = true;
+    if (key == "preconsolidate" && s.data.unlocked.indexOf(null) != -1)
+      nulls = true;
+    if (key == "postconsolidate" && s.data.unlocked.indexOf(null) != -1)
+      nulls = true;
+  });
+  if (nulls) {
+    console.log(`nulls found at ${key}`);
+  }
+}
 export async function createChartData(
   protocol: string,
   data: {
@@ -61,8 +80,12 @@ export async function createChartData(
       });
     });
 
+    nullFinder(chartData, "preappend");
     await appendMissingDataSections(chartData, protocol, data);
-    return consolidateDuplicateKeys(chartData);
+    nullFinder(chartData, "preconsolidate");
+    const consolidated = consolidateDuplicateKeys(chartData);
+    nullFinder(chartData, "postconsolidate");
+    return consolidated;
   }
 }
 async function appendMissingDataSections(
