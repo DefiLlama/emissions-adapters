@@ -12,9 +12,9 @@ const y2k: Protocol = {
   "Liquidity Mining": manualLinear(
     start,
     start + periodToSeconds.year * 4,
-    0.3,
+    qty * 0.3,
   ),
-  Treasury: manualLinear(start, start + periodToSeconds.year * 4, 0.35),
+  Treasury: manualLinear(start, start + periodToSeconds.year * 4, qty * 0.35),
   "Core Team": [
     manualCliff(start + periodToSeconds.month * 9, qty * 0.015),
     manualLinear(
@@ -26,7 +26,7 @@ const y2k: Protocol = {
   "New Order Treasury": manualLinear(
     start,
     start + periodToSeconds.year * 4,
-    0.1,
+    qty * 0.1,
   ),
   Investors: [
     manualCliff(start + periodToSeconds.month * 6, qty * 0.005),
@@ -41,7 +41,9 @@ const y2k: Protocol = {
     notes: [
       "We could not contact the Y2K team to find wallet addresses, so we have assumed Liquidity Mining, Treasury and New Order Treasury unlocks to be linear over 4 years.",
     ],
-    sources: [`https://y2k-finance.gitbook.io/y2k-finance/tokenomics/y2k`],
+    sources: [
+      `https://y2k-finance.gitbook.io/y2k-finance/tokenomics/tokenomics-distribution`,
+    ],
     token: `${chain}:${token}`,
     protocolIds: ["2375", "3056"],
   },
