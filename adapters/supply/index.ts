@@ -7,7 +7,6 @@ import { PromisePool } from "@supercharge/promise-pool";
 let res: number;
 
 export async function latest(key: string, reference: number): Promise<number> {
-  return reference
   if (!res) {
     let r = await fetch(`https://api.llama.fi/emission/${key}`).then((r) =>
       r.json(),
@@ -66,11 +65,15 @@ export async function supply(
     if (supplyIndex == 0 && thisSupply == 0) continue;
     supplyIndex += 1;
 
-    const amount = thisSupply - supplies[i - 1].result;
-    if (amount <= 0) continue;
+    try {
+      const amount = thisSupply - supplies[i - 1].result;
+      if (amount <= 0) continue;
 
-    const start = supplies[i].timestamp;
-    sections.push({ type: "cliff", start, amount });
+      const start = supplies[i].timestamp;
+      sections.push({ type: "cliff", start, amount });
+    } catch {
+      let a = i;
+    }
   }
 
   return sections;

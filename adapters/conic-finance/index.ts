@@ -7,7 +7,6 @@ import { PromisePool } from "@supercharge/promise-pool";
 let res: number;
 
 export async function latest(): Promise<number> {
-  return 1677715200
   if (!res)
     return fetch(`https://api.llama.fi/emission/conic-finance`)
       .then((r) => r.json())

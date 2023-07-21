@@ -24,7 +24,6 @@ const contracts: { [chain: string]: any } = {
 let res: number;
 
 export async function latest(key: string): Promise<number> {
-  return boosterDeployed
   if (!res)
     return fetch(`https://api.llama.fi/emission/${key}`)
       .then((r) => r.json())

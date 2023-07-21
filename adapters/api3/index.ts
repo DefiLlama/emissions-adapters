@@ -17,7 +17,6 @@ const chain: any = "ethereum";
 let res: number;
 
 export async function latest(): Promise<number> {
-  return 2688 * periodToSeconds.week
   if (!res)
     return fetch(`https://api.llama.fi/emission/api3`)
       .then((r) => r.json())

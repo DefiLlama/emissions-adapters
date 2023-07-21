@@ -11,7 +11,6 @@ export async function latest(
   adapter: string,
   timestampDeployed: number,
 ): Promise<number> {
-  return timestampDeployed
   if (!res) {
     let r = await fetch(`https://api.llama.fi/emission/${adapter}`).then((r) =>
       r.json(),
