@@ -74,9 +74,6 @@ export async function createRawSections(
 
         addResultToEvents(section, metadata, adapterResults);
 
-        if (hi) {
-          console.log();
-        }
         const results: RawResult[] | RawResult[][] = adapterResults
           .flat()
           .map((r: AdapterResult) => {
