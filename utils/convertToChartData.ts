@@ -39,6 +39,10 @@ export function nullFinder(data: any[], key: string) {
       nulls = true;
     if (key == "postconsolidate" && s.data.unlocked.indexOf(null) != -1)
       nulls = true;
+    if (key == "apiDataMap" && s == null) nulls = true;
+    if (key == "preforecast" && s.data.unlocked.indexOf(null) != -1)
+      nulls = true;
+    if (key == "postPush" && s.data.unlocked.indexOf(null) != -1) nulls = true;
   });
   if (nulls) {
     console.log(`nulls found at ${key}`);
@@ -81,10 +85,10 @@ export async function createChartData(
     });
 
     nullFinder(chartData, "preappend");
+    // nulls come from the following function
     await appendMissingDataSections(chartData, protocol, data);
     nullFinder(chartData, "preconsolidate");
     const consolidated = consolidateDuplicateKeys(chartData);
-    nullFinder(chartData, "postconsolidate");
     return consolidated;
   }
 }
@@ -122,6 +126,7 @@ async function appendMissingDataSections(
       );
       timestamps = apiDataWithoutForecast.map((d: ApiChartData) => d.timestamp);
       unlocked = apiDataWithoutForecast.map((d: ApiChartData) => d.unlocked);
+      nullFinder(unlocked, "apiDataMap");
       if (apiDataWithoutForecast.length > 0 && unlocked.length > 0)
         appendOldApiData(
           chartData,
@@ -131,6 +136,7 @@ async function appendMissingDataSections(
           timestamps,
         );
     }
+    nullFinder(chartData, "preforecast");
     appendForecast(chartData, unlocked, i, data);
   });
 }
@@ -195,6 +201,7 @@ function appendForecast(
       ),
       section: incompleteSection.key,
     });
+    nullFinder(chartData, "postPush");
   }
 
   if (!("notes" in data.metadata)) data.metadata.notes = [];

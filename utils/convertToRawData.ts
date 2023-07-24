@@ -47,7 +47,7 @@ export async function createRawSections(
         await Promise.all(
           Object.entries(a[1]).map(async (b: any[]) => {
             if (b[0] == "replaces") return;
-            await sectionToRaw(documented, b, true);
+            await sectionToRaw(documented, b);
           }),
         );
       }
@@ -56,11 +56,7 @@ export async function createRawSections(
 
       await sectionToRaw(rawSections, a);
 
-      async function sectionToRaw(
-        key: RawSection[],
-        entry: any[],
-        hi: boolean = false,
-      ) {
+      async function sectionToRaw(key: RawSection[], entry: any[]) {
         const section: string = entry[0];
         if (typeof entry[1] === "function") {
           entry[1] = entry[1]();
