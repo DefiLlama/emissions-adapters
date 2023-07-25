@@ -56,7 +56,11 @@ const worldcoin: Protocol = {
     notes: [],
     protocolIds: [],
   },
-  categories: {},
+  categories: {
+    publicSale: ["Community"],
+    insiders: ["Market Makers", "Investors", "Initial Development Team"],
+    noncirculating: ["Reserve"],
+  },
 };
 
 export default worldcoin;
