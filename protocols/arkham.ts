@@ -1,8 +1,8 @@
-import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
+import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 0;
+const start = 1689634800;
 const qty = 1e9;
 const token = "0x6e2a43be0b1d33b726f0ca3b8de60b3482b8b050";
 const chain = "ethereum";
