@@ -109,7 +109,7 @@ async function appendMissingDataSections(
     r.json(),
   );
   let body = res.body ? JSON.parse(res.body) : [];
-  res = body ? body.documentedData?.data ?? body.data : [];
+  res = body && body.length != 0 ? body.documentedData?.data ?? body.data : [];
 
   incompleteSections.map((i: IncompleteSection) => {
     const sectionRes: any = res.find((s: ApiChartData) => s.label == i.key);
