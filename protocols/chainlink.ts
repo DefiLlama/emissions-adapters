@@ -10,7 +10,7 @@ const address = "0x514910771AF9Ca656af840dff83E8264EcF986CA";
 const chainlink: Protocol = {
   "Node Operators": manualCliff(start, qty * 0.35),
   "Public Token Sale": manualCliff(start, qty * 0.35),
-  Company: balance(
+  Company: ()=>balance(
     [
       "0x5A8e77bC30948cc9A51aE4E042d96e145648BB4C",
       "0xe0b66bFc7344a80152BfeC954942E2926A6FcA80",
