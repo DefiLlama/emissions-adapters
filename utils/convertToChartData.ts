@@ -15,6 +15,7 @@ import {
   GRADIENT_LENGTH,
 } from "./constants";
 import { periodToSeconds, unixTimestampNow } from "./time";
+import { sendMessage } from "../utils/discord";
 
 export function swapInDocumentedData(
   data: any[],
@@ -87,10 +88,15 @@ export async function createChartData(
     nullFinder(chartData, "preappend");
     // nulls come from the following function
     await appendMissingDataSections(chartData, protocol, data);
-    nullFinder(chartData, "preconsolidate");
     const consolidated = consolidateDuplicateKeys(chartData);
     return consolidated;
   }
+}
+function nullsInApiData(res: any): boolean {
+  const unlockedValues = res
+    .map((r: any) => r.data.map((d: any) => d.unlocked))
+    .flat();
+  return unlockedValues.includes(null);
 }
 async function appendMissingDataSections(
   chartData: ChartSection[],
@@ -111,6 +117,13 @@ async function appendMissingDataSections(
   let body = res.body ? JSON.parse(res.body) : [];
   res = body && body.length != 0 ? body.documentedData?.data ?? body.data : [];
 
+  if (nullsInApiData(res)) {
+    await sendMessage(
+      `${protocol} has nulls in API res`,
+      process.env.UNLOCKS_WEBHOOK!,
+    );
+    throw new Error(`${protocol} adapter failed, nulls present`);
+  }
   incompleteSections.map((i: IncompleteSection) => {
     const sectionRes: any = res.find((s: ApiChartData) => s.label == i.key);
 
@@ -136,7 +149,6 @@ async function appendMissingDataSections(
           timestamps,
         );
     }
-    nullFinder(chartData, "preforecast");
     appendForecast(chartData, unlocked, i, data);
   });
 }
