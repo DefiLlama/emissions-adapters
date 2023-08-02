@@ -175,6 +175,7 @@ function appendForecast(
     endTime: number;
   },
 ) {
+  let err: boolean = false;
   const timestamp =
     Math.floor(unixTimestampNow() / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
 
@@ -188,6 +189,11 @@ function appendForecast(
 
     const { recentlyEmitted, totalEmitted, gradientLength } =
       findPreviouslyEmitted(relatedSections, reference);
+
+    if (totalEmitted == 0) {
+      err = true;
+      console.log(`total emitted error found in ${incompleteSection.key}`);
+    }
 
     const gradient: number =
       recentlyEmitted / (timestamp - gradientLength * RESOLUTION_SECONDS);
@@ -221,7 +227,9 @@ function appendForecast(
     `Only past ${incompleteSection.key} unlocks have been included in this analysis, because ${incompleteSection.key} allocation is unlocked adhoc. Future unlocks have been extrapolated, which may not be accurate.`,
   );
 
-  incompleteSection.lastRecord = timestamp + INCOMPLETE_SECTION_STEP;
+  incompleteSection.lastRecord = err
+    ? null
+    : timestamp + INCOMPLETE_SECTION_STEP;
 }
 function findPreviouslyEmitted(
   relatedSections: ChartSection[],
