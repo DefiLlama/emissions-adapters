@@ -1,4 +1,4 @@
-import { balance } from "../adapters/balance";
+import { balance, latest } from "../adapters/balance";
 import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
@@ -8,7 +8,7 @@ const qty = 1e9;
 const token = "0xba5bde662c17e2adff1075610382b9b691296350";
 const chain = "ethereum";
 
-const clev: Protocol = {
+const superrare: Protocol = {
   "Retroactive airdrop": manualCliff(
     start + periodToSeconds.day * 90,
     qty * 0.15,
@@ -48,6 +48,13 @@ const clev: Protocol = {
       `https://discord.com/channels/666318003972997136/868174870389878865/950417363801624626`,
     ],
     protocolIds: ["3144"],
+    incompleteSections: [
+      {
+        key: "Team, Investors, Strategic Partners & Future Contributors",
+        allocation: 0.35,
+        lastRecord: () => latest("superrare", start + periodToSeconds.day),
+      },
+    ],
   },
   categories: {
     insiders: [
@@ -60,4 +67,4 @@ const clev: Protocol = {
   },
 };
 
-export default clev;
+export default superrare;
