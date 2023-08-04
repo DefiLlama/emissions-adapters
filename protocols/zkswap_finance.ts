@@ -9,7 +9,8 @@ const token: string = "0x";
 const zkswap_finance: Protocol = {
     "Public Sale": manualCliff(start, qty * 0.25),
     "Liquidity": manualCliff(start, qty * 0.125),
-    "TGE Bonus": manualLinear(start, start + periodToSeconds.month * 4, qty * 0.05),
+    "TGE Bonus": manualLinear(start, start + periodToSeconds.month * 5, qty * 0.05),
+    "Early User Airdrop": manualLinear(start, start + periodToSeconds.month * 5, qty * 0.05),
     "SWAP2EARN": manualLinear(start, start + periodToSeconds.month * 36, qty * 0.2),
     "Farming": manualLinear(start, start + periodToSeconds.month * 36, qty * 0.2),
     "Staking": manualLinear(start, start + periodToSeconds.month * 36, qty * 0.05),
