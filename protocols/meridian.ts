@@ -34,8 +34,8 @@ const meridian: Protocol = {
   ],
   meta: {
     sources: ["https://docs.meridianfinance.net/tokenomics"],
-    token: "ethereum:0xf4d2888d29D722226FafA5d9B24F9164c092421E",
-    protocolIds: ["1229"],
+    token: "base:0x2F3b1A07E3eFb1fCc64BD09b86bD0Fa885D93552",
+    protocolIds: ["3347"],
   },
   categories: {
     airdrop: ["Community Airdrop"],
