@@ -2,7 +2,7 @@ import { manualCliff, manualLinear } from "../adapters/manual";
 import { LinearAdapterResult, Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 0;
+const start = 1690934400;
 
 const meridian: Protocol = {
   "Community Airdrop": manualCliff(start, 3e6),
