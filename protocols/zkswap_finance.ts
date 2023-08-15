@@ -7,14 +7,15 @@ const chain: string = "era";
 const token: string = "0x";
 
 const zkswap_finance: Protocol = {
-    "Public Sale": manualCliff(start, qty * 0.25),
-    "Liquidity": manualCliff(start, qty * 0.125),
-    "TGE Bonus": manualLinear(start, start + periodToSeconds.month * 4, qty * 0.05),
-    "SWAP2EARN": manualLinear(start, start + periodToSeconds.month * 36, qty * 0.2),
-    "Farming": manualLinear(start, start + periodToSeconds.month * 36, qty * 0.2),
-    "Staking": manualLinear(start, start + periodToSeconds.month * 36, qty * 0.05),
+    "Token Generation Event (TGE)": manualCliff(start, qty * 0.25),
+    "Initial Liquidity": manualCliff(start, qty * 0.125),
+    "TGE Bonus": manualLinear(start, start + periodToSeconds.month * 5, qty * 0.05),
+    "Early Supporters Retroactive": manualLinear(start, start + periodToSeconds.month * 5, qty * 0.05),
+    "Swap2Earn Incentive": manualLinear(start, start + periodToSeconds.month * 36, qty * 0.2),
+    "Liquidity Providers Incentive": manualLinear(start, start + periodToSeconds.month * 36, qty * 0.2),
+    "Staking Reward": manualLinear(start, start + periodToSeconds.month * 36, qty * 0.05),
     "Team": manualLinear(start, start + periodToSeconds.month * 36, qty * 0.04),
-    "Treasury + Operation": manualLinear(start, start + periodToSeconds.month * 36, qty * 3.5),
+    "Treasury + Operation": manualLinear(start, start + periodToSeconds.month * 36, qty * 0.035),
     meta: {
         token: `${chain}:${token}`,
         sources: [
@@ -23,11 +24,11 @@ const zkswap_finance: Protocol = {
         protocolIds: ["3180"],
     },
     categories: {
-        insiders: [
-            "Team"
-        ],
-        publicSale: ["Public Sale"],
-        farming: ["Farming"],
+        publicSale: ["Token Generation Event (TGE)", "Initial Liquidity", "TGE Bonus"],
+        farming: ["Liquidity Providers Incentive", "Staking Reward", "Swap2Earn Incentive"],
+        airdrop: ["Early Supporters Retroactive"],
+        insiders: ["Team"],
+        noncirculating: ["Treasury + Operation"],
     },
 };
 
