@@ -15,7 +15,7 @@ const lineabank: Protocol = {
   "Pre mining": manualCliff(start, qty * 0.03),
   "IDO": [
     manualCliff(start, qtyIDO * 0.30), 
-    manualLinear(end_3months , end_3months + 24 * periodToSeconds.month, 0.7 * qtyIDO),
+    manualLinear(start , start + 24 * periodToSeconds.month, 0.7 * qtyIDO),
   ],
   "Liquidity Incentives": manualLinear(
     shedule_Start,
