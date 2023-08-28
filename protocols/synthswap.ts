@@ -27,7 +27,7 @@ const synthswap: Protocol = {
     ),
   ],
   "Ecosystem & Partners": [
-    manualCliff(start + 3 + periodToSeconds.month , qty * 0.15), 
+    manualCliff(start + 3 * periodToSeconds.month , qty * 0.15), 
   ],
   meta: {
     notes: [
