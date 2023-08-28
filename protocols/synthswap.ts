@@ -3,6 +3,8 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1690977600; // 02-08-2023
+const datavest = 1698941417
+const qtylo = 37500
 const qty = 250000;
 const qtyMark = 50000
 const synthswap: Protocol = {
@@ -19,15 +21,18 @@ const synthswap: Protocol = {
   ),
   "Development & Marketing": [
     manualCliff(start, qtyMark * 0.15), 
-    manualStep(
-      start,
-      periodToSeconds.year,
-      2,
-      (qtyMark * 0.85) / 2,
-    ),
+    manualLinear(
+        start,
+        start + 2 * periodToSeconds.year,
+        0.85 * qtyMark,
+      ),
   ],
   "Ecosystem & Partners": [
-    manualCliff(start + 3 * periodToSeconds.month , qty * 0.15), 
+    manualLinear(
+        datavest,
+        datavest + 2 * periodToSeconds.year,
+        0.15 * qty,
+      ),
   ],
   meta: {
     notes: [
