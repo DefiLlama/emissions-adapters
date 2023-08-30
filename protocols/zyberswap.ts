@@ -11,7 +11,7 @@ const zyberswap: Protocol = {
   meta: {
     token: "arbitrum:0x3b475f6f2f41853706afc9fa6a6b8c5df1a2724c",
     sources: ["https://docs.zyberswap.io/tokenomics/zyber-token"],
-    protocolIds: ["2467", "2530", "2602"],
+    protocolIds: ["2467", "2530"], //2602 add 
   },
   categories: {
     farming: ["liquidity incentives"],
