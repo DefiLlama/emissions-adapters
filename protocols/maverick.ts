@@ -30,7 +30,7 @@ const maverick: Protocol = {
       startjan,
       periodToSeconds.month,
       79,
-      (283706566) / 79,
+      (283293434) / 79,
     ), // monthly steps for the next 79 months 
   ],
   "Foundation & Treasury": [
@@ -58,7 +58,8 @@ const maverick: Protocol = {
     (6800000) / 7
   )],
   meta: {
-    notes: [],
+    notes: ["The remaining allocation for Public Goods Fund, Liquidity Mining and Airdrops, and Foundation/ Treasury will vest beyond July 2030.",
+            "After July 20 there's infinite tail emissions for the sections above"],
     sources: [
       "https://medium.com/maverick-protocol/maverick-ecosystem-incentive-program-95cf76dbfa5e",
       "https://research.binance.com/en/projects/maverick-protocol",
