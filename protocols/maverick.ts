@@ -17,7 +17,7 @@ const maverick: Protocol = {
       startjan,
       periodToSeconds.month,
       79,
-      (230000000) / 79,
+      (126029961) / 79,
     ), // monthly steps for the next 79 months
   ],
   "Investors": manualStep(
@@ -30,8 +30,8 @@ const maverick: Protocol = {
       startjan,
       periodToSeconds.month,
       79,
-      (517000000) / 79,
-    ), // monthly steps for the next 79 months
+      (283706566) / 79,
+    ), // monthly steps for the next 79 months 
   ],
   "Foundation & Treasury": [
     manualCliff(start, 20000000), // 20m tokens release at start
@@ -39,7 +39,7 @@ const maverick: Protocol = {
       startjan,
       periodToSeconds.month,
       79,
-      (180000000) / 79,
+      (98632148) / 79,
     ), // monthly steps for the next 79 months
   ],
   "Team": manualStep(
@@ -47,6 +47,7 @@ const maverick: Protocol = {
     60,
     (380000000) / 60
   ),
+
   "Advisors": [manualStep(
     start + periodToSeconds.year, periodToSeconds.month,
     35,
@@ -54,7 +55,7 @@ const maverick: Protocol = {
   ),manualStep(
     start +  4 * periodToSeconds.year, periodToSeconds.month,
     7,
-    (5950000) / 7
+    (6800000) / 7
   )],
   meta: {
     notes: [],
