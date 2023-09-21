@@ -47,7 +47,7 @@ const woo: Protocol = {
     manualStep(revamp, periodToSeconds.month, 60, (qty * 0.28) / 60),
   ],
   meta: {
-    token: "optimism:0x920cf626a271321c151d027030d5d08af699456b",
+    token: "ethereum:0x4691937a7508860F876c9c0a2a617E7d9E945D4B",
     sources: [
       "https://woo.org/token",
       "https://woo.org/blog/en/woo-tokenomics-revamp-q1-2023",
