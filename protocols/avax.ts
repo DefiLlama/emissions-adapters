@@ -1,6 +1,7 @@
 import { Protocol } from "../types/adapters";
 import { manualStep, manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
+import { time } from "../adapters/avax";
 
 const qty = 720e6;
 const start = 1639785600;
@@ -8,6 +9,7 @@ const publicSale = 1595977200;
 const mainnet = 1600815600;
 
 const avax: Protocol = {
+  // ...time(),
   "Seed Sale": manualStep(mainnet, periodToSeconds.month * 3, 4, 45e5),
   "Private Sale": manualStep(mainnet, periodToSeconds.month * 3, 4, 249e5 / 4),
   "Public Sale A1": manualStep(
