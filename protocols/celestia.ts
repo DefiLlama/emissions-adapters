@@ -52,8 +52,8 @@ const celestia: Protocol = {
       `Celestia’s 1 billion TIA supply at genesis will be subject to several different unlock schedules. All tokens, locked or unlocked, may be staked, but staking rewards are unlocked upon receipt.`,
     ],
     token: "ethereum:-",
-    sources: ["https://ens.mirror.xyz/-eaqMv7XPikvXhvjbjzzPNLS4wzcQ8vdOgi9eNXeUuY"],
-    protocolIds: ["2519"],
+    sources: ["https://docs.celestia.org/learn/staking-governance-supply/"],
+    protocolIds: ["2519"], //add correct id
   },
   categories: {
     insiders: ["Initial Core Contributors", "Early Backers Seed", "Early Backers Series A&B"],
