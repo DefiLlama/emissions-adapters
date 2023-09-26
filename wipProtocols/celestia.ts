@@ -53,7 +53,7 @@ const celestia: Protocol = {
     ],
     token: "ethereum:-",
     sources: ["https://docs.celestia.org/learn/staking-governance-supply/"],
-    protocolIds: ["2519"], //add correct id
+    protocolIds: ["3562"], //add correct id
   },
   categories: {
     insiders: ["Initial Core Contributors", "Early Backers Seed", "Early Backers Series A&B"],
