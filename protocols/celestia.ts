@@ -15,36 +15,36 @@ const celestia: Protocol = {
     manualCliff(start, qtyEcosystem * 0.25), // 25% 
     manualStep(
       start + periodToSeconds.year,
-      periodToSeconds.month,
-      36,
-      (qtyEcosystem * 0.75) / 36,
-    ), // monthly steps for the next 3 years
+      periodToSeconds.day,
+      1095,
+      (qtyEcosystem * 0.75) / 1095,
+    ), //
   ],
   "Initial Core Contributors": [
     manualCliff(start + periodToSeconds.year, qtyCORE * 0.33), // 33%
     manualStep(
       start + periodToSeconds.year,
-      periodToSeconds.month,
-      36,
-      (qtyCORE * 0.67) / 36,
-    ), // monthly steps for the next 3 years
+      periodToSeconds.day,
+      1095,
+      (qtyCORE * 0.67) / 1095,
+    ), // 
   ],
   "Early Backers Seed": [
     manualCliff(start + periodToSeconds.year, qtySEED * 0.33), // 33% 
     manualStep(
       start + periodToSeconds.year,
-      periodToSeconds.month,
-      24,
-      (qtySEED * 0.67) / 24,
-    ), // monthly steps for the next 3 years
+      periodToSeconds.day,
+      365,
+      (qtySEED * 0.67) / 365,
+    ), //
   ],
   "Early Backers Series A&B": [
     manualCliff(start + periodToSeconds.year, qtyAB * 0.33), // 25% 
     manualStep(
       start + periodToSeconds.year,
-      periodToSeconds.month,
-      24,
-      (qtyAB * 0.67) / 24,
+      periodToSeconds.day,
+      365,
+      (qtyAB * 0.67) / 365,
     ), // monthly steps for the next 3 years
   ],
   meta: {
