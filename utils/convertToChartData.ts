@@ -8,6 +8,7 @@ import {
   IncompleteSection,
   ApiChartData,
 } from "../types/adapters";
+import { PromisePool } from "@supercharge/promise-pool";
 import fetch from "node-fetch";
 import {
   RESOLUTION_SECONDS,
@@ -384,14 +385,42 @@ function discreet(raw: RawResult, config: ChartConfig): ChartData {
   return { timestamps, unlocked, apiData, isContinuous: false };
 }
 
-export function mapToServerData(testData: ChartSection[]) {
+export async function mapToServerData(
+  testData: ChartSection[],
+  token: string
+) {
+  const allTimestamps = [
+    ...new Set(
+      testData
+        .map((s: ChartSection) => {
+          return s.data.timestamps;
+        })
+        .flat()
+    ),
+  ];
+  const prices: Record<string, number> = {};
+
+  await PromisePool.withConcurrency(20)
+    .for(allTimestamps)
+    .process(async (ts: string) => {
+      const res = await fetch(
+        `https://coins.llama.fi/prices/historical/${ts}/${token}`
+      )
+        .then((r: any) => r.json())
+        .catch(() => null);
+      const price = res ? res?.coins[token]?.price : 0;
+      prices[ts] = price;
+    });
   const serverData: any[] = testData.map((s: ChartSection) => {
     const label = s.section;
 
-    const data = s.data.timestamps.map((timestamp: number, i: number) => ({
-      timestamp,
-      unlocked: s.data.unlocked[i],
-    }));
+    const data = s.data.timestamps.map(
+      (timestamp: number, i: number) => ({
+        timestamp,
+        unlocked: s.data.unlocked[i],
+        price: prices[timestamp] ?? 0,
+      })
+    );
 
     return { label, data };
   });
