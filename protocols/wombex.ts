@@ -78,7 +78,7 @@ const wombex: Protocol = {
       `WOM Wars Bootstrap LPs had the option to withdraw immediately with a 30% penalty or wait 16 weeks to redeem. Since we don't know specifics, in this analysis we have assumed everyone waited 16 weeks.`,
       `Wombat Wars Reward Incentives have been estimated since we could not find detailed information on their unlock schedule.`,
     ],
-    token: "ethereum:0xa0ef786bf476fe0810408caba05e536ac800ff86",
+    token: "bsc:0xa75d9ca2a0a1d547409d82e1b06618ec284a2ced",
     protocolIds: ["2226"],
   },
   categories: {
