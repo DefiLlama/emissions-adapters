@@ -2,7 +2,7 @@ import { manualCliff } from "../adapters/manual";
 import { CliffAdapterResult, Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 0;
+const start = 1668038400;
 const qty = 313373;
 
 const inflation = (portion: number) => {

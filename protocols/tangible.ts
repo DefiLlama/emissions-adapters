@@ -1,9 +1,9 @@
 import { Protocol } from "../types/adapters";
-import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
+import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 
 const qty = 33333333;
-const start = 0;
+const start = 1651705200;
 
 const tangible: Protocol = {
   "Instant Liquidity Engine": manualCliff(start, qty * 0.0038),
