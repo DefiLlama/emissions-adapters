@@ -163,3 +163,5 @@ export type TimeSeriesChainData = {
   };
 };
 export type Allocations = { [category: string]: number };
+
+export type EmissionBreakdown = Record<string, { emission24h: number; emission7d: number; emission30d: number }>;
