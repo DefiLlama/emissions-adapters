@@ -7,28 +7,26 @@ type Allocation = {
   unlockSchedule: Unlock[];
 };
 
-export function time(): Object {
+export function time(): CliffAdapterResult[] {
   const data: any = jsob;
-  const res: { [label: string]: CliffAdapterResult[] } = {};
+  const sections: CliffAdapterResult[] = [];
 
-  data.allocations.map((a: Allocation, i: number) => {
-    const sections: CliffAdapterResult[] = [];
-
+  data.allocations.map((a: Allocation) => {
     if (a.initialAmount)
       sections.push({
         type: "cliff",
         start: data.startTime,
-        amount: a.initialAmount,
+        amount: a.initialAmount / 10 ** 9,
       });
 
     a.unlockSchedule.map((u: Unlock) => {
-      sections.push({ type: "cliff", start: u.locktime, amount: u.amount });
+      sections.push({
+        type: "cliff",
+        start: u.locktime,
+        amount: u.amount / 10 ** 9,
+      });
     });
-
-    if (sections.length == 0) return;
-
-    res[`Unknown ${i}`] = sections;
   });
 
-  return res;
+  return sections;
 }
