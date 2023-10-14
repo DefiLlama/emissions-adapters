@@ -41,7 +41,12 @@ const aura: Protocol = {
     token: "ethereum:0xc0c293ce456ff0ed870add98a0828dd4d2903dbf", 
     protocolIds: ["1918"], 
   },
-  categories: {},
+  categories: {
+    farming: ["auraBAL incentives", "Balancer LP rewards"],
+    noncirculating: ["BAL treasury", "Treasury"],
+    insiders: ["Contributors"],
+    airdrop: ["AURA/ETH POL", "Bootstrapping token holder base", "LBP liquidity", "veBAL bootstrapping incentives", "Future incentives"]
+  },
 };
 
 export default aura;
