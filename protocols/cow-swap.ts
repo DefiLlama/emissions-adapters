@@ -3,16 +3,16 @@ import { manualLinear, manualStep, manualCliff } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 
 const totalSupply = 1e9; 
-const start = 1648425600; 
+const start = 1648166400; 
 
 const cow: Protocol = {
-    "Community Airdrop": manualCliff(start, 100e6),
-    "DAO Treasury": manualCliff(start, 444e6),
-    "Advisory": manualLinear(start, start + periodToSeconds.year * 4, 6e6),
-    "Community Investment Options": manualLinear(start, start + periodToSeconds.year * 4, 100e6),
-    "Private Investment Round": manualLinear(start, start + periodToSeconds.year * 4, 100e6),
-    "Gnosis DAO": manualLinear(start, start + periodToSeconds.year * 4, 100e6),
-    "Team": manualLinear(start, start + periodToSeconds.year * 4, 150e6),
+    "CoWmunity Airdrop": manualCliff(start, totalSupply * 0.05),
+    "CoW DAO Treasury": manualCliff(start, totalSupply * 0.571),
+    "CoW Advisory": manualLinear(start, start + periodToSeconds.year * 4, totalSupply * 0.006),
+    "CoWmunity Investment": manualLinear(start, start + periodToSeconds.year * 4, totalSupply * 0.025),
+    "Investment Round": manualLinear(start, start + periodToSeconds.year * 4, totalSupply * 0.096),
+    "GnosisDAO": manualLinear(start, start + periodToSeconds.year * 4, totalSupply * 0.10),
+    "Team": manualLinear(start, start + periodToSeconds.year * 4, totalSupply * 0.15),
     meta: {
         notes: [
             `The emission and distribution details are based on the proposed and intended token emission and distribution for CoW Protocol.`,
@@ -25,10 +25,10 @@ const cow: Protocol = {
         protocolIds: ["2643"],
     },
     categories: {
-        farming: ["Community Investment Options"],
-        noncirculating: ["DAO Treasury"],
-        insiders: ["Team", "Gnosis DAO", "Private Investment Round", "Advisory"],
-        airdrop: ["Community Airdrop"]
+        farming: [],
+        noncirculating: ["CoW DAO Treasury"],
+        insiders: ["Team", "GnosisDAO", "Investment Round", "CoW Advisory"],
+        airdrop: ["CoWmunity Airdrop", "CoWmunity Investment"]
     },
 };
 
