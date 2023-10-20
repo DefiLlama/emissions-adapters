@@ -3,7 +3,10 @@ https://docs.llama.fi/list-your-project/emissions-dashboard
 
 ## Testing
 ```
-ts-node utils/test.ts [fileName]
+npm t [fileName]
+
+# Example
+npm t protocols/gearbox.ts
 ```
 
 ## Further Questions:

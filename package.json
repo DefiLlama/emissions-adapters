@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "ts-node utils/test.ts"
+    "test": "mkdir -p utils/testCharts && ts-node utils/test.ts"
   },
   "dependencies": {
     "@defillama/sdk": "^4.0.43",
