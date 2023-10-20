@@ -19,7 +19,7 @@ const incentives = () => {
     thisStart += periodToSeconds.week;
     if (i < 26) continue;
     amount *= 1 - decay;
-    if (i > 260) amount = 589000;
+    if (i > 260) amount = 115384;
   }
   return chartSections;
 };
