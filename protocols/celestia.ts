@@ -2,7 +2,7 @@ import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 1697500800; // 17 oct?!
+const start = 1698710400; // Date and time (GMT): Tuesday, 31 October 2023 00:00:00
 const qty = 1000000000; //1b
 const qtyEcosystem = 268000000
 const qtyCORE = 176000000
@@ -53,7 +53,7 @@ const celestia: Protocol = {
     ],
     token: "ethereum:-",
     sources: ["https://docs.celestia.org/learn/staking-governance-supply/"],
-    protocolIds: ["3562"], //add correct id
+    protocolIds: ["3562"], 
   },
   categories: {
     insiders: ["Initial Core Contributors", "Early Backers Seed", "Early Backers Series A&B"],
