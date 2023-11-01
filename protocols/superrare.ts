@@ -51,7 +51,7 @@ const superrare: Protocol = {
     incompleteSections: [
       {
         key: "Team, Investors, Strategic Partners & Future Contributors",
-        allocation: 0.35,
+        allocation: 0.35 * qty,
         lastRecord: () => latest("superrare", start + periodToSeconds.day),
       },
     ],
