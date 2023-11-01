@@ -6,9 +6,9 @@ const publicSale = 1595977200;
 const mainnet = 1600815600 + periodToSeconds.month + periodToSeconds.day;
 
 const avax: Protocol = {
-  All: time(),
-  documented: {
-    replaces: ["All"],
+  // All: time(),
+  // documented: {
+    // replaces: ["All"],
     "Seed Sale": manualStep(mainnet, periodToSeconds.month * 3, 4, 45e5),
     "Private Sale": manualStep(
       mainnet,
@@ -50,7 +50,7 @@ const avax: Protocol = {
       16,
       225e4,
     ), //  mixed date
-  },
+  // },
   meta: {
     notes: [
       `Exact dates for Seed and Private sales couldn't be found, so we've given them the latest dates described.`,

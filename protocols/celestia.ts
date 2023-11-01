@@ -2,7 +2,7 @@ import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 1698710400; // Date and time (GMT): Tuesday, 31 October 2023 00:00:00
+const start = 1698760800; // Date and time (GMT): Tuesday, 31 October 2023 14:00:00
 const qty = 1000000000; //1b
 const qtyEcosystem = 268000000
 const qtyCORE = 176000000
