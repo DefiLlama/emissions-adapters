@@ -35,6 +35,7 @@ export function filterRawAmounts(
 
   const data = Object.values(chainData);
   for (let i = 0; i < data.length; i++) {
+    if (!('result' in data[i])) data[i].result = data[i - 1].result
     const thisBalance = data[i].result;
     if (depositIndex == 0 && thisBalance == 0) continue;
 
