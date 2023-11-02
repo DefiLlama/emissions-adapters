@@ -44,7 +44,7 @@ const stargate: Protocol = {
       "https://stargateprotocol.gitbook.io/stargate/v/user-docs/tokenomics/allocations-and-lockups",
     ],
     token: `ethereum:${token}`,
-    protocolIds: ["1013"],
+    protocolIds: ["1571"],
     incompleteSections: [
       {
         key: "future incentives",
