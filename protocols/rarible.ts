@@ -13,17 +13,11 @@ const rarible: Protocol = {
         1, 
         7.5e6 
     ),
-    "Airdrop: All NFT Holders": manualStep(
+    "Airdrop": manualStep(
         start, 
         periodToSeconds.day, 
         1, 
-        2e6 
-    ),
-    "Airdrop: Rarible Users": manualStep(
-        start, 
-        periodToSeconds.day, 
-        1, 
-        500e3 
+        25e5 
     ),
     "Trading Rewards":[ 
       manualCliff(tradingRewardsStart, weeklyUnlockAmount),
@@ -40,7 +34,7 @@ const rarible: Protocol = {
     },
     categories: {
         insiders: ["Team and Investors"],
-        airdrop: ["Airdrop: All NFT Holders", "Airdrop: Rarible Users"],
+        airdrop: ["Airdrop"],
         farming: ["Trading Rewards"],
     },
 };
