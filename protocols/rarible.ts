@@ -1,18 +1,14 @@
 import { Protocol } from "../types/adapters";
-import { manualStep, manualLog, manualCliff } from "../adapters/manual";
+import { manualStep, manualLog, manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1594771200; 
 const tradingRewardsStart = 1595116800;
 const weeklyUnlockAmount = 75e3; 
+const teamStart = 1609459200;
 
 const rarible: Protocol = {
-    "Team and Investors": manualStep(
-        start, 
-        periodToSeconds.day, 
-        1, 
-        7.5e6 
-    ),
+    "Team and Investors": manualLinear( teamStart, teamStart + periodToSeconds.year * 2, 7.5e6 ),
     "Airdrop": manualStep(
         start, 
         periodToSeconds.day, 
