@@ -3,7 +3,7 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const totalSupply = 300_000_000; // Total supply of PRISMA tokens
-const start = 1693353600; // Start date in Unix timestamp format
+const genesis = 1693353600; // Genesis date in Unix timestamp format
 
 // High Emission Period
 const highEmissionWeeks = 4;
@@ -20,34 +20,32 @@ let remainingEmissionSupply = totalSupply * 0.62 - highEmissionAmount; // 62% fo
 
 // Post High Emission Tranches
 const postHighEmissionTranches = [
-    { percent: 8.4, weeks: 8 },
-    { percent: 12.0, weeks: 12 },
-    { percent: 10.8, weeks: 12 },
-    { percent: 9.6, weeks: 12 },
-    { percent: 36.4, weeks: 52 }, // Year 1-2
-    { percent: 31.2, weeks: 52 }, // Year 2-3
-    { percent: 31.2, weeks: 52 }  // Year 3+
+    { weeks: 9, percentPerWeek: 1.2, startWeek: 5 },
+    { weeks: 13, percentPerWeek: 1.0, startWeek: 14 },
+    { weeks: 13, percentPerWeek: 0.9, startWeek: 27 },
+    { weeks: 13, percentPerWeek: 0.8, startWeek: 40 },
+    { weeks: 52, percentPerWeek: 0.7, startWeek: 53 },  // Year 1-2
+    { weeks: 52, percentPerWeek: 0.6, startWeek: 105 }, // Year 2-3
+    { weeks: 52, percentPerWeek: 0.5, startWeek: 157 }, // Year 3+
 ];
 
-let currentStart = start + highEmissionWeeks * periodToSeconds.week;
 const postHighEmission = postHighEmissionTranches.map(tranche => {
-    const trancheAmount = remainingEmissionSupply * (tranche.percent / 100);
-    const trancheStart = currentStart;
-    const trancheEnd = trancheStart + tranche.weeks * periodToSeconds.week;
-    
+    const start = genesis + (tranche.startWeek - 1) * periodToSeconds.week;
+    const end = start + tranche.weeks * periodToSeconds.week;
+    const trancheAmount = remainingEmissionSupply * (tranche.percentPerWeek / 100) * tranche.weeks;
     remainingEmissionSupply -= trancheAmount;
-    currentStart = trancheEnd;
 
-    return manualLinear(trancheStart, trancheEnd, trancheAmount);
+    return manualLinear(start, end, trancheAmount);
 });
 
 const prisma: Protocol = {
-    "DAO Treasury": manualCliff(start, daoTreasuryAmount),
-    "veCRV and Prisma Points": manualCliff(start, veCRVAndPrismaPointsAmount),
-    "High Emission Period": manualLinear(start, start + highEmissionWeeks * periodToSeconds.week, highEmissionAmount),
-    "Core Contributors": manualLinear(start, start + periodToSeconds.month * 12, coreContributorsAmount),
-    "Early Supporters": manualLinear(start, start + periodToSeconds.month * 12, earlySupportersAmount),
+    "DAO Treasury": manualCliff(genesis, daoTreasuryAmount),
+    "veCRV and Prisma Points": manualCliff(genesis, veCRVAndPrismaPointsAmount),
+    "High Emission Period": manualLinear(genesis, genesis + highEmissionWeeks * periodToSeconds.week, highEmissionAmount),
+    "Core Contributors": manualLinear(genesis, genesis + periodToSeconds.month * 12, coreContributorsAmount),
+    "Early Supporters": manualLinear(genesis, genesis + periodToSeconds.month * 12, earlySupportersAmount),
     "Post High Emission": postHighEmission,
+
 
   meta: {
 
