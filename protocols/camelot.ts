@@ -4,7 +4,7 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1670198400;
-const qty = 1e9;
+const qty = 1e6;
 const GRAIL = "0x3d9907F9a368ad0a51Be60f7Da3b97cf940982D8";
 const chain = "arbitrum";
 
