@@ -184,6 +184,8 @@ function appendForecast(
       (d: ChartSection) => d.section == incompleteSection.key,
     );
 
+    if (!relatedSections) return;
+
     const reference: number =
       unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
 
@@ -383,7 +385,6 @@ function discreet(raw: RawResult, config: ChartConfig): ChartData {
   }
   return { timestamps, unlocked, apiData, isContinuous: false };
 }
-
 
 export function mapToServerData(testData: ChartSection[]) {
   const serverData: any[] = testData.map((s: ChartSection) => {
