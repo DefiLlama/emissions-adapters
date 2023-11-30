@@ -184,7 +184,7 @@ function appendForecast(
       (d: ChartSection) => d.section == incompleteSection.key,
     );
 
-    if (!relatedSections) return;
+    if (!relatedSections.length) return;
 
     const reference: number =
       unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
@@ -232,6 +232,11 @@ function appendForecast(
   incompleteSection.lastRecord = err
     ? null
     : timestamp + INCOMPLETE_SECTION_STEP;
+
+  if (err)
+    throw new Error(
+      `error in ${incompleteSection.key}, probably RPC related!!!`,
+    );
 }
 function findPreviouslyEmitted(
   relatedSections: ChartSection[],
