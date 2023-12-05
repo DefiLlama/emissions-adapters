@@ -42,4 +42,23 @@ export const protocolsWithNoEmissions:string[] = [
     "3493", // FriendRoom
     "3324", // Predy V5
     "3246", // Sobal #200
+    "177", // DefiSaver
+    "1673", // Hydradex V2
+    "2910", // Hydradex V3
+    "3654", // VaporDex V2
+    "2341", // VaporDex V1
+    "3836", // Chimp Exchange
+    "2252", // Llamalend
+    "3713", // Touch.fan
+    "3055", // Unlimited Network
+    "3605", // BLEX
+    "3454", // Danogo
+    "2299", // EMDX
+    "1614", // 0vix
+    "3643", // Amphor
+    "1707", // CLever
+    "3520", // MonarchPay
+    "3146", // Scatter
+    "3123", // Stealcam
+    "3501", // Valorem
 ]
