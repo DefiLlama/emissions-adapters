@@ -3,7 +3,7 @@ import { manualCliff, manualStep } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 
 const totalQty = 1000000000;
-const start = 1665529200;
+const start = 1662940800;
 const aptos: Protocol = {
   community: [
     manualCliff(start, totalQty * 0.125),
