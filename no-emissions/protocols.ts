@@ -11,7 +11,6 @@ export const protocolsWithNoEmissions:string[] = [
     "2414", // Blur Bids
     "3872", // Bear Vs Bull
     "3687", // Shuriken
-    "2959", // HoldStation DeFutures
     "3265", // Agni Finance
     "3499", // Ekubo
     "3753", // XOXNO
