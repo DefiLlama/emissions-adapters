@@ -58,6 +58,10 @@ const raydium: Protocol = {
         advisorsAllocation
     ),
     meta: {
+        notes: [
+            `The emission and distribution details are based on the proposed and intended token emission and distribution for RAY tokens.`,
+            `Emissions have been slower than originally planned and mining reserve will likely continue to be emitted longer than the intiial 36 months, it's vesting at a rate of 134,649.95 RAY per day; at current rates, there's roughly 40 years left of liquidity mining`,
+          ],
         token: "solana:4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
         sources: [
             "https://docs.raydium.io/raydium/ray_token/the-ray-token"
