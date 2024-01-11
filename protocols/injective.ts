@@ -58,7 +58,7 @@ const aptos: Protocol = {
   meta: {
     sources: ["https://cryptorank.io/price/injective-protocol/vesting"],
     token: "coingecko:injective-protocol",
-    protocolIds: ["349"],
+    protocolIds: ["4011"],
   },
   categories: {
     insiders: ["Team", "Private Sale", "Seed Sale", "Advisors"],
