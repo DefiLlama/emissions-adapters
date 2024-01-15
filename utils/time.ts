@@ -29,6 +29,10 @@ export const periodToSeconds = {
   day: 86400,
   hour: 3600,
   minute: 60,
+  months: (months: number) => periodToSeconds.month * months,
+  weeks: (weeks: number) => periodToSeconds.week * weeks,
+  years: (years: number) => periodToSeconds.year * years,
+  days: (days: number) => periodToSeconds.day * days,
 };
 export function stringToTimestamp(
   inputDate: string,
