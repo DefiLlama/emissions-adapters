@@ -29,12 +29,13 @@ const exactly: Protocol = {
       "https://x.com/ExactlyProtocol/status/1681380822304149504",
       "https://medium.com/@exactly_protocol/the-exa-token-is-here-88a2449c4eb3",
     ],
-    protocolIds: ["exactly"],
+    protocolIds: ["2385"],
   },
   categories: {
     airdrop: ["Airdrop"],
     insiders: ["Team and Advisors", "Investors"],
     noncirculating: ["DAO Treasury"],
+    farming: ["Community"]
   },
 };
 
