@@ -12,7 +12,7 @@ const ipor: Protocol = {
     "Core Team": manualLinear(TGE + periodToSeconds.day, TGE + periodToSeconds.day + periodToSeconds.year * 3, 20e6),
     "Investors": manualLinear(TGE + periodToSeconds.day, TGE + periodToSeconds.day + periodToSeconds.year * 3, 11.85e6),
     "airdrop": [
-        manualStep(TGE + periodToSeconds.month + 17 * periodToSeconds.day, periodToSeconds.day, 0, 85200),
+        manualStep(TGE + periodToSeconds.month + 16 * periodToSeconds.day, periodToSeconds.day, 1, 85200),
         manualLinear(TGE + periodToSeconds.month + 17 * periodToSeconds.day, TGE + periodToSeconds.month + 17 * periodToSeconds.day + periodToSeconds.month * 6, 305000),
     ],
     meta: {
