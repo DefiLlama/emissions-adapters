@@ -3,7 +3,7 @@ import { manualCliff, manualStep } from '../adapters/manual';
 import { periodToSeconds } from '../utils/time';
 
 const totalQty = 10e9;
-const start = 1680307200;
+const start = 1683072000;
 const sui: Protocol = {
   'Community Reserve': [
     manualCliff(start, totalQty / 20),
