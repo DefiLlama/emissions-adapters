@@ -3,7 +3,7 @@ import { manualLinear, manualCliff } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 
 const totalSupply = 30_000_000; 
-const TGE = 1700092800; 
+const TGE = 1701043201; 
 
 // Allocations
 const investorAllocation = totalSupply * 0.10; // 10%
