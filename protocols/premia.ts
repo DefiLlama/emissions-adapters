@@ -52,8 +52,6 @@ const premia: Protocol = {
   Team: manualLinear(1725145200, renewedEnd, 3421996),
   meta: {
     notes: [
-      `Team locked tokens for 4 more years`,
-      "Jan 2023 is when premia team reposted vesting schedule, but tokens were vesting since feb 2021",
       "In Jan 2024 tokenomics were revised with respect to the spreadsheet listed in sources",
       // "1.3m PREMIA of the Operator Developer Fund, 16m Liquidity Mining Rewards, 1.5m Conditional, and 3.7m Team, has not been allocated yet and therefore has been excluded from this analysis (22.5% total supply)",
       "There is no documented release schedule for 22.5% of PREMIA Supply, as it is unallocated, as per the spreadsheet source",
