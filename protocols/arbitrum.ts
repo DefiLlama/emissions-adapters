@@ -8,13 +8,13 @@ const start = 1679533271;
 const qty = 10000000000;
 const qty_advisors = 2694000000;
 const qty_investors = 1753000000;
-const end_team_investors_1year = 1711155671;
+const end_team_investors_1year = 1710550800;
 const token = "0x912ce59144191c1204e64559fe8253a0e49e6548";
 const chain = "arbitrum";
 const arbitrum: Protocol = {
   Airdrop: manualCliff(start, qty * 0.1162),
   "Advisors Team OffchainLabs": [
-    manualCliff(start + periodToSeconds.year, qty_advisors * 0.25), // 25% cliff after 1 year
+    manualCliff(end_team_investors_1year, qty_advisors * 0.25), // 25% cliff after 1 year
     manualStep(
       end_team_investors_1year,
       periodToSeconds.month,
@@ -23,7 +23,7 @@ const arbitrum: Protocol = {
     ), // monthly steps for the next 3 years
   ],
   Investors: [
-    manualCliff(start + periodToSeconds.year, qty_investors * 0.25), // 25% cliff after 1 year
+    manualCliff(end_team_investors_1year, qty_investors * 0.25), // 25% cliff after 1 year
     manualStep(
       end_team_investors_1year,
       periodToSeconds.month,
