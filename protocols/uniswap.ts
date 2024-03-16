@@ -23,7 +23,7 @@ function uniswap(): Protocol {
       start + periodToSeconds.month * 2,
       20000000,
     ),
-    team: manualLinear(start, start + periodToSeconds.year * 4, 180440000),
+    team: manualLinear(start, start + periodToSeconds.year * 4, 212660000),
     investors: manualLinear(start, start + periodToSeconds.year * 4, 180440000),
     advisors: manualLinear(start, start + periodToSeconds.year * 4, 6900000),
     meta: {
