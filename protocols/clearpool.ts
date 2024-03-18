@@ -52,6 +52,7 @@ const clearpool: Protocol = {
     token: `${chain}:${token}`,
     sources: ["https://docs.clearpool.finance/clearpool/dao/cpool/tokenomics"],
     protocolIds: ["1635"],
+    total: qty,
     incompleteSections: [
       incompleteSection("Ecosystem", 0.1015),
       incompleteSection("Partnerships", 0.1),
@@ -71,7 +72,6 @@ const clearpool: Protocol = {
       "Team",
     ],
   },
-  total: qty
 };
 
 export default clearpool;

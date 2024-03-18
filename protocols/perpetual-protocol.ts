@@ -47,6 +47,7 @@ const perpetual: Protocol = {
     ],
     token: `ethereum:${token}`,
     protocolIds: ["362"],
+    total: qty,
     incompleteSections: [
       {
         key: "Ecosystem and rewards",
@@ -59,6 +60,5 @@ const perpetual: Protocol = {
     farming: ["Balancer LBP", "Ecosystem and rewards"],
     insiders: ["Seed investors", "Strategic investors", "Team and advisors"],
   },
-  total: qty
 };
 export default perpetual;

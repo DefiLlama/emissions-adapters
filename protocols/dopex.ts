@@ -43,6 +43,7 @@ const dopex: Protocol = {
     sources: ["https://docs.dopex.io/tokenomics/tokenomics"],
     token: `${chain}:${token}`,
     protocolIds: ["660"],
+    total: qty,
     incompleteSections: [
       {
         key: "Treasury",
@@ -57,7 +58,6 @@ const dopex: Protocol = {
     publicSale: ["Token sale"],
     noncirculating: ["Treasury"],
   },
-  total: qty
 };
 
 export default dopex;

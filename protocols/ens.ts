@@ -51,6 +51,7 @@ const ens: Protocol = {
       "https://ens.mirror.xyz/-eaqMv7XPikvXhvjbjzzPNLS4wzcQ8vdOgi9eNXeUuY",
     ],
     protocolIds: ["2519"],
+    total: qty,
     incompleteSections: [
       {
         key: "Core Contributors",
@@ -73,6 +74,5 @@ const ens: Protocol = {
     publicSale: [],
     airdrop: ["Airdrop"],
   },
-  total: qty
 };
 export default ens;

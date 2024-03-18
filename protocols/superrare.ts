@@ -48,6 +48,7 @@ const superrare: Protocol = {
       `https://discord.com/channels/666318003972997136/868174870389878865/950417363801624626`,
     ],
     protocolIds: ["3144"],
+    total: qty,
     incompleteSections: [
       {
         key: "Team, Investors, Strategic Partners & Future Contributors",
@@ -65,7 +66,6 @@ const superrare: Protocol = {
     noncirculating: ["Community treasury"],
     airdrop: ["Retroactive airdrop"],
   },
-  total: qty
 };
 
 export default superrare;

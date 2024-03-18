@@ -45,6 +45,7 @@ const stargate: Protocol = {
     ],
     token: `ethereum:${token}`,
     protocolIds: ["1571"],
+    total: qty,
     incompleteSections: [
       {
         key: "future incentives",
@@ -62,7 +63,6 @@ const stargate: Protocol = {
     ],
     publicSale: ["STG launch auction purchasers", "STG DEX liquidity"],
   },
-  total: qty
 };
 
 export default stargate;

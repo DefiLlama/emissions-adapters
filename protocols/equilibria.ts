@@ -42,6 +42,7 @@ const equilibria: Protocol = {
     sources: ["https://docs.equilibria.fi/token/eqb/tokenomics"],
     token: "arbitrum:0xbfbcfe8873fe28dfa25f1099282b088d52bbad9c",
     protocolIds: ["3091"],
+    total: qty,
     notes: [
       `Pendle LP Incentives and Team & Advisors allocations depend on PENDLE earnt. This is unpredictable, therefore these sections have been excluded from the analysis.`,
       // `Team & Advisors allocation is linked to performance, and deducted from LP incentives. Here we have shown Team & Advisors, and LP incentives, as one section.`,
@@ -61,6 +62,5 @@ const equilibria: Protocol = {
     noncirculating: ["Equilibria Treasury"],
     farming: ["Liquidity Mining", "Boostrapping Incentives"],
   },
-  total: qty,
 };
 export default equilibria;

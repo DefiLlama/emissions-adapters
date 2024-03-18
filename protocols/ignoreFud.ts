@@ -24,6 +24,7 @@ const ignoreFud: Protocol = {
     token: `${chain}:${token}`,
     sources: ["https://ignore-fud.gitbook.io/ignore-fud/token-economics"],
     protocolIds: ["3332"],
+    total: qty,
     incompleteSections: [
       {
         key: "Reserved",
@@ -37,7 +38,6 @@ const ignoreFud: Protocol = {
     publicSale: ["Public Launch"],
     airdrop: ["Airdrop & Marketing"],
   },
-  total: qty
 };
 
 export default ignoreFud;

@@ -47,6 +47,7 @@ const arbitrum: Protocol = {
       "https://docs.arbitrum.foundation/airdrop-eligibility-distribution#initial-token-allocation--airdrop-distribution",
     ],
     protocolIds: ["2785"],
+    total: qty,
     incompleteSections: [
       {
         key: "Arbitrum DAO Treasury",
@@ -65,7 +66,6 @@ const arbitrum: Protocol = {
     noncirculating: ["Arbitrum DAO Treasury", "Ecosystem Development Fund"],
     airdrop: ["Airdrop"],
   },
-  total: qty
 };
 
 export default arbitrum;

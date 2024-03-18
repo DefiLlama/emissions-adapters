@@ -28,6 +28,7 @@ const forta: Protocol = {
     sources: ["https://docs.forta.network/en/latest/fort-token/"],
     token: "ethereum:0x41545f8b9472d758bb669ed8eaeeecd7a9c4ec29",
     protocolIds: ["2664"],
+    total: totalQty,
     incompleteSections: [
       {
         key: "unallocated",
@@ -42,6 +43,5 @@ const forta: Protocol = {
     farming: ["node runner rewards"],
     noncirculating: ["unallocated"],
   },
-  total: totalQty
 };
 export default forta;

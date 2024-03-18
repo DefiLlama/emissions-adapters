@@ -28,6 +28,7 @@ const conic: Protocol = {
       "https://docs.conic.finance/conic-finance/usdcnc-token/usdcnc-tokenomics",
     ],
     protocolIds: ["2616"],
+    total: qty,
     incompleteSections: [
       {
         key: "Rebalancing Curve Pools",
@@ -47,7 +48,6 @@ const conic: Protocol = {
     ],
     noncirculating: ["Treasury"],
   },
-  total: qty
 };
 
 export default conic;

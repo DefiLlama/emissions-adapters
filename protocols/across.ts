@@ -43,6 +43,7 @@ const across: Protocol = {
       `https://medium.com/across-protocol/happy-birthday-across-to-we-got-you-something-11dbef976d6a`,
     ],
     protocolIds: ["1207"],
+    total: qty,
     incompleteSections: [
       {
         lastRecord: () => latest("across", 1669642200),
@@ -67,7 +68,6 @@ const across: Protocol = {
     noncirculating: ["DAO Treasury"],
     farming: ["Protocol Rewards"],
   },
-  total: qty
 };
 
 export default across;

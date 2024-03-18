@@ -89,6 +89,7 @@ const tranchess: Protocol = {
     ],
     token: "bsc:0x20de22029ab63cf9a7cf5feb2b737ca1ee4c82a6",
     protocolIds: ["425", "3048"],
+    total: qty,
     incompleteSections: [
       {
         key: "Ecosystem / Treasury",
@@ -102,7 +103,6 @@ const tranchess: Protocol = {
     farming: ["Community Incentives"],
     noncirculating: ["Ecosystem / Treasury"],
   },
-  total: qty
 };
 
 export default tranchess;

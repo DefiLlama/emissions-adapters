@@ -49,6 +49,7 @@ const chainlink: Protocol = {
     token: `${chain}:${address}`,
     sources: ["https://twitter.com/ChainLinkGod/status/1351578377140879361"],
     protocolIds: ["2623"],
+    total: qty,
     incompleteSections: [
       {
         key: "Company",
@@ -62,7 +63,6 @@ const chainlink: Protocol = {
     publicSale: ["Public Token Sale"],
     noncirculating: ["Company"],
   },
-  total: qty
 };
 
 export default chainlink;

@@ -28,6 +28,7 @@ const lido: Protocol = {
     sources: [`https://blog.lido.fi/introducing-ldo/`],
     token: `${chain}:${token}`,
     protocolIds: ["182"],
+    total: qty,
     incompleteSections: [
       {
         key: "DAO Treasury",
@@ -45,6 +46,5 @@ const lido: Protocol = {
     ],
     noncirculating: ["DAO Treasury"],
   },
-  total: qty
 };
 export default lido;

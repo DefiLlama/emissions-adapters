@@ -42,6 +42,7 @@ const dodo: Protocol = {
     sources: ["https://docs.dodoex.io/english/tokenomics/dodo-allocation"],
     token: `${chain}:${token}`,
     protocolIds: ["146"],
+    total: qty,
     incompleteSections: [
       {
         key: "Community incentives",
@@ -60,7 +61,6 @@ const dodo: Protocol = {
     publicSale: ["IDO"],
     noncirculating: ["Community incentives"],
   },
-  total: qty
 };
 
 export default dodo;

@@ -63,6 +63,7 @@ const camelot: Protocol = {
     token: `${chain}:${GRAIL}`,
     sources: [`https://docs.camelot.exchange/tokenomics/token-distribution`],
     protocolIds: ["2307", "2792"],
+    total: qty,
     incompleteSections: [
       {
         key: "Ecosystem",
@@ -87,7 +88,6 @@ const camelot: Protocol = {
     publicSale: ["Genesis Pool", "Public Sale"],
     farming: ["Liquidity Mining"],
   },
-  total: qty
 };
 
 export default camelot;

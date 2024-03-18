@@ -56,6 +56,7 @@ const idle: Protocol = {
     sources: ["https://docs.idle.finance/governance/idle/distribution"],
     token: `${chain}:${token}`,
     protocolIds: ["150"],
+    total: qty,
     incompleteSections: [
       {
         key: "Long-term rewards",
@@ -75,6 +76,5 @@ const idle: Protocol = {
     publicSale: ["Liquidity bootstrap"],
     noncirculating: ["Ecosystem fund"],
   },
-  total: qty
 };
 export default idle;

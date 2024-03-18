@@ -42,6 +42,7 @@ const api3: Protocol = {
       `Inflationary staking rewards has no set allocation. In this analysis we can only look at past unlocks.`,
     ],
     protocolIds: ["1339"],
+    total: qty,
     incompleteSections: [
       {
         key: "Staking rewards",
@@ -61,7 +62,6 @@ const api3: Protocol = {
     publicSale: ["Public distribution"],
     farming: ["Staking rewards"],
   },
-  total: qty
 };
 
 export default api3;

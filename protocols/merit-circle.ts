@@ -41,6 +41,7 @@ const merit: Protocol = {
       `https://meritcircle.gitbook.io/merit-circle/merit-circle-usdmc/merit-circle-usdmc/token-distribution`,
     ],
     protocolIds: ["1048"],
+    total: qty,
     incompleteSections: [
       {
         key: "Community Incentives",
@@ -75,7 +76,6 @@ const merit: Protocol = {
     publicSale: ["Public Distribution"],
     noncirculating: ["DAO Treasury"],
   },
-  total: qty
 };
 
 export default merit;

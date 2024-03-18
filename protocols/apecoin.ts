@@ -147,6 +147,7 @@ const apecoin: Protocol = {
     sources: ["https://apecoin.com/about"],
     token: `${chain}:${token}`,
     protocolIds: ["2665"],
+    total: totalQty,
     incompleteSections: [
       {
         key: "ecosystem fund",
@@ -164,6 +165,5 @@ const apecoin: Protocol = {
       "founders",
     ],
   },
-  total: totalQty
 };
 export default apecoin;

@@ -40,6 +40,7 @@ const jonesDao: Protocol = {
       `OlympusDAO's allocation is to be held in perpetuity (effectively burnt) so it has been excluded from our analysis.`,
     ],
     protocolIds: ["1433"],
+    total: qty,
     incompleteSections: [
       {
         key: "Operations & Incentives",
@@ -53,6 +54,5 @@ const jonesDao: Protocol = {
     airdrop: ["Airdrop"],
     publicSale: ["Public sale"],
   },
-  total: qty
 };
 export default jonesDao;

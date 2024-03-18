@@ -39,12 +39,12 @@ const y2k: Protocol = {
     ],
     token: `${chain}:${token}`,
     protocolIds: ["2375", "3056"],
+    total: qty
   },
   categories: {
     insiders: ["Core Team", "New Order Treasury", "Investors"],
     publicSale: ["IFO"],
     noncirculating: ["Treasury"],
   },
-  total: qty
 };
 export default y2k;
