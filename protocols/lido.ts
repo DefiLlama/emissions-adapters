@@ -45,5 +45,6 @@ const lido: Protocol = {
     ],
     noncirculating: ["DAO Treasury"],
   },
+  total: qty
 };
 export default lido;

@@ -102,6 +102,7 @@ const tranchess: Protocol = {
     farming: ["Community Incentives"],
     noncirculating: ["Ecosystem / Treasury"],
   },
+  total: qty
 };
 
 export default tranchess;

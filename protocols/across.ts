@@ -67,6 +67,7 @@ const across: Protocol = {
     noncirculating: ["DAO Treasury"],
     farming: ["Protocol Rewards"],
   },
+  total: qty
 };
 
 export default across;

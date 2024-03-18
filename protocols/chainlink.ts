@@ -62,6 +62,7 @@ const chainlink: Protocol = {
     publicSale: ["Public Token Sale"],
     noncirculating: ["Company"],
   },
+  total: qty
 };
 
 export default chainlink;

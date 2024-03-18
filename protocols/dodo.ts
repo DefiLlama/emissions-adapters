@@ -60,6 +60,7 @@ const dodo: Protocol = {
     publicSale: ["IDO"],
     noncirculating: ["Community incentives"],
   },
+  total: qty
 };
 
 export default dodo;

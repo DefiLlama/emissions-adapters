@@ -45,5 +45,6 @@ const y2k: Protocol = {
     publicSale: ["IFO"],
     noncirculating: ["Treasury"],
   },
+  total: qty
 };
 export default y2k;

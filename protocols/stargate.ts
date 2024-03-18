@@ -62,6 +62,7 @@ const stargate: Protocol = {
     ],
     publicSale: ["STG launch auction purchasers", "STG DEX liquidity"],
   },
+  total: qty
 };
 
 export default stargate;

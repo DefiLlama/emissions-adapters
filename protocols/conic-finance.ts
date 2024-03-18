@@ -47,6 +47,7 @@ const conic: Protocol = {
     ],
     noncirculating: ["Treasury"],
   },
+  total: qty
 };
 
 export default conic;

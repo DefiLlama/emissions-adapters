@@ -42,5 +42,6 @@ const forta: Protocol = {
     farming: ["node runner rewards"],
     noncirculating: ["unallocated"],
   },
+  total: totalQty
 };
 export default forta;

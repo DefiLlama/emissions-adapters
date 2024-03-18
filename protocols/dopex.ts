@@ -57,6 +57,7 @@ const dopex: Protocol = {
     publicSale: ["Token sale"],
     noncirculating: ["Treasury"],
   },
+  total: qty
 };
 
 export default dopex;

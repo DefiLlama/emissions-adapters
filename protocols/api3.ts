@@ -61,6 +61,7 @@ const api3: Protocol = {
     publicSale: ["Public distribution"],
     farming: ["Staking rewards"],
   },
+  total: qty
 };
 
 export default api3;

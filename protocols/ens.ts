@@ -73,5 +73,6 @@ const ens: Protocol = {
     publicSale: [],
     airdrop: ["Airdrop"],
   },
+  total: qty
 };
 export default ens;

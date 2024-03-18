@@ -65,6 +65,7 @@ const arbitrum: Protocol = {
     noncirculating: ["Arbitrum DAO Treasury", "Ecosystem Development Fund"],
     airdrop: ["Airdrop"],
   },
+  total: qty
 };
 
 export default arbitrum;

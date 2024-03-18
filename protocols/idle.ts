@@ -75,5 +75,6 @@ const idle: Protocol = {
     publicSale: ["Liquidity bootstrap"],
     noncirculating: ["Ecosystem fund"],
   },
+  total: qty
 };
 export default idle;

@@ -87,6 +87,7 @@ const camelot: Protocol = {
     publicSale: ["Genesis Pool", "Public Sale"],
     farming: ["Liquidity Mining"],
   },
+  total: qty
 };
 
 export default camelot;

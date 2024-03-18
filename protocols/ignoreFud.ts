@@ -37,6 +37,7 @@ const ignoreFud: Protocol = {
     publicSale: ["Public Launch"],
     airdrop: ["Airdrop & Marketing"],
   },
+  total: qty
 };
 
 export default ignoreFud;

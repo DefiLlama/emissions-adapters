@@ -65,6 +65,7 @@ const superrare: Protocol = {
     noncirculating: ["Community treasury"],
     airdrop: ["Retroactive airdrop"],
   },
+  total: qty
 };
 
 export default superrare;

@@ -75,6 +75,7 @@ const merit: Protocol = {
     publicSale: ["Public Distribution"],
     noncirculating: ["DAO Treasury"],
   },
+  total: qty
 };
 
 export default merit;

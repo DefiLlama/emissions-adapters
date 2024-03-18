@@ -71,6 +71,7 @@ const clearpool: Protocol = {
       "Team",
     ],
   },
+  total: qty
 };
 
 export default clearpool;

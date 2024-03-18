@@ -164,5 +164,6 @@ const apecoin: Protocol = {
       "founders",
     ],
   },
+  total: totalQty
 };
 export default apecoin;

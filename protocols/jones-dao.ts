@@ -53,5 +53,6 @@ const jonesDao: Protocol = {
     airdrop: ["Airdrop"],
     publicSale: ["Public sale"],
   },
+  total: qty
 };
 export default jonesDao;

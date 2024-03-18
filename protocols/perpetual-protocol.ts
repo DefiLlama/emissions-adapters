@@ -59,5 +59,6 @@ const perpetual: Protocol = {
     farming: ["Balancer LBP", "Ecosystem and rewards"],
     insiders: ["Seed investors", "Strategic investors", "Team and advisors"],
   },
+  total: qty
 };
 export default perpetual;
