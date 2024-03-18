@@ -145,6 +145,7 @@ export type Metadata = {
   notes?: string[];
   protocolIds: string[];
   incompleteSections?: IncompleteSection[];
+  total?: number
 };
 export type FuturesData = {
   openInterest: number;
