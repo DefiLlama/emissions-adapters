@@ -15,12 +15,10 @@ const ondo: Protocol = {
         manualStep(publicLaunchDate, periodToSeconds.month * 12, 5, totalSupply * 0.5210869545 * 0.76 / 5)
     ],
     "Protocol Development": [
-        
-        manualStep(publicLaunchDate + periodToSeconds.month * 12, periodToSeconds.month * 12, 4, totalSupply * 0.33 * 0.25)
+        manualStep(publicLaunchDate, periodToSeconds.month * 12, 4, totalSupply * 0.33 * 0.25)
     ],
     "Private Sales": [
-        
-        manualStep(publicLaunchDate + periodToSeconds.month * 12, periodToSeconds.month * 12, 4, totalSupply * 0.1290246044 * 0.25)
+        manualStep(publicLaunchDate, periodToSeconds.month * 12, 4, totalSupply * 0.1290246044 * 0.25)
     ],
 
 
