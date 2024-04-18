@@ -34,7 +34,7 @@ const ethereum: Protocol = {
       "https://www.galaxy.com/insights/research/breakdown-of-ethereum-supply-distribution-since-genesis/",
       "https://fastercapital.com/topics/common-token-vesting-strategies-for-airdrop-cryptocurrency.html",
     ],
-    protocolIds: [""],
+    protocolIds: ["4488"],
     incompleteSections: [
       {
         key: "Ethereum Foundation",
