@@ -1,9 +1,10 @@
-import { multiCall } from "@defillama/sdk/build/abi/abi2";
+import { multiCall, call } from "@defillama/sdk/build/abi/abi2";
 import fetch from "node-fetch";
-import { call } from "@defillama/sdk/build/abi/abi2";
 import { CliffAdapterResult } from "../../types/adapters";
 import { PromisePool } from "@supercharge/promise-pool";
 import { filterRawAmounts, findBlockHeightArray } from "../../utils/chainCalls";
+import { GAS_TOKEN } from "../../utils/constants";
+import { getBalance } from "@defillama/sdk/build/eth";
 
 let res: number;
 
@@ -37,33 +38,36 @@ export async function balance(
 
   [trackedTimestamp, decimals] = await Promise.all([
     latest(adapter, timestampDeployed),
-    call({
-      target,
-      abi: "erc20:decimals",
-      chain,
-    }),
+    target == GAS_TOKEN
+      ? 18
+      : call({
+          target,
+          abi: "erc20:decimals",
+          chain,
+        }),
   ]);
 
   const chainData = await findBlockHeightArray(trackedTimestamp, chain);
 
   await PromisePool.withConcurrency(10)
     .for(Object.keys(chainData))
-    .process(
-      async (block) =>
-        await multiCall({
-          calls: owners.map((o: string) => ({ target, params: [o] })),
-          abi: "erc20:balanceOf",
-          chain,
-          block,
-          requery: true,
-        }).then((r: (number | null)[]) => {
-          if (r.includes(null))
-            throw new Error(`balance call failed for ${adapter}`);
-          chainData[block].result = r.reduce(
-            (p: number, c: any) => Number(p) + Number(c),
-            0,
-          );
-        }),
+    .process(async (block) =>
+      target == GAS_TOKEN
+        ? await getBalance({ target, block: Number(block), chain, decimals })
+        : await multiCall({
+            calls: owners.map((o: string) => ({ target, params: [o] })),
+            abi: "erc20:balanceOf",
+            chain,
+            block,
+            requery: true,
+          }).then((r: (number | null)[]) => {
+            if (r.includes(null))
+              throw new Error(`balance call failed for ${adapter}`);
+            chainData[block].result = r.reduce(
+              (p: number, c: any) => Number(p) + Number(c),
+              0,
+            );
+          }),
     );
 
   return filterRawAmounts(chainData, decimals);
