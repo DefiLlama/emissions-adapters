@@ -53,7 +53,14 @@ export async function balance(
     .for(Object.keys(chainData))
     .process(async (block) =>
       target == GAS_TOKEN
-        ? await getBalance({ target, block: Number(block), chain, decimals })
+        ? await getBalance({
+            target: owners[0],
+            block: Number(block),
+            chain,
+            decimals,
+          }).catch((r) => {
+            r;
+          })
         : await multiCall({
             calls: owners.map((o: string) => ({ target, params: [o] })),
             abi: "erc20:balanceOf",
