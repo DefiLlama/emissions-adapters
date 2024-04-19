@@ -43,7 +43,7 @@ const apecoin: Protocol = {
     ],
     sources: ["https://docs.dymension.xyz/learn/dymension/dym/distribution"],
     token: `${chain}:${token}`,
-    protocolIds: [""],
+    protocolIds: ["4490"],
     total,
   },
   categories: {
