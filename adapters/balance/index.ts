@@ -58,8 +58,13 @@ export async function balance(
             block: Number(block),
             chain,
             decimals,
-          }).catch((r) => {
-            r;
+          }).then((r: any) => {
+            if (r.includes(null))
+              throw new Error(`balance call failed for ${adapter}`);
+            chainData[block].result = r.reduce(
+              (p: number, c: any) => Number(p) + Number(c),
+              0,
+            );
           })
         : await multiCall({
             calls: owners.map((o: string) => ({ target, params: [o] })),

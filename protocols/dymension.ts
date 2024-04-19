@@ -8,7 +8,7 @@ const token =
   "ibc/9A76CDF0CBCEF37923F32518FA15E5DC92B9F56128292BC4D63C4AEA76CBB110";
 const chain = "cosmos";
 
-const apecoin: Protocol = {
+const dymension: Protocol = {
   "Genesis Rolldrop": manualCliff(start, total * 0.08),
   "Ecosystem & R&D": [
     manualCliff(start, (total * 0.2) / 3),
@@ -53,4 +53,4 @@ const apecoin: Protocol = {
     insiders: ["Backers", "Core Contributors"],
   },
 };
-export default apecoin;
+export default dymension;
