@@ -351,7 +351,7 @@ function continuous(raw: RawResult, config: ChartConfig): ChartData {
 
   for (let i = 0; i < steps + 1; i++) {
     if (
-      raw.timestamp < workingTimestamp &&
+      raw.timestamp <= workingTimestamp &&
       raw.continuousEnd > workingTimestamp
     ) {
       workingQuantity += dy;
