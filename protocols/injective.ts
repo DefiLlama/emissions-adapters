@@ -11,7 +11,7 @@ const aptos: Protocol = {
       start + periodToSeconds.month,
       periodToSeconds.month,
       10,
-      totalQty * 0.01
+      totalQty * 0.01,
     ),
   ],
   Ecosystem: [
@@ -20,7 +20,7 @@ const aptos: Protocol = {
       start + periodToSeconds.month * 7,
       periodToSeconds.month * 3,
       9,
-      (totalQty * 0.36 * 0.83) / 9
+      (totalQty * 0.36 * 0.83) / 9,
     ),
   ],
   Team: [
@@ -28,7 +28,7 @@ const aptos: Protocol = {
       start + periodToSeconds.month * 9,
       periodToSeconds.month * 6,
       5,
-      (totalQty * 0.2) / 5
+      (totalQty * 0.2) / 5,
     ),
   ],
   "Private Sale": [
@@ -36,7 +36,7 @@ const aptos: Protocol = {
       start + periodToSeconds.month * 6,
       periodToSeconds.month * 6,
       3,
-      (totalQty * 0.167) / 3
+      (totalQty * 0.167) / 3,
     ),
   ],
   "Seed Sale": [
@@ -44,7 +44,7 @@ const aptos: Protocol = {
       start + periodToSeconds.month * 7,
       periodToSeconds.month * 6,
       3,
-      totalQty * 0.06 * 0.33
+      totalQty * 0.06 * 0.33,
     ),
   ],
   Advisors: [
@@ -52,7 +52,7 @@ const aptos: Protocol = {
       start + periodToSeconds.month * 9,
       periodToSeconds.month * 6,
       6,
-      totalQty * 0.02 * 0.167
+      totalQty * 0.02 * 0.167,
     ),
   ],
   meta: {
