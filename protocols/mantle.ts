@@ -1,11 +1,11 @@
 import { Protocol } from "../types/adapters";
 import { manualCliff } from "../adapters/manual";
 import { balance, latest } from "../adapters/balance";
-import { GAS_TOKEN } from "../utils/constants";
 
 const start = 1688317200;
 const deployed = 1696636800;
 const chain = "mantle";
+const token = "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000";
 
 const mantle: Protocol = {
   Circulating: manualCliff(start, 3172988154),
@@ -26,23 +26,23 @@ const mantle: Protocol = {
         chain,
         deployed,
       ),
-    // () =>
-    //   balance(
-    //     [
-    //       "0x94FEC56BBEcEaCC71c9e61623ACE9F8e1B1cf473",
-    //       "0xcD9Dab9Fa5B55EE4569EdC402d3206123B1285F4",
-    //       "0x87C62C3F9BDFc09200bCF1cbb36F233A65CeF3e6",
-    //       "0x992b65556d330219e7e75C43273535847fEee262",
-    //     ],
-    //     GAS_TOKEN,
-    //     chain,
-    //     chain,
-    //     start,
-    //   ),
+    () =>
+      balance(
+        [
+          "0x94FEC56BBEcEaCC71c9e61623ACE9F8e1B1cf473",
+          "0xcD9Dab9Fa5B55EE4569EdC402d3206123B1285F4",
+          "0x87C62C3F9BDFc09200bCF1cbb36F233A65CeF3e6",
+          "0x992b65556d330219e7e75C43273535847fEee262",
+        ],
+        token,
+        chain,
+        chain,
+        start,
+      ),
   ],
   meta: {
     sources: ["https://docs.mantle.xyz/governance/parameters/tokenomics"],
-    token: `${chain}:0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000`,
+    token: `${chain}:${token}`,
     protocolIds: ["3782"],
     incompleteSections: [
       {

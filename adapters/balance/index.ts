@@ -63,6 +63,7 @@ export async function balance(
               }).then((r: any) => {
                 if (!r.output)
                   throw new Error(`balance call failed for ${adapter}`);
+                if (!chainData[block].result) chainData[block].result = 0;
                 chainData[block].result += Number(r.output);
               });
             })
