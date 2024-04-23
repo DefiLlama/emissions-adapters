@@ -49,21 +49,23 @@ export async function balance(
 
   const chainData = await findBlockHeightArray(trackedTimestamp, chain);
 
-  if (target == GAS_TOKEN && owners.length > 1)
-    throw new Error(`cant multicall gas token balance.`);
   await PromisePool.withConcurrency(10)
     .for(Object.keys(chainData))
     .process(async (block) =>
       target == GAS_TOKEN
-        ? await getBalance({
-            target: owners[0],
-            block: Number(block),
-            chain,
-          }).then((r: any) => {
-            if (!r.output)
-              throw new Error(`balance call failed for ${adapter}`);
-            chainData[block].result = Number(r.output);
-          })
+        ? await PromisePool.withConcurrency(10)
+            .for(owners)
+            .process(async (target) => {
+              getBalance({
+                target,
+                block: Number(block),
+                chain,
+              }).then((r: any) => {
+                if (!r.output)
+                  throw new Error(`balance call failed for ${adapter}`);
+                chainData[block].result += Number(r.output);
+              });
+            })
         : await multiCall({
             calls: owners.map((o: string) => ({ target, params: [o] })),
             abi: "erc20:balanceOf",
