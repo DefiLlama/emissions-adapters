@@ -5,7 +5,7 @@ import { periodToSeconds } from "../utils/time";
 
 const start = 1709679600;
 const total = 1e9;
-const token = "0x57e114b691db790c35207b2e685d4a43181e6061";
+const token = "0xfe0c30065b384f05761f15d0cc899d4f9f9cc0eb";
 const chain = "ethereum";
 
 const etherfi: Protocol = {
