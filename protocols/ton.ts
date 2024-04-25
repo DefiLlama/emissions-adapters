@@ -19,8 +19,10 @@ const ton: Protocol = {
     ],
     notes: [],
     token: "coingecko:the-open-network",
-    protocolIds: [],
+    protocolIds: ["3591"],
   },
-  categories: {},
+  categories: {
+    farming: ["Premine", "Inflation", "Inactive Miners", "TON Believers Fund"],
+  },
 };
 export default ton;
