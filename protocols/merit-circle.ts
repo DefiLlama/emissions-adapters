@@ -5,8 +5,8 @@ import { CliffAdapterResult, Protocol } from "../types/adapters";
 const token = "0x949D48EcA67b17269629c7194F4b727d4Ef9E5d6";
 const chain = "ethereum";
 const qty = 1e9;
-const realtime = (holder: string, deployed: number) =>
-  async()=>balance([holder], token, chain, "merit-circle", deployed).then(
+const realtime = (holder: string, deployed: number) => async () =>
+  balance([holder], token, chain, "merit-circle", deployed).then(
     (s: CliffAdapterResult[]) =>
       s.filter((c: CliffAdapterResult) => c.amount < 1e8),
   );
