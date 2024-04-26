@@ -7,7 +7,7 @@ const processCsvData = async (): Promise<{
   sections: LinearAdapterResult[];
   csvAmount: number;
 }> => {
-  const data = await parseCSVToJSON("./adapters/ethereum/etherscan.csv");
+  const data = await parseCSVToJSON("./defi/emissions-adapters/adapters/ethereum/etherscan.csv");
   const sections: LinearAdapterResult[] = [];
 
   data.map((t: any, i: number) => {
@@ -36,9 +36,7 @@ const processCsvData = async (): Promise<{
 
 export const inflation = async (): Promise<LinearAdapterResult[]> => {
   const { sections, csvAmount } = await processCsvData();
-  const res = await (
-    await fetch(`https://ultrasound.money/api/v2/fees/supply-over-time`)
-  ).json();
+  const res = await (await fetch(`https://ultrasound.money/api/v2/fees/supply-over-time`)).json();
 
   const start = sections[sections.length - 1].end;
   let end = Number(start) + periodToSeconds.day;
