@@ -21,7 +21,7 @@ const saltyio: Protocol =
     },
   categories: 
     {
-    farming: [ "Airdrop 1", "Airdrop 2", "Emissions"],
+    farming: [ "Airdrop 1", "Airdrop 2", "Emissions", "Liquidity Bootstrapping", "Staking Bootstrapping"],
     noncirculating: [ "DAO Reserve" ],
     insiders: [ "Initial Dev Team" ],
     }
