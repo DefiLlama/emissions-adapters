@@ -17,11 +17,13 @@ const saltyio: Protocol =
     {
     sources: ["https://docs.salty.io/the-salt-token/distribution"],
     token: "ethereum:0x0110B0c3391584Ba24Dbf8017Bf462e9f78A6d9F",
-    protocolIds: []
+    protocolIds: ["4533"]
     },
   categories: 
     {
-    farming: [ "Airdrop 1", "Airdrop 2", "Emissions", "Liquidity Bootstrapping", "Staking Bootstrapping"],
+    farming: [  "Emissions" ],
+    airdrop: ["Airdrop 1", "Airdrop 2"],
+    liquidity: ["Liquidity Bootstrapping", "Staking Bootstrapping"],
     noncirculating: [ "DAO Reserve" ],
     insiders: [ "Initial Dev Team" ],
     }
