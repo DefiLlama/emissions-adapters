@@ -31,6 +31,11 @@ const eigen: Protocol = {
     ),
   ],
   meta: {
+    notes: [
+        "Airdrop/Stakedrop: Assuming there will be 6 seassons",
+        "Community Initiatives: No information, assuming is locked for 1 year",
+        "Ecosystem: No information, assuming is locked for 1 year",
+      ],
     token: `${chain}:${token}`,
     sources: ["https://docs.eigenfoundation.org/"],
     protocolIds: ["3107"],
