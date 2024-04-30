@@ -23,7 +23,7 @@ const bitcoin: Protocol = {
       "https://opentensor.medium.com/tao-token-economy-explained-17a3a90cd44e",
     ],
     token: "coingecko:bittensor",
-    protocolIds: [""],
+    protocolIds: ["4547"],
     notes: [
       `Future halvenings have at a specified block height, therefore the dates shown are an estimate only.`,
     ],
