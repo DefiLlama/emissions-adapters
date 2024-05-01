@@ -87,7 +87,7 @@ const btrfly: Protocol = {
       "The remaining BTRFLY will be released under Pulse after year June 2026.",
     ],
     sources: ["https://docs.redacted.finance/btrfly/tokenomics"],
-    token: `${chain}:${token}`,
+    token: `coingecko:redacted`,
     protocolIds: ["1056", "2092", "3226"],
     incompleteSections: [
       {
