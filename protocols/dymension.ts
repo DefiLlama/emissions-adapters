@@ -4,9 +4,6 @@ import { periodToSeconds } from "../utils/time";
 
 const total = 1e9;
 const start = 1707264000;
-const token =
-  "ibc/9A76CDF0CBCEF37923F32518FA15E5DC92B9F56128292BC4D63C4AEA76CBB110";
-const chain = "cosmos";
 
 const dymension: Protocol = {
   "Genesis Rolldrop": manualCliff(start, total * 0.08),
@@ -42,7 +39,7 @@ const dymension: Protocol = {
       "The Incentives Manager and Community Pool allocations are available at genesis. Dymension indicates that they will be spent over 5 years. This is the time period used in this analysis.",
     ],
     sources: ["https://docs.dymension.xyz/learn/dymension/dym/distribution"],
-    token: `${chain}:${token}`,
+    token: "coingecko:dymension",
     protocolIds: ["4490"],
     total,
   },
