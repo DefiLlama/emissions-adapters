@@ -20,7 +20,7 @@ const etherfi: Protocol = {
       token,
       chain,
       "etherfi",
-      0,
+      1714694400,
     ),
   // "User Airdrops": () => balance(),
   // Partnerships: () => balance(),
@@ -38,6 +38,13 @@ const etherfi: Protocol = {
       `https://etherfi.medium.com/announcing-ethfi-the-ether-fi-governance-token-8cae7327763a`,
     ],
     protocolIds: ["4133"],
+    incompleteSections: [
+      {
+        allocation: total * 0.2724,
+        key: "Treasury",
+        lastRecord: () => latest("etherfi", 1714694400),
+      },
+    ],
     // incompleteSections: [
     // {
     //   allocation: total * 0.15,
@@ -53,7 +60,7 @@ const etherfi: Protocol = {
   },
   categories: {
     insiders: ["Investors", "Core Contributors"],
-    noncirculating: ["Foundation", "Ecosystem Development"],
+    noncirculating: ["Foundation", "Ecosystem Development", "Treasury"],
   },
 };
 
