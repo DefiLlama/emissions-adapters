@@ -34,7 +34,7 @@ const cheelee: Protocol = {
   meta: {
     token: `coingecko:cheelee`,
     sources: ["https://static.cheeleepay.com/files/en_US/tokenomics.pdf"],
-    protocolIds: [""],
+    protocolIds: ["4607"],
   },
   categories: {
     insiders: [
