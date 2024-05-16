@@ -58,7 +58,7 @@ const SmarDex: Protocol = {
     ],
     sources: ["https://docs.smardex.io/overview/what-is-smardex/tokenomics"],
     token: "ethereum:0x5de8ab7e27f6e7a1fff3e5b337584aa43961beef",
-    protocolIds: [],
+    protocolIds: ["2695"],
   },
   categories: {
     farming: ["Farming", "Boost"],

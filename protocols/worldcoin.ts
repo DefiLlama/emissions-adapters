@@ -54,7 +54,7 @@ const worldcoin: Protocol = {
       "https://whitepaper.worldcoin.org/tokenomics#circulating-supply-at-launch",
     ],
     notes: [],
-    protocolIds: [],
+    protocolIds: ["4612"],
   },
   categories: {
     publicSale: ["Community"],

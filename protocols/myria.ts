@@ -44,7 +44,7 @@ const myria: Protocol = {
     sources: ["https://myria.com/token/"],
     notes: [],
     token: "ethereum:0xa0ef786bf476fe0810408caba05e536ac800ff86",
-    protocolIds: [""],
+    protocolIds: ["4613"],
   },
   categories: {
     publicSale: ["TGE & Liquidity"],

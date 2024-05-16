@@ -59,7 +59,7 @@ const solana: Protocol = {
       "https://medium.com/solana-labs/solana-foundation-transparency-report-1-b267fe8595c0",
     ],
     token: "coingecko:solana",
-    protocolIds: [],
+    protocolIds: ["4611"],
   },
   categories: {
     insiders: [

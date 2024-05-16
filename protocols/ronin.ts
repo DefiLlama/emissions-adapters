@@ -159,7 +159,7 @@ const ronin: Protocol = {
     token: `ronin:0xe514d9deb7966c8be0ca922de8a064264ea6bcd4`,
     sources: ["https://docs.roninchain.com/docs/basics/tokenomics"],
     notes: [],
-    protocolIds: [],
+    protocolIds: ["4440"],
   },
   categories: {
     farming: [],

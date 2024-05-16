@@ -65,7 +65,7 @@ const biconomy: Protocol = {
     token: `${chain}:${token}`,
     sources: [`https://medium.com/biconomy/bico-token-economics-b33ff71f673d`],
     notes: [],
-    protocolIds: [],
+    protocolIds: ["1578"],
   },
   categories: {},
 };

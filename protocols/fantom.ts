@@ -36,7 +36,7 @@ const fantom: Protocol = {
   meta: {
     sources: ["https://icodrops.com/fantom/"],
     token: "coingecko:fantom",
-    protocolIds: [],
+    protocolIds: ["196"],
   },
   categories: {
     publicSale: ["Token Sale"],
