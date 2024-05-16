@@ -35,7 +35,7 @@ const icp: Protocol = {
     notes: [
       `The remaining 279M ICP are unaccounted for and have therefore been excluded from this analysis.`,
     ],
-    protocolIds: ["3155"],
+    protocolIds: ["4618"],
   },
   categories: {
     insiders: ["Strategic Round", "Presale"],
