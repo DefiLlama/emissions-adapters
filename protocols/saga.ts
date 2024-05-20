@@ -2,7 +2,7 @@ import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 0;
+const start = 1712620800;
 const total = 1e8;
 
 const saga: Protocol = {
