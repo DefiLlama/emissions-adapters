@@ -1,5 +1,5 @@
 import { balance, latest } from "../adapters/balance";
-import { manualLinear } from "../adapters/manual";
+import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
@@ -14,16 +14,16 @@ const etherfi: Protocol = {
     start + periodToSeconds.years(3),
     total * 0.2326,
   ),
-  Treasury: () =>
-    balance(
-      ["0x6329004E903B7F420245E7aF3f355186f2432466"],
-      token,
-      chain,
-      "etherfi",
-      1714694400,
-    ),
-  // "User Airdrops": () => balance(),
-  // Partnerships: () => balance(),
+  Treasury: manualLinear(
+    start,
+    start + periodToSeconds.years(6),
+    total * 0.2724,
+  ),
+  "User Airdrops": [
+    manualCliff(start, total * 0.06),
+    manualCliff(1718409600, total * 0.05),
+  ],
+  Partnerships: manualCliff(start, total * 0.06),
   Investors: manualLinear(
     start + periodToSeconds.year,
     start + periodToSeconds.years(2),
@@ -32,31 +32,12 @@ const etherfi: Protocol = {
   meta: {
     token: `${chain}:${token}`,
     notes: [
-      `Details of the User Airdrops and Partnerships sections wallet addresses and schedules couldn't be found so they've been excluded in this analysis.`,
+      `User Airdrops and Partnerships section schedules couldn't be found so they've been inferred from the chart shown in the source material.`,
     ],
     sources: [
       `https://etherfi.medium.com/announcing-ethfi-the-ether-fi-governance-token-8cae7327763a`,
     ],
     protocolIds: ["4133"],
-    incompleteSections: [
-      {
-        allocation: total * 0.2724,
-        key: "Treasury",
-        lastRecord: () => latest("etherfi", 1714694400),
-      },
-    ],
-    // incompleteSections: [
-    // {
-    //   allocation: total * 0.15,
-    //   key: "Foundation",
-    //   lastRecord: () => latest("ethena", 0),
-    // },
-    // {
-    //   allocation: total * 0.3,
-    //   key: "Ecosystem Development",
-    //   lastRecord: () => latest("ethena", 0),
-    // },
-    // ],
   },
   categories: {
     insiders: ["Investors", "Core Contributors"],
