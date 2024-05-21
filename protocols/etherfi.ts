@@ -37,7 +37,7 @@ const etherfi: Protocol = {
     sources: [
       `https://etherfi.medium.com/announcing-ethfi-the-ether-fi-governance-token-8cae7327763a`,
     ],
-    protocolIds: ["parent#ether-fi"],
+    protocolIds: ["2626", "4429"],
   },
   categories: {
     insiders: ["Investors", "Core Contributors"],
