@@ -2,8 +2,6 @@ import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const chain = "ethereum";
-const address = "0xb0ffa8000886e57f86dd5264b9582b2ad87b2b91";
 const start = 1680480000;
 const total = 1e10;
 
@@ -39,7 +37,7 @@ const altlayer: Protocol = {
   ],
   meta: {
     sources: ["https://wormhole.com/blog/wormhole-w-tokenomics"],
-    token: `${chain}:${address}`,
+    token: "coingecko:wormhole",
     notes: [
       `Data has been inferred from the graph shown in the source material.`,
     ],
