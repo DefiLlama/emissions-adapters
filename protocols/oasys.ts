@@ -1,8 +1,8 @@
-import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
+import { manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 0;
+const start = 1670803200;
 const total = 1e10;
 
 const oasys: Protocol = {
