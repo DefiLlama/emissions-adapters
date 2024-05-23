@@ -5,7 +5,7 @@ import { periodToSeconds } from "../utils/time";
 const start = 1680480000;
 const total = 1e10;
 
-const altlayer: Protocol = {
+const wormhole: Protocol = {
   "Guardian Nodes": manualStep(
     start,
     periodToSeconds.year,
@@ -54,4 +54,4 @@ const altlayer: Protocol = {
     noncirculating: ["Foundation Treasury"],
   },
 };
-export default altlayer;
+export default wormhole;
