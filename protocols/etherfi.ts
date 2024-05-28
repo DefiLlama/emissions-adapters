@@ -21,7 +21,7 @@ const etherfi: Protocol = {
   ),
   "User Airdrops": [
     manualCliff(start, total * 0.06),
-    manualCliff(1718409600, total * 0.05),
+    manualCliff(1719705600, total * 0.05),
   ],
   Partnerships: manualCliff(start, total * 0.06),
   Investors: manualLinear(
