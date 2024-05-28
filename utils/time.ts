@@ -41,7 +41,7 @@ export function stringToTimestamp(
   const year = parseDateString(inputDate, format.toLowerCase(), "y");
   const month = parseDateString(inputDate, format.toLowerCase(), "m");
   const day = parseDateString(inputDate, format.toLowerCase(), "d");
-  const seconds = readableToSeconds(`${year}-${month}-${day}T00:00:00`);
+  const seconds = readableToSeconds(`${year}-${month}-${day}T00:00:00.000Z`);
   if (isNaN(seconds))
     throw new Error(`${inputDate} is not in the format ${format}`);
   return seconds;
