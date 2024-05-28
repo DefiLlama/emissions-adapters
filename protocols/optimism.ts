@@ -7,7 +7,7 @@ const qty = 4294967296;
 const optimism: Protocol = {
   "Ecosystem Fund": [
     manualLinear("2022-06-01", "2023-04-31", 94175479),
-    manualLinear("2022-06-01", "2024-04-31", 90e6),
+    manualLinear("2023-05-01", "2024-04-31", 90e6),
     manualLinear("2024-05-01", "2025-04-31", 94e6),
     manualLinear("2025-05-01", "2026-04-31", 108e6),
   ],
