@@ -16,30 +16,30 @@ const uwulend: Protocol = {
       3e6,
     ),
   ],
-  Treasury: () =>
-    balance(
-      ["0xC671A6B1415dE6549B05775Ee4156074731190c6"],
-      token,
-      chain,
-      "uwu-lend",
-      start,
-    ),
-  documented: {
-    replaces: ["Treasury"],
-    Team: manualLinear(start, start + periodToSeconds.years(2), 4e6),
-    Treasury: manualLinear(start, start + periodToSeconds.years(4), 8e6),
-  },
+  // Treasury: () =>
+  //   balance(
+  //     ["0xC671A6B1415dE6549B05775Ee4156074731190c6"],
+  //     token,
+  //     chain,
+  //     "uwu-lend",
+  //     start,
+  //   ),
+  // documented: {
+  // replaces: ["Treasury"],
+  Team: manualLinear(start, start + periodToSeconds.years(2), 4e6),
+  Treasury: manualLinear(start, start + periodToSeconds.years(4), 8e6),
+  // },
   meta: {
     token: `coingecko:uwu-lend`,
     sources: [`https://docs.uwulend.fi/tokenomics`],
     protocolIds: ["2111"],
-    incompleteSections: [
-      {
-        lastRecord: () => latest("uwu-lend", start),
-        key: "Treasury",
-        allocation: undefined,
-      },
-    ],
+    // incompleteSections: [
+    //   {
+    //     lastRecord: () => latest("uwu-lend", start),
+    //     key: "Treasury",
+    //     allocation: undefined,
+    //   },
+    // ],
   },
   categories: {
     insiders: ["Team", "Investors"],
