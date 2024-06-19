@@ -56,7 +56,7 @@ const arbitrum: Protocol = {
       },
       {
         key: "Ecosystem Development Fund",
-        allocation: qty * 0.0113,
+        allocation: undefined, 
         lastRecord: () => latest("arbitrum", 1686132532),
       },
     ],
