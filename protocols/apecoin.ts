@@ -118,8 +118,8 @@ const treasuryContracts = [
 ];
 
 const apecoin: Protocol = {
-  "ecosystem fund": () =>
-    balance(treasuryContracts, token, chain, "apecoin", 1644883200),
+  // "ecosystem fund": () =>
+  //   balance(treasuryContracts, token, chain, "apecoin", 1644883200),
   "yuga labs": steps(0.15),
   "Jane Goodall Legacy Foundation": steps(0.01),
   "launch contributors": [
@@ -136,25 +136,25 @@ const apecoin: Protocol = {
     ),
   ],
   founders: steps(0.08),
-  documented: {
-    replaces: ["ecosystem fund"],
-    "ecosystem fund": [
-      manualCliff(start, totalQty * 0.2675),
-      manualStep(start, periodToSeconds.month, 48, (totalQty * 0.3525) / 48),
-    ],
-  },
+  // documented: {
+  // replaces: ["ecosystem fund"],
+  "ecosystem fund": [
+    manualCliff(start, totalQty * 0.2675),
+    manualStep(start, periodToSeconds.month, 48, (totalQty * 0.3525) / 48),
+  ],
+  // },
   meta: {
     sources: ["https://apecoin.com/about"],
     token: `${chain}:${token}`,
     protocolIds: ["2665"],
     total: totalQty,
-    incompleteSections: [
-      {
-        key: "ecosystem fund",
-        allocation: totalQty * 0.62,
-        lastRecord: () => latest("apecoin", 1644883200),
-      },
-    ],
+    // incompleteSections: [
+    //   {
+    //     key: "ecosystem fund",
+    //     allocation: totalQty * 0.62,
+    //     lastRecord: () => latest("apecoin", 1644883200),
+    //   },
+    // ],
   },
   categories: {
     noncirculating: ["ecosystem fund"],
