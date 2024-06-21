@@ -68,8 +68,8 @@ const starknet: Protocol = {
     manualStep(
       monthlyReleaseStart,
       periodToSeconds.month,
-      80,
-      remainingEachAfterCliffs / 80,
+      92,
+      remainingEachAfterCliffs / 92,
     ), // Distribute the remaining allocation
   ],
   Investors: [
@@ -78,8 +78,8 @@ const starknet: Protocol = {
     manualStep(
       monthlyReleaseStart,
       periodToSeconds.month,
-      80,
-      remainingEachAfterCliffs / 80,
+      92,
+      remainingEachAfterCliffs / 92,
     ), // Distribute the remaining allocation
   ],
   meta: {
