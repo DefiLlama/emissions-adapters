@@ -2,7 +2,7 @@ import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 0;
+const start = 1712624400;
 const total = 1e9;
 
 const tensor: Protocol = {
