@@ -1,9 +1,8 @@
-import { balance, latest } from "../adapters/balance";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 1709679600;
+const start = 1710284400;
 const total = 1e9;
 const token = "0xfe0c30065b384f05761f15d0cc899d4f9f9cc0eb";
 const chain = "ethereum";
