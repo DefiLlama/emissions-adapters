@@ -89,7 +89,7 @@ const commonwealth: Protocol = {
   meta: {
     sources: ["https://joincommonwealth.xyz/whitepaper"],
     token: "coingecko:common-wealth",
-    protocolIds: [""],
+    protocolIds: ["4839"],
   },
   categories: {
     farming: ["NFT Staking Rewards", "Rewards & Incentives"],
