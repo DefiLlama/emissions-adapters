@@ -16,15 +16,15 @@ const balancer: Protocol = {
     1696118400,
     total * 0.225,
   ),
-  Ecosystem: balanceSection(
+  Ecosystem: ()=>balanceSection(
     "0x10A19e7eE7d7F8a52822f6817de8ea18204F2e4f",
     1618272000,
   ),
-  "Balancer Labs Fundraising Fund": balanceSection(
+  "Balancer Labs Fundraising Fund": ()=>balanceSection(
     "0xB129F73f1AFd3A49C701241F374dB17AE63B20Eb",
     1604192400,
   ),
-  "Balancer Labs Contributors Incentives Program": balanceSection(
+  "Balancer Labs Contributors Incentives Program": ()=>balanceSection(
     "0xCDcEBF1f28678eb4A1478403BA7f34C94F7dDBc5",
     1592870400,
   ),
