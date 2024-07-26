@@ -2,7 +2,7 @@ import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 
 const prime: Protocol = {
-  "Gameplay Pool": manualLinear("2023-03-01", "2028-03-01", 365 * 5 + 1),
+  "Gameplay Pool": manualLinear("2023-03-01", "2028-03-01", 365 * 5 * 300), // estimate
   "Parallel Studios Reserve": manualLinear(
     "2025-06-01",
     "2027-12-01",
@@ -29,7 +29,7 @@ const prime: Protocol = {
   meta: {
     notes: [
       `No unlock schedule is described for the Echelon Foundation Reserve (11.2%). Here we have assumed a 4 year linear unlock.`,
-      `Gameplay Pool unlocks are not detailed in the source material. Here we have used the max of 6 PRIME per day`,
+      `Gameplay Pool unlocks are not detailed in the source material. Here we have used an estimation of 300 PRIME per day`,
       `In the source material no schedule is given for the Caching section, here we have assumed a linear unlock.`,
     ],
     token: "coingecko:echelon-prime",
