@@ -13,9 +13,14 @@ export async function latest(
   timestampDeployed: number,
 ): Promise<number> {
   if (!res) {
-    let r = await fetch(`https://api.llama.fi/emission/${adapter}`).then((r) =>
-      r.json(),
-    );
+    let r;
+    try {
+      r = await fetch(`https://api.llama.fi/emission/${adapter}`).then((r) =>
+        r.json(),
+      );
+    } catch {
+      return timestampDeployed;
+    }
     if (!r.body) return timestampDeployed;
     r = JSON.parse(r.body);
     return r.metadata.incompleteSections == null ||

@@ -111,11 +111,14 @@ async function appendMissingDataSections(
   const incompleteSections = data.metadata.incompleteSections;
   if (incompleteSections == null || incompleteSections.length == 0) return;
 
-  let res = await fetch(`https://api.llama.fi/emission/${protocol}`).then((r) =>
-    r.json(),
-  );
+  let res;
+  try {
+    res = await fetch(`https://api.llama.fi/emission/${protocol}`).then((r) =>
+      r.json(),
+    );
+  } catch {}
   let body = res.body ? JSON.parse(res.body) : [];
-  res = body && body.length != 0 ? body.documentedData?.data ?? body.data : [];
+  res = body && body.length ? body.documentedData?.data ?? body.data : [];
 
   if (nullsInApiData(res)) {
     await sendMessage(

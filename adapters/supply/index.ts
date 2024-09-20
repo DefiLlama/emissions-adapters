@@ -8,9 +8,14 @@ let res: number;
 
 export async function latest(key: string, reference: number): Promise<number> {
   if (!res) {
-    let r = await fetch(`https://api.llama.fi/emission/${key}`).then((r) =>
-      r.json(),
-    );
+    let r;
+    try {
+      r = await fetch(`https://api.llama.fi/emission/${key}`).then((r) =>
+        r.json(),
+      );
+    } catch {
+      return reference;
+    }
     if (!r.body) return reference;
     r = JSON.parse(r.body);
     return r.metadata.incompleteSections == null ||
