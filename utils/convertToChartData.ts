@@ -111,7 +111,7 @@ async function appendMissingDataSections(
   const incompleteSections = data.metadata.incompleteSections;
   if (incompleteSections == null || incompleteSections.length == 0) return;
 
-  let res;
+  let res = [];
   try {
     res = await fetch(`https://api.llama.fi/emission/${protocol}`).then((r) =>
       r.json(),
