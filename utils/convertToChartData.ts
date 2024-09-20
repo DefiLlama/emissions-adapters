@@ -118,7 +118,10 @@ async function appendMissingDataSections(
     );
   } catch {}
   let body = res.body ? JSON.parse(res.body) : [];
-  res = body && body.length ? body.documentedData?.data ?? body.data : [];
+  res =
+    body && body.documentedData.data.length
+      ? body.documentedData?.data ?? body.data
+      : [];
 
   if (nullsInApiData(res)) {
     await sendMessage(
