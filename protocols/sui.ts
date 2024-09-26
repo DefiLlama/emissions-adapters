@@ -2,71 +2,78 @@ import { Protocol } from "../types/adapters";
 import { manualCliff, manualStep } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 
-const totalQty = 5e9; // 5 billion tokens
+const total = 5e9; // 5 billion tokens
 const start = 1683072000; // May 3, 2023
 
 const sui: Protocol = {
-  "ICO $0.03": [manualCliff(start, totalQty * 0.0138)],
-  "Binance Launchpool": [manualCliff(start, totalQty * 0.004)],
-  "ICO $0.1": [
-    manualCliff(start, totalQty * 0.045 * 0.07),
-    manualStep(
-      start,
-      periodToSeconds.month,
-      13,
-      (totalQty * 0.045 * 0.93) / 13,
-    ),
+  "Community Allocation Pool": [
+    manualCliff(start, total * 0.0582 * 0.07),
+    manualStep(start, periodToSeconds.month, 13, (total * 0.0582 * 0.93) / 13),
   ],
   "Community Reserve": [
-    manualCliff(start, totalQty * 0.49720000001 * 0.01),
+    manualCliff(start, total * 0.3652 * 0.08),
+    manualCliff(start + periodToSeconds.month, (total * 0.3652 * 0.92) / 84),
     manualStep(
-      start,
+      start + periodToSeconds.month,
       periodToSeconds.month,
-      84,
-      (totalQty * 0.49720000001 * 0.99) / 84,
+      83,
+      (total * 0.3652 * 0.92) / 84,
     ),
   ],
   "Early Contributors": [
+    manualCliff(start + periodToSeconds.year, ((total * 0.2114) / 84) * 12),
     manualStep(
-      start + periodToSeconds.month * 6,
+      start + periodToSeconds.year,
       periodToSeconds.month,
-      36,
-      (totalQty * 0.2) / 36,
+      72,
+      (total * 0.2114) / 84,
     ),
   ],
   "Mysten Labs Treasury": [
+    manualCliff(start + periodToSeconds.months(6), ((total * 0.1242) / 84) * 6),
     manualStep(
-      start + periodToSeconds.month * 6,
+      start + periodToSeconds.months(6),
       periodToSeconds.month,
-      42,
-      (totalQty * 0.1) / 42,
+      78,
+      (total * 0.1242) / 84,
     ),
   ],
   "Series A": [
+    manualCliff(start + periodToSeconds.year, (total * 0.0714) / 2),
     manualStep(
-      start + periodToSeconds.month * 6,
+      start + periodToSeconds.year,
       periodToSeconds.month,
-      24,
-      (totalQty * 0.08) / 24,
+      12,
+      (total * 0.0714) / 24,
     ),
   ],
   "Series B": [
+    manualCliff(start + periodToSeconds.year, (total * 0.0696) / 3),
     manualStep(
       start + periodToSeconds.year,
       periodToSeconds.month,
       24,
-      (totalQty * 0.06) / 24,
+      (total * 0.0696 * 2) / (24 * 3),
     ),
   ],
+  "Stake Subsidies": [
+    manualCliff(start, total * 0.1 * 0.03),
+    manualStep(start, periodToSeconds.month, 84, (total * 0.1 * 0.97) / 84),
+  ],
   meta: {
-    sources: ["https://blog.sui.io/token-release-schedule/"],
+    sources: [
+      "https://blog.sui.io/token-release-schedule/",
+      "https://tokentrack.co/tokens/sui",
+    ],
     token: "coingecko:sui",
     protocolIds: ["3181"],
+    total,
   },
   categories: {
-    insiders: ["Series A", "Series B", "Early Contributors"],
-    publicSale: ["ICO $0.03", "ICO $0.1", "Binance Launchpool"],
-    noncirculating: ["Mysten Labs Treasury", "Community Reserve"],
+    publicSale: ["Community Allocation Pool"],
+    noncirculating: ["Community Reserve", "Mysten Labs Treasury"],
+    insiders: ["Early Contributors", "Series A", "Series B"],
+    farming: ["Stake Subsidies"],
   },
 };
 
