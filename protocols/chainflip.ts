@@ -3,7 +3,7 @@ import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 1696464000;
+const start = 1732233600;
 const contributor = 1700697600;
 const token = "0x826180541412d574cf1336d22c0c0a287822678a";
 const chain = "ethereum";
