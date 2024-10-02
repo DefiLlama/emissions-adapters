@@ -70,6 +70,7 @@ const aerodrome: Protocol = {
   //   },
   meta: {
     notes: [
+      `After Epoch 67, emissions will be dependent on the AERO FED`, 
       `Sections Airdrop for veAERO Lockers, Ecosystem Pools and Public Goods Funding, Team, Protocol Grants, and AERO Pools Votepower are distributed in veAERO. veAERO <> AERO conversion can be anywhere 0 - 1 depending on lock duration. At the time of analysis, around half AERO was locked, a year after genesis. We have used extrapolated this rate in our analysis.`,
       `LP Emissions and Team emissions schedules have been estimated based on the chart given in the source data.`,
     ],
