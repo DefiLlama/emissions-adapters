@@ -31,7 +31,7 @@ const emissions = (percentage: number): LinearAdapterResult[] => {
 
     if (week == 14) decay = 0.05;
     if (week == 30) decay = 0.0045;
-    if (week == 67) decay = 0.0225;
+    if (week == 67) break; // decay = 0.0225;
     if (week > 14 && amount < 9e6) break;
   }
 
@@ -39,9 +39,9 @@ const emissions = (percentage: number): LinearAdapterResult[] => {
 };
 
 const aerodrome: Protocol = {
-  //   Supply: () => supply(chain, token, start, "aerodrome"),
-  //   documented: {
-  //     replaces: ["supply"],
+  // Supply: () => supply(chain, token, start, "aerodrome"),
+  // documented: {
+  //   replaces: ["supply"],
   "Voters Incentives": manualCliff(start, total * 0.08),
   "Genesis Liquidity Pool": manualCliff(start, total * 0.02),
   "Airdrop for veAERO Lockers": manualLinear(
@@ -79,7 +79,6 @@ const aerodrome: Protocol = {
       `https://github.com/aerodrome-finance/contracts/blob/main/contracts/Minter.sol#L170-L198`,
     ],
     protocolIds: ["3450", "4524"],
-    total,
     incompleteSections: [
       {
         lastRecord: () => latest("aerodrome", start),
