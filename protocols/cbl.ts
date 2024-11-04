@@ -11,17 +11,17 @@ const cbl: Protocol = {
   // 26% of Total Allocation
   // 6 month cliff, followed by a 24-month daily linear vesting
   "Private Sale": manualStep(TGE + periodToSeconds.month * 7, periodToSeconds.month, 24, (TOTAL_SUPPLY * 0.26) / 24),
-  // 3.0% of Total Allocation
+  // 1.5% of Total Allocation
   // 30% on TGE, followed by a 6-month daily linear vesting
   "Public Sale": [
-    manualCliff(TGE, TOTAL_SUPPLY * 0.03 * 0.3),
-    manualStep(TGE + periodToSeconds.month, periodToSeconds.month, 6, (TOTAL_SUPPLY * 0.03 * 0.7) / 6),
+    manualCliff(TGE, TOTAL_SUPPLY * 0.015 * 0.3),
+    manualStep(TGE + periodToSeconds.month, periodToSeconds.month, 6, (TOTAL_SUPPLY * 0.015 * 0.7) / 6),
   ],
-  // 30% of Total Allocation
+  // 31.5% of Total Allocation
   // 15% on TGE, followed by a 60-month daily linear vesting
   "Community Growth & Rewards": [
-    manualCliff(TGE, TOTAL_SUPPLY * 0.3 * 0.15),
-    manualStep(TGE + periodToSeconds.month, periodToSeconds.month, 60, (TOTAL_SUPPLY * 0.3 * 0.85) / 60),
+    manualCliff(TGE, TOTAL_SUPPLY * 0.315 * 0.15),
+    manualStep(TGE + periodToSeconds.month, periodToSeconds.month, 60, (TOTAL_SUPPLY * 0.315 * 0.85) / 60),
   ],
   // 20% of Total Allocation
   // 10% on TGE, followed by a 60-month daily linear vesting
