@@ -41,13 +41,14 @@ const cbl: Protocol = {
   meta: {
     sources: ["https://docs.credbull.io/docs/litepaper"],
     token: `${CHAIN}:${CBL_ADDRESS}`,
-    protocolIds: [],
+    protocolIds: ['4759'],
   },
   categories: {
-    insiders: ["Partners & Advisors", "Core & Future Team"],
+    insiders: ["Partners & Advisors", "Core & Future Team", "Private Sale"],
     liquidity: ["Liquidity"],
     publicSale: ["Public Sale"],
     noncirculating: ["Treasury"],
+    farming: ["Community Growth & Rewards"]
   },
 };
 export default cbl;
