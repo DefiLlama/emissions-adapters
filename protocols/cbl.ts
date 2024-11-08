@@ -2,7 +2,7 @@ import { manualCliff, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const TGE = 1730984400; // 2024-11-07 13:00 UTC
+const TGE = 1730973600; // 2024-11-07 10:00 UTC
 const TOTAL_SUPPLY = 1e9; // 1,000,000,000
 const CBL_ADDRESS = "0xD6b3d81868770083307840F513A3491960b95cb6";
 const CHAIN = "arbitrum";
