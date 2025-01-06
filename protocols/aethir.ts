@@ -42,7 +42,7 @@ const aethir: Protocol = {
     ],
     token: "coingecko:aethir",
     sources: ["https://docs.aethir.com/aethir-tokenomics/token-overview"],
-    protocolIds: ["5580"],
+    protocolIds: ["5591"],
   },
   categories: {
     insiders: ["Team", "Investors", "Advisors"],
