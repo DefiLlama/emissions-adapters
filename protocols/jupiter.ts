@@ -31,6 +31,7 @@ const jupiter: Protocol = {
       `No vesting schedule has been given for Mercurial Stakeholders, so in this analysis we have assumed an instant unlock.`,
     ],
     protocolIds: ["2141", "4077"],
+    total: 10e9,
   },
   categories: {
     noncirculating: ["DAO", "LFG Launchpad fees"],
