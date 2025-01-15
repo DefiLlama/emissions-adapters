@@ -292,7 +292,7 @@ function consolidateDuplicateKeys(data: ChartSection[]) {
       d.data.timestamps.push(
         d.data.timestamps[targetLength - 1] + RESOLUTION_SECONDS,
       );
-      d.data.unlocked.push(d.data.unlocked[targetLength - 2]);
+      d.data.unlocked.push(d.data.unlocked[targetLength - 1]);
     }
 
     if (sortedKeys.includes(d.section)) {
