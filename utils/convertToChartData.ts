@@ -254,21 +254,24 @@ function findPreviouslyEmitted(
 } {
   let gradientLength: number = GRADIENT_LENGTH;
 
-  const recentlyEmitted = relatedSections
-    .map((d: ChartSection) => {
-      const unlocked: number[] = d.data.unlocked;
-      const length: number = unlocked.length;
+  const recentlyEmitted = Math.max(
+    0,
+    relatedSections
+      .map((d: ChartSection) => {
+        const unlocked: number[] = d.data.unlocked;
+        const length: number = unlocked.length;
 
-      if (GRADIENT_LENGTH > length) {
-        gradientLength = length;
-        return unlocked[length - 1];
-      }
+        if (GRADIENT_LENGTH > length) {
+          gradientLength = length;
+          return unlocked[length - 1];
+        }
 
-      return (
-        unlocked[length - 1] - unlocked[Math.floor(length - GRADIENT_LENGTH)]
-      );
-    })
-    .reduce((p: number, c: number) => p + c, reference);
+        return (
+          unlocked[length - 1] - unlocked[Math.floor(length - GRADIENT_LENGTH)]
+        );
+      })
+      .reduce((p: number, c: number) => p + c, reference),
+  );
 
   const totalEmitted: number | undefined = relatedSections
     .map((d: ChartSection) => d.data.unlocked[d.data.unlocked.length - 1])
