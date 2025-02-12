@@ -3,7 +3,7 @@ import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 
 const total = 5e8;
-const start = 0;
+const start = 1738800000;
 
 const schedule = (qty: number) => [
   manualCliff(start + periodToSeconds.year, qty / 6),
