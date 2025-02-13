@@ -1,59 +1,36 @@
-import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
-import { LinearAdapterResult, Protocol } from "../types/adapters";
+import { manualCliff } from "../adapters/manual";
+import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const qty = 100000000;
-const start = 1617577200;
-const rewardMonths = 36;
+const qty = 21000000; // Total BOOM token supply
+const start = 1704067200; // Adjust to Boom Token's official launch date
+const vestingPeriod = periodToSeconds.month; // 1-Month vesting
 
-const rewards = (): LinearAdapterResult[] => {
-  let sections: LinearAdapterResult[] = [];
-  let thisStart: number = start;
-  let workingQty: number = 0;
-
-  for (let i = 1; i < rewardMonths; i++) {
-    const year: number = i / 12;
-    const thisQty: number = 32000000 * (1 - 0.5 ** year);
-
-    sections.push(
-      manualLinear(
-        thisStart,
-        thisStart + periodToSeconds.month,
-        thisQty - workingQty,
-      ),
-    );
-
-    workingQty = thisQty;
-    thisStart += periodToSeconds.month;
-  }
-
-  return sections;
-};
-const liquity: Protocol = {
-  "Stability Pool rewards": rewards(),
-  "Uniswap LPs": manualCliff(start, 1333333),
-  "Community reserve": manualCliff(start, qty * 0.02),
-  Endowment: manualCliff(start + periodToSeconds.year, qty * 0.0606),
-  "Team and advisors": [
-    manualCliff(start + periodToSeconds.year, qty * 0.2665 * 0.25),
-    manualStep(
-      start + periodToSeconds.year,
-      periodToSeconds.month,
-      27,
-      (qty * 0.2665 * 0.75) / 27,
-    ),
-  ],
-  "Service providers": manualCliff(start + periodToSeconds.year, qty * 0.0104),
-  Investors: manualCliff(start + periodToSeconds.year, qty * 0.339),
+const boomTokenAI: Protocol = {
+  "AI Staking & Governance Rewards": manualCliff(start + vestingPeriod, 7500000), // AI-powered staking rewards
+  "AI Market Analytics": manualCliff(start + vestingPeriod, 1000000), // AI-based trading insights
+  "AI Security & Risk Monitoring": manualCliff(start + vestingPeriod, 500000), // AI fraud detection
+  "AI Trading Bots": manualCliff(start + vestingPeriod, 750000), // Automated trading & liquidity AI
+  "DEX Liquidity (Uniswap/PancakeSwap)": manualCliff(start + vestingPeriod, 2000000), // BOOM Token liquidity
+  "Community Growth & Grants": manualCliff(start + vestingPeriod, qty * 0.07), // Incentives for new builders
+  "Boom Treasury & Endowment": manualCliff(start + vestingPeriod, qty * 0.10), // Long-term sustainability
+  "Core Team & Advisors": manualCliff(start + vestingPeriod, qty * 0.18), // Fully unlocked after 1 month
+  "Strategic Partners & Service Providers": manualCliff(start + vestingPeriod, qty * 0.05),
+  "Seed & Private Investors": manualCliff(start + vestingPeriod, qty * 0.25), // Investors unlock fully in 1 month
   meta: {
-    sources: ["https://medium.com/liquity/liquity-launch-details-4537c5ffa9ea"],
-    token: "ethereum:0x6dea81c8171d0ba574754ef6f8b412f2ed88c54d",
-    protocolIds: ["270"],
+    sources: ["https://boomtoken.io/ai-agents"], // Official Boom Token AI page
+    token: "bsc:0xcd6a51559254030ca30c2fb2cbdf5c492e8caf9c", // BOOM Token contract (BSC)
+    protocolIds: ["BOOM_AI"],
   },
   categories: {
-    farming: ["Stability Pool rewards", "Uniswap LPs"],
-    noncirculating: ["Endowment", "Community reserve"],
-    insiders: ["Team and advisors", "Service providers", "Investors"],
+    farming: ["AI Staking & Governance Rewards", "DEX Liquidity (Uniswap/PancakeSwap)"],
+    security: ["AI Security & Risk Monitoring"],
+    analytics: ["AI Market Analytics"],
+    automation: ["AI Trading Bots"],
+    governance: ["Boom Treasury & Endowment", "Community Growth & Grants"],
+    noncirculating: ["Boom Treasury & Endowment", "Community Growth & Grants"],
+    insiders: ["Core Team & Advisors", "Strategic Partners & Service Providers", "Seed & Private Investors"],
   },
 };
-export default liquity;
+
+export default boomTokenAI;
