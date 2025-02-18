@@ -3,7 +3,7 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 const start = 1693558800;
 const halfTime = start + periodToSeconds.month * 18;
-const endTime = start + periodToSeconds.month * 48;
+const endTime = start + periodToSeconds.month * 54;
 const qty = 1000000000;
 const chain: string = "era";
 const token: string = "0x31C2c031fDc9d33e974f327Ab0d9883Eae06cA4A";
