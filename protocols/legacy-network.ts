@@ -2,7 +2,7 @@ import { manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 
 const chain: any = "binance";
-const LGCT: string = "0x8290333ceF9e6D528dD5618Fb97a76f268f3EDD4";
+const LGCT: string = "0xD38B305CaC06990c0887032A02C03D6839f770A8";
 const lgct: Protocol = {
   "Public Sale": manualLinear("2025-01-7","2026-09-06", 45e6),
   "Community and Marketing": manualLinear("2025-09-22", "2035-01-06", 15e6),
@@ -20,7 +20,7 @@ const lgct: Protocol = {
     token: `${chain}:${LGCT}`,
     protocolIds: [""],
     notes: [
-      `Dates are generally rounded to the nearest month since little information is available.`,
+      `The token is cross-bridge and available on Binance Smart Chain, Ethereum, Base and Vechain.`,
     ],
   },
   categories: {
