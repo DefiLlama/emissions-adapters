@@ -13,9 +13,9 @@ const zkswap_finance: Protocol = {
     "Initial Liquidity": manualCliff(start, qty * 0.125),
     "TGE Bonus": manualLinear(start, start + periodToSeconds.month * 5, qty * 0.05),
     "Early Supporters Retroactive": manualLinear(start, start + periodToSeconds.month * 5, qty * 0.05),
-    "Swap2Earn Incentive": [manualLinear(start, halfTime, qty * 0.2 * 0.5), manualLinear(halfTime, endTime, qty * 0.2 * 0.5)],
+    "Swap2Earn Incentive": [manualLinear(start, halfTime, qty * 0.2 * 0.5), manualLinear(halfTime, endTime, qty * 0.15 * 0.5)],
     "Liquidity Providers Incentive": [manualLinear(start, halfTime, qty * 0.2 * 0.5), manualLinear(halfTime, endTime, qty * 0.2 * 0.5)],
-    "Staking Reward": [manualLinear(start, halfTime, qty * 0.05 * 0.5), manualLinear(halfTime, endTime, qty * 0.05 * 0.5)],
+    "Staking Reward": [manualLinear(start, halfTime, qty * 0.05 * 0.5), manualLinear(halfTime, endTime, qty * 0.10 * 0.5)],
     "Team": [manualLinear(start, halfTime, qty * 0.04 * 0.5), manualLinear(halfTime, endTime, qty * 0.04 * 0.5)],
     "Treasury + Operation": [manualLinear(start, halfTime, qty * 0.035 * 0.5), manualLinear(halfTime, endTime, qty * 0.035 * 0.5)],
     meta: {
