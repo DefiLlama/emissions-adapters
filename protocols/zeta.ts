@@ -2,7 +2,7 @@ import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const total = 21e9;
+const total = 21e8;
 const start = 1697670000;
 
 const zeta: Protocol = {
@@ -12,7 +12,7 @@ const zeta: Protocol = {
       start + periodToSeconds.month,
       periodToSeconds.month,
       5,
-      total * 0.02,
+      total * 0.002,
     ),
     manualStep(
       start + periodToSeconds.months(6),
