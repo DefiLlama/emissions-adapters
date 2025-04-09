@@ -65,7 +65,7 @@ const doge: Protocol = {
             "https://github.com/dogecoin/dogecoin/blob/master/src/chainparams.cpp",
         ],
         token: "coingecko:dogecoin",
-        protocolIds: [],
+        protocolIds: ["6016"],
         notes: [
             "Block rewards were initially random between 0-1,000,000 DOGE for blocks 1-99,999",
             "Block rewards were random between 0-500,000 DOGE for blocks 100,000-144,999",

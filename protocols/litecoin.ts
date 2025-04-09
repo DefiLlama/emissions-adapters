@@ -31,7 +31,7 @@ const litecoin: Protocol = {
       "https://www.litecoinhalving.com/",
     ],
     token: "coingecko:litecoin",
-    protocolIds: [],
+    protocolIds: ["4499"],
     notes: [
         `Future halvenings have at a specified block height, therefore the dates shown are an estimate only.`,
     ],

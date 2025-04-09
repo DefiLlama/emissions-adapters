@@ -5,6 +5,12 @@ import { periodToSeconds } from "../utils/time";
 const start = 1705536000; // January 18, 2025
 
 const trump: Protocol = {
+  "Public Distribution": [
+    manualCliff(start, 100_000_000), // 100% at TGE
+  ],
+  "Liquidity": [
+    manualCliff(start, 100_000_000), // 100% at TGE
+  ],
   "Creators & CIC Digital 1": [
     manualCliff(start + periodToSeconds.month * 3, 36_000_000), // 10% unlock after 3 months
     manualStep(
@@ -59,16 +65,10 @@ const trump: Protocol = {
       15_000_000 / 730 // Remaining 75% over 24 months daily
     ),
   ],
-  "Public Distribution": [
-    manualCliff(start, 100_000_000), // 100% at TGE
-  ],
-  "Liquidity": [
-    manualCliff(start, 100_000_000), // 100% at TGE
-  ],
   meta: {
     sources: ["https://gettrumpmemes.com/"],
     token: "coingecko:official-trump",
-    protocolIds: []
+    protocolIds: ["6017"]
   },
   categories: {
     insiders: [
