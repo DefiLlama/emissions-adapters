@@ -21,7 +21,8 @@ const gunzFoundation = totalSupply * 0.09;
 
 const gunz: Protocol = {
   "Community Incentives": manualCliff(start, communityIncentives),
-
+  "NFT Validator Staking":
+    manualCliff(start, nftValidatorStaking), // Not circulating
   "Liquidity Pool":
     manualCliff(start, liquidityPool),
 
@@ -38,7 +39,6 @@ const gunz: Protocol = {
       start + periodToSeconds.months(30), // 12 + 18 months
       privateB
     ),
-
 
   "Strategic Round":
     manualLinear(
@@ -97,7 +97,7 @@ const gunz: Protocol = {
     sources: ["https://storage.gunbygunz.com/GUNZ__Whitepaper.pdf"],
     protocolIds: ["6030"],
     notes: [
-      "NFT Validator Staking allocation is not circulating and excluded from vesting schedules",
+      "NFT Validator Staking allocation is not circulating, but it is included in the total supply.",
       "Liquidity Pool allocation is supposed to be 66% at TGE and 33% unlocked after 1 day of listing but for simplicity, it is set to 100% at TGE",
     ]
   },
@@ -114,6 +114,7 @@ const gunz: Protocol = {
     noncirculating: [
       "Treasury",
       "GUNZ Foundation",
+      "NFT Validator Staking",
     ],
     liquidity: [
       "Liquidity Pool",
