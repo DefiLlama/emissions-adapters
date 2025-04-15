@@ -31,22 +31,42 @@ export function addResultToEvents(
   });
 
   linears.map((l: LinearAdapterResult, i: number) => {
-    if (i == linears.length) return;
-    const l2 = linears[i];
-    const thisRate = i == 0 ? 0 : ratePerPeriod(l, precision);
-    const nextRate = ratePerPeriod(l2, precision);
-    if (Math.abs(Number(thisRate) - Number(nextRate)) / thisRate < 0.001)
-      return;
-    if (!metadata.events) metadata.events = [];
-    metadata.events.push({
-      description: `Linear unlock ${isFuture(l.start) ? "will" : "was"} ${
-        Number(thisRate) > Number(nextRate) ? "decrease" : "increase"
-      }${
-        isFuture(l.start) ? "" : "d"
-      } from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
-      timestamp: l.start,
-      noOfTokens: [thisRate, nextRate],
-    });
+    // compare current with the next one if it exists
+    if (i < linears.length - 1) {
+      const l2 = linears[i + 1];
+      const thisRate = ratePerPeriod(l, precision);
+      const nextRate = ratePerPeriod(l2, precision);
+
+      if (Math.abs(Number(thisRate) - Number(nextRate)) / (thisRate || 1) >= 0.001) {
+        if (!metadata.events) metadata.events = [];
+        metadata.events.push({
+          description: `Linear unlock ${isFuture(l2.start) ? "will" : "was"} ${
+            Number(thisRate) > Number(nextRate) ? "decrease" : "increase"
+          }${
+            isFuture(l2.start) ? "" : "d"
+          } from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
+          timestamp: l2.start,
+          noOfTokens: [thisRate, nextRate],
+        });
+      }
+    }
+
+    // handle first linear period to show the initial rate increase from 0
+    if (i === 0) {
+        const initialRate = ratePerPeriod(l, precision);
+        if (initialRate > 0) {
+          if (!metadata.events) metadata.events = [];
+          metadata.events.push({
+            description: `Linear unlock ${isFuture(l.start) ? "will" : "was"} ${
+              0 > Number(initialRate) ? "decrease" : "increase"
+            }${
+              isFuture(l.start) ? "" : "d"
+            } from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
+            timestamp: l.start,
+            noOfTokens: [0, initialRate],
+          });
+        }
+    }
   });
 
   steps.map((s: StepAdapterResult) => {
