@@ -2,7 +2,7 @@ import { Protocol } from "../types/adapters";
 import { manualCliff, manualStep } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 
-const start = 1705536000; // January 18, 2025
+const start = 1737133200; // January 18, 2025
 
 const trump: Protocol = {
   "Public Distribution": [
