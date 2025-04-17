@@ -30,7 +30,7 @@ const rocketpool: Protocol = {
         token: `ethereum:0xD33526068D116cE69F19A9ee46F0bd304F21A51f`,
         protocolIds: ["900"],
         notes: [
-            "Public Saale, Pre-Sale Investors, and Team allocations are based on old RPL token",
+            "Public Sale, Pre-Sale Investors, and Team allocations are based on old RPL token",
             "RocketPool uses a compound inflation model where new RPL tokens are minted at regular intervals.",
             "Emissions are split between Node Operators, Trusted Node Operators (oDAO), and the Protocol DAO based on configured percentages on that time.",
             "The percentages at start are 70% for Node Operators, 15% for Trusted Node Operators, and 15% for the Protocol DAO according to the docs. However, these percentages are subject to change over time. In this analysis we will track it correctly using onchain data",
