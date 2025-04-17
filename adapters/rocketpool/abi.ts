@@ -1,4 +1,11 @@
 export default {
+  getAddress: {
+    "inputs": [{"type": "bytes32"}],
+    "name": "getAddress",
+    "outputs": [{"type": "address"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
   getRewardsClaimersPerc: {
     "inputs": [],
     "name": "getRewardsClaimersPerc",
