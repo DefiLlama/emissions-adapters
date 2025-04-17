@@ -1,0 +1,7 @@
+import adapter from "./emissions";
+
+const RPL_TOKEN = "0xD33526068D116cE69F19A9ee46F0bd304F21A51f";
+const INFLATION_SETTINGS = "0x1d4AAEaE7C8b75a8e5ab589a84516853DBDdd735";
+const REWARDS_SETTINGS = "0x8857610Ba0A7caFD4dBE1120bfF03E9c74fc4124";
+
+export const rocketPoolEmissions = adapter(RPL_TOKEN, INFLATION_SETTINGS, REWARDS_SETTINGS, "ethereum");
