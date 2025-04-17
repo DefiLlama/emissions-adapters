@@ -55,9 +55,26 @@ export const protocolsWithNoEmissions:string[] = [
     "2299", // EMDX
     "1614", // 0vix
     "3643", // Amphor
-    "1707", // CLever
     "3520", // MonarchPay
     "3146", // Scatter
     "3123", // Stealcam
     "3501", // Valorem
+    "5009", //Tether
+    "5008", //Circle
+    "2223", //Meteora Vaults
+    "4148", //Meteora DLMM
+    "385", //Meteora Pools
+    "4449", //Pump
+    "5936", //Pump Swap
+    "6049", //Axiom
+    "5398", //Phantom
+    "4981", //Photon
+    "5174", //four.meme
+    "5407", //BullX
+    "4293", //Trojan
+    "5408", //gmgn
+    "4227", //bonkbot
+    "2929", //SparkLend
+    "5806", //Bloom Trading Bot
+    "4990", //DEX Screener
 ]
