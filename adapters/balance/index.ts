@@ -8,23 +8,20 @@ import { getBalance } from "@defillama/sdk/build/eth";
 
 let res: number;
 
-export async function latest(
-  adapter: string,
-  timestampDeployed: number,
-): Promise<number> {
+export async function latest(adapter: string, timestampDeployed: number): Promise<number> {
   if (!res) {
     let r;
-    try {
-      r = await fetch(`https://api.llama.fi/emission/${adapter}`).then((r) =>
-        r.json(),
-      );
-    } catch {
-      return timestampDeployed;
-    }
+    // try {
+    //   r = await fetch(`https://api.llama.fi/emission/${adapter}`).then((r) =>
+    //     r.json(),
+    //   );
+    // } catch {
+    adapter;
+    return timestampDeployed;
+    // }
     if (!r.body) return timestampDeployed;
     r = JSON.parse(r.body);
-    return r.metadata.incompleteSections == null ||
-      r.metadata.incompleteSections[0].lastRecord == null
+    return r.metadata.incompleteSections == null || r.metadata.incompleteSections[0].lastRecord == null
       ? timestampDeployed
       : r.metadata.incompleteSections[0].lastRecord;
   }
@@ -36,7 +33,7 @@ export async function balance(
   target: string,
   chain: any,
   adapter: string,
-  timestampDeployed: number,
+  timestampDeployed: number
 ): Promise<CliffAdapterResult[]> {
   let trackedTimestamp: number;
   let decimals: number;
@@ -66,8 +63,7 @@ export async function balance(
                 block: Number(block),
                 chain,
               }).then((r: any) => {
-                if (!r.output)
-                  throw new Error(`balance call failed for ${adapter}`);
+                if (!r.output) throw new Error(`balance call failed for ${adapter}`);
                 if (!chainData[block].result) chainData[block].result = 0;
                 chainData[block].result += Number(r.output);
               });
@@ -79,13 +75,9 @@ export async function balance(
             block,
             requery: true,
           }).then((r: (number | null)[]) => {
-            if (r.includes(null))
-              throw new Error(`balance call failed for ${adapter}`);
-            chainData[block].result = r.reduce(
-              (p: number, c: any) => Number(p) + Number(c),
-              0,
-            );
-          }),
+            if (r.includes(null)) throw new Error(`balance call failed for ${adapter}`);
+            chainData[block].result = r.reduce((p: number, c: any) => Number(p) + Number(c), 0);
+          })
     );
 
   return filterRawAmounts(chainData, decimals);

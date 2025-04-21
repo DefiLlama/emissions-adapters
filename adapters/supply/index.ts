@@ -8,20 +8,20 @@ let res: number;
 
 export async function latest(key: string, reference: number): Promise<number> {
   if (!res) {
-    let r;
-    try {
-      r = await fetch(`https://api.llama.fi/emission/${key}`).then((r) =>
-        r.json(),
-      );
-    } catch {
-      return reference;
-    }
-    if (!r.body) return reference;
-    r = JSON.parse(r.body);
-    return r.metadata.incompleteSections == null ||
-      r.metadata.incompleteSections[0].lastRecord == null
-      ? reference
-      : r.metadata.incompleteSections[0].lastRecord;
+    // let r;
+    // try {
+    //   r = await fetch(`https://api.llama.fi/emission/${key}`).then((r) =>
+    //     r.json(),
+    //   );
+    // } catch {
+    key;
+    return reference;
+    // }
+    // if (!r.body) return reference;
+    // r = JSON.parse(r.body);
+    // return r.metadata.incompleteSections == null || r.metadata.incompleteSections[0].lastRecord == null
+    //   ? reference
+    //   : r.metadata.incompleteSections[0].lastRecord;
   }
   return res;
 }
@@ -31,7 +31,7 @@ export async function supply(
   target: string,
   timestampDeployed: number,
   adapter: string,
-  excluded: number = 0,
+  excluded: number = 0
 ) {
   let trackedTimestamp: number;
   let decimals: number;
@@ -58,7 +58,7 @@ export async function supply(
           block,
         }).then((res: number) => {
           chainData[block].result = res / 10 ** decimals - excluded;
-        }),
+        })
     );
 
   const sections: CliffAdapterResult[] = [];
