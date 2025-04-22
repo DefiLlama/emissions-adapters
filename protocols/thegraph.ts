@@ -41,7 +41,7 @@ function calculateInflationEmissions(): LinearAdapterResult[] {
   return sections;
 }
 
-const gunz: Protocol = {
+const thegraph: Protocol = {
   "Early Backers": manualCliff(start + periodToSeconds.months(6), earlyBackers),
   "Backers": manualCliff(start + periodToSeconds.months(12), backers),
 
@@ -123,4 +123,4 @@ const gunz: Protocol = {
   },
 };
 
-export default gunz;
+export default thegraph;
