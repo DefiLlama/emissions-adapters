@@ -6,6 +6,13 @@ export default {
     "stateMutability": "view",
     "type": "function"
   },
+  getUint: {
+    "inputs": [{"type": "bytes32"}],
+    "name": "getUint",
+    "outputs": [{"type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
   getRewardsClaimersPerc: {
     "inputs": [],
     "name": "getRewardsClaimersPerc",
