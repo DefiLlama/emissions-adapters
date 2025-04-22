@@ -77,4 +77,9 @@ export const protocolsWithNoEmissions:string[] = [
     "2929", //SparkLend
     "5806", //Bloom Trading Bot
     "4990", //DEX Screener
+    "5577", //Trust Wallet
+    "5647", //Sailor
+    "5825", //Veda
+    "4457", //Magpie Ecosystem
+    "3871", //Wildcard
 ]
