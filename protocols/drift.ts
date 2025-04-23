@@ -29,8 +29,8 @@ const drift: Protocol = {
 
   "Protocol Development":
     manualLinear(
-      start,
-      start + periodToSeconds.months(60),
+      start + periodToSeconds.months(18),
+      start + periodToSeconds.months(36),
       protocolDev
     ),
 
@@ -39,6 +39,8 @@ const drift: Protocol = {
     sources: ["https://www.drift.trade/governance/introducing-the-drift-governance-token"],
     protocolIds: ["970"],
     notes: [
+      "Protocol Development are subject to 18 month lock up and 18 month vesting period based on the documentation",
+      "Strategic Participants are assumed to be locked for 12 months and then linearly unlocked, assumption are made based on chart image in the source",
     ]
   },
 
