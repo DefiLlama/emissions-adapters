@@ -1,5 +1,6 @@
 import {
   AdapterResult,
+  Categories,
   CliffAdapterResult,
   LinearAdapterResult,
   Metadata,
@@ -13,7 +14,15 @@ export function addResultToEvents(
   section: string,
   metadata: Metadata,
   results: AdapterResult[],
+  categories: Categories,
 ): Metadata {
+  const sectionToCategory: { [section: string]: string } = {};
+  for (const category in categories) {
+    categories[category].forEach((s) => {
+      sectionToCategory[s] = category;
+    });
+  }
+
   const [cliffs, steps, linears]: any = ["cliff", "step", "linear"].map(
     (t: any) => filterResultsByType(results, t),
   );
@@ -27,6 +36,7 @@ export function addResultToEvents(
       } unlock${isFuture(c.start) ? "" : "ed"} from ${section} on {timestamp}`,
       timestamp: c.start,
       noOfTokens: [c.amount],
+      category: sectionToCategory[section] || 'Uncategorized',
     });
   });
 
@@ -47,6 +57,7 @@ export function addResultToEvents(
           } from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
           timestamp: l2.start,
           noOfTokens: [thisRate, nextRate],
+          category: sectionToCategory[section] || 'Uncategorized',
         });
       }
     }
@@ -64,6 +75,7 @@ export function addResultToEvents(
             } from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
             timestamp: l.start,
             noOfTokens: [0, initialRate],
+            category: sectionToCategory[section] || 'Uncategorized',
           });
         }
     }
@@ -79,6 +91,7 @@ export function addResultToEvents(
         `,
         timestamp: s.start + i * s.stepDuration,
         noOfTokens: [s.amount],
+        category: sectionToCategory[section] || 'Uncategorized',
       });
     }
   });

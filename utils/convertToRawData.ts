@@ -68,7 +68,7 @@ export async function createRawSections(
         );
         adapterResults = await Promise.all(adapterResults);
 
-        addResultToEvents(section, metadata, adapterResults);
+        addResultToEvents(section, metadata, adapterResults, categories);
 
         const results: RawResult[] | RawResult[][] = adapterResults
           .flat()
@@ -106,6 +106,8 @@ export async function createRawSections(
 
   if (metadata && metadata.events)
     metadata.events.sort((a: Event, b: Event) => a.timestamp - b.timestamp);
+
+  
 
   return { rawSections, documented, startTime, endTime, metadata, categories };
 }
