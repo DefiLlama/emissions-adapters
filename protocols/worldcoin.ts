@@ -1,138 +1,80 @@
-import { Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
+import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-// July 24, 2023
 const start = 1690156800;
-const totalSupply = 10_000_000_000;
-
-// Allocation amounts
-const community = totalSupply * 0.75;      // 75.0% - Community
-const team = totalSupply * 0.10;           // 10.0% - Initial Development Team
-const investors = totalSupply * 0.138;     // 13.8% - TFH Investors
-const reserve = totalSupply * 0.012;       // 1.2% - TFH Reserve
-
-// Initial launch amount for community
-const initialCommunityAmount = 500_000_000; // 0.5B at launch
-const year3 = start + periodToSeconds.years(3);
-const year6 = start + periodToSeconds.years(6);
-const year9 = start + periodToSeconds.years(9);
-const year15 = start + periodToSeconds.years(15);
-
-const communityYear3Target = 4_000_000_000;  // 4.0B by year 3
-const communityYear6Target = 5_750_000_000;  // 5.75B by year 6
-const communityYear9Target = 6_625_000_000;  // 6.625B by year 9
-const communityYear15Target = 7_500_000_000; // 7.5B by year 15
+const qty = 1e10;
+const token = "0x163f8c2467924be0ae7b5347228cabf260318753";
+const chain = "ethereum";
 
 const worldcoin: Protocol = {
-  "Worldcoin Community": [
-    // Initial launch amount
-    manualCliff(start, initialCommunityAmount),
-
-    // Phase 1: Launch to Year 3 (4.0B target)
+  "Market Makers": manualCliff(start, qty * 0.01),
+  Community: [
+    manualCliff(start, qty * 0.0043),
+    manualLinear(start, start + periodToSeconds.year, qty * 0.0357),
     manualLinear(
-      start,
-      year3,
-      communityYear3Target - initialCommunityAmount
+      start + periodToSeconds.year,
+      start + periodToSeconds.year * 3,
+      qty * 0.35,
     ),
-
-    // Phase 2: Year 4-6 (5.75B target)
     manualLinear(
-      year3,
-      year6,
-      communityYear6Target - communityYear3Target
+      start + periodToSeconds.year * 3,
+      start + periodToSeconds.year * 6,
+      qty * 0.175,
     ),
-
-    // Phase 3: Year 7-9 (6.625B target)
     manualLinear(
-      year6,
-      year9,
-      communityYear9Target - communityYear6Target
+      start + periodToSeconds.year * 6,
+      start + periodToSeconds.year * 9,
+      qty * 0.0875,
     ),
-
-    // Phase 4: Year 10-15 (7.5B target)
     manualLinear(
-      year9,
-      year15,
-      communityYear15Target - communityYear9Target
-    )
+      start + periodToSeconds.year * 9,
+      start + periodToSeconds.year * 15,
+      qty * 0.0875,
+    ),
   ],
-
-  "TFH Reserve": manualCliff(start, reserve),
-
+  Investors: [
+    manualLinear(
+      start + periodToSeconds.year,
+      start + periodToSeconds.year * 3,
+      qty * 0.135 * 0.2,
+    ),
+    manualLinear(
+      start + periodToSeconds.year,
+      start + periodToSeconds.year * 5,
+      qty * 0.135 * 0.8,
+    ),
+  ],
   "Initial Development Team": [
-    // 20% on original 3-year schedule (1 year cliff + 2 year linear)
-    manualCliff(
+    manualLinear(
       start + periodToSeconds.year,
-      team * 0.2 * 0.333 // 33.3% cliff after 1 year
+      start + periodToSeconds.year * 3,
+      qty * 0.098 * 0.2,
     ),
     manualLinear(
       start + periodToSeconds.year,
-      start + periodToSeconds.years(3),
-      team * 0.2 * 0.667 // 66.7% over 2 years after cliff
+      start + periodToSeconds.year * 5,
+      qty * 0.098 * 0.8,
     ),
-
-    // 80% on extended 5-year schedule
-    manualCliff(
-      start + periodToSeconds.year,
-      team * 0.8 * 0.333 // 33.3% cliff after 1 year
-    ),
-    manualLinear(
-      start + periodToSeconds.year,
-      start + periodToSeconds.years(5),
-      team * 0.8 * 0.667 // 66.7% over 4 years after cliff
-    )
   ],
-
-  "TFH Investors": [
-    // 20% on original 3-year schedule (1 year cliff + 2 year linear)
-    manualCliff(
-      start + periodToSeconds.year,
-      investors * 0.2 * 0.333 // 33.3% cliff after 1 year
-    ),
-    manualLinear(
-      start + periodToSeconds.year,
-      start + periodToSeconds.years(3),
-      investors * 0.2 * 0.667 // 66.7% over 2 years after cliff
-    ),
-
-    // 80% on extended 5-year schedule
-    manualCliff(
-      start + periodToSeconds.year,
-      investors * 0.8 * 0.333 // 33.3% cliff after 1 year
-    ),
-    manualLinear(
-      start + periodToSeconds.year,
-      start + periodToSeconds.years(5),
-      investors * 0.8 * 0.667 // 66.7% over 4 years after cliff
-    )
-  ],
-
+  Reserve: manualLinear(
+    start + periodToSeconds.year,
+    start + periodToSeconds.year * 3,
+    qty * 0.017,
+  ),
   meta: {
-    token: "coingecko:worldcoin-wld",
+    token: `${chain}:${token}`,
     sources: [
-      "https://whitepaper.world.org/#introducing-wld",
+      `https://www.toolsforhumanity.com/announcements/lockup-extension`,
+      "https://whitepaper.worldcoin.org/tokenomics#circulating-supply-at-launch",
     ],
     protocolIds: ["4612"],
-    notes: [
-      "Community allocation follows a phased distribution reaching 7.5B by year 15",
-      "80% of team and investor tokens have vesting extended from 3 to 5 years",
-      "TFH Reserve (1.2%) is locked for at least as long as team/investor tokens"
-    ]
   },
-
   categories: {
-    insiders: [
-      "Initial Development Team",
-      "TFH Investors"
-    ],
-    noncirculating: [
-      "TFH Reserve"
-    ],
-    farming: [
-      "Worldcoin Community"
-    ]
-  }
+    publicSale: ["Community"],
+    insiders: ["Market Makers", "Investors", "Initial Development Team"],
+    noncirculating: ["Reserve"],
+  },
 };
 
 export default worldcoin;
