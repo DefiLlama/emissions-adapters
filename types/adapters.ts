@@ -157,6 +157,7 @@ export type Event = {
   description: string;
   timestamp: number;
   noOfTokens: number[];
+  category: string;
 };
 export type TimeSeriesChainData = {
   [block: string]: {
