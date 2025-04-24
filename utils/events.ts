@@ -37,6 +37,7 @@ export function addResultToEvents(
       timestamp: c.start,
       noOfTokens: [c.amount],
       category: sectionToCategory[section] || 'Uncategorized',
+      unlockType: "cliff"
     });
   });
 
@@ -49,16 +50,17 @@ export function addResultToEvents(
 
       if (Math.abs(Number(thisRate) - Number(nextRate)) / (thisRate || 1) >= 0.001) {
         if (!metadata.events) metadata.events = [];
-        metadata.events.push({
-          description: `Linear unlock ${isFuture(l2.start) ? "will" : "was"} ${
-            Number(thisRate) > Number(nextRate) ? "decrease" : "increase"
-          }${
-            isFuture(l2.start) ? "" : "d"
-          } from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
-          timestamp: l2.start,
-          noOfTokens: [thisRate, nextRate],
-          category: sectionToCategory[section] || 'Uncategorized',
-        });
+          metadata.events.push({
+            description: `Linear unlock ${isFuture(l2.start) ? "will" : "was"} ${
+              Number(thisRate) > Number(nextRate) ? "decrease" : "increase"
+            }${
+              isFuture(l2.start) ? "" : "d"
+            } from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
+            timestamp: l2.start,
+            noOfTokens: [thisRate, nextRate],
+            category: sectionToCategory[section] || 'Uncategorized',
+            unlockType: "linear"
+          });
       }
     }
 
@@ -76,6 +78,7 @@ export function addResultToEvents(
             timestamp: l.start,
             noOfTokens: [0, initialRate],
             category: sectionToCategory[section] || 'Uncategorized',
+            unlockType: "linear"
           });
         }
     }
@@ -92,6 +95,7 @@ export function addResultToEvents(
         timestamp: s.start + i * s.stepDuration,
         noOfTokens: [s.amount],
         category: sectionToCategory[section] || 'Uncategorized',
+        unlockType: "cliff"
       });
     }
   });
