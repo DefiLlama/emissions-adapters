@@ -158,6 +158,7 @@ export type Event = {
   timestamp: number;
   noOfTokens: number[];
   category: string;
+  unlockType: "cliff" | "linear";
 };
 export type TimeSeriesChainData = {
   [block: string]: {
