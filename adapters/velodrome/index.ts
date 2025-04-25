@@ -1,5 +1,4 @@
-import { getLogs } from "@defillama/sdk/build/util/logs";
-import { getProvider } from "@defillama/sdk";
+import { ChainApi } from '@defillama/sdk'
 import { LinearAdapterResult, TimeSeriesChainData } from "../../types/adapters";
 import { PromisePool } from "@supercharge/promise-pool";
 import { getBlock } from "@defillama/sdk/build/computeTVL/blocks";
@@ -75,6 +74,10 @@ async function getCachedChainData(version: 'v1' | 'v2'): Promise<VelodromeChainD
 }
 
 async function fetchChainData(version: 'v1' | 'v2'): Promise<VelodromeChainData> {
+    const api = new ChainApi({
+        chain: 'optimism'
+    })
+
     const chainData: VelodromeChainData = {};
     const versionConfig = VERSIONS[version];
     const toBlock = (await getBlock("optimism", unixTimestampNow())).number;
@@ -84,7 +87,7 @@ async function fetchChainData(version: 'v1' | 'v2'): Promise<VelodromeChainData>
 
     if (version === 'v2') {
         const [mintLogs, tokenMints] = await Promise.all([
-            getLogs({
+            api.getLogs({
                 target: versionConfig.MINTER_ADDRESS,
                 eventAbi: mintEventAbi,
                 fromBlock: versionConfig.START,
@@ -93,7 +96,7 @@ async function fetchChainData(version: 'v1' | 'v2'): Promise<VelodromeChainData>
                 entireLog: true,
                 parseLog: true
             }),
-            getLogs({
+            api.getLogs({
                 target: versionConfig.VELO_TOKEN,
                 topics: [
                     "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
@@ -133,7 +136,7 @@ async function fetchChainData(version: 'v1' | 'v2'): Promise<VelodromeChainData>
         }
     } else {
         const [mintLogs, teamTransfers, rebaseTransfers] = await Promise.all([
-            getLogs({
+            api.getLogs({
                 target: versionConfig.MINTER_ADDRESS,
                 eventAbi: mintEventAbi,
                 fromBlock: versionConfig.START,
@@ -142,7 +145,7 @@ async function fetchChainData(version: 'v1' | 'v2'): Promise<VelodromeChainData>
                 entireLog: true,
                 parseLog: true
             }),
-            getLogs({
+            api.getLogs({
                 target: versionConfig.VELO_TOKEN,
                 topics: [
                     "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
@@ -154,7 +157,7 @@ async function fetchChainData(version: 'v1' | 'v2'): Promise<VelodromeChainData>
                 chain: "optimism",
                 entireLog: true
             }),
-            getLogs({
+            api.getLogs({
                 target: versionConfig.VELO_TOKEN,
                 topics: [
                     "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
@@ -210,11 +213,15 @@ function groupTransfersByTx(transfers: any[]) {
 }
 
 async function processBlocks(mintLogs: any[], chainData: VelodromeChainData) {
+    const api = new ChainApi({
+        chain: 'optimism'
+    })
+    
     const blockNumbers = [...new Set(mintLogs.map(log => log.blockNumber))];
     await PromisePool.withConcurrency(10)
         .for(blockNumbers)
         .process(async (blockNum) => {
-            const block = await getProvider("optimism").getBlock(blockNum);
+            const block = await api.provider.getBlock(blockNum);
             if (block?.timestamp) {
                 chainData[blockNum] = {
                     timestamp: block.timestamp,
