@@ -1,5 +1,4 @@
 import { call, multiCall } from "@defillama/sdk/build/abi/abi2";
-import adapter from "./emissions";
 import abi from "./abi";
 import { findBlockHeightArray } from "../../utils/chainCalls";
 import { PromisePool } from "@supercharge/promise-pool";
@@ -18,7 +17,6 @@ interface ExtendedChainData extends TimeSeriesChainData {
 }
 
 const ONE_ETHER = BigInt("1000000000000000000");
-const WEEK = 7 * 24 * 60 * 60;
 const RPL_TOKEN = "0xD33526068D116cE69F19A9ee46F0bd304F21A51f";
 const ROCKET_STORAGE = "0x1d8f8f00cfa6758d7be78336684788fb0ee0fa46";
 const INFLATION_SETTINGS_KEY = "0x36b7eef85823b64ca08056c771cf2b8dd4f9f4491b3adfa282c1d3dd7b847af8";
@@ -92,7 +90,7 @@ function calculateEmissions(
 export async function latest(reference: number): Promise<number> {
     let r;
     try {
-        r = await fetch(`https://api.llama.fi/emission/rocketpool`).then((r) =>
+        r = await fetch(`https://api.llama.fi/emission/rocket-pool`).then((r) =>
             r.json(),
         );
     } catch {
