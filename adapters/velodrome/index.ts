@@ -41,10 +41,6 @@ const VERSIONS: Record<string, VelodromeVersion> = {
     }
 };
 
-const api = new ChainApi({
-    chain: 'optimism'
-})
-
 export type EmissionType = 'total' | 'gauge' | 'rebase' | 'team';
 
 interface CacheData {
@@ -78,6 +74,10 @@ async function getCachedChainData(version: 'v1' | 'v2'): Promise<VelodromeChainD
 }
 
 async function fetchChainData(version: 'v1' | 'v2'): Promise<VelodromeChainData> {
+    const api = new ChainApi({
+        chain: 'optimism'
+    })
+
     const chainData: VelodromeChainData = {};
     const versionConfig = VERSIONS[version];
     const toBlock = (await getBlock("optimism", unixTimestampNow())).number;
@@ -213,6 +213,10 @@ function groupTransfersByTx(transfers: any[]) {
 }
 
 async function processBlocks(mintLogs: any[], chainData: VelodromeChainData) {
+    const api = new ChainApi({
+        chain: 'optimism'
+    })
+    
     const blockNumbers = [...new Set(mintLogs.map(log => log.blockNumber))];
     await PromisePool.withConcurrency(10)
         .for(blockNumbers)
