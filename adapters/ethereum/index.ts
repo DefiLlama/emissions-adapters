@@ -31,29 +31,22 @@ export const inflation = async (): Promise<LinearAdapterResult[]> => {
 };
 
 export const uncle = async (): Promise<LinearAdapterResult[]> => {
-  const rawData: any[] = uncleData;
+  const rawData = uncleData;
   const linearSections: LinearAdapterResult[] = [];
 
-  const sortedData = [...rawData].sort((a, b) => a.timestamp - b.timestamp);
+  const { startTime, rewards } = rawData;
 
-  for (let i = 0; i < sortedData.length - 1; i++) {
-    const current = sortedData[i];
-    
+  for (let i = 0; i < rewards.length; i++) {
+    const start = startTime + i * 86400;
+    const end = startTime + 86400;
+
     linearSections.push({
       type: "linear",
-      amount: Number(current.uncles_reward),
-      start: current.timestamp,
-      end: sortedData[i + 1].timestamp
+      amount: Number(rewards[i]),
+      start: start,
+      end: end
     });
   }
-
-  const lastEntry = sortedData[sortedData.length - 1];
-  linearSections.push({
-    type: "linear",
-    amount: Number(lastEntry.uncles_reward),
-    start: lastEntry.timestamp,
-    end: lastEntry.timestamp + periodToSeconds.day
-  });
 
   return linearSections;
 };
