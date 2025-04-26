@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emissions Chart Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+
+    <style>
+        .chart-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Protocol Emissions Chart</h1>
+    <div class="chart-container">
+        <canvas id="myChart"></canvas>
+    </div>
+    <script>
+        // Chart data will be injected here
+        const chartData = CHART_DATA_PLACEHOLDER;
+        
+        // Create datasets from the chart data
+        const hexColors = {
+            green: "#008000",
+            blue: "#0000FF",
+            cyan: "#00FFFF",
+            indigo: "#4B0082",
+            gray: "#696969",
+            maroon: "#800000",
+            purple: "#800080"
+        };
+
+        // Get unique sections to assign consistent colors
+        const sections = [...new Set(chartData.map(d => d.section))];
+
+        const datasets = chartData.map((section, index) => ({
+            label: section.section,
+            data: section.data.unlocked.map((value, i) => ({
+                x: new Date(section.data.timestamps[i] * 1000),
+                y: value
+            })),
+            fill: true,
+            borderWidth: 2,
+            tension: 0.1,
+            borderColor: Object.values(hexColors)[sections.indexOf(section.section)],
+            backgroundColor: Object.values(hexColors)[sections.indexOf(section.section)]
+        }));
+
+        // Initialize the chart
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    tooltip: {
+                    callbacks: {
+                        footer: (tooltipItems) => {
+                            let total = 0;
+                            tooltipItems.forEach(item => {
+                                total += item.parsed.y;
+                            });
+                            return 'Total: ' + total.toLocaleString();
+                        }
+                    }
+                },
+                    zoom: {
+                        zoom: {
+                            wheel: {
+                                enabled: true
+                            },
+                            pinch: {
+                                enabled: true
+                            },
+                            mode: 'xy'
+                        },
+                        pan: {
+                            enabled: true,
+                            mode: 'xy'
+                        }
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 0
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            displayFormats: {
+                                quarter: 'MMM YYYY'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Tokens'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
