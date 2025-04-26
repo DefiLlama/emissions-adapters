@@ -1,3 +1,4 @@
+import { uncle } from "../adapters/ethereum";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { CliffAdapterResult, LinearAdapterResult, Protocol } from "../types/adapters";
 import { GAS_TOKEN } from "../utils/constants";
@@ -85,6 +86,7 @@ const ethereum: Protocol = {
     manualLinear(genesis, byzantiumFork, 4369999 * 5),
     manualLinear(byzantiumFork, constantinopleFork, 2910000 * 3),
     manualLinear(constantinopleFork, merge, 8257393 * 2),
+    uncle,
     stakingRewards,
     burnData
   ],
@@ -93,8 +95,7 @@ const ethereum: Protocol = {
     notes: [
       `Information on the Early Contributor vesting schedule structure could not be found, here we have assumed it as linearly unlocked over 4 years.`,
       `The Ethereum Foundation supply is assumed to be unlocked when there's an outflow from EthDev address.`,
-      `Issuance is combination of PoW and PoS issuance, with EIP-1559 burning included`,
-      `Uncle Block rewards are not included in the issuance calculation.`,
+      `Issuance is combination of PoW and PoS issuance, with Uncle Rewards and EIP-1559 burning included`,
     ],
     sources: [
       "https://dune.com/21co/ethereum-key-metrics",
