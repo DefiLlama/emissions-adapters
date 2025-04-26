@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import { LinearAdapterResult } from "../../types/adapters";
 import { periodToSeconds } from "../../utils/time";
 import etherscan from "./etherscan.json";
+import uncleData from "./uncle.json";
 
 export const inflation = async (): Promise<LinearAdapterResult[]> => {
   const csvAmount = "120071885.806088302627129454";
@@ -27,4 +28,25 @@ export const inflation = async (): Promise<LinearAdapterResult[]> => {
   });
 
   return sections;
+};
+
+export const uncle = async (): Promise<LinearAdapterResult[]> => {
+  const rawData = uncleData;
+  const linearSections: LinearAdapterResult[] = [];
+
+  const { startTime, rewards } = rawData;
+
+  for (let i = 0; i < rewards.length; i++) {
+    const start = startTime + i * 86400;
+    const end = startTime + 86400;
+
+    linearSections.push({
+      type: "linear",
+      amount: Number(rewards[i]),
+      start: start,
+      end: end
+    });
+  }
+
+  return linearSections;
 };

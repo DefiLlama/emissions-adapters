@@ -1,9 +1,17 @@
+import 'dotenv/config';
+
 import { Allocations, Protocol } from "../types/adapters";
 import { createChartData } from "./convertToChartData";
 import { createRawSections } from "./convertToRawData";
 import { createCategoryData } from "./categoryData";
 import { getChartPng } from "./chart";
+import fs from 'fs';
+import path from 'path';
 import { secondsToReadableDate } from "./time";
+import * as _env from './env'
+
+// to trigger inclusion of the env.ts file
+const _include_env = _env.getEnv('BITLAYER_RPC')
 
 if (process.argv.length < 3) {
   console.error(`Missing argument, you need to provide the adapter name.
@@ -35,6 +43,11 @@ export async function parseData(adapter: Protocol, i: number): Promise<void> {
       ? getChartPng(documentedData, process.argv[3] == "true", i + 0.5)
       : [],
   ]);
+
+  await generateInteractiveChart(realTimeData, protocol, i);
+  if (documentedData.length) {
+    await generateInteractiveChart(documentedData, protocol, i + 0.5);
+  }
 }
 
 function postDebugLogs(
@@ -45,6 +58,11 @@ function postDebugLogs(
 ): void {
   const format: string = "DD/MM/YY";
   let sum: number = 0;
+  let totalSupply: number = 0;
+
+  if (data[0]?.metadata?.total) {
+    totalSupply = data[0].metadata.total;
+  }
 
   console.log(
     `The ${protocol} chart produced starts on ${secondsToReadableDate(
@@ -106,4 +124,25 @@ export async function main() {
     console.log(e);
   }
 }
+async function generateInteractiveChart(data: any[], protocolName: string, index: number) {
+  const templatePath = path.join(__dirname, 'template.html');
+  const outputPath = path.join(__dirname, 'testCharts', `result${index}.html`);
+  
+  let template = fs.readFileSync(templatePath, 'utf8');
+  
+  template = template.replace(
+    'const chartData = CHART_DATA_PLACEHOLDER;',
+    `const chartData = ${JSON.stringify(data, null, 2)};`
+  );
+  
+  template = template.replace(
+    '<h1>Protocol Emissions Chart</h1>',
+    `<h1>${protocolName} Emissions Chart</h1>`
+  );
+  
+  fs.writeFileSync(outputPath, template);
+  
+  console.log(`Interactive chart generated at ${outputPath}`);
+}
+
 main();
