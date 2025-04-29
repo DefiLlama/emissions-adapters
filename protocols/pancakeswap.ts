@@ -1,23 +1,39 @@
-import { Protocol } from "../types/adapters";
-import { pancakeRegular, pancakeSpecial } from "../adapters/pancakeswap";
+import { LinearAdapterResult, Protocol } from "../types/adapters";
+import { queryDune } from "../utils/dune";
+
+
+const emissions = async (): Promise<LinearAdapterResult[]> => {
+  const result: LinearAdapterResult[] = [];
+  const issuanceData = await queryDune("5057582")
+
+  for (let i = 0; i < issuanceData.length - 1; i++) {
+    result.push({
+      type: "linear",
+      start: issuanceData[i + 1].day,
+      end: issuanceData[i].day,
+      amount: issuanceData[i].daily_net_emissions
+    })
+  }
+  return result;
+}
 
 const pancakeswap: Protocol = {
-    "Regular Farming": pancakeRegular,
-    "Special Ecosystem": pancakeSpecial,
+    "Emissions": emissions,
     meta: {
         sources: [
             "https://docs.pancakeswap.finance/protocol/cake-tokenomics",
-            "https://docs.pancakeswap.finance/welcome-to-pancakeswap/how-to-guides/v3-v2-migration/migration/masterchef-v2"
+            "https://dune.com/pancakeswap/PancakeSwap-CAKE-Tokenomics"
         ],
         token: `bsc:0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82`,
         protocolIds: ["parent#pancakeswap"],
         notes: [
-            "In addition to emissions above, PancakeSwap also mint CAKE to dev address at rate of 9.09%, however it's burned weekly and never enters circulation. Therefore it's not included in this analysis.",
-        ]
+            "This chart shows the change in circulating supply over time, calculated from net emissions (minted minus burned tokens) starting from an initial supply.",
+            "CAKE have maximum supply of 450 million tokens.",
+        ],
     },
     categories: {
-        farming: ["Regular Farming"],
-        noncirculating: ["Special Ecosystem"]
+        farming: ["Regular Emissions"],
+        noncirculating: ["Special Emissions"]
     },
 };
 
