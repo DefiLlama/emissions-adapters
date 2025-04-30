@@ -29,7 +29,8 @@ const cetus: Protocol = {
   categories: {
     farming: ["Community"],
     publicSale: ["Liquidity Treasury"],
-    insiders: ["Team & Advisors", "Investors"],
+    privateSale: ["Investors"],
+    insiders: ["Team & Advisors"],
   },
 };
 

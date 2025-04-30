@@ -35,9 +35,10 @@ const zk: Protocol = {
     protocolIds: ["4844"],
   },
   categories: {
-    insiders: ["Team", "Investors"],
     airdrop: ["Airdrop"],
     noncirculating: ["Ecosystem Initiatives"],
+    privateSale: ["Investors"],
+    insiders: ["Team"],
   },
 };
 

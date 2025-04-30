@@ -27,13 +27,9 @@ const send: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Team",
-      "Investors",
-    ],
-    airdrop: [
-      "Save, Ecosystem, Suilend Airdrop",
-    ]
+    airdrop: ["Save, Ecosystem, Suilend Airdrop"],
+    privateSale: ["Investors"],
+    insiders: ["Team"],
   },
 };
 

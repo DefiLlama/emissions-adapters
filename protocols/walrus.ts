@@ -57,16 +57,10 @@ const walrus: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Investors",
-      "Mysten Labs",
-      "Early Contributor"
-    ],
-    noncirculating: [
-      "Subsidies",
-      "Community Reserve"
-    ],
-    airdrop: ["Walrus User Drop"]
+    noncirculating: ["Subsidies","Community Reserve"],
+    airdrop: ["Walrus User Drop"],
+    privateSale: ["Investors"],
+    insiders: ["Mysten Labs","Early Contributor"],
   },
 };
 

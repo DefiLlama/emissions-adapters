@@ -34,9 +34,10 @@ const x2y2: Protocol = {
   categories: {
     farming: ["Staking Reward"],
     airdrop: ["Airdrop"],
-    insiders: ["Development & Team","Presale"],
     noncirculating: ["Treasury & Ecosystem"],
-    liquidity: ["Liquidity Management"]
+    liquidity: ["Liquidity Management"],
+    privateSale: ["Presale"],
+    insiders: ["Development & Team"],
   },
 };
 

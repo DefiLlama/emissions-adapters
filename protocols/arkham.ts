@@ -41,14 +41,11 @@ const arkham: Protocol = {
     protocolIds: ["3269"],
   },
   categories: {
-    farming: [
-      "Community Rewards",
-      "Contributor Incentive Pool",
-      "DON PoS Rewards",
-    ],
-    noncirculating: ["Ecosystem Grants", "Foundation Treasury"],
-    insiders: ["Core Contributors", "Investors", "Advisors"],
+    farming: ["Community Rewards","Contributor Incentive Pool","DON PoS Rewards"],
+    noncirculating: ["Ecosystem Grants","Foundation Treasury"],
     publicSale: ["Binance Launchpad"],
+    privateSale: ["Investors"],
+    insiders: ["Core Contributors","Advisors"],
   },
 };
 

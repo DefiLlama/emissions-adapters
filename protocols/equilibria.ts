@@ -57,10 +57,10 @@ const equilibria: Protocol = {
     ],
   },
   categories: {
-    insiders: ["Presale Investors"],
     publicSale: ["IDO"],
     noncirculating: ["Equilibria Treasury"],
-    farming: ["Liquidity Mining", "Boostrapping Incentives"],
+    farming: ["Liquidity Mining","Boostrapping Incentives"],
+    privateSale: ["Presale Investors"],
   },
 };
 export default equilibria;

@@ -25,11 +25,12 @@ const ipor: Protocol = {
         protocolIds: ["2147"], 
     },
     categories: {
-        insiders: ["Core Team", "Investors", "Operations"],
-        farming: ["Liquidity Mining"],
-        noncirculating: ["DAO Treasury"],
-        airdrop: ["airdrop"]
-    },
+    farming: ["Liquidity Mining"],
+    noncirculating: ["DAO Treasury"],
+    airdrop: ["airdrop"],
+    privateSale: ["Investors"],
+    insiders: ["Core Team","Operations"],
+  },
 };
 
 export default ipor;

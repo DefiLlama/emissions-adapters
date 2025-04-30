@@ -102,24 +102,10 @@ const thegraph: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Early Team & Advisors",
-      "Edge & Node",
-      "Backers",
-      "Early Backers",
-      "Strategic GRT Sale",
-    ],
-    noncirculating: [
-      "Graph Foundation",
-      "Curator Program Grants",
-      "New Issuance",
-      "Educational Program",
-      "Bug Bounty",
-    ],
-    publicSale: [
-      "Public GRT Sale",
-      "Testnet Indexer Rewards",
-    ]
+    noncirculating: ["Graph Foundation","Curator Program Grants","New Issuance","Educational Program","Bug Bounty"],
+    publicSale: ["Public GRT Sale","Testnet Indexer Rewards"],
+    privateSale: ["Backers","Early Backers","Strategic GRT Sale"],
+    insiders: ["Early Team & Advisors","Edge & Node"],
   },
 };
 

@@ -29,7 +29,8 @@ const asymetrix: Protocol = {
   },
   categories: {
     farming: ["Community"],
-    insiders: ["Team", "Investors"],
+    privateSale: ["Investors"],
+    insiders: ["Team"],
   },
 };
 

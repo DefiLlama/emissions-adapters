@@ -73,22 +73,11 @@ const velo: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Founders",
-      "Early Backers and Advisors",
-      "Private Placement",
-      "Strategic Partners",
-    ],
-    noncirculating: [
-      "Velo Development Reserve",
-    ],
-    liquidity: [
-      "Listing",
-      "Strategic Partners"
-    ],
-    farming: [
-      "Community Development"
-    ]
+    noncirculating: ["Velo Development Reserve"],
+    liquidity: ["Listing","Strategic Partners"],
+    farming: ["Community Development"],
+    privateSale: ["Private Placement"],
+    insiders: ["Founders","Early Backers and Advisors","Strategic Partners"],
   }
 };
 

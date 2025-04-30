@@ -82,9 +82,10 @@ const flow: Protocol = {
   },
   categories: {
     farming: ["Staking Rewards"],
-    insiders: ["Development Team", "Dapper Labs", "Pre-launch Backers"],
-    publicSale: ["Community Sale", "Auction"],
-    noncirculating: ["Ecosystem Reserve"]
+    publicSale: ["Community Sale","Auction"],
+    noncirculating: ["Ecosystem Reserve"],
+    privateSale: ["Pre-launch Backers"],
+    insiders: ["Development Team","Dapper Labs"],
   }
 };
 

@@ -47,10 +47,11 @@ const jito: Protocol = {
     protocolIds: ["2308"],
   },
   categories: {
-    insiders: ["Investors", "Core Contributors"],
     noncirculating: ["Ecosystem Development"],
     airdrop: ["Airdrop"],
     farming: ["Community Growth"],
+    privateSale: ["Investors"],
+    insiders: ["Core Contributors"],
   },
 };
 

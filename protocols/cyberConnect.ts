@@ -57,15 +57,11 @@ const cyberConnect: Protocol = {
     protocolIds: ["3702"],
   },
   categories: {
-    insiders: [
-      "Team and Advisors",
-      "Private Sale",
-      "Ecosystem Partners",
-      "Early Integration Partners",
-    ],
     publicSale: ["CoinList Public Sale"],
-    noncirculating: ["Community Treasury", "Developer Community", "Marketing"],
+    noncirculating: ["Community Treasury","Developer Community","Marketing"],
     farming: ["Community Rewards"],
+    privateSale: ["Private Sale"],
+    insiders: ["Team and Advisors","Ecosystem Partners","Early Integration Partners"],
   },
 };
 

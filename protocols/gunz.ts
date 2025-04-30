@@ -103,26 +103,11 @@ const gunz: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Founders & Team",
-      "Advisors",
-      "Private A",
-      "Private B",
-      "Strategic Round",
-      "KOL Round"
-    ],
-    noncirculating: [
-      "Treasury",
-      "GUNZ Foundation",
-      "NFT Validator Staking",
-    ],
-    liquidity: [
-      "Liquidity Pool",
-    ],
-    farming: [
-      "Community Incentives",
-      "Platform Rewards",
-    ],
+    noncirculating: ["Treasury","GUNZ Foundation","NFT Validator Staking"],
+    liquidity: ["Liquidity Pool"],
+    farming: ["Community Incentives","Platform Rewards"],
+    privateSale: ["Private A","Private B","Strategic Round"],
+    insiders: ["Founders & Team","Advisors","KOL Round"],
   },
 };
 

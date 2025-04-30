@@ -48,11 +48,12 @@ const hold: Protocol = {
         protocolIds: ["2959"], 
     },
     categories: {
-        insiders: ["Team","Investor"],
-        liquidity: ["Liquidity"],
-        publicSale: ["Public Round"],
-        farming: ["Community Fund"]
-    },
+    liquidity: ["Liquidity"],
+    publicSale: ["Public Round"],
+    farming: ["Community Fund"],
+    privateSale: ["Investor"],
+    insiders: ["Team"],
+  },
 };
 
 export default hold;

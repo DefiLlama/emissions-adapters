@@ -62,15 +62,11 @@ const clearpool: Protocol = {
     ],
   },
   categories: {
-    noncirculating: ["Ecosystem", "Partnerships", "Reserves"],
+    noncirculating: ["Ecosystem","Partnerships","Reserves"],
     farming: ["Rewards"],
     publicSale: ["Liquidity"],
-    insiders: [
-      "Seed Investors",
-      "Private Investors",
-      "Public Investors",
-      "Team",
-    ],
+    privateSale: ["Seed Investors","Private Investors","Public Investors"],
+    insiders: ["Team"],
   },
 };
 

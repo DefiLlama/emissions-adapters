@@ -62,19 +62,10 @@ const mantra: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Core Contributors",
-      "Mainnet Pre-Seed",
-      "Mainnet Seed"
-    ],
-    noncirculating: [
-      "Ecosystem",
-      "Existing OM (EVM)",
-      "OM Upgrade"
-    ],
-    airdrop: [
-      "Airdrops"
-    ],
+    noncirculating: ["Ecosystem","Existing OM (EVM)","OM Upgrade"],
+    airdrop: ["Airdrops"],
+    privateSale: ["Mainnet Pre-Seed","Mainnet Seed"],
+    insiders: ["Core Contributors"],
   },
 };
 

@@ -33,7 +33,8 @@ const berachain: Protocol = {
   categories: {
     farming: ["Community Initiatives"],
     airdrop: ["Airdrop"],
-    insiders: ["Investors", "Initial Core Contributors", "Ecosystem & R&D"],
+    privateSale: ["Investors"],
+    insiders: ["Initial Core Contributors","Ecosystem & R&D"],
   },
 };
 

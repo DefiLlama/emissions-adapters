@@ -36,16 +36,10 @@ const fasttoken: Protocol = {
     protocolIds: ["4923"],
   },
   categories: {
-    insiders: [
-      "Advisors",
-      "Founders",
-      "Private Sale",
-      "Presale",
-      "Marketing",
-      "Partners",
-    ],
-    publicSale: ["Public Sale", "Blockchain"],
+    publicSale: ["Public Sale","Blockchain"],
     noncirculating: ["Ecosystem"],
+    privateSale: ["Private Sale","Presale"],
+    insiders: ["Advisors","Founders","Marketing","Partners"],
   },
 };
 

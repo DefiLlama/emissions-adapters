@@ -67,20 +67,11 @@ const hashflow: Protocol = {
     protocolIds: ["1447"],
   },
   categories: {
-    insiders: [
-      "Core Team",
-      "Early Investors",
-      "Vendors and Early Service Providers",
-      "Early Integration Partners",
-    ],
-    noncirculating: ["Future Hires", "Community Treasury"],
-    farming: [
-      "Hashverse Rewards",
-      "Future Community Rewards",
-      "Community Rewards",
-      "Ecosystem Partners",
-    ],
+    noncirculating: ["Future Hires","Community Treasury"],
+    farming: ["Hashverse Rewards","Future Community Rewards","Community Rewards","Ecosystem Partners"],
     liquidity: ["Designated Market Maker Loans"],
+    privateSale: ["Early Investors"],
+    insiders: ["Core Team","Vendors and Early Service Providers","Early Integration Partners"],
   },
 };
 

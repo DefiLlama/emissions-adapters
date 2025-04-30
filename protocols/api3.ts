@@ -52,15 +52,11 @@ const api3: Protocol = {
     ],
   },
   categories: {
-    insiders: [
-      "Founding Team",
-      "Partners & Contributors",
-      "Pre-seed Investors",
-      "Seed Investors",
-    ],
     noncirculating: ["Ecosystem Fund"],
     publicSale: ["Public distribution"],
     farming: ["Staking rewards"],
+    privateSale: ["Pre-seed Investors","Seed Investors"],
+    insiders: ["Founding Team","Partners & Contributors"],
   },
 };
 

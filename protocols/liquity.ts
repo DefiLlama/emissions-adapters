@@ -51,9 +51,10 @@ const liquity: Protocol = {
     protocolIds: ["270"],
   },
   categories: {
-    farming: ["Stability Pool rewards", "Uniswap LPs"],
-    noncirculating: ["Endowment", "Community reserve"],
-    insiders: ["Team and advisors", "Service providers", "Investors"],
+    farming: ["Stability Pool rewards","Uniswap LPs"],
+    noncirculating: ["Endowment","Community reserve"],
+    privateSale: ["Investors"],
+    insiders: ["Team and advisors","Service providers"],
   },
 };
 export default liquity;

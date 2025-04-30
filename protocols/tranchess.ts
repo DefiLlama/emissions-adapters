@@ -99,9 +99,10 @@ const tranchess: Protocol = {
     ],
   },
   categories: {
-    insiders: ["Team", "Seed Investors"],
     farming: ["Community Incentives"],
     noncirculating: ["Ecosystem / Treasury"],
+    privateSale: ["Seed Investors"],
+    insiders: ["Team"],
   },
 };
 

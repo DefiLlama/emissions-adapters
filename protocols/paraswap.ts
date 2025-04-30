@@ -63,9 +63,10 @@ const paraswap: Protocol = {
   },
   categories: {
     airdrop: ["Airdrop"],
-    insiders: ["Investors", "Team", "Future team members"],
     farming: ["Initial liquidity mining"],
     noncirculating: ["Reserves"],
+    privateSale: ["Investors"],
+    insiders: ["Team","Future team members"],
   },
 };
 

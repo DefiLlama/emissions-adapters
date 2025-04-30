@@ -74,9 +74,10 @@ const fei: Protocol = {
   },
 
   categories: {
-    insiders: ['FEI Core Team', 'Investors', 'Genesis Group'],
-    farming: ['Staking Rewards'],
-    publicSale: ['Initial DEX Offering']
+    farming: ["Staking Rewards"],
+    publicSale: ["Initial DEX Offering"],
+    privateSale: ["Investors"],
+    insiders: ["FEI Core Team","Genesis Group"],
   },
 };
 

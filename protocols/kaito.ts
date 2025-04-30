@@ -54,10 +54,11 @@ const kaito: Protocol = {
     protocolIds: ["6028"]
   },
   categories: {
-    insiders: ["Core Contributors", "Early Backers"],
-    noncirculating: ["Foundation", "Ecosystem & Network Growth"],
-    farming: ["Liquidity Incentives", "Long-term Creator Incentives"],
-    airdrop: ["Initial Community & Ecosystem", "Binance Holder"]
+    noncirculating: ["Foundation","Ecosystem & Network Growth"],
+    farming: ["Liquidity Incentives","Long-term Creator Incentives"],
+    airdrop: ["Initial Community & Ecosystem","Binance Holder"],
+    privateSale: ["Early Backers"],
+    insiders: ["Core Contributors"],
   }
 };
 

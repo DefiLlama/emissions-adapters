@@ -62,21 +62,11 @@ const cloud: Protocol = {
   },
 
   categories: {
-    publicSale: [
-      "Launch Pool"
-    ],
-    airdrop: [
-      "Initial Airdrop",
-      "Jup LFG"
-    ],
-    insiders: [
-      "Team",
-      "Investors"
-    ],
-    noncirculating: [
-      "Community Reserve",
-      "Strategic Reserve"
-    ]
+    publicSale: ["Launch Pool"],
+    airdrop: ["Initial Airdrop","Jup LFG"],
+    noncirculating: ["Community Reserve","Strategic Reserve"],
+    privateSale: ["Investors"],
+    insiders: ["Team"],
   }
 };
 

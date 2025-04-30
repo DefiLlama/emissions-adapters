@@ -57,8 +57,9 @@ const perpetual: Protocol = {
     ],
   },
   categories: {
-    farming: ["Balancer LBP", "Ecosystem and rewards"],
-    insiders: ["Seed investors", "Strategic investors", "Team and advisors"],
+    farming: ["Balancer LBP","Ecosystem and rewards"],
+    privateSale: ["Seed investors","Strategic investors"],
+    insiders: ["Team and advisors"],
   },
 };
 export default perpetual;

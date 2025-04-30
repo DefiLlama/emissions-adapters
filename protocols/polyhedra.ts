@@ -42,12 +42,10 @@ const polyhedra: Protocol = {
   },
   categories: {
     airdrop: ["Airdrop"],
-    farming: [
-      "Community, other activities",
-      "Ecosystem and Network Incentives",
-    ],
-    insiders: ["Pre-TGE Purchasers", "Private Sale", "Core Contributors"],
+    farming: ["Community, other activities","Ecosystem and Network Incentives"],
     noncirculating: ["Foundation Reserves"],
+    privateSale: ["Pre-TGE Purchasers","Private Sale"],
+    insiders: ["Core Contributors"],
   },
 };
 

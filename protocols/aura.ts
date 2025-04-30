@@ -42,10 +42,10 @@ const aura: Protocol = {
     protocolIds: ["1918"], 
   },
   categories: {
-    farming: ["auraBAL incentives", "Balancer LP rewards"],
-    noncirculating: ["BAL treasury", "Treasury"],
-    insiders: ["Contributors"],
-    airdrop: ["AURA/ETH POL", "Bootstrapping token holder base", "LBP liquidity", "veBAL bootstrapping incentives", "Future incentives"]
+    farming: ["auraBAL incentives","Balancer LP rewards"],
+    noncirculating: ["BAL treasury","Treasury"],
+    airdrop: ["AURA/ETH POL","Bootstrapping token holder base","LBP liquidity","veBAL bootstrapping incentives","Future incentives"],
+    privateSale: ["Contributors"],
   },
 };
 

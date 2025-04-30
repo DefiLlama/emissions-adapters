@@ -312,8 +312,9 @@ const ena: Protocol = {
     protocolIds: ["4133"],
   },
   categories: {
-    insiders: ["Investors", "Team"],
-    noncirculating: ["Foundation", "Ecosystem Development"],
+    noncirculating: ["Foundation","Ecosystem Development"],
+    privateSale: ["Investors"],
+    insiders: ["Team"],
   },
 };
 

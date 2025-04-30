@@ -42,10 +42,11 @@ const convex: Protocol = {
     ],
   },
   categories: {
-    insiders: ["Investors", "Team"],
     noncirculating: ["Treasury"],
-    airdrop: ["veCRV voters", "veCRV holders"],
-    farming: ["Liquidity mining", "Curve LP rewards"],
+    airdrop: ["veCRV voters","veCRV holders"],
+    farming: ["Liquidity mining","Curve LP rewards"],
+    privateSale: ["Investors"],
+    insiders: ["Team"],
   },
 };
 export default convex;

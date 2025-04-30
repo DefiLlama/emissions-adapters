@@ -38,13 +38,9 @@ const lido: Protocol = {
     ],
   },
   categories: {
-    insiders: [
-      "Investors",
-      "Validators & Signature Holders",
-      "Initial Lido Devlopers",
-      "Founders & Future Employees",
-    ],
     noncirculating: ["DAO Treasury"],
+    privateSale: ["Investors"],
+    insiders: ["Validators & Signature Holders","Initial Lido Devlopers","Founders & Future Employees"],
   },
 };
 export default lido;

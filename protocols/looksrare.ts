@@ -72,9 +72,10 @@ const looksrare: Protocol = {
   },
   categories: {
     airdrop: ["Airdrop"],
-    farming: ["Volume Rewards", "Staking Rewards"],
-    insiders: ["Strategic Sale", "Founding Team"],
+    farming: ["Volume Rewards","Staking Rewards"],
     noncirculating: ["Treasury"],
+    privateSale: ["Strategic Sale"],
+    insiders: ["Founding Team"],
   },
 };
 

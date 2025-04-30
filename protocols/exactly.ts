@@ -33,9 +33,10 @@ const exactly: Protocol = {
   },
   categories: {
     airdrop: ["Airdrop"],
-    insiders: ["Team and Advisors", "Investors"],
     noncirculating: ["DAO Treasury"],
-    farming: ["Community"]
+    farming: ["Community"],
+    privateSale: ["Investors"],
+    insiders: ["Team and Advisors"],
   },
 };
 

@@ -122,21 +122,10 @@ const uxlink: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Fundraising 6 Months",
-      "Fundraising 12 Months",
-      "Fundraising 24 Months",
-      "Fundraising 36 Months",
-      "Protocol Labs",
-      "Protocol Labs Team & Contributors",
-    ],
-    noncirculating: [
-      "Filecoin Foundation",
-    ],
-    farming: [
-      "Baseline Minting",
-      "Simple Minting",
-    ],
+    noncirculating: ["Filecoin Foundation"],
+    farming: ["Baseline Minting","Simple Minting"],
+    privateSale: ["Fundraising 6 Months","Fundraising 12 Months","Fundraising 24 Months","Fundraising 36 Months"],
+    insiders: ["Protocol Labs","Protocol Labs Team & Contributors"],
   },
 };
 

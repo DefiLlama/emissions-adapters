@@ -55,9 +55,10 @@ const optimism: Protocol = {
     protocolIds: ["2967"],
   },
   categories: {
-    insiders: ["Team", "Investors"],
     airdrop: ["Airdrops"],
-    noncirculating: ["Retroactive Public Goods Funding", "Ecosystem Fund"],
+    noncirculating: ["Retroactive Public Goods Funding","Ecosystem Fund"],
+    privateSale: ["Investors"],
+    insiders: ["Team"],
   },
 };
 

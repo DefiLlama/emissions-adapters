@@ -43,9 +43,10 @@ const sei: Protocol = {
     protocolIds: ["4664"],
   },
   categories: {
-    insiders: ["Private Sale", "Team", "Foundation"],
     noncirculating: ["Ecosystem Reserve"],
     publicSale: ["Binance Launchpool"],
+    privateSale: ["Private Sale"],
+    insiders: ["Team","Foundation"],
   },
 };
 export default sei;

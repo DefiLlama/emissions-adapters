@@ -46,17 +46,11 @@ const swise: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Team",
-      "Investors",
-    ],
-    noncirculating: [
-      "Future Fundraise",
-    ],
+    noncirculating: ["Future Fundraise"],
     liquidity: [],
-    farming: [
-      "Community",
-    ],
+    farming: ["Community"],
+    privateSale: ["Investors"],
+    insiders: ["Team"],
   },
 };
 

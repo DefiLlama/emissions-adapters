@@ -42,9 +42,10 @@ const y2k: Protocol = {
     total: qty
   },
   categories: {
-    insiders: ["Core Team", "New Order Treasury", "Investors"],
     publicSale: ["IFO"],
     noncirculating: ["Treasury"],
+    privateSale: ["Investors"],
+    insiders: ["Core Team","New Order Treasury"],
   },
 };
 export default y2k;

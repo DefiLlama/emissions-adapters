@@ -62,15 +62,10 @@ const solana: Protocol = {
     protocolIds: ["4611"],
   },
   categories: {
-    insiders: [
-      "Seed Round",
-      "Founding Round",
-      "Validator Round",
-      "Strategic Round",
-      "Founders",
-    ],
     publicSale: ["CoinList Auction"],
-    noncirculating: ["Grant pool", "Staking Rewards", "Foundation"],
+    noncirculating: ["Grant pool","Staking Rewards","Foundation"],
+    privateSale: ["Seed Round","Strategic Round"],
+    insiders: ["Founding Round","Validator Round","Founders"],
   },
 };
 export default solana;

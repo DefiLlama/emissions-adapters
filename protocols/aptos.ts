@@ -52,8 +52,9 @@ const aptos: Protocol = {
     protocolIds: ["2725"],
   },
   categories: {
-    insiders: ["investors", "core contributors"],
-    noncirculating: ["foundation", "community"],
+    noncirculating: ["foundation","community"],
+    privateSale: ["investors"],
+    insiders: ["core contributors"],
   },
 };
 export default aptos;

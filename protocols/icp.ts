@@ -38,9 +38,9 @@ const icp: Protocol = {
     protocolIds: ["4618"],
   },
   categories: {
-    insiders: ["Strategic Round", "Presale"],
     publicSale: ["Seed Round"],
     airdrop: ["Airdrop"],
+    privateSale: ["Strategic Round","Presale"],
   },
 };
 

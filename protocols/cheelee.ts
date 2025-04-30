@@ -37,17 +37,12 @@ const cheelee: Protocol = {
     protocolIds: ["4607"],
   },
   categories: {
-    insiders: [
-      "Strategic Round 1",
-      "Strategic Round 2",
-      "Private Round",
-      "Team",
-      "Advisors",
-    ],
     airdrop: ["Community Drop"],
     publicSale: ["Liquidity"],
     farming: ["Cheelee Rewards"],
-    noncirculating: ["Reserve Fund", "Marketing"],
+    noncirculating: ["Reserve Fund","Marketing"],
+    privateSale: ["Strategic Round 1","Strategic Round 2","Private Round"],
+    insiders: ["Team","Advisors"],
   },
 };
 

@@ -71,9 +71,10 @@ const sui: Protocol = {
   },
   categories: {
     publicSale: ["Community Allocation Pool"],
-    noncirculating: ["Community Reserve", "Mysten Labs Treasury"],
-    insiders: ["Early Contributors", "Series A", "Series B"],
+    noncirculating: ["Community Reserve","Mysten Labs Treasury"],
     farming: ["Stake Subsidies"],
+    privateSale: ["Series A","Series B"],
+    insiders: ["Early Contributors"],
   },
 };
 

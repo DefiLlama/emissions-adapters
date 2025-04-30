@@ -40,9 +40,10 @@ const oasys: Protocol = {
     protocolIds: ["4649"],
   },
   categories: {
-    farming: ["Ecosystem & Community", "Staking Rewards"],
-    insiders: ["Development", "Early Backers"],
+    farming: ["Ecosystem & Community","Staking Rewards"],
     noncirculating: ["Foundation"],
+    privateSale: ["Early Backers"],
+    insiders: ["Development"],
   },
 };
 export default oasys;

@@ -53,7 +53,8 @@ const zora: Protocol = {
     airdrop: ["Retroactive Airdrop"],
     liquidity: ["Ecosystem Liquidity"],
     noncirculating: ["Treasury"],
-    insiders: ["Team", "Investors"],
+    privateSale: ["Investors"],
+    insiders: ["Team"],
   }
 };
 

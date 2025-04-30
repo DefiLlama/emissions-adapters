@@ -38,10 +38,11 @@ const forta: Protocol = {
     ],
   },
   categories: {
-    insiders: ["other", "backers", "core contributors", "OpenZeppelin"],
     airdrop: ["airdrop"],
     farming: ["node runner rewards"],
     noncirculating: ["unallocated"],
+    privateSale: ["backers"],
+    insiders: ["other","core contributors","OpenZeppelin"],
   },
 };
 export default forta;

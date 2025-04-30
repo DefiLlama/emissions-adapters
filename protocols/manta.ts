@@ -70,16 +70,11 @@ const manta: Protocol = {
     protocolIds: ["4032"],
   },
   categories: {
-    publicSale: ["Public Sale", "Binanace Launchpool"],
-    insiders: [
-      "Private Round",
-      "Strategic Investors",
-      "Institution Investors",
-      "Team",
-      "Advisor",
-    ],
-    airdrop: ["Airdrop", "New Paradigm (Airdrop 2)"],
-    noncirculating: ["Ecosystem / Community", "Foundation"],
+    publicSale: ["Public Sale","Binanace Launchpool"],
+    airdrop: ["Airdrop","New Paradigm (Airdrop 2)"],
+    noncirculating: ["Ecosystem / Community","Foundation"],
+    privateSale: ["Private Round","Strategic Investors","Institution Investors"],
+    insiders: ["Team","Advisor"],
   },
 };
 

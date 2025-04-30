@@ -50,8 +50,9 @@ const chainflip: Protocol = {
   categories: {
     farming: ["Node Operators Programs"],
     publicSale: ["Token Sale"],
-    noncirculating: ["Liquid Treasury", "Treasury Reserves"],
-    insiders: ["Strategic Investors", "Oxen Foundation", "Contributors"],
+    noncirculating: ["Liquid Treasury","Treasury Reserves"],
+    privateSale: ["Strategic Investors"],
+    insiders: ["Oxen Foundation","Contributors"],
   },
 };
 

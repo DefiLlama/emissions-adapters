@@ -151,9 +151,10 @@ const hedera: Protocol = {
     protocolIds: [""],
   },
   categories: {
-    insiders: ["Purchase Agreements", "Initial Dev Costs / Licensing"],
     noncirculating: ["Network Governance/Ops"],
     farming: ["Ecosystem / Open Source Dev"],
+    privateSale: ["Purchase Agreements"],
+    insiders: ["Initial Dev Costs / Licensing"],
   },
 };
 

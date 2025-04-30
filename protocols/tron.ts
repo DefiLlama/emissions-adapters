@@ -44,8 +44,9 @@ const tron: Protocol = {
   },
   categories: {
     publicSale: ["Public Sale"],
-    insiders: ["Tron Foundation", "Private Sale"],
     farming: ["Network Rewards"],
+    privateSale: ["Private Sale"],
+    insiders: ["Tron Foundation"],
   }
 };
 

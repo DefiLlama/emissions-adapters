@@ -43,9 +43,10 @@ const renzo: Protocol = {
     protocolIds: ["3933"],
   },
   categories: {
-    insiders: ["Fundraising", "Core Contributors", "Foundation"],
-    publicSale: ["Binance Launch Pool", "Liquidity"],
+    publicSale: ["Binance Launch Pool","Liquidity"],
     farming: ["Community"],
+    privateSale: ["Fundraising"],
+    insiders: ["Core Contributors","Foundation"],
   },
 };
 

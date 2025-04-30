@@ -75,9 +75,10 @@ const redstone: Protocol = {
   categories: {
     publicSale: ["Binance Launchpool"],
     airdrop: ["Community & Genesis"],
-    insiders: ["Core Contributors", "Early Backers"],
     farming: ["Ecosystem & Data Providers"],
     noncirculating: ["Protocol Development"],
+    privateSale: ["Early Backers"],
+    insiders: ["Core Contributors"],
   },
 };
 

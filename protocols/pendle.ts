@@ -48,9 +48,10 @@ const pendle: Protocol = {
     protocolIds: ["382"],
   },
   categories: {
-    insiders: ["Team", "Investors", "Advisors", "Liquidity bootstrapping"],
     farming: ["Incentives"],
     noncirculating: ["Ecosystem fund"],
+    privateSale: ["Investors"],
+    insiders: ["Team","Advisors","Liquidity bootstrapping"],
   },
 };
 export default pendle;

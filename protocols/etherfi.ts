@@ -39,8 +39,9 @@ const etherfi: Protocol = {
     protocolIds: ["2626", "4429"],
   },
   categories: {
-    insiders: ["Investors", "Core Contributors"],
-    noncirculating: ["Foundation", "Ecosystem Development", "Treasury"],
+    noncirculating: ["Foundation","Ecosystem Development","Treasury"],
+    privateSale: ["Investors"],
+    insiders: ["Core Contributors"],
   },
 };
 

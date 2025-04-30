@@ -117,10 +117,11 @@ const orderlyNetwork: Protocol = {
   },
   categories: {
     airdrop: ["Retroactive Airdrop"],
-    farming: ["Trading Rewards", "Market Making Rewards"],
-    insiders: ["Strategic Investors", "Team and Advisors"],
+    farming: ["Trading Rewards","Market Making Rewards"],
     liquidity: ["Liquidity"],
-    noncirculating: ["Builder Rewards", "Foundation"],
+    noncirculating: ["Builder Rewards","Foundation"],
+    privateSale: ["Strategic Investors"],
+    insiders: ["Team and Advisors"],
   },
 };
 

@@ -30,7 +30,8 @@ const hop: Protocol = {
   },
   categories: {
     airdrop: ["Airdrop"],
-    insiders: ["Initial team", "Investors"],
+    privateSale: ["Investors"],
+    insiders: ["Initial team"],
   },
 };
 export default hop;

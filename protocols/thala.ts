@@ -45,7 +45,8 @@ const thala: Protocol = {
     noncirculating: ["Treasury"],
     publicSale: ["Token Generation Event"],
     farming: ["Community Incentive"],
-    insiders: ["Team & Advisors", "Investors"],
+    privateSale: ["Investors"],
+    insiders: ["Team & Advisors"],
   },
 };
 

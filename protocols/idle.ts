@@ -71,10 +71,11 @@ const idle: Protocol = {
     ],
   },
   categories: {
-    insiders: ["Team", "Investors"],
-    farming: ["Long-term rewards", "Liquidity mining", "early LPs"],
+    farming: ["Long-term rewards","Liquidity mining","early LPs"],
     publicSale: ["Liquidity bootstrap"],
     noncirculating: ["Ecosystem fund"],
+    privateSale: ["Investors"],
+    insiders: ["Team"],
   },
 };
 export default idle;

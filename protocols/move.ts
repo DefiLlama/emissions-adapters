@@ -41,9 +41,10 @@ const move: Protocol = {
     total,
   },
   categories: {
-    insiders: ["Early Contributors", "Early Backers", "Foundation"],
     airdrop: ["Initial Claims"],
     farming: ["Ecosystem & Community"],
+    privateSale: ["Early Backers"],
+    insiders: ["Early Contributors","Foundation"],
   },
 };
 

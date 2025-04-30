@@ -51,19 +51,10 @@ const orca: Protocol = {
   },
   
   categories: {
-    insiders: [
-      "Team",
-      "Private Sale",
-      "Value Add and Advisory",
-      "Initial Advisors"
-    ],
-    liquidity: [
-      "Liquidity Providers",
-    ],
-    airdrop: [
-      "Average Traders Airdrop",
-      "Heavy Traders Airdrop",
-    ],
+    liquidity: ["Liquidity Providers"],
+    airdrop: ["Average Traders Airdrop","Heavy Traders Airdrop"],
+    privateSale: ["Private Sale"],
+    insiders: ["Team","Value Add and Advisory","Initial Advisors"],
   },
 };
 

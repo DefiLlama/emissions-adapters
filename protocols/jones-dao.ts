@@ -50,9 +50,10 @@ const jonesDao: Protocol = {
     ],
   },
   categories: {
-    insiders: ["Core contributors", "Private sale"],
     airdrop: ["Airdrop"],
     publicSale: ["Public sale"],
+    privateSale: ["Private sale"],
+    insiders: ["Core contributors"],
   },
 };
 export default jonesDao;

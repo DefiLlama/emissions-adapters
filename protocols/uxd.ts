@@ -31,9 +31,9 @@ const uxd: Protocol = {
     protocolIds: ["1402"],
   },
   categories: {
-    // farming: ["Community"],
-    insiders: ["Seed investors", "Preseed investors", "Team"],
     publicSale: ["Token sale"],
+    privateSale: ["Seed investors","Preseed investors"],
+    insiders: ["Team"],
   },
 };
 

@@ -37,8 +37,9 @@ const swell: Protocol = {
   categories: {
     publicSale: ["Launch Pools"],
     airdrop: ["Community"],
-    insiders: ["Team", "Fundraising"],
     noncirculating: ["Foundation"],
+    privateSale: ["Fundraising"],
+    insiders: ["Team"],
   },
 };
 

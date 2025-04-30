@@ -58,13 +58,10 @@ const superrare: Protocol = {
     ],
   },
   categories: {
-    insiders: [
-      "Team",
-      "Investors",
-      "Team, Investors, Strategic Partners & Future Contributors",
-    ],
     noncirculating: ["Community treasury"],
     airdrop: ["Retroactive airdrop"],
+    privateSale: ["Investors"],
+    insiders: ["Team","Team, Investors, Strategic Partners & Future Contributors"],
   },
 };
 

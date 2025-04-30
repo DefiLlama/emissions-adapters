@@ -88,17 +88,10 @@ const moonbeam: Protocol = {
     protocolIds: ["2788"],
   },
   categories: {
-    insiders: [
-      "Seed funding",
-      "Strategic funding",
-      "Key partners and advisors",
-      "PureStake early backers",
-      "Founders and early employees",
-      "Future employee incentives",
-      "Developer adoption program",
-    ],
-    publicSale: ["Take Flight community event", "2021 Moonbeam crowdloan"],
+    publicSale: ["Take Flight community event","2021 Moonbeam crowdloan"],
     farming: ["Liquidity programs"],
+    privateSale: ["Seed funding","Strategic funding","PureStake early backers"],
+    insiders: ["Key partners and advisors","Founders and early employees","Future employee incentives","Developer adoption program"],
   },
 };
 

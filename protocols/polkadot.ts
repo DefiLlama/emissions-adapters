@@ -54,16 +54,10 @@ const polkadot: Protocol = {
     protocolIds: ["5978"],
   },
   categories: {
-    publicSale: [
-      "Public Sale (ICO)",
-    ],
-    insiders: [
-      "Private Sale 1",
-      "Private Sale 2",
-      "Private Sale 3",
-    ],
-    noncirculating: ["Premined Rewards & Airdrops", "Web3 Foundation", "Treasury"],
+    publicSale: ["Public Sale (ICO)"],
+    noncirculating: ["Premined Rewards & Airdrops","Web3 Foundation","Treasury"],
     farming: ["Staking Rewards"],
+    privateSale: ["Private Sale 1","Private Sale 2","Private Sale 3"],
   },
 };
 

@@ -73,16 +73,9 @@ const babylon: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Team",
-      "Advisors",
-      "Early Private-Round Investors"
-    ],
-    noncirculating: [
-      "Community Incentives",
-      "Ecosystem Building",
-      "Research and Development + Operations"
-    ],
+    noncirculating: ["Community Incentives","Ecosystem Building","Research and Development + Operations"],
+    privateSale: ["Early Private-Round Investors"],
+    insiders: ["Team","Advisors"],
   },
 };
 

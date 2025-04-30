@@ -41,8 +41,9 @@ const saga: Protocol = {
   },
   categories: {
     airdrop: ["Airdrops"],
-    insiders: ["Core Contributors", "Fundraising", "Ecosystem & Development"],
     noncirculating: ["Foundation & Reserve"],
+    privateSale: ["Fundraising"],
+    insiders: ["Core Contributors","Ecosystem & Development"],
   },
 };
 

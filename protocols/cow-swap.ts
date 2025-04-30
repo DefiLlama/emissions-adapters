@@ -25,11 +25,12 @@ const cow: Protocol = {
         protocolIds: ["2643"],
     },
     categories: {
-        farming: [],
-        noncirculating: ["CoW DAO Treasury"],
-        insiders: ["Team", "GnosisDAO", "Investment Round", "CoW Advisory"],
-        airdrop: ["CoWmunity Airdrop", "CoWmunity Investment"]
-    },
+    farming: [],
+    noncirculating: ["CoW DAO Treasury"],
+    airdrop: ["CoWmunity Airdrop","CoWmunity Investment"],
+    privateSale: ["Investment Round"],
+    insiders: ["Team","GnosisDAO","CoW Advisory"],
+  },
 };
 
 export default cow;

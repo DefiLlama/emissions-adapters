@@ -47,7 +47,8 @@ const blur: Protocol = {
   categories: {
     airdrop: ["airdrop"],
     noncirculating: ["community treasury"],
-    insiders: ["advisors", "contributors", "investors"],
+    privateSale: ["investors"],
+    insiders: ["advisors","contributors"],
   },
 };
 

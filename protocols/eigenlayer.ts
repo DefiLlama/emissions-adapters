@@ -202,8 +202,9 @@ const eigen: Protocol = {
   },
   categories: {
     publicSale: ["Airdrop/Stakedrop"],
-    insiders: ["Investors", "Early Contributors"],
     noncirculating: ["R&D, Ecosystem & Community Initiatives"],
+    privateSale: ["Investors"],
+    insiders: ["Early Contributors"],
   },
 };
 

@@ -39,11 +39,12 @@ const goldfinch: Protocol = {
         protocolIds: ["703"], 
     },
     categories: {
-        insiders: ["Early and Future Team", "Investors", "Warbler Labs", "Contributors"],
-        farming: ["Senior Pool Liquidity Mining", "Backer Staking", "Backer Pool Liquidity Mining"],
-        noncirculating: ["Community Treasury", "Auditors", "Borrowers"],
-        airdrop: ["Retroactive Liquidity Provider Distribution","Early Liquidity Provider Program", "Flight Academy"]
-    },
+    farming: ["Senior Pool Liquidity Mining","Backer Staking","Backer Pool Liquidity Mining"],
+    noncirculating: ["Community Treasury","Auditors","Borrowers"],
+    airdrop: ["Retroactive Liquidity Provider Distribution","Early Liquidity Provider Program","Flight Academy"],
+    privateSale: ["Investors"],
+    insiders: ["Early and Future Team","Warbler Labs","Contributors"],
+  },
 };
 
 export default goldfinch;

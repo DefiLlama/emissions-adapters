@@ -67,10 +67,11 @@ const solayer: Protocol = {
   categories: {
     publicSale: ["Emerald Card Sale"],
     farming: ["Community Incentives"],
-    noncirculating: ["Community and Ecosystem", "Foundation"],
-    insiders: ["Team and Advisors", "Investors"],
+    noncirculating: ["Community and Ecosystem","Foundation"],
     liquidity: ["Liquidity"],
-    airdrop: ["Genesis Drop"]
+    airdrop: ["Genesis Drop"],
+    privateSale: ["Investors"],
+    insiders: ["Team and Advisors"],
   },
 };
 
