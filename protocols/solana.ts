@@ -63,7 +63,8 @@ const solana: Protocol = {
   },
   categories: {
     publicSale: ["CoinList Auction"],
-    noncirculating: ["Grant pool","Staking Rewards","Foundation"],
+    farming: ["Staking Rewards"],
+    noncirculating: ["Grant pool","Foundation"],
     privateSale: ["Seed Round","Strategic Round"],
     insiders: ["Founding Round","Validator Round","Founders"],
   },
