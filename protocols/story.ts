@@ -59,8 +59,9 @@ const story: Protocol = {
     total,
   },
   categories: {
-    farming: ["Initial Incentives", "Ecosystem & Community"],
-    insiders: ["Core Contributors", "Early Backers", "Foundation"],
+    farming: ["Initial Incentives","Ecosystem & Community"],
+    privateSale: ["Early Backers"],
+    insiders: ["Core Contributors","Foundation"],
   },
 };
 

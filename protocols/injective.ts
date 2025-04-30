@@ -61,9 +61,10 @@ const aptos: Protocol = {
     protocolIds: ["4011"],
   },
   categories: {
-    insiders: ["Team", "Private Sale", "Seed Sale", "Advisors"],
-    noncirculating: ["Ecosystem", "Community"],
+    noncirculating: ["Ecosystem","Community"],
     airdrop: ["Binance Launchpad"],
+    privateSale: ["Private Sale","Seed Sale"],
+    insiders: ["Team","Advisors"],
   },
 };
 export default aptos;

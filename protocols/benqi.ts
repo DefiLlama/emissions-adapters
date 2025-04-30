@@ -37,12 +37,13 @@ const benqi: Protocol = {
         protocolIds: ["467"],
     },
     categories: {
-        farming: ["Community Incentives"],
-        noncirculating: ["Foundation Treasury"],
-        insiders: ["Seed", "Private", "Team"],
-        publicSale: ["Public A", "Public B"],
-        liquidity: ["Exchange Liquidity"]
-    },
+    farming: ["Community Incentives"],
+    noncirculating: ["Foundation Treasury"],
+    publicSale: ["Public A","Public B"],
+    liquidity: ["Exchange Liquidity"],
+    privateSale: ["Seed","Private"],
+    insiders: ["Team"],
+  },
 };
 
 export default benqi;

@@ -55,13 +55,10 @@ const stargate: Protocol = {
     ],
   },
   categories: {
-    insiders: ["core contributors", "investors"],
-    farming: [
-      "STG-USDC Curve pool incentives",
-      "initial emissions program",
-      "future incentives",
-    ],
-    publicSale: ["STG launch auction purchasers", "STG DEX liquidity"],
+    farming: ["STG-USDC Curve pool incentives","initial emissions program","future incentives"],
+    publicSale: ["STG launch auction purchasers","STG DEX liquidity"],
+    privateSale: ["investors"],
+    insiders: ["core contributors"],
   },
 };
 

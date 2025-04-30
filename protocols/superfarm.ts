@@ -89,11 +89,12 @@ const superfarm: Protocol = {
   },
 
   categories: {
-    insiders: ['Founders & Advisors', 'Seed', 'Private Round 1', 'Private Round 2', 'Private Round 3'],
-    noncirculating: ['Ecosystem', 'Development'],
-    farming: ['Staking', 'NFT Drops'],
-    liquidity: ['Liquidity'],
-    publicSale: ['IDO']
+    noncirculating: ["Ecosystem","Development"],
+    farming: ["Staking","NFT Drops"],
+    liquidity: ["Liquidity"],
+    publicSale: ["IDO"],
+    privateSale: ["Seed","Private Round 1","Private Round 2","Private Round 3"],
+    insiders: ["Founders & Advisors"],
   },
 };
 

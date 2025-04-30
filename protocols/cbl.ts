@@ -50,11 +50,12 @@ const cbl: Protocol = {
     protocolIds: ['4759'],
   },
   categories: {
-    insiders: ["Partners & Advisors", "Core & Future Team", "Private Sale"],
     liquidity: ["Liquidity"],
     publicSale: ["Public Sale"],
     noncirculating: ["Treasury"],
-    farming: ["Community Growth & Rewards"]
+    farming: ["Community Growth & Rewards"],
+    privateSale: ["Private Sale"],
+    insiders: ["Partners & Advisors","Core & Future Team"],
   },
 };
 export default cbl;

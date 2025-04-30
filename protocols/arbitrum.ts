@@ -56,9 +56,10 @@ const arbitrum: Protocol = {
     ],
   },
   categories: {
-    insiders: ["Investors", "Advisors Team OffchainLabs"],
-    noncirculating: ["Arbitrum DAO Treasury", "Ecosystem Development Fund"],
+    noncirculating: ["Arbitrum DAO Treasury","Ecosystem Development Fund"],
     airdrop: ["Airdrop"],
+    privateSale: ["Investors"],
+    insiders: ["Advisors Team OffchainLabs"],
   },
 };
 

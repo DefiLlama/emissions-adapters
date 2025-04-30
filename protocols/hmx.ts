@@ -47,10 +47,11 @@ const hmx: Protocol = {
     protocolIds: ["2296"],
   },
   categories: {
-    insiders: ["Team", "Private Sale"],
     publicSale: ["TGE"],
     farming: ["Community Incentives"],
-    noncirculating: ["Ecosystem Fund"]
+    noncirculating: ["Ecosystem Fund"],
+    privateSale: ["Private Sale"],
+    insiders: ["Team"],
   },
 };
 export default hmx;

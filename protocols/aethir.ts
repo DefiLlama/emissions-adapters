@@ -45,10 +45,11 @@ const aethir: Protocol = {
     protocolIds: ["5591"],
   },
   categories: {
-    insiders: ["Team", "Investors", "Advisors"],
     airdrop: ["Airdrop"],
     noncirculating: ["Ecosystem"],
     farming: ["Checkers & Compute Providers"],
+    privateSale: ["Investors"],
+    insiders: ["Team","Advisors"],
   },
 };
 

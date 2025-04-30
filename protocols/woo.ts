@@ -64,16 +64,10 @@ const woo: Protocol = {
     protocolIds: ["1461", "2284", "2346"],
   },
   categories: {
-    publicSale: ["IEO", "Liquidity Management"],
-    insiders: [
-      "Private Round 1",
-      "Private Round 2",
-      "Private Round 3",
-      "Seed Round",
-      "Series A and A+",
-      "Team & Advisors",
-    ],
+    publicSale: ["IEO","Liquidity Management"],
     farming: ["Ecosystem"],
+    privateSale: ["Private Round 1","Private Round 2","Private Round 3","Seed Round","Series A and A+"],
+    insiders: ["Team & Advisors"],
   },
 };
 

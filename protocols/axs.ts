@@ -95,10 +95,11 @@ const axs: Protocol = {
     protocolIds: ["6102"],
   },
   categories: {
-    insiders: ["Private Sale", "Advisors", "Sky Mavis"],
     publicSale: ["Public Sale"],
-    farming: ["Staking Reward", "Play to Earn"],
+    farming: ["Staking Reward","Play to Earn"],
     noncirculating: ["Ecosystem Fund"],
+    privateSale: ["Private Sale"],
+    insiders: ["Advisors","Sky Mavis"],
   }
 };
 

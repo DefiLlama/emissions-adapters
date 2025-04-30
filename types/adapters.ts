@@ -95,6 +95,7 @@ export type IncompleteSection = {
 };
 export type SectionType =
   | "publicSale"
+  | "privateSale"
   | "insiders"
   | "airdrop"
   | "farming"

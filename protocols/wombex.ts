@@ -84,14 +84,10 @@ const wombex: Protocol = {
   categories: {
     airdrop: ["Airdrop"],
     publicSale: ["Pancake Swap IFO"],
-    farming: [
-      "Syrup Pool",
-      "Wombat Wars Reward Incentives",
-      "Liquidity Mining",
-      "WOM Wars Bootstrap Event",
-    ],
-    noncirculating: ["Community Treasury", "Wombat Whitelisting & Treasury"],
-    insiders: ["Private Sale", "Liquidity Provision, Market Making, Marketing"],
+    farming: ["Syrup Pool","Wombat Wars Reward Incentives","Liquidity Mining","WOM Wars Bootstrap Event"],
+    noncirculating: ["Community Treasury","Wombat Whitelisting & Treasury"],
+    privateSale: ["Private Sale"],
+    insiders: ["Liquidity Provision, Market Making, Marketing"],
   },
 };
 

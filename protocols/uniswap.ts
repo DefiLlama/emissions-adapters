@@ -32,10 +32,11 @@ function uniswap(): Protocol {
       protocolIds: ["2196", "2197", "2198"],
     },
     categories: {
-      farming: ["community"],
-      airdrop: ["airdrop"],
-      insiders: ["team", "investors", "advisors"],
-    },
+    farming: ["community"],
+    airdrop: ["airdrop"],
+    privateSale: ["investors"],
+    insiders: ["team","advisors"],
+  },
   };
 }
 export default uniswap();

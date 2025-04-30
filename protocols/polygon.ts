@@ -53,9 +53,10 @@ const polygon: Protocol = {
   },
   categories: {
     publicSale: ["Launchpad Sale"],
-    insiders: ["Seed", "Early Supporters", "Team", "Advisors"],
-    noncirculating: ["Foundation", "Ecosystem"],
+    noncirculating: ["Foundation","Ecosystem"],
     farming: ["Staking Rewards"],
+    privateSale: ["Seed"],
+    insiders: ["Early Supporters","Team","Advisors"],
   },
 };
 export default polygon;

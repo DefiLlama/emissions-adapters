@@ -55,10 +55,11 @@ const saga: Protocol = {
     protocolIds: ["4609"],
   },
   categories: {
-    insiders: ["Core Contributors", "Investors", "Advisors"],
     airdrop: ["Airdrop"],
     publicSale: ["Liquidity"],
-    noncirculating: ["Ecosystem Development", "Community Growth"],
+    noncirculating: ["Ecosystem Development","Community Growth"],
+    privateSale: ["Investors"],
+    insiders: ["Core Contributors","Advisors"],
   },
 };
 

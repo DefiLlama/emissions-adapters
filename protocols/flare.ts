@@ -86,17 +86,10 @@ const flare: Protocol = {
     protocolIds: ["4665"],
   },
   categories: {
-    insiders: [
-      "Flare Labs",
-      "Flare VC Fund",
-      "Flare Foundation",
-      "Team",
-      "Future Team",
-      "Advisors",
-      "Backers",
-    ],
-    farming: ["Inflation", "Incentive Pool"],
-    airdrop: ["Initial Airdrop", "FlareDrop"],
+    farming: ["Inflation","Incentive Pool"],
+    airdrop: ["Initial Airdrop","FlareDrop"],
+    privateSale: ["Backers"],
+    insiders: ["Flare Labs","Flare VC Fund","Flare Foundation","Team","Future Team","Advisors"],
   },
 };
 export default flare;

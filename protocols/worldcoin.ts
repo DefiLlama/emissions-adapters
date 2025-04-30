@@ -72,8 +72,9 @@ const worldcoin: Protocol = {
   },
   categories: {
     publicSale: ["Community"],
-    insiders: ["Market Makers", "Investors", "Initial Development Team"],
     noncirculating: ["Reserve"],
+    privateSale: ["Investors"],
+    insiders: ["Market Makers","Initial Development Team"],
   },
 };
 

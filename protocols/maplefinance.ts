@@ -49,19 +49,11 @@ const mpl: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Team and Advisor",
-      "Seed Investors"
-    ],
-    noncirculating: [
-        "Treasury"
-    ],
-    publicSale: [
-      "Public Sale"
-    ],
-    farming: [
-      "Liquidity Mining"
-    ]
+    noncirculating: ["Treasury"],
+    publicSale: ["Public Sale"],
+    farming: ["Liquidity Mining"],
+    privateSale: ["Seed Investors"],
+    insiders: ["Team and Advisor"],
   },
 };
 

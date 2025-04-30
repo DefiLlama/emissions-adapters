@@ -32,10 +32,11 @@ const dfx: Protocol = {
         protocolIds: ["366"], 
     },
     categories: {
-        farming: ["Liquidity Providers"],
-        noncirculating: ["Treasury - Ecosystem DAO", "Dev Fund", "Future Token Sale"],
-        insiders: ["Pre-Seed (9 investors)", "Seed (11 investors)", "Founders (4 founders)"],
-    },
+    farming: ["Liquidity Providers"],
+    noncirculating: ["Treasury - Ecosystem DAO","Dev Fund","Future Token Sale"],
+    privateSale: ["Pre-Seed (9 investors)","Seed (11 investors)"],
+    insiders: ["Founders (4 founders)"],
+  },
 };
 
 export default dfx;

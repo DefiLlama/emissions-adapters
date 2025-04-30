@@ -63,11 +63,8 @@ const balancer: Protocol = {
   categories: {
     farming: ["Liquidity Providers"],
     noncirculating: ["Ecosystem"],
-    insiders: [
-      "Founders, Options, Advisors, Investors",
-      "Balancer Labs Fundraising Fund",
-      "Balancer Labs Contributors Incentives Program",
-    ],
+    privateSale: ["Balancer Labs Fundraising Fund","Balancer Labs Contributors Incentives Program"],
+    insiders: ["Founders, Options, Advisors, Investors"],
   },
 };
 

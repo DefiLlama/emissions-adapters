@@ -101,13 +101,14 @@ const plx: Protocol = {
         protocolIds: ["2740"],
     },
     categories: {
-        liquidity: ["Liquidity"],
-        farming: ["Chainlink Build"],
-        noncirculating: ["Ecosystem", "Marketing"],
-        airdrop: ["Initial Airdrop"],
-        insiders: ["Team", "Advisor","Protocol Contributor", "Private Investors", "KOL Investors", "Seed Investors"],
-        publicSale: ["Public Investors" ]
-    },
+    liquidity: ["Liquidity"],
+    farming: ["Chainlink Build"],
+    noncirculating: ["Ecosystem","Marketing"],
+    airdrop: ["Initial Airdrop"],
+    publicSale: ["Public Investors"],
+    privateSale: ["Private Investors","KOL Investors","Seed Investors"],
+    insiders: ["Team","Advisor","Protocol Contributor"],
+  },
 };
 
 export default plx;

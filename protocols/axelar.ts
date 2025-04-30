@@ -78,15 +78,10 @@ const axelar: Protocol = {
     protocolIds: ['2237'],
   },
   categories: {
-    insiders: [
-      'Company - Core Team',
-      'Company - Operations',
-      'Seed Round',
-      'Series A',
-      'Series B',
-    ],
-    noncirculating: ['Community Programs', 'Insurance Fund'],
-    airdrop: ['Community Sale'],
+    noncirculating: ["Community Programs","Insurance Fund"],
+    airdrop: ["Community Sale"],
+    privateSale: ["Seed Round","Series A","Series B"],
+    insiders: ["Company - Core Team","Company - Operations"],
   },
 };
 export default axelar;

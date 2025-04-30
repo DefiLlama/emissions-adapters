@@ -46,10 +46,11 @@ const xai: Protocol = {
     total,
   },
   categories: {
-    publicSale: ["Launchpool", "Market Makers"],
-    farming: ["Community", "Ecosystem", "DAC"],
+    publicSale: ["Launchpool","Market Makers"],
+    farming: ["Community","Ecosystem","DAC"],
     noncirculating: ["Foundation"],
-    insiders: ["Team", "Investors"],
+    privateSale: ["Investors"],
+    insiders: ["Team"],
   },
 };
 export default xai;

@@ -25,16 +25,11 @@ const ankr: Protocol = {
     ],
   },
   categories: {
-    insiders: [
-      "Private Sale 1",
-      "Private Sale 2",
-      "Private Sale 3",
-      "Team",
-      "Advisors",
-    ],
     publicSale: ["Public Sale"],
     noncirculating: ["Marketing"],
     farming: ["Mining Rewards"],
+    privateSale: ["Private Sale 1","Private Sale 2","Private Sale 3"],
+    insiders: ["Team","Advisors"],
   },
 };
 export default ankr;

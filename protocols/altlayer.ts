@@ -46,9 +46,10 @@ const altlayer: Protocol = {
   },
   categories: {
     publicSale: ["Binance Launchpool"],
-    insiders: ["Team", "Investors", "Advisors", "Protocol Development"],
     farming: ["Ecosystem & Community"],
     noncirculating: ["Treasury"],
+    privateSale: ["Investors"],
+    insiders: ["Team","Advisors","Protocol Development"],
   },
 };
 export default altlayer;

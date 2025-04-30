@@ -93,24 +93,11 @@ const moonwell: Protocol = {
     ],
   },
   categories: {
-    publicSale: [
-      "Public Sale & Strategic Sale",
-    ],
-    insiders: [
-      "Bootstrap & Private Sale",
-      "Strategic Sale",
-      "Key Partners",
-      "Advisors",
-      "Founding Contributors"
-    ],
-    farming: [
-      "Liquidity Incentives"
-    ],
-    noncirculating: [
-      "Long-Term Protocol & Ecosystem Development",
-      "Application Development",
-      "Future Contributors"
-    ],
+    publicSale: ["Public Sale & Strategic Sale"],
+    farming: ["Liquidity Incentives"],
+    noncirculating: ["Long-Term Protocol & Ecosystem Development","Application Development","Future Contributors"],
+    privateSale: ["Bootstrap & Private Sale","Strategic Sale"],
+    insiders: ["Key Partners","Advisors","Founding Contributors"],
   },
 };
 

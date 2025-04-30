@@ -71,9 +71,10 @@ const traderJoe: Protocol = {
     protocolIds: ["468"],
   },
   categories: {
-    insiders: ["Potential strategic investors", "Team"],
     farming: ["Liquidity providers"],
     noncirculating: ["Treasury"],
+    privateSale: ["Potential strategic investors"],
+    insiders: ["Team"],
   },
 };
 export default traderJoe;

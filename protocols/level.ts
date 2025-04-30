@@ -48,22 +48,10 @@ const level: Protocol = {
     protocolIds: ["2395"],
   },
   categories: {
-    insiders: [
-      "Strategic Sale 1",
-      "Strategic Sale 2",
-      "Strategic Sale 3",
-      "Strategic Sale 4",
-      "Team",
-    ],
-    farming: [
-      "Ladder Incentives",
-      "Trading Rewards",
-      "Junior Tranche",
-      "Mezzanine Tranche",
-      "Sneior Tranche",
-      "LP incentives",
-    ],
+    farming: ["Ladder Incentives","Trading Rewards","Junior Tranche","Mezzanine Tranche","Sneior Tranche","LP incentives"],
     publicSale: ["Liquidity Bootstrap"],
+    privateSale: ["Strategic Sale 1","Strategic Sale 2","Strategic Sale 3","Strategic Sale 4"],
+    insiders: ["Team"],
   },
 };
 

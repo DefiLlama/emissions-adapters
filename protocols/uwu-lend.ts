@@ -42,8 +42,9 @@ const uwulend: Protocol = {
     // ],
   },
   categories: {
-    insiders: ["Team", "Investors"],
     farming: ["Treasury"],
+    privateSale: ["Investors"],
+    insiders: ["Team"],
   },
 };
 

@@ -47,13 +47,10 @@ const safe: Protocol = {
   },
   categories: {
     farming: ["Ecosystem"],
-    insiders: ["Core Contributors", "Grants & Reserve", "Strategic Raise"],
-    noncirculating: [
-      "SafeDAO Treasury",
-      "GnosisDAO Treasury",
-      "Joint Treasury",
-    ],
+    noncirculating: ["SafeDAO Treasury","GnosisDAO Treasury","Joint Treasury"],
     airdrop: ["Airdrop"],
+    privateSale: ["Strategic Raise"],
+    insiders: ["Core Contributors","Grants & Reserve"],
   },
 };
 export default safe;

@@ -47,9 +47,10 @@ const meme: Protocol = {
   },
   categories: {
     airdrop: ["Airdrop"],
-    publicSale: ["Community Presale", "Binance Launchpool"],
+    publicSale: ["Community Presale","Binance Launchpool"],
     noncirculating: ["Ecosystem"],
-    insiders: ["Private Sale", "Contributors"],
+    privateSale: ["Private Sale"],
+    insiders: ["Contributors"],
   },
 };
 

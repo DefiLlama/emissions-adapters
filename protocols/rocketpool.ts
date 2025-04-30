@@ -45,11 +45,12 @@ const rocketpool: Protocol = {
         ],
     },
     categories: {
-        insiders: ["Pre-Sale Investors", "Rocket Pool Team"],
-        publicSale: ["Public Sale"],
-        farming: ["Node Operator Rewards", "Trusted Node Rewards"],
-        noncirculating: ["Protocol DAO Rewards"]
-    }
+    publicSale: ["Public Sale"],
+    farming: ["Node Operator Rewards","Trusted Node Rewards"],
+    noncirculating: ["Protocol DAO Rewards"],
+    privateSale: ["Pre-Sale Investors"],
+    insiders: ["Rocket Pool Team"],
+  }
 };
 
 export default rocketpool;

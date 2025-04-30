@@ -45,10 +45,11 @@ const blast: Protocol = {
     protocolIds: ["4236"],
   },
   categories: {
-    airdrop: ["Blast Points", "Blast Gold", "Blur Foundation"],
+    airdrop: ["Blast Points","Blast Gold","Blur Foundation"],
     farming: ["Community"],
-    insiders: ["Core Contributors", "Investors"],
     noncirculating: ["Blast Foundation"],
+    privateSale: ["Investors"],
+    insiders: ["Core Contributors"],
   },
 };
 

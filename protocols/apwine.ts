@@ -70,8 +70,9 @@ const apwine: Protocol = {
     publicSale: ["Bootstrap"],
     farming: ["Liquidity Incentives"],
     airdrop: ["Airdrop"],
-    insiders: ["Seed & Pre-seed", "Advisors", "Team"],
     noncirculating: ["Ecosystem"],
+    privateSale: ["Seed & Pre-seed"],
+    insiders: ["Advisors","Team"],
   },
 };
 export default apwine;

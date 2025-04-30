@@ -40,10 +40,11 @@ const stella: Protocol = {
     protocolIds: ["3148"],
   },
   categories: {
-    insiders: ["Private Sale", "Team & Insiders"],
-    publicSale: ["Binance Launchpad", "Binance Launchpool"],
+    publicSale: ["Binance Launchpad","Binance Launchpool"],
     farming: ["Liquidity Mining"],
     noncirculating: ["Ecosystem"],
+    privateSale: ["Private Sale"],
+    insiders: ["Team & Insiders"],
   },
 };
 

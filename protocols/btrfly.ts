@@ -99,9 +99,10 @@ const btrfly: Protocol = {
     total,
   },
   categories: {
-    insiders: ["Seed", "Founding Team"],
-    farming: ["Olympus", "V1 Supply"],
-    noncirculating: ["Pulse", "DAO Reserves"],
+    farming: ["Olympus","V1 Supply"],
+    noncirculating: ["Pulse","DAO Reserves"],
+    privateSale: ["Seed"],
+    insiders: ["Founding Team"],
   },
 };
 

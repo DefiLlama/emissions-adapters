@@ -774,19 +774,11 @@ const dydx: Protocol = {
     total: 1e9,
   },
   categories: {
-    insiders: [
-      "Investors",
-      "Employees & Consultants of dYdX Trading or Foundation",
-      "Future Employees & Consultants of dYdX Trading or Foundation",
-    ],
-    farming: [
-      "User Trading Rewards",
-      "Liquidity Provider Rewards",
-      "Liquidity Staking Pool",
-      "Safety Staking Pool",
-    ],
+    farming: ["User Trading Rewards","Liquidity Provider Rewards","Liquidity Staking Pool","Safety Staking Pool"],
     airdrop: ["Retroactive Rewards"],
     noncirculating: ["Community Treasury"],
+    privateSale: ["Investors"],
+    insiders: ["Employees & Consultants of dYdX Trading or Foundation","Future Employees & Consultants of dYdX Trading or Foundation"],
   },
 };
 

@@ -94,15 +94,11 @@ const starknet: Protocol = {
     protocolIds: ["3787"],
   },
   categories: {
-    insiders: ["Early Contributors", "Investors", "Donations"],
-    noncirculating: [
-      "Foundation Strategic Reserves",
-      "Foundation Treasury",
-      "StarkWare",
-      "Grants including DPs",
-    ],
+    noncirculating: ["Foundation Strategic Reserves","Foundation Treasury","StarkWare","Grants including DPs"],
     airdrop: ["Community Provisions"],
     liquidity: ["Community Rebates"],
+    privateSale: ["Investors"],
+    insiders: ["Early Contributors","Donations"],
   },
 };
 

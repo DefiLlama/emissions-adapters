@@ -81,18 +81,10 @@ const debridge: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Core Contributors",
-      "Strategic Partners",
-    ],
-    noncirculating: [
-      "Community & Launch",
-      "Ecosystem",
-      "deBridge Foundation",
-    ],
-    farming: [
-      "Validators",
-    ]
+    noncirculating: ["Community & Launch","Ecosystem","deBridge Foundation"],
+    farming: ["Validators"],
+    privateSale: ["Strategic Partners"],
+    insiders: ["Core Contributors"],
   },
 };
 

@@ -84,9 +84,10 @@ const aptos: Protocol = {
     protocolIds: ['4028'],
   },
   categories: {
-    insiders: ['Team', 'Private Sale', 'Advisors'],
-    noncirculating: ['Ecosystem / Treasury'],
-    airdrop: ['Binance Launchpad'],
+    noncirculating: ["Ecosystem / Treasury"],
+    airdrop: ["Binance Launchpad"],
+    privateSale: ["Private Sale"],
+    insiders: ["Team","Advisors"],
   },
 };
 export default aptos;

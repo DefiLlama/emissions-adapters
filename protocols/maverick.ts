@@ -68,10 +68,10 @@ const maverick: Protocol = {
     protocolIds: ["2644"],
   },
   categories: {
-    insiders: ["Investors", "Foundation & Treasury", "Team", "Advisors"],
     publicSale: ["Binance Launchpool"],
-    farming: ["Public Goods Fund", "Liquidity Mining and Airdrops"],
-    
+    farming: ["Public Goods Fund","Liquidity Mining and Airdrops"],
+    privateSale: ["Investors"],
+    insiders: ["Foundation & Treasury","Team","Advisors"],
   },
 };
 export default maverick;

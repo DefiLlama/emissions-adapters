@@ -38,9 +38,10 @@ const aave: Protocol = {
   },
   categories: {
     publicSale: ["IDO"],
-    liquidity: ["Uniswap Liquidity", "Market Maker"],
-    insiders: ["Seed", "Private Sale", "Core Team", "Advisors"],
+    liquidity: ["Uniswap Liquidity","Market Maker"],
     noncirculating: ["Ecosystem"],
+    privateSale: ["Seed","Private Sale"],
+    insiders: ["Core Team","Advisors"],
   },
 };
 export default aave;

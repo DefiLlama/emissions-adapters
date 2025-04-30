@@ -114,25 +114,11 @@ const peaq: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Investors (Pre Seed)",
-      "Investors (Seed)",
-      "Investors (Private and Pre-Launch)",
-      "Core Contributors and EoT Labs",
-    ],
-    noncirculating: [
-      "Community Reserve",
-      "Network Security",
-      "Ecosystem Funds",
-    ],
-    liquidity: [
-      "Ecosystem Market Making & Liquidity"
-    ],
-    publicSale: [
-      "Community Sale",
-      "Community Initial Campaign",
-      "Community Campaigns (Get Real & Early Adopters)"
-    ],
+    noncirculating: ["Community Reserve","Network Security","Ecosystem Funds"],
+    liquidity: ["Ecosystem Market Making & Liquidity"],
+    publicSale: ["Community Sale","Community Initial Campaign","Community Campaigns (Get Real & Early Adopters)"],
+    privateSale: ["Investors (Pre Seed)","Investors (Seed)","Investors (Private and Pre-Launch)"],
+    insiders: ["Core Contributors and EoT Labs"],
   },
 };
 

@@ -28,10 +28,11 @@ const ondo: Protocol = {
         protocolIds: ["2542"],
     },
     categories: {
-        publicSale: ["Community Access Sale"],
-        noncirculating: ["Ecosystem Growth"],
-        insiders: ["Private Sales","Protocol Development"]
-    },
+    publicSale: ["Community Access Sale"],
+    noncirculating: ["Ecosystem Growth"],
+    privateSale: ["Private Sales"],
+    insiders: ["Protocol Development"],
+  },
 };
 
 export default ondo;

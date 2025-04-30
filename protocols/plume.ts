@@ -77,10 +77,11 @@ const plume: Protocol = {
   },
 
   categories: {
-    insiders: ['Core Contributors', 'Early Backers'],
-    noncirculating: ['Foundation', 'Community & Ecosystem'],
-    airdrop: ['Airdrop'],
-    farming: ['Validators'],
+    noncirculating: ["Foundation","Community & Ecosystem"],
+    airdrop: ["Airdrop"],
+    farming: ["Validators"],
+    privateSale: ["Early Backers"],
+    insiders: ["Core Contributors"],
   },
 };
 

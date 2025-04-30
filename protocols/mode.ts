@@ -59,8 +59,9 @@ const mode: Protocol = {
   },
   categories: {
     airdrop: ["User & Developer Airdrops"],
-    insiders: ["Core Contributors", "Investors"],
     noncirculating: ["Foundation & Treasury"],
+    privateSale: ["Investors"],
+    insiders: ["Core Contributors"],
   },
 };
 

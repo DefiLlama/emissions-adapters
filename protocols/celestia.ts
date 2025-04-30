@@ -56,14 +56,11 @@ const celestia: Protocol = {
     protocolIds: ["3562"],
   },
   categories: {
-    insiders: [
-      "Initial Core Contributors",
-      "Early Backers Seed",
-      "Early Backers Series A&B",
-    ],
     publicSale: [],
     airdrop: ["Public Allocation"],
     farming: ["R&D & Ecosystem"],
+    privateSale: ["Early Backers Seed","Early Backers Series A&B"],
+    insiders: ["Initial Core Contributors"],
   },
 };
 export default celestia;

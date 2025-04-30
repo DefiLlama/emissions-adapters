@@ -22,9 +22,10 @@ const truefi: Protocol = {
         protocolIds: ["166"],
     },
     categories: {
-        insiders: ["Presale Investors","Team","Company","Future Team"],
-        farming: ["Liquidity Mining Rewards"],
-    },
+    farming: ["Liquidity Mining Rewards"],
+    privateSale: ["Presale Investors"],
+    insiders: ["Team","Company","Future Team"],
+  },
 };
 
 export default truefi;

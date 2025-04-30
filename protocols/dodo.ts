@@ -52,14 +52,10 @@ const dodo: Protocol = {
     ],
   },
   categories: {
-    insiders: [
-      "Team & consultants",
-      "Seed investors",
-      "private round investors",
-      "Operations, marketing, partners",
-    ],
     publicSale: ["IDO"],
     noncirculating: ["Community incentives"],
+    privateSale: ["Seed investors","private round investors"],
+    insiders: ["Team & consultants","Operations, marketing, partners"],
   },
 };
 

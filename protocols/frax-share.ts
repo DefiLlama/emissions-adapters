@@ -44,13 +44,10 @@ const fxs: Protocol = {
     protocolIds: ["359", "2076", "2121", "2221", "2607"],
   },
   categories: {
-    insiders: [
-      "Accredited Private Investors",
-      "Strategic Advisors / Outside Early Contributors",
-      "Team / Founders / Early Project Members",
-    ],
     noncirculating: ["Treasury / Grants / Partnerships / Bug Bounties"],
     farming: ["Liquidity Programs / Farming / Community"],
+    privateSale: ["Accredited Private Investors"],
+    insiders: ["Strategic Advisors / Outside Early Contributors","Team / Founders / Early Project Members"],
   },
 };
 

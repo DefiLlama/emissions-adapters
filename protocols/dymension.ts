@@ -46,8 +46,9 @@ const dymension: Protocol = {
   categories: {
     airdrop: ["Genesis Rolldrop"],
     farming: ["Incentives Manager"],
-    noncirculating: ["Community Pool", "Ecosystem & R&D"],
-    insiders: ["Backers", "Core Contributors"],
+    noncirculating: ["Community Pool","Ecosystem & R&D"],
+    privateSale: ["Backers"],
+    insiders: ["Core Contributors"],
   },
 };
 export default dymension;

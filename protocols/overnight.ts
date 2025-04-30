@@ -54,9 +54,10 @@ const overnight: Protocol = {
     protocolIds: ["1023", "2696", "2810", "3631"],
   },
   categories: {
-    insiders: ["Pre Seed", "Team"],
-    noncirculating: ["Treasury", "Insurance Fund"],
+    noncirculating: ["Treasury","Insurance Fund"],
     publicSale: ["Presale"],
+    privateSale: ["Pre Seed"],
+    insiders: ["Team"],
   },
 };
 

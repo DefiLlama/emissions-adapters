@@ -90,9 +90,10 @@ const aptos: Protocol = {
     protocolIds: ['4022'],
   },
   categories: {
-    insiders: ['Protocol Development', 'Private Sales'],
-    noncirculating: ['Ecosystem Growth', 'Publisher Rewards'],
-    airdrop: ['Community Launch'],
+    noncirculating: ["Ecosystem Growth","Publisher Rewards"],
+    airdrop: ["Community Launch"],
+    privateSale: ["Private Sales"],
+    insiders: ["Protocol Development"],
   },
 };
 export default aptos;

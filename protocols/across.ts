@@ -64,9 +64,9 @@ const across: Protocol = {
   },
   categories: {
     airdrop: ["Airdrop"],
-    insiders: ["Strategic Partnerships"],
     noncirculating: ["DAO Treasury"],
     farming: ["Protocol Rewards"],
+    privateSale: ["Strategic Partnerships"],
   },
 };
 

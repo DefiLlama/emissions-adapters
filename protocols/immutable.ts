@@ -57,9 +57,10 @@ const immutable: Protocol = {
   },
   categories: {
     farming: ["Ecosystem Development"],
-    insiders: ["Project Development", "Private Sale"],
-    publicSale: ["Public Sale 1", "Public Sale 2"],
+    publicSale: ["Public Sale 1","Public Sale 2"],
     noncirculating: ["Foundation Reserve"],
+    privateSale: ["Private Sale"],
+    insiders: ["Project Development"],
   },
 };
 

@@ -71,20 +71,12 @@ const metis: Protocol = {
     protocolIds: ["3228"],
   },
   categories: {
-    insiders: [
-      "Founding Team",
-      "MetisLab Foundation",
-      "Advisors",
-      "Angel Investors",
-      "Seed Investors",
-      "Private Investors",
-      "Community Star Investors",
-      "Strategic Investors",
-    ],
-    publicSale: ["IDO", "Liquidity Reserve"],
+    publicSale: ["IDO","Liquidity Reserve"],
     airdrop: ["Airdrop"],
     noncirculating: ["Community Development"],
     farming: ["Transaction Mining"],
+    privateSale: ["Angel Investors","Seed Investors","Private Investors","Community Star Investors","Strategic Investors"],
+    insiders: ["Founding Team","MetisLab Foundation","Advisors"],
   },
 };
 export default metis;

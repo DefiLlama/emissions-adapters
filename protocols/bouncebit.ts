@@ -50,14 +50,12 @@ const bouncebit: Protocol = {
     protocolIds: ["4656"],
   },
   categories: {
-    farming: [
-      "Testnet & TVL Incentives",
-      "Staking Reward & Delegation Program",
-    ],
-    insiders: ["Investors", "Team", "Advisors"],
+    farming: ["Testnet & TVL Incentives","Staking Reward & Delegation Program"],
     airdrop: ["Binance Megadrop"],
     publicSale: ["Market Making"],
     noncirculating: ["BounceClub & Ecosystem Reserve"],
+    privateSale: ["Investors"],
+    insiders: ["Team","Advisors"],
   },
 };
 export default bouncebit;

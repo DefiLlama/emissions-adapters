@@ -52,10 +52,11 @@ const aevo: Protocol = {
     protocolIds: ["281"],
   },
   categories: {
-    insiders: ["Team", "Investors", "Corporate Property", "Market Makers"],
     noncirculating: ["Community Treasury"],
     airdrop: ["Retroactive Airdrop"],
     farming: ["Liquidity Mining"],
+    privateSale: ["Investors"],
+    insiders: ["Team","Corporate Property","Market Makers"],
   },
 };
 

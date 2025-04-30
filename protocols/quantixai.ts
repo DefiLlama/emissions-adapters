@@ -75,15 +75,9 @@ const quantixai: Protocol = {
   },
 
   categories: {
-    insiders: [
-      "Team",
-      "Investments",
-    ],
-    noncirculating: [
-      "QuantixAI Trading Bot Fund",
-      "Market Making",
-      "Marketing",
-    ],
+    noncirculating: ["QuantixAI Trading Bot Fund","Market Making","Marketing"],
+    privateSale: ["Investments"],
+    insiders: ["Team"],
   },
 };
 
