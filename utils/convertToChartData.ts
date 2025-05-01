@@ -57,7 +57,6 @@ export async function createChartData(
     metadata: Metadata;
     startTime: number;
     endTime: number;
-    categories?: { [key: string]: string[] };
   },
   replaces: string[],
 ): Promise<{ realTimeData: ChartSection[]; documentedData: ChartSection[] }> {
@@ -90,7 +89,7 @@ export async function createChartData(
     // nulls come from the following function
     await appendMissingDataSections(chartData, protocol, data);
     const consolidated = consolidateDuplicateKeys(chartData);
-    return mapToServerData(consolidated, data.categories);
+    return consolidated;
   }
 }
 function nullsInApiData(res: any): boolean {
@@ -107,7 +106,6 @@ async function appendMissingDataSections(
     metadata: Metadata;
     startTime: number;
     endTime: number;
-    categories?: { [key: string]: string[] };
   },
 ) {
   const incompleteSections = data.metadata.incompleteSections;
@@ -181,7 +179,6 @@ function appendForecast(
     metadata: Metadata;
     startTime: number;
     endTime: number;
-    categories?: { [key: string]: string[] };
   },
 ) {
   let err: boolean = false;
@@ -403,28 +400,16 @@ function discreet(raw: RawResult, config: ChartConfig): ChartData {
   return { timestamps, unlocked, apiData, isContinuous: false };
 }
 
-export function mapToServerData(
-  testData: ChartSection[],
-  categories?: { [key: string]: string[] }
-) {
+export function mapToServerData(testData: ChartSection[]) {
   const serverData: any[] = testData.map((s: ChartSection) => {
     const label = s.section;
-    let category: string | undefined;
-    if (categories) {
-      for (const [cat, sections] of Object.entries(categories)) {
-        if (sections.includes(label)) {
-          category = cat;
-          break;
-        }
-      }
-    }
 
     const data = s.data.timestamps.map((timestamp: number, i: number) => ({
       timestamp,
       unlocked: s.data.unlocked[i],
     }));
 
-    return { label, category, data };
+    return { label, data };
   });
 
   return serverData;
