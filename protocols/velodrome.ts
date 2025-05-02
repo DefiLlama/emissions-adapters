@@ -51,4 +51,4 @@ function velodrome(): Protocol {
   };
 }
 
-export default velodrome;
+export default velodrome();
