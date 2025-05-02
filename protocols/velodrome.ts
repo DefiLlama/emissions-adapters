@@ -5,6 +5,7 @@ import { getEmissionsV1, getEmissionsV2 } from "../adapters/velodrome";
 
 const qty = 400000000;
 const start = 1654066800;
+
 function velodrome(): Protocol {
   return {
     "Community": manualCliff(start, qty * 0.6),
@@ -22,14 +23,14 @@ function velodrome(): Protocol {
         start + 2 * periodToSeconds.year,
         7200000,
       ),
-      getEmissionsV1("team")
+      () => getEmissionsV1("team")
     ],
     "Optimism Team": manualCliff(start, qty * 0.05),
     "Genesis Liquidity Pools": manualCliff(start, qty * 0.01),
-    "Rebase Emissions v1": getEmissionsV1("rebase"),
-    "Rebase Emissions v2": getEmissionsV2("rebase"),
-    "Gauge Emissions v1": getEmissionsV1("gauge"),
-    "Gauge Emissions v2": getEmissionsV2("gauge"),
+    "Rebase Emissions v1": () => getEmissionsV1("rebase"),
+    "Rebase Emissions v2": () => getEmissionsV2("rebase"),
+    "Gauge Emissions v1": () => getEmissionsV1("gauge"),
+    "Gauge Emissions v2": () => getEmissionsV2("gauge"),
     meta: {
       sources: ["https://docs.velodrome.finance/tokenomics"],
       notes: [
@@ -50,4 +51,4 @@ function velodrome(): Protocol {
   };
 }
 
-export default velodrome();
+export default velodrome;
