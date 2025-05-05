@@ -198,13 +198,14 @@ function appendForecast(
     const { recentlyEmitted, totalEmitted, gradientLength } =
       findPreviouslyEmitted(relatedSections, reference);
 
-    if (totalEmitted == 0) {
-      err = true;
-      console.log(`total emitted error found in ${incompleteSection.key}`);
-    }
+      if (totalEmitted === null || totalEmitted === undefined) { 
+        err = true; 
+        console.log(`Invalid total emitted value in ${incompleteSection.key}`); 
+      }
 
-    const gradient: number =
-      recentlyEmitted / (timestamp - gradientLength * RESOLUTION_SECONDS);
+
+    const gradient: number = totalEmitted > 0 ?
+      recentlyEmitted / (timestamp - gradientLength * RESOLUTION_SECONDS) : 0;
     const change: number = incompleteSection.allocation - totalEmitted;
     if (change < 0) return;
 
