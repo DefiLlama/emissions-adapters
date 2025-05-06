@@ -60,12 +60,12 @@ export async function createRawSections(
       async function sectionToRaw(key: RawSection[], entry: any[]) {
         const section: string = entry[0];
         if (typeof entry[1] === "function") {
-          entry[1] = entry[1]();
+          entry[1] = entry[1](backfill);
         }
         let adapterResults = await entry[1];
         if (adapterResults.length == null) adapterResults = [adapterResults];
         adapterResults = adapterResults.map((r: any) =>
-          typeof r === "function" ? r().then() : r,
+          typeof r === "function" ? r(backfill).then() : r,
         );
         adapterResults = await Promise.all(adapterResults);
 

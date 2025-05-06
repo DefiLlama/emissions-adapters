@@ -9,30 +9,33 @@ const across: Protocol = {
   Airdrop: manualCliff(start, qty * 0.125),
   "Strategic Partnerships": [
     manualCliff("2025-06-30", qty * 0.1),
-    () =>
+    (backfill: boolean) =>
       balance(
         ["0x8180D59b7175d4064bDFA8138A58e9baBFFdA44a"],
         "0x44108f0223A3C3028F5Fe7AEC7f9bb2E66beF82F",
         "ethereum",
         "across",
         1669939200,
+        backfill
       ),
   ],
-  "DAO Treasury": () =>
+  "DAO Treasury": (backfill: boolean) =>
     balance(
       ["0xB524735356985D2f267FA010D681f061DfF03715"],
       "0x44108f0223A3C3028F5Fe7AEC7f9bb2E66beF82F",
       "ethereum",
       "across",
       1669642200,
+      backfill
     ),
-  "Protocol Rewards": () =>
+  "Protocol Rewards": (backfill: boolean) =>
     balance(
       ["0x9040e41eF5E8b281535a96D9a48aCb8cfaBD9a48"],
       "0x44108f0223A3C3028F5Fe7AEC7f9bb2E66beF82F",
       "ethereum",
       "across",
       1669642200,
+      backfill
     ),
   meta: {
     notes: [
