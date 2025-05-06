@@ -59,6 +59,7 @@ export async function createChartData(
     endTime: number;
   },
   replaces: string[],
+  backfill: boolean = false
 ): Promise<{ realTimeData: ChartSection[]; documentedData: ChartSection[] }> {
   const realTimeData = await iterateThroughSections(data.rawSections);
   let documentedData = await iterateThroughSections(data.documented);
@@ -87,7 +88,7 @@ export async function createChartData(
 
     nullFinder(chartData, "preappend");
     // nulls come from the following function
-    await appendMissingDataSections(chartData, protocol, data);
+    await appendMissingDataSections(chartData, protocol, data, backfill);
     const consolidated = consolidateDuplicateKeys(chartData);
     return consolidated;
   }
@@ -107,22 +108,25 @@ async function appendMissingDataSections(
     startTime: number;
     endTime: number;
   },
+  backfill: boolean
 ) {
   const incompleteSections = data.metadata.incompleteSections;
   if (incompleteSections == null || incompleteSections.length == 0) return;
 
   let res: any = [];
-  try {
-    res = await fetch(`https://api.llama.fi/emission/${protocol}`).then((r) =>
-      r.json(),
-    );
-  } catch {}
-  let body = res.body ? JSON.parse(res.body) : [];
-  res =
-    body && body.documentedData?.data.length
-      ? body.documentedData?.data ?? body.data
-      : [];
-
+  if (!backfill) {
+    try {
+      res = await fetch(`https://api.llama.fi/emission/${protocol}`).then((r) =>
+        r.json(),
+      );
+    } catch {}
+    let body = res.body ? JSON.parse(res.body) : [];
+    res =
+      body && body.documentedData?.data.length
+        ? body.documentedData?.data ?? body.data
+        : [];
+  }
+  
   if (nullsInApiData(res)) {
     await sendMessage(
       `${protocol} has nulls in API res`,
