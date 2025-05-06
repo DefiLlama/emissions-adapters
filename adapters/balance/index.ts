@@ -11,7 +11,9 @@ let res: number;
 export async function latest(
   adapter: string,
   timestampDeployed: number,
+  backfill: boolean = false
 ): Promise<number> {
+  if (backfill) return timestampDeployed
   if (!res) {
     let r;
     try {
@@ -37,12 +39,13 @@ export async function balance(
   chain: any,
   adapter: string,
   timestampDeployed: number,
+  backfill: boolean = false
 ): Promise<CliffAdapterResult[]> {
   let trackedTimestamp: number;
   let decimals: number;
 
   [trackedTimestamp, decimals] = await Promise.all([
-    latest(adapter, timestampDeployed),
+    latest(adapter, timestampDeployed, backfill),
     target == GAS_TOKEN
       ? 18
       : call({

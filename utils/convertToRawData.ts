@@ -15,6 +15,7 @@ const excludedKeys = ["meta", "categories", "documented"];
 
 export async function createRawSections(
   adapter: Protocol,
+  backfill: boolean = false
 ): Promise<SectionData> {
   let startTime: number = 10000000000;
   let endTime: number = 0;
@@ -36,7 +37,7 @@ export async function createRawSections(
           await Promise.all(
             Object.entries(a[1].incompleteSections).map(async (c: any) => {
               a[1].incompleteSections[c[0]].lastRecord =
-                await a[1].incompleteSections[c[0]].lastRecord();
+                await a[1].incompleteSections[c[0]].lastRecord(backfill);
             }),
           );
         }
@@ -59,12 +60,12 @@ export async function createRawSections(
       async function sectionToRaw(key: RawSection[], entry: any[]) {
         const section: string = entry[0];
         if (typeof entry[1] === "function") {
-          entry[1] = entry[1]();
+          entry[1] = entry[1](backfill);
         }
         let adapterResults = await entry[1];
         if (adapterResults.length == null) adapterResults = [adapterResults];
         adapterResults = adapterResults.map((r: any) =>
-          typeof r === "function" ? r().then() : r,
+          typeof r === "function" ? r(backfill).then() : r,
         );
         adapterResults = await Promise.all(adapterResults);
 
