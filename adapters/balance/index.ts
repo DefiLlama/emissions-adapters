@@ -11,6 +11,7 @@ let res: number;
 export async function latest(
   adapter: string,
   timestampDeployed: number,
+  backfill: boolean = false
 ): Promise<number> {
   if (!res) {
     let r;
@@ -23,7 +24,7 @@ export async function latest(
     }
     if (!r.body) return timestampDeployed;
     r = JSON.parse(r.body);
-    return r.metadata.incompleteSections == null ||
+    return backfill || r.metadata.incompleteSections == null ||
       r.metadata.incompleteSections[0].lastRecord == null
       ? timestampDeployed
       : r.metadata.incompleteSections[0].lastRecord;

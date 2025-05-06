@@ -46,17 +46,17 @@ const across: Protocol = {
     total: qty,
     incompleteSections: [
       {
-        lastRecord: () => latest("across", 1669642200),
+        lastRecord: (backfill: boolean) => latest("across", 1669642200, backfill),
         key: "DAO Treasury",
         allocation: qty * 0.525,
       },
       {
-        lastRecord: () => latest("across", 1669642200),
+        lastRecord: (backfill: boolean) => latest("across", 1669642200, backfill),
         key: "Protocol Rewards",
         allocation: qty * 0.1,
       },
       {
-        lastRecord: () => latest("across", 1669939200),
+        lastRecord: (backfill: boolean) => latest("across", 1669939200, backfill),
         key: "Strategic Partnerships",
         allocation: qty * 0.25,
       },
