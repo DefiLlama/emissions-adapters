@@ -48,7 +48,7 @@ const chainlink: Protocol = {
   meta: {
     token: `${chain}:${address}`,
     sources: ["https://twitter.com/ChainLinkGod/status/1351578377140879361"],
-    protocolIds: ["2623"],
+    protocolIds: ["parent#chainlink"],
     total: qty,
     incompleteSections: [
       {
