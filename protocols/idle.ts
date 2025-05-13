@@ -20,13 +20,14 @@ const idle: Protocol = {
   "Liquidity mining": [
     manualLinear(start, start + periodToSeconds.year * 2, qty * 0.18),
   ],
-  "Long-term rewards": () =>
+  "Long-term rewards": (backfill: boolean) =>
     balance(
       ["0x107A369bc066c77FF061c7d2420618a6ce31B925"],
       token,
       chain,
       "idle",
       timestampDeployed,
+      backfill,
     ),
   Investors: [
     manualCliff(start + periodToSeconds.month * 6, qty * 0.173 * 0.25),
@@ -44,13 +45,14 @@ const idle: Protocol = {
       (qty * 0.227 * 2) / 3,
     ),
   ],
-  "Ecosystem fund": () =>
+  "Ecosystem fund": (backfill: boolean) =>
     balance(
       ["0xb0aA1f98523Ec15932dd5fAAC5d86e57115571C7"],
       token,
       chain,
       "idle",
       timestampDeployed2,
+      backfill,
     ),
   meta: {
     sources: ["https://docs.idle.finance/governance/idle/distribution"],
@@ -61,17 +63,19 @@ const idle: Protocol = {
       {
         key: "Long-term rewards",
         allocation: qty * 0.2,
-        lastRecord: () => latest("idle", timestampDeployed),
+        lastRecord: (backfill: boolean) =>
+          latest("idle", timestampDeployed, backfill),
       },
       {
         key: "Ecosystem fund",
         allocation: qty * 0.15,
-        lastRecord: () => latest("idle", timestampDeployed2),
+        lastRecord: (backfill: boolean) =>
+          latest("idle", timestampDeployed2, backfill),
       },
     ],
   },
   categories: {
-    farming: ["Long-term rewards","Liquidity mining","early LPs"],
+    farming: ["Long-term rewards", "Liquidity mining", "early LPs"],
     publicSale: ["Liquidity bootstrap"],
     noncirculating: ["Ecosystem fund"],
     privateSale: ["Investors"],

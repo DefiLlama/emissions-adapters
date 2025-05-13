@@ -15,13 +15,14 @@ const lido: Protocol = {
   "Validators & Signature Holders": schedule(0.065),
   "Initial Lido Devlopers": schedule(0.2),
   "Founders & Future Employees": schedule(0.15),
-  "DAO Treasury": () =>
+  "DAO Treasury": (backfill: boolean) =>
     balance(
       ["0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c"],
       token,
       chain,
       "lido#",
       timestampDeployed,
+      backfill,
     ),
   meta: {
     notes: [],
@@ -33,14 +34,19 @@ const lido: Protocol = {
       {
         key: "DAO Treasury",
         allocation: qty * 0.3632,
-        lastRecord: () => latest("lido#", timestampDeployed),
+        lastRecord: (backfill: boolean) =>
+          latest("lido#", timestampDeployed, backfill),
       },
     ],
   },
   categories: {
     noncirculating: ["DAO Treasury"],
     privateSale: ["Investors"],
-    insiders: ["Validators & Signature Holders","Initial Lido Devlopers","Founders & Future Employees"],
+    insiders: [
+      "Validators & Signature Holders",
+      "Initial Lido Devlopers",
+      "Founders & Future Employees",
+    ],
   },
 };
 export default lido;

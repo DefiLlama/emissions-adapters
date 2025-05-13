@@ -16,13 +16,14 @@ const ethereum: Protocol = {
     start + periodToSeconds.year * 4,
     6e6,
   ),
-  "Ethereum Foundation": () =>
+  "Ethereum Foundation": (backfill: boolean) =>
     balance(
       ["0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe"],
       GAS_TOKEN,
       "ethereum",
       "ethereum",
       start,
+      backfill,
     ),
   meta: {
     token: `${chain}:${GAS_TOKEN}`,
@@ -39,12 +40,12 @@ const ethereum: Protocol = {
       {
         key: "Ethereum Foundation",
         allocation: 6e6,
-        lastRecord: () => latest("ethereum", start),
+        lastRecord: (backfill: boolean) => latest("ethereum", start, backfill),
       },
       {
         key: "PoW Mining & EIP-1559 Burn",
         allocation: undefined,
-        lastRecord: () => latest("ethereum", start),
+        lastRecord: (backfill: boolean) => latest("ethereum", start, backfill),
       },
     ],
   },

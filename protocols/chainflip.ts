@@ -21,13 +21,14 @@ const chainflip: Protocol = {
   "Liquid Treasury": manualCliff(start, 4_968_503),
   "Strategic Investors": [typeA(18_886_906), ...typeB(3_162_974)],
   "Oxen Foundation": [typeA(3_200_000), ...typeB(1_000_000)],
-  Contributors: () =>
+  Contributors: (backfill: boolean) =>
     balance(
       ["0xCE317d9909F5dDD30dcd7331f832E906Adc81f5d"],
       token,
       chain,
       "chainflip",
       contributor,
+      backfill,
     ),
   "Treasury Reserves": [],
   meta: {
@@ -43,16 +44,17 @@ const chainflip: Protocol = {
       {
         key: "Contributors",
         allocation: 13_000_000,
-        lastRecord: () => latest("chainflip", contributor),
+        lastRecord: (backfill: boolean) =>
+          latest("chainflip", contributor, backfill),
       },
     ],
   },
   categories: {
     farming: ["Node Operators Programs"],
     publicSale: ["Token Sale"],
-    noncirculating: ["Liquid Treasury","Treasury Reserves"],
+    noncirculating: ["Liquid Treasury", "Treasury Reserves"],
     privateSale: ["Strategic Investors"],
-    insiders: ["Oxen Foundation","Contributors"],
+    insiders: ["Oxen Foundation", "Contributors"],
   },
 };
 

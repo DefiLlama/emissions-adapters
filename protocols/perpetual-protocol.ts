@@ -11,13 +11,14 @@ const timestampDeployed: number = 1612828800;
 const token: string = "0xbc396689893d065f41bc2c6ecbee5e0085233447";
 
 const perpetual: Protocol = {
-  "Ecosystem and rewards": () =>
+  "Ecosystem and rewards": (backfill: boolean) =>
     balance(
       ["0xd374225abb84dca94e121f0b8a06b93e39ad7a99"],
       token,
       "ethereum",
       "perpetual-protocol",
       timestampDeployed,
+      backfill,
     ),
   "Seed investors": manualStep(
     v1Launch,
@@ -52,13 +53,14 @@ const perpetual: Protocol = {
       {
         key: "Ecosystem and rewards",
         allocation: qty * 0.548,
-        lastRecord: () => latest("perpetual-protocol", timestampDeployed),
+        lastRecord: (backfill: boolean) =>
+          latest("perpetual-protocol", timestampDeployed, backfill),
       },
     ],
   },
   categories: {
-    farming: ["Balancer LBP","Ecosystem and rewards"],
-    privateSale: ["Seed investors","Strategic investors"],
+    farming: ["Balancer LBP", "Ecosystem and rewards"],
+    privateSale: ["Seed investors", "Strategic investors"],
     insiders: ["Team and advisors"],
   },
 };

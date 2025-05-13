@@ -31,13 +31,14 @@ const stargate: Protocol = {
     0.0211 * qty,
   ),
   "STG DEX liquidity": manualCliff(start, 0.0155 * qty),
-  "future incentives": () =>
+  "future incentives": (backfill: boolean) =>
     balance(
       ["0x65bb797c2b9830d891d87288f029ed8dacc19705"],
       token,
       "ethereum",
       "stargate-finance",
       timestampDeployed,
+      backfill,
     ),
   meta: {
     sources: [
@@ -50,13 +51,18 @@ const stargate: Protocol = {
       {
         key: "future incentives",
         allocation: qty * 0.3039,
-        lastRecord: () => latest("stargate-finance", timestampDeployed),
+        lastRecord: (backfill: boolean) =>
+          latest("stargate-finance", timestampDeployed, backfill),
       },
     ],
   },
   categories: {
-    farming: ["STG-USDC Curve pool incentives","initial emissions program","future incentives"],
-    publicSale: ["STG launch auction purchasers","STG DEX liquidity"],
+    farming: [
+      "STG-USDC Curve pool incentives",
+      "initial emissions program",
+      "future incentives",
+    ],
+    publicSale: ["STG launch auction purchasers", "STG DEX liquidity"],
     privateSale: ["investors"],
     insiders: ["core contributors"],
   },

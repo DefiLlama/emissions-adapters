@@ -28,13 +28,14 @@ const btrfly: Protocol = {
   "V1 Supply": manualCliff(start, total * 0.224),
   Seed: schedule(0.06),
   "Founding Team": schedule(0.09),
-  "DAO Reserves": () =>
+  "DAO Reserves": (backfill: boolean) =>
     balance(
       ["0xA52Fd396891E7A74b641a2Cb1A6999Fcf56B077e"],
       token,
       chain,
       "btrfly",
       1659974400,
+      backfill,
     ),
   Olympus: [
     manualLinear(start, start + periodToSeconds.year, 4875),
@@ -93,14 +94,15 @@ const btrfly: Protocol = {
       {
         key: "DAO Reserves",
         allocation: total * 0.15,
-        lastRecord: () => latest("btrfly", 1659974400),
+        lastRecord: (backfill: boolean) =>
+          latest("btrfly", 1659974400, backfill),
       },
     ],
     total,
   },
   categories: {
-    farming: ["Olympus","V1 Supply"],
-    noncirculating: ["Pulse","DAO Reserves"],
+    farming: ["Olympus", "V1 Supply"],
+    noncirculating: ["Pulse", "DAO Reserves"],
     privateSale: ["Seed"],
     insiders: ["Founding Team"],
   },

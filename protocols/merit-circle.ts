@@ -5,11 +5,12 @@ import { CliffAdapterResult, Protocol } from "../types/adapters";
 const token = "0x949D48EcA67b17269629c7194F4b727d4Ef9E5d6";
 const chain = "ethereum";
 const qty = 1e9;
-const realtime = (holder: string, deployed: number) => async () =>
-  balance([holder], token, chain, "merit-circle", deployed).then(
-    (s: CliffAdapterResult[]) =>
-      s.filter((c: CliffAdapterResult) => c.amount < 1e8),
-  );
+const realtime =
+  (holder: string, deployed: number) => async (backfill: boolean) =>
+    balance([holder], token, chain, "merit-circle", deployed, backfill).then(
+      (s: CliffAdapterResult[]) =>
+        s.filter((c: CliffAdapterResult) => c.amount < 1e8),
+    );
 
 const merit: Protocol = {
   "Community Incentives": realtime(
@@ -46,27 +47,32 @@ const merit: Protocol = {
       {
         key: "Community Incentives",
         allocation: qty * 0.302,
-        lastRecord: () => latest("merit-circle", 1641513600),
+        lastRecord: (backfill: boolean) =>
+          latest("merit-circle", 1641513600, backfill),
       },
       {
         key: "Contributors",
         allocation: qty * 0.2,
-        lastRecord: () => latest("merit-circle", 1668124800),
+        lastRecord: (backfill: boolean) =>
+          latest("merit-circle", 1668124800, backfill),
       },
       {
         key: "DAO Treasury",
         allocation: undefined,
-        lastRecord: () => latest("merit-circle", 1635548400),
+        lastRecord: (backfill: boolean) =>
+          latest("merit-circle", 1635548400, backfill),
       },
       {
         key: "Early Contributors",
         allocation: qty * 0.141,
-        lastRecord: () => latest("merit-circle", 1652137200),
+        lastRecord: (backfill: boolean) =>
+          latest("merit-circle", 1652137200, backfill),
       },
       {
         key: "Retroactive Rewards",
         allocation: qty * 0.034,
-        lastRecord: () => latest("merit-circle", 1640649600),
+        lastRecord: (backfill: boolean) =>
+          latest("merit-circle", 1640649600, backfill),
       },
     ],
   },
