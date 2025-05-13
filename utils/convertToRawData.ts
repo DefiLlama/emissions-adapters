@@ -29,6 +29,9 @@ export async function createRawSections(
   };
   let categories: { [category: string]: string[] } = {};
 
+  let allCliffAllocations: any[] = [];
+  let allLinearAllocations: any[] = [];
+
   await Promise.all(
     Object.entries(adapter).map(async (a: any[]) => {
       if (a[0] == "meta") {
@@ -69,7 +72,9 @@ export async function createRawSections(
         );
         adapterResults = await Promise.all(adapterResults);
 
-        addResultToEvents(section, metadata, adapterResults, categories);
+        const { cliffAllocations, linearAllocations } = addResultToEvents(section, metadata, adapterResults, categories);
+        allCliffAllocations.push(...cliffAllocations);
+        allLinearAllocations.push(...linearAllocations);
 
         const results: RawResult[] | RawResult[][] = adapterResults
           .flat()
@@ -108,7 +113,34 @@ export async function createRawSections(
   if (metadata && metadata.events)
     metadata.events.sort((a: Event, b: Event) => a.timestamp - b.timestamp);
 
-  
+
+  const unlockEventMap: { [timestamp: number]: { cliffAllocations: any[]; linearAllocations: any[] } } = {};
+  allCliffAllocations.forEach((a) => {
+    if (!unlockEventMap[a.timestamp]) unlockEventMap[a.timestamp] = { cliffAllocations: [], linearAllocations: [] };
+    unlockEventMap[a.timestamp].cliffAllocations.push(a);
+  });
+  allLinearAllocations.forEach((a) => {
+    if (!unlockEventMap[a.timestamp]) unlockEventMap[a.timestamp] = { cliffAllocations: [], linearAllocations: [] };
+    unlockEventMap[a.timestamp].linearAllocations.push(a);
+  });
+  metadata.unlockEvents = [];
+  for (const [timestampStr, { cliffAllocations, linearAllocations }] of Object.entries(unlockEventMap)) {
+    const timestamp = Number(timestampStr);
+    const totalTokensCliff = cliffAllocations.reduce((sum, a) => sum + (a.amount || 0), 0);
+    const netChangeInWeeklyRate = linearAllocations.reduce((sum, a) => sum + ((a.newRatePerWeek || 0) - (a.previousRatePerWeek || 0)), 0);
+    const totalNewWeeklyRate = linearAllocations.reduce((sum, a) => sum + (a.newRatePerWeek || 0), 0);
+    metadata.unlockEvents.push({
+      timestamp,
+      cliffAllocations,
+      linearAllocations,
+      summary: {
+        totalTokensCliff: totalTokensCliff > 0 ? totalTokensCliff : undefined,
+        netChangeInWeeklyRate: netChangeInWeeklyRate !== 0 ? netChangeInWeeklyRate : undefined,
+        totalNewWeeklyRate: totalNewWeeklyRate > 0 ? totalNewWeeklyRate : undefined,
+      }
+    });
+  }
+  metadata.unlockEvents.sort((a, b) => a.timestamp - b.timestamp);
 
   return { rawSections, documented, startTime, endTime, metadata, categories };
 }
