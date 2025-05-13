@@ -131,8 +131,8 @@ export async function createRawSections(
     const totalNewWeeklyRate = linearAllocations.reduce((sum, a) => sum + (a.newRatePerWeek || 0), 0);
     metadata.unlockEvents.push({
       timestamp,
-      cliffAllocations,
-      linearAllocations,
+      cliffAllocations: cliffAllocations.map(({ timestamp, ...rest }) => rest),
+      linearAllocations: linearAllocations.map(({ timestamp, ...rest }) => rest),
       summary: {
         totalTokensCliff: totalTokensCliff > 0 ? totalTokensCliff : undefined,
         netChangeInWeeklyRate: netChangeInWeeklyRate !== 0 ? netChangeInWeeklyRate : undefined,
