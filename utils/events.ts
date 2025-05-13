@@ -15,7 +15,7 @@ export function addResultToEvents(
   metadata: Metadata,
   results: AdapterResult[],
   categories: Categories,
-): Metadata {
+): { cliffAllocations: any[]; linearAllocations: any[] } {
   const sectionToCategory: { [section: string]: string } = {};
   for (const category in categories) {
     categories[category].forEach((s) => {
@@ -90,8 +90,7 @@ export function addResultToEvents(
       metadata.events.push({
         description: `On {timestamp} {tokens[0]} of ${section} tokens ${
           isFuture(s.start + i * s.stepDuration) ? "will be" : "were"
-        } unlocked
-        `,
+        } unlocked`,
         timestamp: s.start + i * s.stepDuration,
         noOfTokens: [s.amount],
         category: sectionToCategory[section] || 'Uncategorized',
@@ -100,7 +99,67 @@ export function addResultToEvents(
     }
   });
 
-  return metadata;
+  const cliffAllocations: any[] = [];
+  const linearAllocations: any[] = [];
+
+  cliffs.forEach((c: CliffAdapterResult) => {
+    if (c.amount.toFixed(2) == "0.00") return;
+    cliffAllocations.push({
+      recipient: section,
+      category: sectionToCategory[section] || 'Uncategorized',
+      unlockType: "cliff",
+      amount: c.amount,
+      timestamp: c.start
+    });
+  });
+
+  steps.forEach((s: StepAdapterResult) => {
+    for (let i = 0; i < s.steps; i++) {
+      const ts = s.start + i * s.stepDuration;
+      cliffAllocations.push({
+        recipient: section,
+        category: sectionToCategory[section] || 'Uncategorized',
+        unlockType: "cliff",
+        amount: s.amount,
+        timestamp: ts
+      });
+    }
+  });
+
+  linears.forEach((l: LinearAdapterResult, i: number) => {
+
+    if (i === 0) {
+      const initialRate = ratePerPeriod(l, precision);
+      if (initialRate > 0) {
+        linearAllocations.push({
+          recipient: section,
+          category: sectionToCategory[section] || 'Uncategorized',
+          unlockType: "linear_start",
+          previousRatePerWeek: 0,
+          newRatePerWeek: initialRate,
+          timestamp: l.start
+        });
+      }
+    }
+
+    if (i < linears.length - 1) {
+      const l2 = linears[i + 1];
+      const thisRate = ratePerPeriod(l, precision);
+      const nextRate = ratePerPeriod(l2, precision);
+      if (Math.abs(Number(thisRate) - Number(nextRate)) / (thisRate || 1) >= 0.001) {
+        linearAllocations.push({
+          recipient: section,
+          category: sectionToCategory[section] || 'Uncategorized',
+          unlockType: "linear_rate_change",
+          previousRatePerWeek: thisRate,
+          newRatePerWeek: nextRate,
+          timestamp: l2.start
+        });
+      }
+    }
+  });
+
+  return { cliffAllocations, linearAllocations };
 }
 const filterResultsByType = (
   results: AdapterResult[],

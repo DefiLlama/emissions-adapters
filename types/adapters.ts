@@ -143,6 +143,7 @@ export type Metadata = {
   sources: string[];
   token: string;
   events?: Event[];
+  unlockEvents?: UnlockEvent[];
   notes?: string[];
   protocolIds: string[];
   incompleteSections?: IncompleteSection[];
@@ -161,6 +162,27 @@ export type Event = {
   category: string;
   unlockType: "cliff" | "linear";
 };
+
+export type AllocationDetail = {
+  recipient: string;
+  category: string;
+  unlockType: "cliff" | "linear_start" | "linear_rate_change";
+  amount?: number;  
+  previousRatePerWeek?: number;
+  newRatePerWeek?: number;
+}
+
+export type UnlockEvent = {
+  timestamp: number;
+  cliffAllocations: AllocationDetail[];
+  linearAllocations: AllocationDetail[];
+  summary: {
+    totalTokensCliff?: number;
+    netChangeInWeeklyRate?: number;
+    totalNewWeeklyRate?: number;
+  }
+}
+
 export type TimeSeriesChainData = {
   [block: string]: {
     timestamp: number;
