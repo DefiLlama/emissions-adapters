@@ -6,7 +6,11 @@ import { PromisePool } from "@supercharge/promise-pool";
 
 let res: number;
 
-export async function latest(key: string, reference: number): Promise<number> {
+export async function latest(
+  key: string,
+  reference: number,
+  backfill: boolean = false,
+): Promise<number> {
   if (!res) {
     let r;
     try {
@@ -18,7 +22,8 @@ export async function latest(key: string, reference: number): Promise<number> {
     }
     if (!r.body) return reference;
     r = JSON.parse(r.body);
-    return r.metadata.incompleteSections == null ||
+    return backfill ||
+      r.metadata.incompleteSections == null ||
       r.metadata.incompleteSections[0].lastRecord == null
       ? reference
       : r.metadata.incompleteSections[0].lastRecord;
@@ -32,12 +37,13 @@ export async function supply(
   timestampDeployed: number,
   adapter: string,
   excluded: number = 0,
+  backfill: boolean = false,
 ) {
   let trackedTimestamp: number;
   let decimals: number;
 
   [trackedTimestamp, decimals] = await Promise.all([
-    latest(adapter, timestampDeployed),
+    latest(adapter, timestampDeployed, backfill),
     call({
       target,
       abi: "erc20:decimals",

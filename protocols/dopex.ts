@@ -10,13 +10,14 @@ const timestampDeployed = 1655766000;
 const chain = "arbitrum";
 
 const dopex: Protocol = {
-  Treasury: () =>
+  Treasury: (backfill: boolean) =>
     balance(
       ["0x2fa6f21ecfe274f594f470c376f5bdd061e08a37"],
       token,
       chain,
       "dopex",
       timestampDeployed,
+      backfill,
     ),
   // "Operational allocation": manualLinear(
   //   start,
@@ -48,16 +49,17 @@ const dopex: Protocol = {
       {
         key: "Treasury",
         allocation: qty * 0.47,
-        lastRecord: () => latest("dopex", timestampDeployed),
+        lastRecord: (backfill: boolean) =>
+          latest("dopex", timestampDeployed, backfill),
       },
     ],
   },
   categories: {
-    farming: ["Farming","Platform rewards"],
+    farming: ["Farming", "Platform rewards"],
     publicSale: ["Token sale"],
     noncirculating: ["Treasury"],
     privateSale: ["Early investors"],
-    insiders: ["Founders","Operational allocations"],
+    insiders: ["Founders", "Operational allocations"],
   },
 };
 

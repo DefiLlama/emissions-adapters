@@ -4,7 +4,6 @@ import { getLogs, lookupBlock } from "@defillama/sdk/build/util";
 import fetch from "node-fetch";
 import abi from "./abi";
 import { CliffAdapterResult } from "../../types/adapters";
-import { RESOLUTION_SECONDS } from "../../utils/constants";
 
 const boosterDeployed: number = 1685660400;
 const factoryDeployed: number = 16032059;
@@ -23,13 +22,14 @@ const contracts: { [chain: string]: any } = {
 
 let res: number;
 
-export async function latest(key: string): Promise<number> {
+export async function latest(key: string, backfill: boolean): Promise<number> {
   if (!res)
     return fetch(`https://api.llama.fi/emission/${key}`)
       .then((r) => r.json())
       .then((r) => {
         try {
           return JSON.parse(r.body).then((r: any) =>
+            backfill ||
             r.metadata.incompleteSections == null ||
             r.metadata.incompleteSections[0].lastRecord == null
               ? boosterDeployed
@@ -96,10 +96,11 @@ export async function incentives(
   key: string,
   chains: string[],
   maxQty: number,
+  backfill: boolean = false,
 ) {
   const results: CliffAdapterResult[] = [];
   const timestampNow: number = unixTimestampNow();
-  const from = await latest(key);
+  const from = await latest(key, backfill);
   let workingQty: number = 0;
   let start: number = from;
 

@@ -14,7 +14,7 @@ const eigen: Protocol = {
     manualCliff("2024-09-16", total * 0.042),
     manualStep("2025-01-01", periodToSeconds.month * 3, 4, (total * 0.055) / 4),
   ],
-  "R&D, Ecosystem & Community Initiatives": () =>
+  "R&D, Ecosystem & Community Initiatives": (backfill: boolean) =>
     balance(
       [
         "0xBF520AADBDC52dda54aCe4E7D2882360d25291B1",
@@ -169,6 +169,7 @@ const eigen: Protocol = {
       chain,
       "eigenlayer",
       start,
+      backfill,
     ),
   Investors: [
     manualCliff(start + periodToSeconds.year, (total * 0.295) / 4),
@@ -196,7 +197,8 @@ const eigen: Protocol = {
       {
         key: "R&D, Ecosystem & Community Initiatives",
         allocation: total * 0.3,
-        lastRecord: () => latest("eigenlayer", start),
+        lastRecord: (backfill: boolean) =>
+          latest("eigenlayer", start, backfill),
       },
     ],
   },

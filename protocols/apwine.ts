@@ -21,13 +21,14 @@ const apwine: Protocol = {
     total * 0.08264,
   ),
   Bootstrap: manualCliff(start, total * 0.07),
-  DAO: () =>
+  DAO: (backfill: boolean) =>
     balance(
       ["0xDbbfc051D200438dd5847b093B22484B842de9E7"],
       token,
       chain,
       "apwine",
       1621684800,
+      backfill,
     ),
   documented: {
     replaces: ["DAO"],
@@ -60,7 +61,8 @@ const apwine: Protocol = {
     protocolIds: ["1109"],
     incompleteSections: [
       {
-        lastRecord: () => latest("apwine", 1621684800),
+        lastRecord: (backfill: boolean) =>
+          latest("apwine", 1621684800, backfill),
         key: "DAO",
         allocation: total * 0.56,
       },
@@ -72,7 +74,7 @@ const apwine: Protocol = {
     airdrop: ["Airdrop"],
     noncirculating: ["Ecosystem"],
     privateSale: ["Seed & Pre-seed"],
-    insiders: ["Advisors","Team"],
+    insiders: ["Advisors", "Team"],
   },
 };
 export default apwine;

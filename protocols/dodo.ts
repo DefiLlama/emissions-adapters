@@ -30,13 +30,14 @@ const dodo: Protocol = {
   ],
   IDO: manualCliff(start, qty * 0.01),
   "Operations, marketing, partners": manualCliff(start, qty * 0.08),
-  "Community incentives": () =>
+  "Community incentives": (backfill: boolean) =>
     balance(
       ["0x4447183c50e82a8b0141718c405381a3b1bad634"],
       token,
       chain,
       "dodo",
       timestampDeployed,
+      backfill,
     ),
   meta: {
     sources: ["https://docs.dodoex.io/english/tokenomics/dodo-allocation"],
@@ -47,15 +48,16 @@ const dodo: Protocol = {
       {
         key: "Community incentives",
         allocation: qty * 0.6,
-        lastRecord: () => latest("dodo", timestampDeployed),
+        lastRecord: (backfill: boolean) =>
+          latest("dodo", timestampDeployed, backfill),
       },
     ],
   },
   categories: {
     publicSale: ["IDO"],
     noncirculating: ["Community incentives"],
-    privateSale: ["Seed investors","private round investors"],
-    insiders: ["Team & consultants","Operations, marketing, partners"],
+    privateSale: ["Seed investors", "private round investors"],
+    insiders: ["Team & consultants", "Operations, marketing, partners"],
   },
 };
 

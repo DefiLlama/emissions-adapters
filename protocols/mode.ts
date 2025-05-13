@@ -14,21 +14,23 @@ const token = "0xDfc7C877a950e49D2610114102175A06C2e3167a";
 const chain = "mode";
 
 const mode: Protocol = {
-  "User & Developer Airdrops": () =>
+  "User & Developer Airdrops": (backfill: boolean) =>
     balance(
       ["0x9cBd6d7B3f7377365E45CF53937E96ed8b92E53d"],
       token,
       chain,
       "mode",
       timestamps.airdrops,
+      backfill,
     ),
-  "Foundation & Treasury": () =>
+  "Foundation & Treasury": (backfill: boolean) =>
     balance(
       ["0xaa9703BEa2aaE3E6DB568D20fb16cAAD3096FDf8"],
       token,
       chain,
       "mode",
       timestamps.foundation,
+      backfill,
     ),
   Investors: manualLinear(
     timestamps.start + periodToSeconds.year,
@@ -48,12 +50,14 @@ const mode: Protocol = {
       {
         key: "User & Developer Airdrops",
         allocation: total * 0.35,
-        lastRecord: () => latest("mode", timestamps.airdrops),
+        lastRecord: (backfill: boolean) =>
+          latest("mode", timestamps.airdrops, backfill),
       },
       {
         key: "Foundation & Treasury",
         allocation: total * 0.27,
-        lastRecord: () => latest("mode", timestamps.foundation),
+        lastRecord: (backfill: boolean) =>
+          latest("mode", timestamps.foundation, backfill),
       },
     ],
   },

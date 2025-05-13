@@ -6,7 +6,8 @@ const token = "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F";
 const chain = "ethereum";
 
 const synthetix: Protocol = {
-  Miscellaneous: () => supply(chain, token, start, "synthetix"),
+  Miscellaneous: (backfill: boolean) =>
+    supply(chain, token, start, "synthetix", 0, backfill),
   meta: {
     token: `${chain}:${token}`,
     sources: [
@@ -20,7 +21,7 @@ const synthetix: Protocol = {
     incompleteSections: [
       {
         key: "Miscellaneous",
-        lastRecord: () => latest("synthetix", start),
+        lastRecord: (backfill: boolean) => latest("synthetix", start, backfill),
         allocation: undefined,
       },
     ],

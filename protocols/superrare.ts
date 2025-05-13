@@ -17,13 +17,16 @@ const superrare: Protocol = {
     manualCliff(start, qty * 0.4 * 0.25),
     manualStep(start, periodToSeconds.month, 96, (qty * 0.4 * 0.75) / 96),
   ],
-  "Team, Investors, Strategic Partners & Future Contributors": () =>
+  "Team, Investors, Strategic Partners & Future Contributors": (
+    backfill: boolean,
+  ) =>
     balance(
       ["0x860a80d33E85e97888F1f0C75c6e5BBD60b48DA9"],
       token,
       chain,
       "superrare",
       start + periodToSeconds.day,
+      backfill,
     ),
   documented: {
     replaces: ["Team, Investors, Strategic Partners & Future Contributors"],
@@ -53,7 +56,8 @@ const superrare: Protocol = {
       {
         key: "Team, Investors, Strategic Partners & Future Contributors",
         allocation: 0.35 * qty,
-        lastRecord: () => latest("superrare", start + periodToSeconds.day),
+        lastRecord: (backfill: boolean) =>
+          latest("superrare", start + periodToSeconds.day, backfill),
       },
     ],
   },
@@ -61,7 +65,10 @@ const superrare: Protocol = {
     noncirculating: ["Community treasury"],
     airdrop: ["Retroactive airdrop"],
     privateSale: ["Investors"],
-    insiders: ["Team","Team, Investors, Strategic Partners & Future Contributors"],
+    insiders: [
+      "Team",
+      "Team, Investors, Strategic Partners & Future Contributors",
+    ],
   },
 };
 

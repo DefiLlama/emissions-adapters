@@ -14,13 +14,14 @@ const chain = "arbitrum";
 const arbitrum: Protocol = {
   Airdrop: manualCliff(start, qty * 0.1162),
   Foundation: manualLinear("2023-04-17", "2027-04-17", 75e7),
-  "Arbitrum DAO Treasury": () =>
+  "Arbitrum DAO Treasury": (backfill: boolean) =>
     balance(
       ["0xF3FC178157fb3c87548bAA86F9d24BA38E649B58"],
       token,
       chain,
       "arbitrum",
       1686132532, // no outflows at this time
+      backfill,
     ),
   "Advisors Team OffchainLabs": [
     manualCliff(end_team_investors_1year, qty_advisors * 0.25), // 25% cliff after 1 year
@@ -51,12 +52,13 @@ const arbitrum: Protocol = {
       {
         key: "Arbitrum DAO Treasury",
         allocation: qty * 0.4278,
-        lastRecord: () => latest("arbitrum", 1686132532), // no outflows at this time
+        lastRecord: (backfill: boolean) =>
+          latest("arbitrum", 1686132532, backfill), // no outflows at this time
       },
     ],
   },
   categories: {
-    noncirculating: ["Arbitrum DAO Treasury","Ecosystem Development Fund"],
+    noncirculating: ["Arbitrum DAO Treasury", "Ecosystem Development Fund"],
     airdrop: ["Airdrop"],
     privateSale: ["Investors"],
     insiders: ["Advisors Team OffchainLabs"],

@@ -1,7 +1,7 @@
 import { balance, latest as late } from "../balance";
 import contracts from "./contracts";
 
-export const unallocated = () =>
+export const unallocated = (backfill: boolean) =>
   Promise.all(
     Object.keys(contracts).map((k: any) =>
       balance(
@@ -10,7 +10,9 @@ export const unallocated = () =>
         k,
         "forta",
         contracts[k].timestamp,
+        backfill,
       ),
     ),
   );
-export const latest = () => late("forta", 1651356000);
+export const latest = (backfill: boolean) =>
+  late("forta", 1651356000, backfill);

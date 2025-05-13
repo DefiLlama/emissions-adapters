@@ -52,14 +52,14 @@ const equilibria: Protocol = {
       {
         key: "Pendle LP Incentives, Team & Advisors",
         allocation: qty * 0.45,
-        lastRecord: () => latest("equilibria"),
+        lastRecord: (backfill: boolean) => latest("equilibria", backfill),
       },
     ],
   },
   categories: {
     publicSale: ["IDO"],
     noncirculating: ["Equilibria Treasury"],
-    farming: ["Liquidity Mining","Boostrapping Incentives"],
+    farming: ["Liquidity Mining", "Boostrapping Incentives"],
     privateSale: ["Presale Investors"],
   },
 };
