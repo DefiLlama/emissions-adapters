@@ -51,7 +51,7 @@ const chainlink: Protocol = {
     protocolIds: ["parent#chainlink"],
     total: qty,
     incompleteSections: [
-      {
+      { 
         key: "Company",
         lastRecord: () => latest("chainlink", 1656630000),
         allocation: qty * 0.3,
