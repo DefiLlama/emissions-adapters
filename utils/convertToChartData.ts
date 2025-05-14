@@ -194,46 +194,43 @@ function appendForecast(
       (d: ChartSection) => d.section == incompleteSection.key,
     );
 
-    if (!relatedSections.length) return;
+    if (!relatedSections.length && unlocked.length === 0) return;
 
-    const reference: number =
-      unlocked.length > 0 ? unlocked[unlocked.length - 1] : 0;
+    const { recentlyEmitted, totalEmitted, gradientLength } = findPreviouslyEmitted(relatedSections);
 
-    const { recentlyEmitted, totalEmitted, gradientLength } =
-      findPreviouslyEmitted(relatedSections, reference);
+      if (Number.isNaN(totalEmitted) || totalEmitted === null || totalEmitted === undefined) {
+        err = true;
+        console.log(`Invalid total emitted value (NaN, null, or undefined) in ${incompleteSection.key}`);
+    }
 
-      if (totalEmitted === null || totalEmitted === undefined) { 
-        err = true; 
-        console.log(`Invalid total emitted value in ${incompleteSection.key}`); 
-      }
-
-
-    const gradient: number = totalEmitted > 0 ?
-      recentlyEmitted / (timestamp - gradientLength * RESOLUTION_SECONDS) : 0;
+    const gradientDenominator = gradientLength * RESOLUTION_SECONDS;
+    const gradient: number = (totalEmitted > 0 && recentlyEmitted > 0 && gradientDenominator > 0) ?
+      recentlyEmitted / gradientDenominator : 0;
     const change: number = incompleteSection.allocation - totalEmitted;
     if (change < 0) return;
-
-    const continuousEnd: number = Math.round(
-      Math.min(
-        timestamp + change / gradient,
-        timestamp + periodToSeconds.year * 5,
-      ),
-    );
-    chartData.push({
-      data: rawToChartData(
-        "",
-        {
-          timestamp,
-          change,
-          continuousEnd,
-        },
-        data.startTime,
-        continuousEnd,
-      ),
-      section: incompleteSection.key,
-    });
-    nullFinder(chartData, "postPush");
-  }
+    if (gradient > 0) {
+      const continuousEnd: number = Math.round(
+          Math.min(
+            timestamp + change / gradient,
+            timestamp + periodToSeconds.year * 5,
+          ),
+        );
+        chartData.push({
+          data: rawToChartData(
+            "",
+            {
+              timestamp,
+              change,   
+              continuousEnd,
+            },
+            data.startTime,
+            continuousEnd,
+          ),
+          section: incompleteSection.key,
+        });
+        nullFinder(chartData, "postPush");
+      }
+    }
 
   if (!("notes" in data.metadata)) data.metadata.notes = [];
   data.metadata.notes?.push(
@@ -251,38 +248,40 @@ function appendForecast(
 }
 function findPreviouslyEmitted(
   relatedSections: ChartSection[],
-  reference: number,
 ): {
   recentlyEmitted: number;
   totalEmitted: number;
   gradientLength: number;
 } {
-  let gradientLength: number = GRADIENT_LENGTH;
+  let calculatedTotalEmitted: number = 0;
+  let calculatedRecentlyEmitted: number = 0;
 
-  const recentlyEmitted = Math.max(
-    0,
-    relatedSections
-      .map((d: ChartSection) => {
-        const unlocked: number[] = d.data.unlocked;
-        const length: number = unlocked.length;
+  const forecastGradientPeriodLength: number = GRADIENT_LENGTH;
 
-        if (GRADIENT_LENGTH > length) {
-          gradientLength = length;
-          return unlocked[length - 1];
-        }
+  for (const d of relatedSections) {
+    const unlocked: number[] = d.data.unlocked;
+    const length: number = unlocked.length;
 
-        return (
-          unlocked[length - 1] - unlocked[Math.floor(length - GRADIENT_LENGTH)]
-        );
-      })
-      .reduce((p: number, c: number) => p + c, reference),
-  );
+    if (length === 0) {
+      continue;
+    }
+    const lastVal: number = unlocked[length - 1];
+    calculatedTotalEmitted += lastVal;
 
-  const totalEmitted: number | undefined = relatedSections
-    .map((d: ChartSection) => d.data.unlocked[d.data.unlocked.length - 1])
-    .reduce((p: number, c: number) => p + c, reference);
+    if (forecastGradientPeriodLength >= length) {
+      calculatedRecentlyEmitted += lastVal;
+    } else {
+      const previousValIndex = Math.floor(length - forecastGradientPeriodLength);
+      const previousVal = unlocked[previousValIndex < 0 ? 0 : previousValIndex];
+      calculatedRecentlyEmitted += (lastVal - previousVal);
+    }
+  }
 
-  return { recentlyEmitted, totalEmitted, gradientLength };
+  return {
+    recentlyEmitted: Math.max(0, calculatedRecentlyEmitted),
+    totalEmitted: calculatedTotalEmitted,
+    gradientLength: forecastGradientPeriodLength,
+  };
 }
 function consolidateDuplicateKeys(data: ChartSection[]) {
   let sortedData: any[] = [];
