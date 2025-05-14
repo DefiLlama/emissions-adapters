@@ -9,9 +9,9 @@ const rocketpool: Protocol = {
     "Public Sale": manualCliff(startOld, 5_580_000),
     "Rocket Pool Team": manualCliff(startOld, 2_700_000),
 
-    "Node Operator Rewards": () => emission(inflationStart, "node"),
-    "Protocol DAO Rewards": () => emission(inflationStart, "protocol"),
-    "Trusted Node Rewards": () => emission(inflationStart, "trusted"),
+    "Node Operator Rewards": (backfill: boolean) => emission(inflationStart, backfill, "node"),
+    "Protocol DAO Rewards": (backfill: boolean) => emission(inflationStart, backfill, "protocol"),
+    "Trusted Node Rewards": (backfill: boolean) => emission(inflationStart, backfill, "trusted"),
     meta: {
         sources: [
             "https://medium.com/rocket-pool/rocket-pool-staking-protocol-part-3-3029afb57d4c",
@@ -29,17 +29,17 @@ const rocketpool: Protocol = {
         incompleteSections: [
             {
                 key: "Node Operator Rewards",
-                lastRecord: () => latest(inflationStart),
+                lastRecord: (backfill: boolean) =>latest(inflationStart, backfill),
                 allocation: undefined,
             },
             {
                 key: "Protocol DAO Rewards", 
-                lastRecord: () => latest(inflationStart),
+                lastRecord: (backfill: boolean) => latest(inflationStart, backfill),
                 allocation: undefined,
             },
             {
                 key: "Trusted Node Rewards",
-                lastRecord: () => latest(inflationStart),
+                lastRecord: (backfill: boolean) =>latest(inflationStart, backfill),
                 allocation: undefined,
             }
         ],

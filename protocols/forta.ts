@@ -20,7 +20,7 @@ const forta: Protocol = {
     manualCliff(start, totalQty * 0.01),
     manualCliff(start + periodToSeconds.year * 2, totalQty * 0.012),
   ],
-  unallocated: () => unallocated(),
+  unallocated: (backfill: boolean) => unallocated(backfill),
   backers: nonCommunity(0.245),
   "core contributors": nonCommunity(0.2),
   OpenZeppelin: nonCommunity(0.1),
@@ -33,7 +33,7 @@ const forta: Protocol = {
       {
         key: "unallocated",
         allocation: totalQty * 0.391,
-        lastRecord: () => latest(),
+        lastRecord: (backfill: boolean) => latest(backfill),
       },
     ],
   },
@@ -42,7 +42,7 @@ const forta: Protocol = {
     farming: ["node runner rewards"],
     noncirculating: ["unallocated"],
     privateSale: ["backers"],
-    insiders: ["other","core contributors","OpenZeppelin"],
+    insiders: ["other", "core contributors", "OpenZeppelin"],
   },
 };
 export default forta;

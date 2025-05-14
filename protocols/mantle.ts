@@ -10,7 +10,7 @@ const token = "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000";
 const mantle: Protocol = {
   Circulating: manualCliff(start, 3172988154),
   Treasury: [
-    () =>
+    (backfill: boolean) =>
       balance(
         [
           "0x78605Df79524164911C144801f41e9811B7DB73D",
@@ -25,8 +25,9 @@ const mantle: Protocol = {
         "ethereum",
         chain,
         deployed,
+        backfill,
       ),
-    () =>
+    (backfill: boolean) =>
       balance(
         [
           "0x94FEC56BBEcEaCC71c9e61623ACE9F8e1B1cf473",
@@ -38,6 +39,7 @@ const mantle: Protocol = {
         chain,
         chain,
         start,
+        backfill,
       ),
   ],
   meta: {
@@ -46,7 +48,7 @@ const mantle: Protocol = {
     protocolIds: ["3782"],
     incompleteSections: [
       {
-        lastRecord: () => latest(chain, deployed),
+        lastRecord: (backfill: boolean) => latest(chain, deployed, backfill),
         key: "Treasury",
         allocation: 3046328614,
       },

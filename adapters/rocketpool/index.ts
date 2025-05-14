@@ -87,7 +87,8 @@ function calculateEmissions(
     return simulatedSupply - initialSupply;
 }
 
-export async function latest(reference: number): Promise<number> {
+export async function latest(reference: number, backfill: boolean): Promise<number> {
+    if (backfill) return reference
     let r;
     try {
         r = await fetch(`https://api.llama.fi/emission/rocket-pool`).then((r) =>
@@ -106,8 +107,8 @@ export async function latest(reference: number): Promise<number> {
     return r.metadata.incompleteSections[0].lastRecord;
 }
 
-export async function emission(timestamp: number, type?: "node" | "trusted" | "protocol") {
-    let trackedTimestamp = await latest(timestamp);
+export async function emission(timestamp: number, backfill: boolean = false, type?: "node" | "trusted" | "protocol") {
+    let trackedTimestamp = await latest(timestamp, backfill);
     const chainData: ExtendedChainData = await findBlockHeightArray(trackedTimestamp, "ethereum");
     await PromisePool.withConcurrency(10)
         .for(Object.keys(chainData))

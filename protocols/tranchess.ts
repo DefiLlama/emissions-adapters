@@ -65,21 +65,23 @@ const tranchess: Protocol = {
     manualLinear("2022-02-10", "2022-02-17", 2e5),
   ],
   "Ecosystem / Treasury": [
-    () =>
+    (backfill: boolean) =>
       balance(
         ["0x1bf019A44a708FBEBA7ADc79bdaD3D0769fF3a7b"],
         "0x20de22029ab63cf9A7Cf5fEB2b737Ca1eE4c82A6",
         "bsc",
         "tranchess",
         1629154800,
+        backfill,
       ),
-    () =>
+    (backfill: boolean) =>
       balance(
         ["0x1bf019A44a708FBEBA7ADc79bdaD3D0769fF3a7b"],
         "0xD6123271F980D966B00cA4FCa6C2c021f05e2E73",
         "ethereum",
         "tranchess",
         1671062400,
+        backfill,
       ),
   ],
   meta: {
@@ -94,7 +96,8 @@ const tranchess: Protocol = {
       {
         key: "Ecosystem / Treasury",
         allocation: qty * 0.5,
-        lastRecord: () => latest("tranchess", 1629154800),
+        lastRecord: (backfill: boolean) =>
+          latest("tranchess", 1629154800, backfill),
       },
     ],
   },

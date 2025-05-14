@@ -15,26 +15,28 @@ const camelot: Protocol = {
     start + periodToSeconds.year * 3,
     qty * 0.025,
   ),
-  Ecosystem: () =>
+  Ecosystem: (backfill: boolean) =>
     balance(
       ["0x03fF2d78AFB69e0859Ec6bEB4CF107D3741e97AB"],
       GRAIL,
       chain,
       "camelot",
       1669852800,
+      backfill,
     ),
   "Genesis Pool": manualLinear(
     start,
     start + periodToSeconds.month * 6,
     qty * 0.05,
   ),
-  Reserves: () =>
+  Reserves: (backfill: boolean) =>
     balance(
       ["0x48E365dAEBe55aa21Bb39E4c2876661827d566c5"],
       GRAIL,
       chain,
       "camelot",
       1669852800,
+      backfill,
     ),
   Partnerships: [
     manualCliff(start + periodToSeconds.month * 6, qty * 0.025),
@@ -68,12 +70,14 @@ const camelot: Protocol = {
       {
         key: "Ecosystem",
         allocation: qty * 0.05,
-        lastRecord: () => latest("camelot", 1669852800),
+        lastRecord: (backfill: boolean) =>
+          latest("camelot", 1669852800, backfill),
       },
       {
         key: "Reserves",
         allocation: qty * 0.08,
-        lastRecord: () => latest("camelot", 1669852800),
+        lastRecord: (backfill: boolean) =>
+          latest("camelot", 1669852800, backfill),
       },
     ],
   },

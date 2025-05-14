@@ -10,13 +10,14 @@ const start = 1634943600;
 
 const beam: Protocol = {
   "Merit Circle Treasury Funds": manualLinear(start, 1714052911, 27122501974),
-  Treasury: () =>
+  Treasury: (backfill: boolean) =>
     balance(
       ["0x7e9e4c0876B2102F33A1d82117Cc73B7FddD0032"],
       token,
       chain,
       "beam",
       1697497200,
+      backfill,
     ),
   "Contributors & Builders": manualLinear(
     start,
@@ -41,7 +42,7 @@ const beam: Protocol = {
       {
         key: "Treasury",
         allocation: total * 0.1846,
-        lastRecord: () => latest("beam", 1697497200),
+        lastRecord: (backfill: boolean) => latest("beam", 1697497200, backfill),
       },
     ],
     total,

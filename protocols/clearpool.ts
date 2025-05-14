@@ -8,13 +8,13 @@ const qty = 1000000000;
 const token = "0x66761fa41377003622aee3c7675fc7b5c1c2fac5";
 const chain = "ethereum";
 
-const balanceAllocation = (address: string) => () =>
-  balance([address], token, chain, "clearpool", start);
+const balanceAllocation = (address: string) => (backfill: boolean) =>
+  balance([address], token, chain, "clearpool", start, backfill);
 
 const incompleteSection = (key: string, allocation: number) => ({
   key: key,
   allocation: qty * allocation,
-  lastRecord: () => latest("clearpool", start),
+  lastRecord: (backfill: boolean) => latest("clearpool", start, backfill),
 });
 
 const clearpool: Protocol = {
@@ -62,10 +62,10 @@ const clearpool: Protocol = {
     ],
   },
   categories: {
-    noncirculating: ["Ecosystem","Partnerships","Reserves"],
+    noncirculating: ["Ecosystem", "Partnerships", "Reserves"],
     farming: ["Rewards"],
     publicSale: ["Liquidity"],
-    privateSale: ["Seed Investors","Private Investors","Public Investors"],
+    privateSale: ["Seed Investors", "Private Investors", "Public Investors"],
     insiders: ["Team"],
   },
 };
