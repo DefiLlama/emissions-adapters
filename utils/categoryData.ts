@@ -70,3 +70,33 @@ export function createCategoryData(
     final: normalizeAllocations(rawFinalAllocations),
   };
 }
+
+export function createSectionData(
+  data: ChartSection[]
+): { current: Allocations; final: Allocations } {
+  if (!data.length) return { current: {}, final: {} };
+  const rawCurrentAllocations: Allocations = {};
+  const rawFinalAllocations: Allocations = {};
+  const timestampNow: number = unixTimestampNow();
+
+  data.forEach((section: ChartSection) => {
+    const s = section;
+    if (!s) return;
+    const currentEntryIndex = s.data.timestamps.findIndex(
+      (t: number) => timestampNow - RESOLUTION_SECONDS < t && t < timestampNow
+    );
+    const finalEntryIndex = s.data.unlocked.length - 1;
+    const current =
+      s.data.unlocked[
+        currentEntryIndex == -1 ? finalEntryIndex : currentEntryIndex
+      ];
+    const final = s.data.unlocked[finalEntryIndex];
+    rawCurrentAllocations[s.section] = current;
+    rawFinalAllocations[s.section] = final;
+  });
+
+  return {
+    current: normalizeAllocations(rawCurrentAllocations),
+    final: normalizeAllocations(rawFinalAllocations),
+  };
+}
