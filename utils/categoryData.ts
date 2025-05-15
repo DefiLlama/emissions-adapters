@@ -9,6 +9,11 @@ import { unixTimestampNow } from "./time";
 
 type Unlocks = { current: number; final: number };
 
+function calculateProgress(current: number, final: number): number {
+  if (final === 0) return 0;
+  return Number(((current / final) * 100).toFixed(1));
+}
+
 function normalizeAllocations(rawAllocations: Allocations): Allocations {
   const total: number = Object.values(rawAllocations).reduce(
     (p: number, c: number) => p + c,
@@ -32,6 +37,7 @@ export function createCategoryData(
   if (!data.length) return {};
   const rawCurrentAllocations: Allocations = {};
   const rawFinalAllocations: Allocations = {};
+  const progressAllocations: Allocations = {};
 
   Object.keys(categories).map((c: string) => {
     rawCurrentAllocations[c] = 0;
@@ -63,20 +69,23 @@ export function createCategoryData(
       rawCurrentAllocations[c] += current;
       rawFinalAllocations[c] += final;
     });
+      progressAllocations[c] = calculateProgress(rawCurrentAllocations[c], rawFinalAllocations[c]);
   });
 
   return {
     current: normalizeAllocations(rawCurrentAllocations),
     final: normalizeAllocations(rawFinalAllocations),
+    progress: progressAllocations,
   };
 }
 
 export function createSectionData(
   data: ChartSection[]
-): { current: Allocations; final: Allocations } {
-  if (!data.length) return { current: {}, final: {} };
+): { current: Allocations; final: Allocations, progress: Allocations } {
+  if (!data.length) return { current: {}, final: {}, progress: {} };
   const rawCurrentAllocations: Allocations = {};
   const rawFinalAllocations: Allocations = {};
+  const progressAllocations: Allocations = {};
   const timestampNow: number = unixTimestampNow();
 
   data.forEach((section: ChartSection) => {
@@ -93,10 +102,12 @@ export function createSectionData(
     const final = s.data.unlocked[finalEntryIndex];
     rawCurrentAllocations[s.section] = current;
     rawFinalAllocations[s.section] = final;
+    progressAllocations[s.section] = calculateProgress(current, final);
   });
 
   return {
     current: normalizeAllocations(rawCurrentAllocations),
     final: normalizeAllocations(rawFinalAllocations),
+    progress: progressAllocations,
   };
 }
