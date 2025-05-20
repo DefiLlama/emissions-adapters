@@ -18,8 +18,8 @@ interface BurnDataPoint {
   timestamp: number;
 }
 
-const burnData = async (type: 'pos' | 'pow'): Promise<LinearAdapterResult[]> => {
-  const result: LinearAdapterResult[] = [];
+const burnData = async (type: 'pos' | 'pow'): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
   const burnData = await queryDune("5041563")
  
   // Filter data based on type
@@ -34,9 +34,8 @@ const burnData = async (type: 'pos' | 'pow'): Promise<LinearAdapterResult[]> => 
 
   for (let i = 0; i < filteredData.length - 1; i++) {
     result.push({
-      type: "linear",
-      start: filteredData[i + 1].timestamp,
-      end: filteredData[i].timestamp,
+      type: "cliff",
+      start: filteredData[i].timestamp,
       amount: -filteredData[i].eth_burn
     });
   }
@@ -58,17 +57,16 @@ const foundationOutflow = async (): Promise<CliffAdapterResult[]> => {
   return result;
 }
 
-const stakingRewards = async (): Promise<LinearAdapterResult[]> => {
-  const result: LinearAdapterResult[] = [];
+const stakingRewards = async (): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
   const issuanceData = await queryDune("5041721")
 
-  for (let i = 0; i < issuanceData.length - 1; i++) {
+  for (let i = 0; i < issuanceData.length; i++) {
     result.push({
-      type: "linear",
-      start: issuanceData[i + 1].timestamp,
-      end: issuanceData[i].timestamp,
+      type: "cliff",
+      start: issuanceData[i].timestamp,
       amount: issuanceData[i].eth_issued
-    })
+    });
   }
   return result;
 }
