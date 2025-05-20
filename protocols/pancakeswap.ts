@@ -1,16 +1,15 @@
-import { LinearAdapterResult, Protocol } from "../types/adapters";
+import { CliffAdapterResult, LinearAdapterResult, Protocol } from "../types/adapters";
 import { queryDune } from "../utils/dune";
 
 
-const emissions = async (): Promise<LinearAdapterResult[]> => {
-  const result: LinearAdapterResult[] = [];
+const emissions = async (): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
   const issuanceData = await queryDune("5057582")
 
   for (let i = 0; i < issuanceData.length - 1; i++) {
     result.push({
-      type: "linear",
-      start: issuanceData[i + 1].day,
-      end: issuanceData[i].day,
+      type: "cliff",
+      start: issuanceData[i].day,
       amount: issuanceData[i].daily_net_emissions
     })
   }
@@ -32,7 +31,7 @@ const pancakeswap: Protocol = {
         ],
     },
     categories: {
-        farming: ["Regular Emissions"],
+        farming: ["Emissions"],
         noncirculating: ["Special Emissions"]
     },
 };
