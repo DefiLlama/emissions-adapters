@@ -30,6 +30,8 @@ export function addResultToEvents(
   cliffs.map((c: CliffAdapterResult) => {
     if (!metadata.events) metadata.events = [];
     if (c.amount.toFixed(2) == "0.00") return;
+    // Skip cliff events that are explicitly marked as not unlocks
+    if (c.isUnlock === false) return;
     metadata.events.push({
       description: `A cliff of {tokens[0]} tokens ${
         isFuture(c.start) ? "will" : "was"
@@ -104,6 +106,8 @@ export function addResultToEvents(
 
   cliffs.forEach((c: CliffAdapterResult) => {
     if (c.amount.toFixed(2) == "0.00") return;
+    // Skip cliff events that are explicitly marked as not unlocks
+    if (c.isUnlock === false) return;
     cliffAllocations.push({
       recipient: section,
       category: sectionToCategory[section] || 'Uncategorized',

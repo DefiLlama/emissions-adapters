@@ -19,6 +19,7 @@ const stakingRewardsDune = async (): Promise<{ data: CliffAdapterResult[]; lastT
     type: "cliff",
     start: Number(row.timestamp),
     amount: Number(row.sol_reward),
+    isUnlock: false,
   }));
   const lastTimestamp = Math.max(...duneData.map((row: any) => Number(row.timestamp)));
   return { data: filtered, lastTimestamp };

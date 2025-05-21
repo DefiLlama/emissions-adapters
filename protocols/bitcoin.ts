@@ -21,6 +21,7 @@ const miningRewardsDune = async (): Promise<{ data: CliffAdapterResult[]; lastTi
     type: "cliff",
     start: Number(row.timestamp),
     amount: Number(row.btc_mined),
+    isUnlock: false,
   }));
   const lastTimestamp = Math.max(...duneData.map((row: any) => Number(row.timestamp)));
   return { data: filtered, lastTimestamp };
