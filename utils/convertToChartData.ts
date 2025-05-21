@@ -170,7 +170,14 @@ function appendOldApiData(
   timestamps: number[],
 ) {
   chartData.push({
-    data: { isContinuous: false, timestamps, unlocked, apiData },
+    data: {
+      isContinuous: false,
+      timestamps,
+      unlocked,
+      rawEmission: unlocked.map(u => Math.max(0, u)),
+      burned: unlocked.map(u => Math.max(0, -u)),
+      apiData
+    },
     section: incompleteSection.key,
   });
 }
@@ -284,13 +291,13 @@ function findPreviouslyEmitted(
   };
 }
 function consolidateDuplicateKeys(data: ChartSection[]) {
-  let sortedData: any[] = [];
+  let sortedData: ChartSection[] = [];
 
-  const sectionLengths = data.map((s: any) => s.data.unlocked.length);
+  const sectionLengths = data.map((s) => s.data.unlocked.length);
   const maxSectionLength: number = Math.max(...sectionLengths);
 
-  data.map((d: any) => {
-    const sortedKeys = sortedData.map((s: any) => s.section);
+  data.map((d) => {
+    const sortedKeys = sortedData.map((s) => s.section);
 
     // normalize to extrapolations
     let targetLength = d.data.timestamps.length;
@@ -300,22 +307,52 @@ function consolidateDuplicateKeys(data: ChartSection[]) {
         d.data.timestamps[targetLength - 1] + RESOLUTION_SECONDS,
       );
       d.data.unlocked.push(d.data.unlocked[targetLength - 1]);
+      d.data.rawEmission = d.data.rawEmission || [];
+      d.data.burned = d.data.burned || [];
+      d.data.rawEmission.push(d.data.rawEmission[targetLength - 1] || 0);
+      d.data.burned.push(d.data.burned[targetLength - 1] || 0);
     }
 
     if (sortedKeys.includes(d.section)) {
-      d.data.unlocked.map((a: any, i: number) => {
-        const j = sortedKeys.indexOf(d.section);
-        sortedData[j].data.unlocked[i] += a;
+      const j = sortedKeys.indexOf(d.section);
+      d.data.unlocked.forEach((unlockVal: number, i: number) => {
+        sortedData[j].data.unlocked[i] += unlockVal;
+        // Initialize arrays if they don't exist
+        sortedData[j].data.rawEmission = sortedData[j].data.rawEmission || Array(d.data.unlocked.length).fill(0);
+        sortedData[j].data.burned = sortedData[j].data.burned || Array(d.data.unlocked.length).fill(0);
+        
+        // For rawEmission, we only add positive values
+        if (unlockVal > 0) {
+          sortedData[j].data.rawEmission[i] += unlockVal;
+        }
+        // For burns, we only add negative values (as positive numbers)
+        else if (unlockVal < 0) {
+          sortedData[j].data.burned[i] += Math.abs(unlockVal);
+        }
       });
     } else {
-      sortedData.push(d);
+      // Initialize new arrays for a new section
+      const rawEmission = Array(d.data.unlocked.length).fill(0);
+      const burned = Array(d.data.unlocked.length).fill(0);
+      
+      // Process each value to separate emissions and burns
+      d.data.unlocked.forEach((val: number, i: number) => {
+        if (val > 0) {
+          rawEmission[i] = val;
+        } else if (val < 0) {
+          burned[i] = Math.abs(val);
+        }
+      });
+      
+      sortedData.push({
+        section: d.section,
+        data: {
+          ...d.data,
+          rawEmission,
+          burned,
+        }
+      });
     }
-  });
-
-  // filter any erroneous negative values
-  sortedData.map((s: any) => {
-    s.data.unlocked = s.data.unlocked.map((u: number) => (u < 0 ? 0 : u));
-    return s;
   });
 
   return sortedData;
@@ -374,9 +411,16 @@ function continuous(raw: RawResult, config: ChartConfig): ChartData {
     workingTimestamp += RESOLUTION_SECONDS;
   }
 
-  unlocked[unlocked.length - 1] = raw.change;
+  // unlocked[unlocked.length - 1] = raw.change;
 
-  return { timestamps, unlocked, apiData, isContinuous: true };
+  return {
+    timestamps,
+    unlocked,
+    rawEmission: unlocked.map(u => Math.max(0, u)),
+    burned: unlocked.map(u => Math.max(0, -u)),
+    apiData,
+    isContinuous: true
+  };
 }
 function discreet(raw: RawResult, config: ChartConfig): ChartData {
   let {
@@ -401,7 +445,14 @@ function discreet(raw: RawResult, config: ChartConfig): ChartData {
 
     workingTimestamp += RESOLUTION_SECONDS;
   }
-  return { timestamps, unlocked, apiData, isContinuous: false };
+  return {
+    timestamps,
+    unlocked,
+    rawEmission: unlocked.map(u => Math.max(0, u)),
+    burned: unlocked.map(u => Math.max(0, -u)),
+    apiData,
+    isContinuous: false
+  };
 }
 
 export function mapToServerData(testData: ChartSection[]) {
@@ -411,6 +462,8 @@ export function mapToServerData(testData: ChartSection[]) {
     const data = s.data.timestamps.map((timestamp: number, i: number) => ({
       timestamp,
       unlocked: s.data.unlocked[i],
+      rawEmission: s.data.rawEmission[i],
+      burned: s.data.burned[i]
     }));
 
     return { label, data };

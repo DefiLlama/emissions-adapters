@@ -59,13 +59,17 @@ export type LinearAdapterResult = {
 };
 export type ChartData = {
   timestamps: number[];
-  unlocked: number[];
+  unlocked: number[];      // Net value after burns
+  rawEmission: number[];   // Original emission without burns
+  burned: number[];        // Burn amounts
   isContinuous: boolean;
   apiData?: ApiChartData[];
 };
 export type ApiChartData = {
   timestamp: number;
-  unlocked: number;
+  unlocked: number;      // Net value after burns
+  rawEmission: number;   // Original emission without burns
+  burned: number;        // Burn amount
   label?: string;
 };
 export type TransposedApiChartData = {
