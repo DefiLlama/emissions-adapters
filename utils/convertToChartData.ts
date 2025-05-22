@@ -432,13 +432,13 @@ function discreet(raw: RawResult, config: ChartConfig): ChartData {
     apiData,
   } = config;
 
+  let changeApplied = false;
+
   for (let i = 0; i < steps + 1; i++) {
-    // checks if the next data point falls between the previous and next plot times
-    if (
-      workingTimestamp - RESOLUTION_SECONDS <= raw.timestamp &&
-      raw.timestamp < workingTimestamp
-    )
+    if (!changeApplied && raw.timestamp <= workingTimestamp) {
       workingQuantity += raw.change;
+      changeApplied = true;
+    }
 
     unlocked.push(workingQuantity);
     timestamps.push(workingTimestamp);
