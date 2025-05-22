@@ -74,6 +74,7 @@ const bitcoin: Protocol = {
     ],
     token: "coingecko:bitcoin",
     protocolIds: ["2786"],
+    chain: "bitcoin",
     notes: [
       `Past mining rewards are fetched from Dune Analytics (query 5166006). Future halvenings are forecasted and dates are estimates only.`,
     ],

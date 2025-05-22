@@ -32,7 +32,7 @@ const burnData = async (type: 'pos' | 'pow'): Promise<CliffAdapterResult[]> => {
     filteredData = burnData.filter((d: BurnDataPoint) => d.timestamp >= merge);
   }
 
-  for (let i = 0; i < filteredData.length - 1; i++) {
+  for (let i = 0; i < filteredData.length; i++) {
     result.push({
       type: "cliff",
       start: filteredData[i].timestamp,
@@ -86,7 +86,8 @@ const ethereum: Protocol = {
     manualLinear(constantinopleFork, merge, 8257393 * 2),
     uncle,
     stakingRewards,
-    burnData
+    () => burnData('pow'),  // Pre-merge burns
+    () => burnData('pos'),  // Post-merge burns
   ],
   meta: {
     token: `${chain}:${GAS_TOKEN}`,
@@ -101,6 +102,7 @@ const ethereum: Protocol = {
       "https://fastercapital.com/topics/common-token-vesting-strategies-for-airdrop-cryptocurrency.html",
     ],
     protocolIds: ["4488"],
+    chain: "ethereum",
   },
   categories: {
     farming: ["Issuance"],

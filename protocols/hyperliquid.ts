@@ -31,6 +31,7 @@ const hyperliquid: Protocol = {
     sources: ["https://hyperfnd.medium.com/hype-genesis-1830a4dc2e3f"],
     protocolIds: ["4481", "5448", "5507", "5761"],
     total,
+    chain: "hyperliquid"
   },
   categories: {
     insiders: ["Core Contributors", "Hyper Foundation Budget"],

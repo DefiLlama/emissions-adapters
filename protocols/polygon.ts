@@ -50,6 +50,7 @@ const polygon: Protocol = {
     sources: [`https://research.binance.com/en/projects/matic-network`],
     token: `ethereum:${token}`,
     protocolIds: ["240"],
+    chain: "polygon"
   },
   categories: {
     publicSale: ["Launchpad Sale"],

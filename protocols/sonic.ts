@@ -80,6 +80,7 @@ const sonic: Protocol = {
     ],
     token: "coingecko:sonic-3",
     protocolIds: ["6105"], 
+    chain: "sonic"
   },
   categories: {
     noncirculating: ["Ongoing Funding"],

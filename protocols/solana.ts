@@ -94,6 +94,7 @@ const solana: Protocol = {
     ],
     token: "coingecko:solana",
     protocolIds: ["4611"],
+    chain: "solana"
   },
   categories: {
     publicSale: ["CoinList Auction"],

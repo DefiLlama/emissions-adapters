@@ -52,6 +52,7 @@ const polkadot: Protocol = {
     ],
     token: "coingecko:polkadot",
     protocolIds: ["5978"],
+    chain: "polkadot"
   },
   categories: {
     publicSale: ["Public Sale (ICO)"],

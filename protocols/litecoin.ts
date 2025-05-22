@@ -35,6 +35,7 @@ const litecoin: Protocol = {
     notes: [
         `Future halvenings have at a specified block height, therefore the dates shown are an estimate only.`,
     ],
+    chain: "litecoin"
   },
   categories: {
     farming: ["Mining rewards"],

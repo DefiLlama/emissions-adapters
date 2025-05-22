@@ -152,7 +152,8 @@ export type Metadata = {
   notes?: string[];
   protocolIds: string[];
   incompleteSections?: IncompleteSection[];
-  total?: number
+  total?: number;
+  chain?: string;
 };
 export type FuturesData = {
   openInterest: number;
