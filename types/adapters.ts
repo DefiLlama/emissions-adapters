@@ -49,6 +49,7 @@ export type CliffAdapterResult = {
   start: number;
   amount: number;
   dateFormat?: string;
+  isUnlock?: boolean;
 };
 export type LinearAdapterResult = {
   type: "linear";
@@ -165,6 +166,7 @@ export type Event = {
   noOfTokens: number[];
   category: string;
   unlockType: "cliff" | "linear";
+  rateDurationDays?: number;
 };
 
 export type AllocationDetail = {

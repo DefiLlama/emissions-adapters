@@ -61,7 +61,8 @@ export function addResultToEvents(
             timestamp: l2.start,
             noOfTokens: [thisRate, nextRate],
             category: sectionToCategory[section] || 'Uncategorized',
-            unlockType: "linear"
+            unlockType: "linear",
+            rateDurationDays: (l2.end - l2.start) / 86400
           });
       }
     }
@@ -80,7 +81,8 @@ export function addResultToEvents(
             timestamp: l.start,
             noOfTokens: [0, initialRate],
             category: sectionToCategory[section] || 'Uncategorized',
-            unlockType: "linear"
+            unlockType: "linear",
+            rateDurationDays: (l.end - l.start) / 86400
           });
         }
     }
