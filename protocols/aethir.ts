@@ -43,6 +43,7 @@ const aethir: Protocol = {
     token: "coingecko:aethir",
     sources: ["https://docs.aethir.com/aethir-tokenomics/token-overview"],
     protocolIds: ["5591"],
+    chain: 'aethir'
   },
   categories: {
     airdrop: ["Airdrop"],

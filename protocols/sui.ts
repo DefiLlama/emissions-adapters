@@ -68,6 +68,7 @@ const sui: Protocol = {
     token: "coingecko:sui",
     protocolIds: ["3181"],
     total,
+    chain: 'sui'
   },
   categories: {
     publicSale: ["Community Allocation Pool"],

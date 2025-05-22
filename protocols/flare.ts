@@ -84,6 +84,7 @@ const flare: Protocol = {
       `It cant be known when future team members will join, so this section (1.5% of total) has been excluded from the analysis.`,
     ],
     protocolIds: ["4665"],
+    chain: 'flare'
   },
   categories: {
     farming: ["Inflation","Incentive Pool"],

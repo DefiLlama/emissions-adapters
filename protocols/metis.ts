@@ -69,6 +69,7 @@ const metis: Protocol = {
     ],
     token: "ethereum:0x9e32b13ce7f2e80a01932b42553652e053d6ed8e",
     protocolIds: ["3228"],
+    chain: 'metis'
   },
   categories: {
     publicSale: ["IDO","Liquidity Reserve"],

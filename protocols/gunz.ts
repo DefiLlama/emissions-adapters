@@ -99,7 +99,8 @@ const gunz: Protocol = {
     notes: [
       "NFT Validator Staking allocation is not circulating, but it is included in the total supply.",
       "Liquidity Pool allocation is supposed to be 66% at TGE and 33% unlocked after 1 day of listing but for simplicity, it is set to 100% at TGE",
-    ]
+    ],
+    chain: 'gunz'
   },
 
   categories: {

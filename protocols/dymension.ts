@@ -42,6 +42,7 @@ const dymension: Protocol = {
     token: "coingecko:dymension",
     protocolIds: ["4490"],
     total,
+    chain: 'dymension'
   },
   categories: {
     airdrop: ["Genesis Rolldrop"],

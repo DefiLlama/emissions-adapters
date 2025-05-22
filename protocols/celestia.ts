@@ -54,6 +54,7 @@ const celestia: Protocol = {
     token: "coingecko:celestia",
     sources: ["https://docs.celestia.org/learn/staking-governance-supply/"],
     protocolIds: ["3562"],
+    chain: 'celestia'
   },
   categories: {
     publicSale: [],

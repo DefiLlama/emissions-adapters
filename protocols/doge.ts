@@ -72,6 +72,7 @@ const doge: Protocol = {
             "Fixed block rewards were implemented from block 145,000 onwards",
             "Projected until block 12.5M"
         ],
+        chain: "doge"
     },
     categories: {
         farming: ["Mining rewards"],

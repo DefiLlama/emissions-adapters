@@ -74,6 +74,7 @@ const plume: Protocol = {
       'Based on estimated token release schedule we assume that from TGE to 3 years after TGE, 50% of the amount is unlocked linearly',
       'Where the remaining 50% is unlocked linearly from 3 years to 7 years after TGE',
     ],
+    chain: 'plume_mainnet'
   },
 
   categories: {

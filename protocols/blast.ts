@@ -43,6 +43,7 @@ const blast: Protocol = {
     sources: ["https://docs.blast.io/tokenomics"],
     token: "coingecko:blast",
     protocolIds: ["4236"],
+    chain: 'blast'
   },
   categories: {
     airdrop: ["Blast Points","Blast Gold","Blur Foundation"],

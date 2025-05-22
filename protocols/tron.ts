@@ -41,6 +41,7 @@ const tron: Protocol = {
     ],
     token: `coingecko:tron`,
     protocolIds: ["6103"],
+    chain: "tron"
   },
   categories: {
     publicSale: ["Public Sale"],

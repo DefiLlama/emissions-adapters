@@ -27,6 +27,7 @@ const bitcoin: Protocol = {
     notes: [
       `Future halvenings have at a specified block height, therefore the dates shown are an estimate only.`,
     ],
+    chain: 'bittensor'
   },
   categories: {
     farming: ["Mining rewards"],

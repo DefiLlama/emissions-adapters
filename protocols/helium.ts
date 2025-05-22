@@ -94,6 +94,7 @@ const helium: Protocol = {
     sources: ["https://github.com/helium/HIP/blob/main/0020-hnt-max-supply.md"],
     token: "coingecko:helium",
     protocolIds: ["6099"],
+    chain: "helium"
   },
   categories: {
     farming: ["Proof of Coverage", "Data Transfer"],

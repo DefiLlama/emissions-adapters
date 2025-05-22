@@ -44,6 +44,7 @@ const xai: Protocol = {
     token: `coingecko:xai-blockchain`,
     protocolIds: ["4797"],
     total,
+    chain: 'xai'
   },
   categories: {
     publicSale: ["Launchpool","Market Makers"],

@@ -121,6 +121,7 @@ const celo: Protocol = {
       "Initial Reserve had 50% unlock at TGE, with remaining 50% unlocking on March 31, 2030",
       "Operational Grants have multiple vesting phases with different amount and timeframes"
     ],
+    chain: 'celo'
   },
 
   categories: {

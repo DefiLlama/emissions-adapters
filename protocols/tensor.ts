@@ -41,6 +41,7 @@ const tensor: Protocol = {
     sources: ["https://docs.tensor.foundation/tokenomics"],
     notes: [],
     protocolIds: ["4640"],
+    chain: 'tensor'
   },
   categories: {
     insiders: ["Core Contributors", "Investors & Advisors"],

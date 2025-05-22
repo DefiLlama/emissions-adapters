@@ -54,7 +54,8 @@ const tezos: Protocol = {
       "https://icodrops.com/tezos/"
     ],
     token: "coingecko:tezos",
-    protocolIds: ["6101"]
+    protocolIds: ["6101"],
+    chain: 'tezos'
   },
   categories: {
     publicSale: ["ICO Participants"],

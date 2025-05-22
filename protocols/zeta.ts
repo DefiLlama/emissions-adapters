@@ -95,6 +95,7 @@ const zeta: Protocol = {
     notes: [
       `There is no detail about the unlock rate of Validator Incentives, so we've used a linear unlock.`,
     ],
+    chain: 'zeta'
   },
   categories: {
     farming: [

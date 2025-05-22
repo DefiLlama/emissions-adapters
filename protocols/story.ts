@@ -57,6 +57,7 @@ const story: Protocol = {
     token: "coingecko:story-2",
     protocolIds: ["5778"],
     total,
+    chain: 'story'
   },
   categories: {
     farming: ["Initial Incentives","Ecosystem & Community"],

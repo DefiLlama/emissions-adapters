@@ -40,6 +40,7 @@ const hyperliquid: Protocol = {
       "https://docs.coredao.org/docs/Learn/economics/core-token/tokenomics-and-utility",
     ],
     protocolIds: ["5382"],
+    chain: 'core'
   },
   categories: {
     farming: ["Relayer Rewards", "Users", "Node Mining"],

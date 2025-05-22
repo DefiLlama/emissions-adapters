@@ -118,7 +118,8 @@ const uxlink: Protocol = {
       "Because Mining Reserve are reserved we don't include them in the calculation.",
       "Baseline Minting are assumed to be linear for simplicity",
       "Simple Minting are assumed to be linear with the supply getting halved every 6 years",
-    ]
+    ],
+    chain: 'filecoin'
   },
 
   categories: {

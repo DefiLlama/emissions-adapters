@@ -78,7 +78,8 @@ const flow: Protocol = {
       "https://flow.com/post/flow-token-circulating-supply-updates",
       "https://blog.coinlist.co/flow-raises-18m-on-coinlist/"
     ],
-    protocolIds: ["6104"]
+    protocolIds: ["6104"],
+    chain: 'flow'
   },
   categories: {
     farming: ["Staking Rewards"],
