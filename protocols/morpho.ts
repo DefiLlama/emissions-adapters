@@ -50,7 +50,7 @@ const morpho: Protocol = {
       "https://docs.morpho.org/governance/morpho-token/overview/#token-distribution--vesting",
       "https://docs.google.com/spreadsheets/d/1eVFzOvsMlPYHjPyJZlNKEqD9BI-WUaxqvKMPH6wLTjk/edit",
     ],
-    protocolIds: ["3014", "4025"],
+    protocolIds: ["parent#morpho","3014", "4025"],
     total,
     // incompleteSections: [
     //   {
