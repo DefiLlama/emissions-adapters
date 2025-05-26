@@ -9,7 +9,7 @@ let API_KEY_INDEX = 0;
 
 const NOW_TIMESTAMP = Math.trunc((Date.now()) / 1000)
 
-const getLatestData = async (queryId: string) => {
+const getLatestData = async (queryId: string, run_daily:boolean) => {
   checkCanRunDuneQuery()
 
   const url = `https://api.dune.com/api/v1/query/${queryId}/results`
@@ -22,7 +22,9 @@ const getLatestData = async (queryId: string) => {
     const submitted_at = latest_result.submitted_at
     const submitted_at_timestamp = Math.trunc(new Date(submitted_at).getTime() / 1000)
     const diff = NOW_TIMESTAMP - submitted_at_timestamp
-    if (diff < 60 * 60 * 3) {
+    if (!run_daily && diff < 60 * 60 * 3) {
+      return latest_result.result.rows
+    }else if(run_daily && diff < 60 * 60 * 23) {
       return latest_result.result.rows
     }
     return undefined
@@ -81,11 +83,11 @@ const submitQuery = async (queryId: string, query_parameters = {}) => {
 }
 
 
-export const queryDune = async (queryId: string, query_parameters: any = {}) => {
+export const queryDune = async (queryId: string, run_daily: boolean = false, query_parameters: any = {}) => {
   checkCanRunDuneQuery()
 
   if (Object.keys(query_parameters).length === 0) {
-    const latest_result = await getLatestData(queryId)
+    const latest_result = await getLatestData(queryId, run_daily)
     if (latest_result !== undefined) return latest_result
   }
   const execution_id = await submitQuery(queryId, query_parameters)
@@ -119,14 +121,6 @@ const tableName = {
   avax: "avalanche_c"
 } as any
 
-export const queryDuneSql = (options: any, query: string) => {
-  checkCanRunDuneQuery()
-
-  return queryDune("3996608", {
-    fullQuery: query.replace("CHAIN", tableName[options.chain] ?? options.chain).split("TIME_RANGE").join(`block_time >= from_unixtime(${options.startTimestamp})
-  AND block_time <= from_unixtime(${options.endTimestamp})`)
-  })
-}
 
 export function checkCanRunDuneQuery() {
   if (!isRestrictedMode) return;

@@ -13,7 +13,7 @@ const DUNE_QUERY_ID = "5166082";
 
 // Fetch past staking rewards from Dune and return both data and the last timestamp
 const stakingRewardsDune = async (): Promise<{ data: CliffAdapterResult[]; lastTimestamp: number }> => {
-  const duneData = await queryDune(DUNE_QUERY_ID);
+  const duneData = await queryDune(DUNE_QUERY_ID, true);
   // Dune returns { timestamp: epoch seconds, sol_reward: number }
   const filtered = duneData.map((row: any) => ({
     type: "cliff",

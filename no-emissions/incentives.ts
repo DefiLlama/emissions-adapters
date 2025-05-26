@@ -13,6 +13,6 @@ export const protocolsIncentives:string[] = [
     "3", //curve
     "3107", //eigenlayer
     "parent#morpho", //morpho
-    "parent#aerdrome", //aerdrome
-
+    "parent#aerodrome", //aerdrome
+    "parent#jito"
 ]

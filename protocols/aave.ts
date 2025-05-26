@@ -15,7 +15,7 @@ const devSchedule = (portion: number) => [
 
 const incentivesRewards = async (): Promise<CliffAdapterResult[]> => {
   const result: CliffAdapterResult[] = [];
-  const issuanceData = await queryDune("5187947")
+  const issuanceData = await queryDune("5187947", true)
 
   for (let i = 0; i < issuanceData.length; i++) {
     result.push({

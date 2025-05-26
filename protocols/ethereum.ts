@@ -20,7 +20,7 @@ interface BurnDataPoint {
 
 const burnData = async (type: 'pos' | 'pow'): Promise<CliffAdapterResult[]> => {
   const result: CliffAdapterResult[] = [];
-  const burnData = await queryDune("5041563")
+  const burnData = await queryDune("5041563", true)
  
   // Filter data based on type
   let filteredData = burnData;
@@ -45,7 +45,7 @@ const burnData = async (type: 'pos' | 'pow'): Promise<CliffAdapterResult[]> => {
 
 const foundationOutflow = async (): Promise<CliffAdapterResult[]> => {
   const result: CliffAdapterResult[] = [];
-  const foundationOutflowData = await queryDune("5041975")
+  const foundationOutflowData = await queryDune("5041975", true)
   for (let i = 0; i < foundationOutflowData.length; i++) {
     result.push({
       type: "cliff",
@@ -59,7 +59,7 @@ const foundationOutflow = async (): Promise<CliffAdapterResult[]> => {
 
 const stakingRewards = async (): Promise<CliffAdapterResult[]> => {
   const result: CliffAdapterResult[] = [];
-  const issuanceData = await queryDune("5041721")
+  const issuanceData = await queryDune("5041721", true)
 
   for (let i = 0; i < issuanceData.length; i++) {
     result.push({

@@ -16,7 +16,7 @@ const halveningDates: string[] = [
 const DUNE_QUERY_ID = "5166006";
 
 const miningRewardsDune = async (): Promise<{ data: CliffAdapterResult[]; lastTimestamp: number }> => {
-  const duneData = await queryDune(DUNE_QUERY_ID);
+  const duneData = await queryDune(DUNE_QUERY_ID, true);
   const filtered = duneData.map((row: any) => ({
     type: "cliff",
     start: Number(row.timestamp),
