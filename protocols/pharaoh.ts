@@ -43,7 +43,7 @@ const pharaoh: Protocol = {
     sources: [
       "https://docs.pharaoh.exchange/pages/tokenomics-and-emissions"
     ],
-    protocolIds: ["4287", "3921"]
+    protocolIds: ["parent#pharaoh-exchange", "4287", "3921"]
   },
   categories: {
     insiders: ["Contributors"],

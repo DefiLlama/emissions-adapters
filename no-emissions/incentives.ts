@@ -14,5 +14,9 @@ export const protocolsIncentives:string[] = [
     "3107", //eigenlayer
     "parent#morpho", //morpho
     "parent#aerodrome", //aerdrome
-    "parent#jito"
+    "parent#jito",
+    "parent#sanctum", //cloud
+    "6099", //helium
+    "parent#pancakeswap", //pancakeswap
+    "parent#pharaoh-exchange", //pharaoh
 ]

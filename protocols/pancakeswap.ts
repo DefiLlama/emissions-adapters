@@ -2,22 +2,32 @@ import { CliffAdapterResult, LinearAdapterResult, Protocol } from "../types/adap
 import { queryDune } from "../utils/dune";
 
 
-const emissions = async (): Promise<CliffAdapterResult[]> => {
+const emissions = async (type: string): Promise<CliffAdapterResult[]> => {
   const result: CliffAdapterResult[] = [];
   const issuanceData = await queryDune("5057582")
-
+  if(type == "burn"){
+    for (let i = 0; i < issuanceData.length - 1; i++) {
+    result.push({
+      type: "cliff",
+      start: issuanceData[i].day,
+      amount: -issuanceData[i].total_burned
+    })
+  }
+    return result;
+  }else{
   for (let i = 0; i < issuanceData.length - 1; i++) {
     result.push({
       type: "cliff",
       start: issuanceData[i].day,
-      amount: issuanceData[i].daily_net_emissions
+      amount: issuanceData[i].total_minted
     })
   }
   return result;
 }
+}
 
 const pancakeswap: Protocol = {
-    "Emissions": emissions,
+    "Emissions": [emissions("mint"), emissions("burn")],
     meta: {
         sources: [
             "https://docs.pancakeswap.finance/protocol/cake-tokenomics",
