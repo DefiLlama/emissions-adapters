@@ -4,7 +4,7 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1759190400; // 30/09/2024
-const total = 1.67e9; // Total Supply: 1.67 billion tokens
+const total = 1_673_646_668.28466; // Total Supply: 1.67 billion tokens
 const token = "0xec53bF9167f50cDEB3Ae105f56099aaaB9061F83";
 const chain = "ethereum";
 
@@ -187,7 +187,7 @@ const eigen: Protocol = {
       total * 0.255 * 0.04,
     ),
   ],
-  Inflation: manualLinear("2024-10-1", "2028-10-1", total * 1.04 ** 4 - total),
+Inflation: manualLinear("2024-10-1", "2028-10-1", total * 0.04 * 4),
   meta: {
     notes: ["Airdrop/Stakedrop: Assuming there will be 6 seassons"],
     token: `${chain}:${token}`,
@@ -207,6 +207,7 @@ const eigen: Protocol = {
     noncirculating: ["R&D, Ecosystem & Community Initiatives"],
     privateSale: ["Investors"],
     insiders: ["Early Contributors"],
+    farming: ["Inflation"],
   },
 };
 

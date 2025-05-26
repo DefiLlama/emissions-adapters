@@ -1,3 +1,4 @@
+import { getEmissionsV2 } from "../adapters/aerodrome";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { latest, supply } from "../adapters/supply";
 import { LinearAdapterResult, Protocol } from "../types/adapters";
@@ -42,7 +43,6 @@ const aerodrome: Protocol = {
   // Supply: () => supply(chain, token, start, "aerodrome"),
   // documented: {
   //   replaces: ["supply"],
-  "Voters Incentives": manualCliff(start, total * 0.08),
   "Genesis Liquidity Pool": manualCliff(start, total * 0.02),
   "Airdrop for veAERO Lockers": manualLinear(
     start,
@@ -67,6 +67,8 @@ const aerodrome: Protocol = {
   ),
   "LP Emissions": emissions(95),
   "Team Emissions": emissions(5),
+  "Rebase Emissions": getEmissionsV2("rebase"),
+  "Gauge Emissions": getEmissionsV2("gauge"),
   //   },
   meta: {
     notes: [
@@ -79,7 +81,7 @@ const aerodrome: Protocol = {
       `https://aerodrome.finance/docs#tokenomics`,
       `https://github.com/aerodrome-finance/contracts/blob/main/contracts/Minter.sol#L170-L198`,
     ],
-    protocolIds: ["3450", "4524"],
+    protocolIds: ["parent#aerodrome", "3450", "4524"],
     incompleteSections: [
       {
         lastRecord: (backfill: boolean) => latest("aerodrome", start, backfill),
@@ -88,7 +90,9 @@ const aerodrome: Protocol = {
       },
     ],
   },
-  categories: {},
+  categories: {
+    farming: ["Rebase Emissions", "Gauge Emissions"],
+  },
 };
 
 export default aerodrome;

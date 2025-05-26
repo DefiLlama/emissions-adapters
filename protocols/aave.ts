@@ -1,6 +1,7 @@
 import adapter from "../adapters/aave/aave";
 import { manualCliff, manualStep } from "../adapters/manual";
-import { Protocol } from "../types/adapters";
+import { CliffAdapterResult, Protocol } from "../types/adapters";
+import { queryDune } from "../utils/dune";
 import { periodToSeconds } from "../utils/time";
 
 const lendDevQty = 3000000;
@@ -12,6 +13,20 @@ const devSchedule = (portion: number) => [
   manualStep(lendSale, periodToSeconds.year / 2, 4, (lendDevQty * portion) / 5),
 ];
 
+const incentivesRewards = async (): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
+  const issuanceData = await queryDune("5187947")
+
+  for (let i = 0; i < issuanceData.length; i++) {
+    result.push({
+      type: "cliff",
+      start: issuanceData[i].timestamp,
+      amount: issuanceData[i].total_amount
+    });
+  }
+  return result;
+}
+
 const aave: Protocol = {
   "LEND core development": devSchedule(0.3),
   "LEND user experience development": devSchedule(0.2),
@@ -21,6 +36,7 @@ const aave: Protocol = {
   "LEND public sale": manualCliff(lendSale, lendSaleQty),
   "Ecosysten reserve": async () =>
     adapter("0x25F2226B597E8F9514B3F68F00f494cF4f286491", "ethereum"),
+  "AAVE Incentives": incentivesRewards,
   meta: {
     sources: [
       "https://docs.aave.com/aavenomics/incentives-policy-and-aave-reserve",
@@ -28,7 +44,7 @@ const aave: Protocol = {
       "https://github.com/ETHLend/Documentation/blob/master/ETHLendWhitePaper.md#token-distribution",
     ],
     token: "ethereum:0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
-    protocolIds: ["111", "1599", "1838", "1839"],
+    protocolIds: ["parent#aave", "111", "1599", "1838", "1839"],
     incompleteSections: [
       {
         key: "Ecosysten reserve",
@@ -40,6 +56,7 @@ const aave: Protocol = {
   categories: {
     noncirculating: ["Ecosysten reserve"],
     publicSale: ["LEND to AAVE migrator"],
+    farming: ["AAVE Incentives"],
   },
 };
 export default aave;

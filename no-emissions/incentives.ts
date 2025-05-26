@@ -9,4 +9,10 @@ export const protocolsIncentives:string[] = [
     "3562", //celestia
     "6101", //tezos
     "6103", //tron
+    "parent#aave", //aave
+    "3", //curve
+    "3107", //eigenlayer
+    "parent#morpho", //morpho
+    "parent#aerdrome", //aerdrome
+
 ]
