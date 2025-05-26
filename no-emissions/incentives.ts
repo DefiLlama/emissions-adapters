@@ -19,4 +19,5 @@ export const protocolsIncentives:string[] = [
     "6099", //helium
     "parent#pancakeswap", //pancakeswap
     "parent#pharaoh-exchange", //pharaoh
+    "parent#maker"
 ]
