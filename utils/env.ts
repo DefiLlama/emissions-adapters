@@ -10,7 +10,11 @@ export const ENV_KEYS = new Set([
     ...BOOL_KEYS,
     ...Object.keys(DEFAULTS),
     'DUNE_API_KEYS',
-    'DUNE_RESTRICTED_MODE'
+    'DUNE_RESTRICTED_MODE',
+    'CLICKHOUSE_HOST',
+    'CLICKHOUSE_USERNAME',
+    'CLICKHOUSE_PASSWORD',
+    'CLICKHOUSE_PORT'
 ])
 
 Object.keys(DEFAULTS).forEach(i => {
