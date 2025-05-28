@@ -67,7 +67,8 @@ const incentivesRewards = async (): Promise<CliffAdapterResult[]> => {
     result.push({
       type: "cliff",
       start: readableToSeconds(issuanceData[i].date),
-      amount: Number(issuanceData[i].amount) / 1e18
+      amount: Number(issuanceData[i].amount) / 1e18,
+      isUnlock: false,
     });
   }
   return result;

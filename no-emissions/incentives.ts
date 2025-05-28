@@ -22,4 +22,11 @@ export const protocolsIncentives:string[] = [
     "parent#maker",
     "6237", //initia
     "6236", //bsc
+    "382", //pendle
+    "337", //gmx
+    "parent#shadow-exchange", //shadow
+    "114", //compound
+    "212", //venus
+    "parent#thena", //thena
+    "parent#moonwell", //moonwell
 ]

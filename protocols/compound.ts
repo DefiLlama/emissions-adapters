@@ -1,15 +1,31 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
-import { Protocol } from "../types/adapters";
+import { CliffAdapterResult, Protocol } from "../types/adapters";
+import { queryDune } from "../utils/dune";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1592222400;
 const qty = 10000000;
 
+const compRewards = async (): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
+  const issuanceData = await queryDune("5194691", true)
+
+  for (let i = 0; i < issuanceData.length; i++) {
+    result.push({
+      type: "cliff",
+      start: issuanceData[i].timestamp,
+      amount: issuanceData[i].amount
+    });
+  }
+  return result;
+}
+
 const compound: Protocol = {
   "Liquidity mining": [
-    manualLinear("2020-05-27", "2020-06-26", 31 * 3297),
-    manualLinear("2020-06-27", "2020-08-30", 65 * 2880),
-    manualLinear("2020-06-27", "2025-08-24", 1819 * 2304),
+    // manualLinear("2020-05-27", "2020-06-26", 31 * 3297),
+    // manualLinear("2020-06-27", "2020-08-30", 65 * 2880),
+    // manualLinear("2020-06-27", "2025-08-24", 1819 * 2304),
+    compRewards,
   ],
   "Team founders": manualLinear(
     start,

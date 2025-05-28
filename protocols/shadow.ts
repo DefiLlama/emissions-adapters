@@ -1,48 +1,30 @@
+import { getLogs } from "@defillama/sdk/build/util/indexer";
+import { getBlock } from "@defillama/sdk/build/computeTVL/blocks";
 import { manualCliff, manualLinear } from "../adapters/manual";
-import { LinearAdapterResult, Protocol } from "../types/adapters";
-import { periodToSeconds } from "../utils/time";
+import { CliffAdapterResult, LinearAdapterResult, Protocol } from "../types/adapters";
+import { periodToSeconds, readableToSeconds, unixTimestampNow } from "../utils/time";
+import { queryAggregatedDailyLogsAmounts } from "../utils/queries";
 
 const start = 1736899200; 
 const total = 10_000_000;
 
-const emissions = (percentage: number): LinearAdapterResult[] => {
-  const result: LinearAdapterResult[] = [];
-  let weeklyEmissionRate = 50_000; // starting emission rate (50k SHADOW per week)
-  let weekNumber = 0;
-  let totalEmitted = 3_000_000;
+const emissions = async (): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
 
-  // Note: Elastic emissions (±25% multiplier change) are not modeled here.
-  // This function models the base decay schedule assuming a constant 1% decay (multiplier=9900).
-  while (totalEmitted < total) {
-    let currentWeekEmissionAmount = (weeklyEmissionRate * percentage) / 100;
-    let isFinalEmission = false;
+  const data = await queryAggregatedDailyLogsAmounts({
+    address: "0xc7022f359cd1bda8ab8a19d1f19d769cbf7f3765",
+    topic0: "0x0f6798a560793a54c3bcfe86a93cde1e73087d944c0ea20544137d4121396885",
+    startDate: "2025-01-15",
+  })
 
-    if (totalEmitted + currentWeekEmissionAmount > total) {
-      currentWeekEmissionAmount = (total - totalEmitted);
-      currentWeekEmissionAmount = (currentWeekEmissionAmount * percentage) / 100;
-
-      isFinalEmission = true;
-    }
-
+  for (let i = 0; i < data.length; i++) {
     result.push({
-      type: "linear",
-      start: start + periodToSeconds.weeks(weekNumber),
-      end: start + periodToSeconds.weeks(weekNumber + 1),
-      amount: currentWeekEmissionAmount
+      type: "cliff",
+      start: readableToSeconds(data[i].date),
+      amount: Number(data[i].amount) / 1e18,
+      isUnlock: false,
     });
-
-    totalEmitted += currentWeekEmissionAmount;
-
-    if (isFinalEmission) {
-      break;
-    }
-
-    weeklyEmissionRate *= 0.99; // apply 1% decay for the next period's calculation base
-
-    weekNumber++;
-    if (weeklyEmissionRate < 1) break;
   }
-
   return result;
 }
 
@@ -78,20 +60,20 @@ const shadow: Protocol = {
     total * 0.015,
   ),
 
-  // Emissions (remaining 7M)
-  "Gauge Emissions": emissions(100),
+  "Gauge Emissions": emissions,
 
   meta: {
     notes: [
       "We assume the initial allocations are linearly vested over 180 days.",
       "All allocations except Protocol-Owned Liquidity and Reserves are locked in xSHADOW.",
-      "The emissions are elastic and depend on the protocol's revenue, which is not modeled here.",
+      "The emissions are taken directly using onchain data by filtering the logs for Mint events from Minter",
     ],
     token: `sonic:0x3333b97138d4b086720b5ae8a7844b1345a33333`,
     sources: [
       "https://docs.shadow.so/pages/tokenomics",
       "https://docs.shadow.so/pages/xshadow",
-      "https://sonicscan.org/tx/0xdbd2344dfd88f549599bb17a01e86263592da6c034d4a8541d824832ba375d86"
+      "https://sonicscan.org/tx/0xdbd2344dfd88f549599bb17a01e86263592da6c034d4a8541d824832ba375d86",
+      "https://sonicscan.org/address/0xc7022f359cd1bda8ab8a19d1f19d769cbf7f3765"
     ],
     protocolIds: ["parent#shadow-exchange"]
   },
