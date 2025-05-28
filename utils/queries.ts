@@ -52,3 +52,60 @@ export async function queryAggregatedDailyLogsAmountsMulti(params: {
 
   return queryClickhouse<DailyAmount>(sql, params);
 }
+
+/*
+  Query where event data is nonindexed address, uint256 amount
+*/
+export async function queryAddrAmount(params: {
+  addresses: string[];
+  topic0: string;
+  startDate: string;
+  endDate?: string;
+}): Promise<DailyAmount[]> {
+  const sql = `
+  SELECT
+    toStartOfDay(timestamp) AS date,
+    SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) AS amount
+FROM evm_indexer.logs
+  WHERE (address IN ({addresses:Array(String)})) 
+  AND topic0 = {topic0:String}
+  AND (timestamp >= toDateTime({startDate:String}))
+  ${params.endDate ? 'AND (timestamp < toDateTime({endDate:String}))' : ''}
+GROUP BY date
+ORDER BY date ASC
+    `
+    return queryClickhouse<DailyAmount>(sql, params);
+}
+
+/* Query transfer events */
+export async function queryTransferEvents(params: {
+  contractAddress: string;
+  fromAddress?: string;
+  toAddress?: string;
+  startDate: string;
+  endDate?: string;
+}): Promise<DailyAmount[]> {
+  const sql = `
+    SELECT
+    toStartOfDay(timestamp) AS date,
+    lower(concat('0x', right(topic1, 40))) AS from_address,
+    lower(concat('0x', right(topic2, 40))) AS to_address,
+    reinterpretAsUInt256(reverse(unhex(substring(data, 1, 64)))) AS amount
+FROM evm_indexer.logs
+WHERE topic0 = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
+  AND timestamp >= toDateTime({startDate:String})
+  ${params.endDate ? 'AND timestamp < toDateTime({endDate:String})' : ''}
+  ${params.contractAddress ? 'AND address = {contractAddress:String}' : ''}
+  ${params.fromAddress ? 'AND topic1 = lower(concat(\'0x\', lpad(substring({fromAddress:String}, 3), 64, \'0\')))' : ''}
+  ${params.toAddress ? 'AND topic2 = lower(concat(\'0x\', lpad(substring({toAddress:String}, 3), 64, \'0\')))' : ''}
+ORDER BY timestamp
+`;
+
+  return queryClickhouse<DailyAmount>(sql, params);
+
+}
+
+// custom queries as long as the output is table with date and amount
+export async function queryCustom(sql: string, params: any): Promise<DailyAmount[]> {
+  return queryClickhouse<DailyAmount>(sql, params);
+}
