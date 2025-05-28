@@ -29,4 +29,5 @@ export const protocolsIncentives:string[] = [
     "212", //venus
     "parent#thena", //thena
     "parent#moonwell", //moonwell
+    "900", //rocketpool
 ]

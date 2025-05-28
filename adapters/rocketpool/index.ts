@@ -91,7 +91,7 @@ export async function latest(reference: number, backfill: boolean): Promise<numb
     if (backfill) return reference
     let r;
     try {
-        r = await fetch(`https://api.llama.fi/emission/rocket-pool`).then((r) =>
+        r = await fetch(`https://api.llama.fi/emission/rocketpool`).then((r) =>
             r.json(),
         );
     } catch {
