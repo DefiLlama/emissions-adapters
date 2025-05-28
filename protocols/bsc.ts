@@ -20,7 +20,7 @@ const stakingRewards = async (): Promise<CliffAdapterResult[]> => {
 const bsc: Protocol = {
   "Staking Rewards": stakingRewards,
   meta: {
-    token: "coingecko:bnb",
+    token: "coingecko:binancecoin",
     sources: ["https://docs.bsc.xyz/home/core-concepts/init-token/tokenomics#release-schedule"],
     chain: 'bsc',
     protocolIds: ["6236"],
