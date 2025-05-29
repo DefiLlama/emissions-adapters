@@ -1,5 +1,5 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
-import { CliffAdapterResult, Protocol } from "../types/adapters";
+import { CliffAdapterResult, LinearAdapterResult, Protocol } from "../types/adapters";
 import { queryDune } from "../utils/dune";
 import { periodToSeconds } from "../utils/time";
 
@@ -14,16 +14,24 @@ const team = totalSupply * 0.18;
 const airdropNFT = totalSupply * 0.09;
 const ecosystem = totalSupply * 0.25;
 
-const emissions = async (): Promise<CliffAdapterResult[]> => {
-  const result: CliffAdapterResult[] = [];
+const emissions = async (): Promise<LinearAdapterResult[]> => {
+  const result: LinearAdapterResult[] = [];
   const issuanceData = await queryDune("5199249", true)
 
+  // Sort data by timestamp to ensure chronological order
+  issuanceData.sort((a: any, b: any) => a.timestamp - b.timestamp);
+
   for (let i = 0; i < issuanceData.length; i++) {
+    const currentTimestamp = issuanceData[i].timestamp;
+    const nextTimestamp = i < issuanceData.length - 1 
+      ? issuanceData[i + 1].timestamp
+      : currentTimestamp + 604800; // Add 1 week (604800 seconds) for the last entry
+
     result.push({
-      type: "cliff",
-      start: issuanceData[i].timestamp,
+      type: "linear",
+      start: currentTimestamp,
+      end: nextTimestamp,
       amount: issuanceData[i].amount,
-      isUnlock: false,
     });
   }
   return result;

@@ -8,8 +8,8 @@ import { queryAggregatedDailyLogsAmounts } from "../utils/queries";
 const start = 1736899200; 
 const total = 10_000_000;
 
-const emissions = async (): Promise<CliffAdapterResult[]> => {
-  const result: CliffAdapterResult[] = [];
+const emissions = async (): Promise<LinearAdapterResult[]> => {
+  const result: LinearAdapterResult[] = [];
 
   const data = await queryAggregatedDailyLogsAmounts({
     address: "0xc7022f359cd1bda8ab8a19d1f19d769cbf7f3765",
@@ -17,14 +17,23 @@ const emissions = async (): Promise<CliffAdapterResult[]> => {
     startDate: "2025-01-15",
   })
 
+  // Sort data by date to ensure chronological order
+  data.sort((a, b) => readableToSeconds(a.date) - readableToSeconds(b.date));
+
   for (let i = 0; i < data.length; i++) {
+    const currentTimestamp = readableToSeconds(data[i].date);
+    const nextTimestamp = i < data.length - 1 
+      ? readableToSeconds(data[i + 1].date)
+      : currentTimestamp + 86400; // Add 1 day (86400 seconds) for the last entry
+
     result.push({
-      type: "cliff",
-      start: readableToSeconds(data[i].date),
+      type: "linear",
+      start: currentTimestamp,
+      end: nextTimestamp,
       amount: Number(data[i].amount) / 1e18,
-      isUnlock: false,
     });
   }
+  
   return result;
 }
 
