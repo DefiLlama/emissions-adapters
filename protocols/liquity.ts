@@ -1,37 +1,75 @@
 import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
-import { LinearAdapterResult, Protocol } from "../types/adapters";
-import { periodToSeconds } from "../utils/time";
+import { CliffAdapterResult, LinearAdapterResult, Protocol } from "../types/adapters";
+import { queryCustom } from "../utils/queries";
+import { periodToSeconds, readableToSeconds } from "../utils/time";
 
 const qty = 100000000;
 const start = 1617577200;
-const rewardMonths = 36;
 
-const rewards = (): LinearAdapterResult[] => {
-  let sections: LinearAdapterResult[] = [];
-  let thisStart: number = start;
-  let workingQty: number = 0;
+let rewardsExecutionPromise: Promise<void> | null = null;
+let stabilityPoolCache: CliffAdapterResult[] | null = null;
+let uniLPCache: CliffAdapterResult[] | null = null;
 
-  for (let i = 1; i < rewardMonths; i++) {
-    const year: number = i / 12;
-    const thisQty: number = 32000000 * (1 - 0.5 ** year);
-
-    sections.push(
-      manualLinear(
-        thisStart,
-        thisStart + periodToSeconds.month,
-        thisQty - workingQty,
-      ),
-    );
-
-    workingQty = thisQty;
-    thisStart += periodToSeconds.month;
+const executeRewardsSequentially = async (): Promise<void> => {
+  if (rewardsExecutionPromise) {
+    return rewardsExecutionPromise;
   }
 
-  return sections;
+  rewardsExecutionPromise = (async () => {
+    console.log("Processing stability pool rewards...");
+    const stabilityData = await queryCustom(`SELECT
+    toStartOfDay(timestamp) AS date,
+	SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
+FROM evm_indexer.logs
+WHERE (address in ('0x66017d22b0f8556afdd19fc67041899eb65a21bb'))
+  AND (topic0 = '0x2608b986a6ac0f6c629ca37018e80af5561e366252ae93602a96d3ab2e73e42d'
+       OR topic0 = '0xcd2cdc1a4af71051394e9c6facd9a266b2ac5bd65d219a701eeda009f47682bf')
+GROUP BY date
+ORDER BY date DESC`, {});
+
+    stabilityPoolCache = [];
+    for (let i = 0; i < stabilityData.length; i++) {
+      stabilityPoolCache.push({
+        type: "cliff",
+        start: readableToSeconds(stabilityData[i].date),
+        amount: Number(stabilityData[i].amount)
+      });
+    }
+
+    console.log("Processing uniswap LP rewards...");
+    const uniData = await queryCustom(`SELECT
+    toStartOfDay(timestamp) AS date,
+	SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
+FROM evm_indexer.logs
+WHERE (address in ('0xd37a77e71ddf3373a79be2ebb76b6c4808bdf0d5'))
+  AND (topic0 = '0xe2403640ba68fed3a2f88b7557551d1993f84b99bb10ff833f0cf8db0c5e0486')
+GROUP BY date
+ORDER BY date DESC`, {});
+
+    uniLPCache = [];
+    for (let i = 0; i < uniData.length; i++) {
+      uniLPCache.push({
+        type: "cliff",
+        start: readableToSeconds(uniData[i].date),
+        amount: Number(uniData[i].amount)
+      });
+    }
+  })();
+
+  return rewardsExecutionPromise;
 };
+
+const stabilityPool = async (): Promise<CliffAdapterResult[]> => {
+  await executeRewardsSequentially();
+  return stabilityPoolCache || [];
+};
+
+const uniLP = async (): Promise<CliffAdapterResult[]> => {
+  await executeRewardsSequentially();
+  return uniLPCache || [];
+};
+
 const liquity: Protocol = {
-  "Stability Pool rewards": rewards(),
-  "Uniswap LPs": manualCliff(start, 1333333),
   "Community reserve": manualCliff(start, qty * 0.02),
   Endowment: manualCliff(start + periodToSeconds.year, qty * 0.0606),
   "Team and advisors": [
@@ -45,6 +83,8 @@ const liquity: Protocol = {
   ],
   "Service providers": manualCliff(start + periodToSeconds.year, qty * 0.0104),
   Investors: manualCliff(start + periodToSeconds.year, qty * 0.339),
+  "Stability Pool rewards": stabilityPool,
+  "Uniswap LPs": uniLP,
   meta: {
     sources: ["https://medium.com/liquity/liquity-launch-details-4537c5ffa9ea"],
     token: "ethereum:0x6dea81c8171d0ba574754ef6f8b412f2ed88c54d",

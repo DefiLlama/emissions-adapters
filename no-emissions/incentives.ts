@@ -32,4 +32,5 @@ export const protocolsIncentives:string[] = [
     "900", //rocketpool
     "1207", //across
     "5963", //resupply
+    "270", //liquity
 ]

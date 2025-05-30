@@ -57,7 +57,7 @@ const chainlink: Protocol = {
         key: "Company",
         lastRecord: (backfill: boolean) =>
           latest("chainlink", 1656630000, backfill),
-        allocation: qty * 0.3,
+        allocation: undefined,
       },
     ],
   },
