@@ -1,6 +1,6 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { CliffAdapterResult, Protocol } from "../types/adapters";
-import { queryCustom } from "../utils/queries-v2";
+import { queryCustom } from "../utils/queries";
 import { readableToSeconds } from "../utils/time";
 
 const schedules: { [date: string]: { [section: string]: number } } = {
