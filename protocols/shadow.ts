@@ -23,7 +23,7 @@ const emissions = async (): Promise<LinearAdapterResult[]> => {
     const currentTimestamp = readableToSeconds(data[i].date);
     const nextTimestamp = i < data.length - 1 
       ? readableToSeconds(data[i + 1].date)
-      : currentTimestamp + 86400;
+      : currentTimestamp + periodToSeconds.week;
 
     result.push({
       type: "linear",

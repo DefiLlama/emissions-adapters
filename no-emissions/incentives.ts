@@ -31,4 +31,5 @@ export const protocolsIncentives:string[] = [
     "parent#moonwell", //moonwell
     "900", //rocketpool
     "1207", //across
+    "5963", //resupply
 ]
