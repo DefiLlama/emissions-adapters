@@ -33,4 +33,5 @@ export const protocolsIncentives:string[] = [
     "1207", //across
     "5963", //resupply
     "270", //liquity
+    "parent#dydx", //dydx
 ]

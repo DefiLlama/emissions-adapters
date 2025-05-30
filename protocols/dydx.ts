@@ -1,5 +1,7 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
-import { Protocol } from "../types/adapters";
+import { CliffAdapterResult, Protocol } from "../types/adapters";
+import { queryCustom } from "../utils/queries-v2";
+import { readableToSeconds } from "../utils/time";
 
 const schedules: { [date: string]: { [section: string]: number } } = {
   "03/08/2021": {
@@ -764,17 +766,41 @@ const schedules: { [date: string]: { [section: string]: number } } = {
   // }
 };
 
+const rewards = async (): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
+  const data = await queryCustom(`SELECT
+    toStartOfDay(timestamp) AS date,
+    SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) / 1e18 AS amount
+FROM evm_indexer.logs
+WHERE address IN ('0x5aa653a076c1dbb47cec8c1b4d152444cad91941', '0x01d3348601968ab85b4bb028979006eac235a588', '0x65f7ba4ec257af7c55fd5854e5f6356bbd0fb8ec')
+  AND (topic0 = '0x2ef606d064225d24c1514dc94907c134faee1237445c2f63f410cce0852b2054'
+  		OR topic0 = '0x8b787e8c8443ad32d7a6d2aed319d9bee901168951fe414912a3968f977c6a29'
+  		OR topic0 = '0xfc30cddea38e2bf4d6ea7d3f9ed3b6ad7f176419f4963bd81318067a4aee73fe')
+GROUP BY date
+ORDER BY date DESC`, {})
+
+  for (let i = 0; i < data.length; i++) {
+    result.push({
+      type: "cliff",
+      start: readableToSeconds(data[i].date),
+      amount: Number(data[i].amount)
+    });
+  }
+  return result;
+}
+
 const dydx: Protocol = {
+  Rewards: rewards,
   meta: {
     sources: [
       "https://docs.dydx.community/dydx-unlimited/start-here/dydx-token-allocation",
     ],
     token: "coingecko:dydx-chain",
-    protocolIds: ["144", "4067"],
-    total: 1e9,
+    protocolIds: ["parent#dydx", "144", "4067"],
+    notes: ["Rewards data are taken from Safety Module, Merkle Distributor and Liquidity Staking claim events"]
   },
   categories: {
-    farming: ["User Trading Rewards","Liquidity Provider Rewards","Liquidity Staking Pool","Safety Staking Pool"],
+    farming: ["Rewards"],
     airdrop: ["Retroactive Rewards"],
     noncirculating: ["Community Treasury"],
     privateSale: ["Investors"],
@@ -785,6 +811,7 @@ const dydx: Protocol = {
 Object.keys(schedules).map((end: string, i: number) => {
   Object.keys(schedules[end]).map((section: string) => {
     if (section == "Total ") return;
+    if (section == "Retroactive Rewards" || section == "User Trading Rewards" || section == "Liquidity Provider Rewards" || section == "Liquidity Staking Pool" || section == "Safety Staking Pool") return;
     if (i == 0)
       dydx[section] = [manualCliff(end, schedules[end][section], "dd/mm/yyyy")];
     else
