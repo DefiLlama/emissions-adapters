@@ -25,7 +25,7 @@ const emissions = async (): Promise<LinearAdapterResult[]> => {
     const currentTimestamp = issuanceData[i].timestamp;
     const nextTimestamp = i < issuanceData.length - 1 
       ? issuanceData[i + 1].timestamp
-      : currentTimestamp + 604800; // Add 1 week (604800 seconds) for the last entry
+      : currentTimestamp + periodToSeconds.week;
 
     result.push({
       type: "linear",

@@ -17,14 +17,13 @@ const emissions = async (): Promise<LinearAdapterResult[]> => {
     startDate: "2025-01-15",
   })
 
-  // Sort data by date to ensure chronological order
   data.sort((a, b) => readableToSeconds(a.date) - readableToSeconds(b.date));
 
   for (let i = 0; i < data.length; i++) {
     const currentTimestamp = readableToSeconds(data[i].date);
     const nextTimestamp = i < data.length - 1 
       ? readableToSeconds(data[i + 1].date)
-      : currentTimestamp + 86400; // Add 1 day (86400 seconds) for the last entry
+      : currentTimestamp + 86400;
 
     result.push({
       type: "linear",
