@@ -44,6 +44,7 @@ export function addResultToEvents(
   });
 
   linears.map((l: LinearAdapterResult, i: number) => {
+    if (l.isUnlock === false) return;
     // compare current with the next one if it exists
     if (i < linears.length - 1) {
       const l2 = linears[i + 1];
@@ -133,7 +134,7 @@ export function addResultToEvents(
   });
 
   linears.forEach((l: LinearAdapterResult, i: number) => {
-
+    if (l.isUnlock === false) return;
     if (i === 0) {
       const initialRate = ratePerPeriod(l, precision);
       if (initialRate > 0) {

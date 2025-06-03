@@ -40,14 +40,18 @@ function miningRewardsForecast(splitTimestamp: number): LinearAdapterResult[] {
     let forecastStart = Math.max(splitTimestamp + periodToSeconds.day, start);
     if (forecastStart < end) {
       const qty = reward * 210000 * ((end - forecastStart) / (end - start));
-      sections.push(manualLinear(forecastStart, end, qty));
+      const section = manualLinear(forecastStart, end, qty);
+      section.isUnlock = false;
+      sections.push(section);
     }
     reward /= 2;
     for (let j = i + 1; j < halveningDates.length - 1; j++) {
       const nextStart = normalizeTime(halveningDates[j], undefined);
       const nextEnd = normalizeTime(halveningDates[j + 1], undefined);
       const nextQty = reward * 210000;
-      sections.push(manualLinear(nextStart, nextEnd, nextQty));
+      const nextSection = manualLinear(nextStart, nextEnd, nextQty);
+      nextSection.isUnlock = false;
+      sections.push(nextSection);
       reward /= 2;
     }
     break;

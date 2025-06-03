@@ -57,6 +57,7 @@ export type LinearAdapterResult = {
   end: number;
   amount: number;
   dateFormat?: string;
+  isUnlock?: boolean;
 };
 export type ChartData = {
   timestamps: number[];
