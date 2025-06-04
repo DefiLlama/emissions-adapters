@@ -49,7 +49,7 @@ function protocol() {
         "https://curve.readthedocs.io/dao-gauges.html",
       ],
       token: "ethereum:0xd533a949740bb3306d119cc777fa900ba034cd52",
-      protocolIds: ["3"],
+      protocolIds: ["parent#curve-finance","3"],
     },
     categories: {
       noncirculating: ["community reserve"],
