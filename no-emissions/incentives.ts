@@ -10,7 +10,7 @@ export const protocolsIncentives:string[] = [
     "6101", //tezos
     "6103", //tron
     "parent#aave", //aave
-    "3", //curve
+    "parent#curve-finance", //curve
     "3107", //eigenlayer
     "parent#morpho", //morpho
     "parent#aerodrome", //aerdrome
