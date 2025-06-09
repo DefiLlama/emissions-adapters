@@ -35,4 +35,5 @@ export const protocolsIncentives:string[] = [
     "270", //liquity
     "parent#dydx", //dydx
     "parent#fluid", //fluid
+    "319", //convex
 ]
