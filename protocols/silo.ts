@@ -1,10 +1,55 @@
-import { Protocol } from "../types/adapters";
+import { CliffAdapterResult, Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
-import { periodToSeconds } from "../utils/time";
+import { periodToSeconds, readableToSeconds } from "../utils/time";
 import vesting from "../adapters/uniswap/uniswap";
+import { queryCustom } from "../utils/queries";
 
 const qty = 1000000000;
 const start = 1638316800;
+
+const rewards = async (): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
+  const data = await queryCustom(`SELECT
+    date,
+    SUM(amount) AS amount
+FROM (
+    SELECT
+        toStartOfDay(timestamp) AS date,
+        SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
+    FROM evm_indexer.logs
+    WHERE topic0 IN (
+        '0x5637d7f962248a7f05a7ab69eec6446e31f3d0a299d997f135a65c62806e7891'
+    )
+    AND address IN (
+        '0x6c1603ab6cecf89dd60c24530dde23f97da3c229',
+        '0x4999873bf8741bfffb0ec242aaaa7ef1fe74fce8'
+    )
+    GROUP BY date
+
+    UNION ALL
+
+    SELECT
+        toStartOfDay(timestamp) AS date,
+        SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
+    FROM evm_indexer.logs
+    WHERE topic0 = '0x18ee3c31d4863a37e1b4563022fa292ed3f955a41fe1e49a2e8da1b986430e20'
+    AND address = '0xe9c01f928296359ba1d0ad1000cc9bf972cb0026'
+    AND topic1 = '0xc98b620c8900494093d98c33a3cd83be00000000000000000000000000000000'
+    GROUP BY date
+) AS combined
+GROUP BY date
+ORDER BY date DESC;
+`, {})
+
+  for (let i = 0; i < data.length; i++) {
+    result.push({
+      type: "cliff",
+      start: readableToSeconds(data[i].date),
+      amount: Number(data[i].amount)
+    });
+  }
+  return result;
+}
 
 const silo: Protocol = {
   "Genesis protocol-owned liquidity": manualCliff(start, qty * 0.1),
@@ -41,6 +86,7 @@ const silo: Protocol = {
       "ethereum",
       "siloToken",
     ),
+    "Incentives": rewards,
   meta: {
     sources: [
       "https://silopedia.silo.finance/governance/token-allocation-and-vesting",
@@ -60,6 +106,7 @@ const silo: Protocol = {
       "Early investors & early advisors",
       "Future contributors & future advisors",
     ],
+    farming: ["Incentives"],
     airdrop: ["Early community rewards"],
   },
 };

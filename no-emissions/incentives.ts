@@ -36,4 +36,7 @@ export const protocolsIncentives:string[] = [
     "parent#dydx", //dydx
     "parent#fluid", //fluid
     "319", //convex
+    "2020", //silo
+    "parent#bluefin", //bluefin
+    "parent#trader-joe", //lfj
 ]

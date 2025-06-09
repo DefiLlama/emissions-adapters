@@ -1,6 +1,7 @@
 import { manualLinear } from "../adapters/manual";
-import { Protocol, LinearAdapterResult } from "../types/adapters";
-import { periodToSeconds } from "../utils/time";
+import { Protocol, LinearAdapterResult, CliffAdapterResult } from "../types/adapters";
+import { queryCustom } from "../utils/queries";
+import { periodToSeconds, readableToSeconds } from "../utils/time";
 
 const rates = {
   "03/07/2021": 30,
@@ -58,20 +59,47 @@ function schedule(
   return sections;
 }
 
+const rewards = async (): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
+  const data = await queryCustom(`SELECT
+    toStartOfDay(timestamp) AS date,
+    SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
+FROM evm_indexer.logs
+where topic0 = '0x71bab65ced2e5750775a0613be067df48ef06cf92a496ebf7663ae0660924954'
+and address in (
+'0xd6a4f121ca35509af06a0be99093d08462f53052',
+'0x188bed1968b795d5c9022f6a0bb5931ac4c18f00',
+'0x4483f0b6e2f5486d06958c20f8c39a7abe87bf8f'
+)
+GROUP BY date
+ORDER BY date DESC`, {})
+
+  for (let i = 0; i < data.length; i++) {
+    result.push({
+      type: "cliff",
+      start: readableToSeconds(data[i].date),
+      amount: Number(data[i].amount)
+    });
+  }
+  return result;
+}
+
 const traderJoe: Protocol = {
   "Liquidity providers": schedule(50),
   "Potential strategic investors": schedule(10, 3),
   Team: schedule(20, 3),
   Treasury: schedule(20),
+  Incentives: rewards,
   meta: {
     sources: [
       "https://help.traderjoexyz.com/en/trader-joe/platform/tokenomics",
     ],
     token: "avax:0x6e84a6216ea6dacc71ee8e6b0a5b7322eebc0fdd",
-    protocolIds: ["468"],
+    protocolIds: ["parent#trader-joe"],
   },
   categories: {
-    farming: ["Liquidity providers"],
+    // farming: ["Liquidity providers"],
+    farming: ["Incentives"],
     noncirculating: ["Treasury"],
     privateSale: ["Potential strategic investors"],
     insiders: ["Team"],
