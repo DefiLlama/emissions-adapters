@@ -39,5 +39,6 @@ export const protocolsIncentives:string[] = [
     "2020", //silo
     "parent#bluefin", //bluefin
     "parent#trader-joe", //lfj
+    "parent#radiant", //radiant
     "182", //lido
 ]
