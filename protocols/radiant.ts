@@ -79,13 +79,7 @@ const radiant: Protocol = {
     ),
     manualCliff(start + periodToSeconds.month * 3, qty * 0.2 * 0.1),
   ],
-  "Rewards": yieldFarming.map((amount, month) =>
-    manualLinear(
-      start + month * periodToSeconds.month,
-      start + (month + 1) * periodToSeconds.month,
-      amount,
-    ),
-  ),
+  "Rewards": rewards,
   meta: {
     token: "arbitrum:0x0c4681e6c0235179ec3d4f4fc4df3d14fdd96017",
     sources: [

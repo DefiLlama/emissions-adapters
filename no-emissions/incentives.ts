@@ -41,4 +41,5 @@ export const protocolsIncentives:string[] = [
     "parent#trader-joe", //lfj
     "parent#radiant", //radiant
     "182", //lido
+    "1571", //stargate
 ]
