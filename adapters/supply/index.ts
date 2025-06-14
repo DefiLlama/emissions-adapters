@@ -4,40 +4,47 @@ import { CliffAdapterResult } from "../../types/adapters";
 import { findBlockHeightArray } from "../../utils/chainCalls";
 import { PromisePool } from "@supercharge/promise-pool";
 
-let res: number;
+let res: number | undefined;
 
 export async function latest(
-  key: string,
-  reference: number,
-  backfill: boolean = false,
+    key: string,
+    reference: number,
+    backfill: boolean = false,
 ): Promise<number> {
-  if (!res) {
+  if (res === undefined) {
     let r;
     try {
       r = await fetch(`https://api.llama.fi/emission/${key}`).then((r) =>
-        r.json(),
+          r.json(),
       );
     } catch {
+      res = reference;
       return reference;
     }
-    if (!r.body) return reference;
+    if (!r.body) {
+      res = reference;
+      return reference;
+    }
     r = JSON.parse(r.body);
-    return backfill ||
-      r.metadata.incompleteSections == null ||
-      r.metadata.incompleteSections[0].lastRecord == null
-      ? reference
-      : r.metadata.incompleteSections[0].lastRecord;
+    const result = backfill ||
+    r.metadata.incompleteSections == null ||
+    r.metadata.incompleteSections[0].lastRecord == null
+        ? reference
+        : r.metadata.incompleteSections[0].lastRecord;
+
+    res = result;
+    return result;
   }
   return res;
 }
 
 export async function supply(
-  chain: any,
-  target: string,
-  timestampDeployed: number,
-  adapter: string,
-  excluded: number = 0,
-  backfill: boolean = false,
+    chain: any,
+    target: string,
+    timestampDeployed: number,
+    adapter: string,
+    excluded: number = 0,
+    backfill: boolean = false,
 ) {
   let trackedTimestamp: number;
   let decimals: number;
@@ -54,18 +61,18 @@ export async function supply(
   const chainData = await findBlockHeightArray(trackedTimestamp, chain);
 
   await PromisePool.withConcurrency(10)
-    .for(Object.keys(chainData))
-    .process(
-      async (block) =>
-        await call({
-          target,
-          chain,
-          abi: "erc20:totalSupply",
-          block,
-        }).then((res: number) => {
-          chainData[block].result = res / 10 ** decimals - excluded;
-        }),
-    );
+      .for(Object.keys(chainData))
+      .process(
+          async (block) =>
+              await call({
+                target,
+                chain,
+                abi: "erc20:totalSupply",
+                block,
+              }).then((res: number) => {
+                chainData[block].result = res / 10 ** decimals - excluded;
+              }),
+      );
 
   const sections: CliffAdapterResult[] = [];
   let supplyIndex: number = 0;
