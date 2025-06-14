@@ -42,4 +42,5 @@ export const protocolsIncentives:string[] = [
     "parent#radiant", //radiant
     "182", //lido
     "1571", //stargate
+    "parent#euler", //euler
 ]
