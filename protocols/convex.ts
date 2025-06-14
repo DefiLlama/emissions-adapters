@@ -28,7 +28,7 @@ const rewards = async (): Promise<CliffAdapterResult[]> => {
   `;
 
   const rewardPaidData = await queryCustom(rewardPaidSql, {
-    rewardContract: "0x449f2fd99174e1785CF2A1c79E665Fec3dD1DdC6",
+    rewardContract: "0x449f2fd99174e1785cf2a1c79e665fec3dd1ddc6",
     rewardTopic: "0xe2403640ba68fed3a2f88b7557551d1993f84b99bb10ff833f0cf8db0c5e0486",
     treasuryTopic: `0x000000000000000000000000${TREASURY_ADDRESS.substring(2).toLowerCase()}`,
     startDate: "2021-05-17"
