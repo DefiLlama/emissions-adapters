@@ -43,4 +43,5 @@ export const protocolsIncentives:string[] = [
     "182", //lido
     "1571", //stargate
     "parent#euler", //euler
+    "parent#ramses-exchange", //ramses
 ]
