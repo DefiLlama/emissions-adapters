@@ -31,6 +31,9 @@ export default async function morpho(): Promise<AdapterResult[]> {
       const effectiveStart = start ?? created_at;
       const effectiveEnd = end ?? now;
 
+      if(asset?.address?.toLowerCase() !== "0x58D97B57BB95320F9a05dC918Aef65434969c2B2".toLowerCase() && asset?.address?.toLowerCase() !== "0x9994E35Db50125E0DF82e4c2dde62496CE330999".toLowerCase())
+        return;
+      
       if (!end && effectiveStart > now) return;
 
       if (type === "airdrop-reward") {
