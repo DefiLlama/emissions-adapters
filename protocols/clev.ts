@@ -20,23 +20,23 @@ const clev: Protocol = {
     periodToSeconds.year,
     10,
     false,
-    5,
+    5
   ),
   "Community Contributors": manualStep(
     start,
     periodToSeconds.month,
     24,
-    (qty * 0.04) / 24,
+    (qty * 0.04) / 24
   ),
   "Treasury Reserve": manualLinear(start, periodToSeconds.year * 2, qty * 0.05),
   IDO: manualCliff(start, qty * 0.05),
   Airdrop: manualLinear(start, start + periodToSeconds.year, qty * 0.05),
-  AlladinDAO: manualLinear(start, start + periodToSeconds.year * 2, qty * 0.3),
+  AladdinDAO: manualLinear(start, start + periodToSeconds.year * 2, qty * 0.3),
   "Initial Liquidity": manualCliff(start, qty * 0.01),
   "Strategic Partnerships": manualLinear(
     start,
     start + periodToSeconds.month * 3,
-    qty * 0.015,
+    qty * 0.015
   ),
   "Beta bonus": manualCliff(start, 0.0025),
   meta: {
@@ -49,7 +49,7 @@ const clev: Protocol = {
   categories: {
     insiders: [
       "Strategic Partnerships",
-      "AlladinDAO",
+      "AladdinDAO",
       "Community Contributors",
     ],
     farming: ["Liquidity Incentives"],
