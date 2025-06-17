@@ -69,7 +69,7 @@ const fxn: Protocol = {
     insiders: [
       "Community Contributors",
       "Strategic Parnerships",
-      "Alladin DAO",
+      "Aladdin DAO",
     ],
     noncirculating: ["Treasury Reserve"],
     publicSale: ["IDO", "Initial Liquidity"],
