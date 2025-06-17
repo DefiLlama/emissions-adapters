@@ -48,7 +48,7 @@ const fxn: Protocol = {
     start + periodToSeconds.year,
     total * 0.0025,
   ),
-  "Alladin DAO": manualLinear(
+  "Aladdin DAO": manualLinear(
     start,
     start + periodToSeconds.years(2),
     total * 0.3,
