@@ -3,88 +3,75 @@ import { AdapterResult } from "../types/adapters";
 import { manualCliff, manualLinear } from "./manual";
 import { periodToSeconds, unixTimestampNow } from "../utils/time";
 
-interface AggregatedReward {
-  start: number;
-  end: number;
-  amount: number;
-}
-
 export default async function morpho(): Promise<AdapterResult[]> {
-  const sections: AdapterResult[] = [];
   const now = unixTimestampNow();
-  const res = await fetch("https://rewards.morpho.org/v1/programs").then((r) =>
-    r.json(),
-  );
-
-  const aggregatedRewards: Map<string, AggregatedReward> = new Map();
-
   const allowedAssets = [
     "0x58D97B57BB95320F9a05dC918Aef65434969c2B2",
     "0x9994E35Db50125E0DF82e4c2dde62496CE330999",
     "0xBAa5CC21fd487B8Fcc2F632f3F4E8D37262a0842"
   ].map(addr => addr.toLowerCase());
 
-  function estimateAmount(start: number, end: number, rates: any[] | null) {
-    if (!rates || !rates.length) return 0;
-    const aggregateRate = rates.reduce(
-      (p: number, c: any) => p + Number(c.per_dollar_per_year),
-      0,
-    );
-    const yearsDuration = (end - start) / periodToSeconds.year;
-    return aggregateRate * yearsDuration;
-  }
-
-  res.data.forEach(
-    ({
-      start,
-      created_at,
-      end,
-      total_rewards,
-      current_rates,
-      type,
-      asset,
-    }: any) => {
-      const effectiveStart = start ?? created_at;
-      const effectiveEnd = end ?? now;
-
-      if (!asset?.address || !allowedAssets.includes(asset.address.toLowerCase())) {
-        return;
-      }
-      
-      if (!end && effectiveStart > now) return;
-
-      if (type === "airdrop-reward") {
-        sections.push(
-          manualCliff(effectiveStart, Number(total_rewards) / 1e18),
-        );
-        return;
-      }
-
-      const amount = end
-        ? Number(total_rewards)
-        : estimateAmount(effectiveStart, effectiveEnd, current_rates);
-
-      if (!amount || amount < 0) return;
-
-      const assetId = asset?.id ?? "unknown_asset";
-      const key = `${effectiveStart}-${effectiveEnd}-${assetId}`;
-
-      const existing = aggregatedRewards.get(key);
-      if (existing) {
-        existing.amount += amount;
-      } else {
-        aggregatedRewards.set(key, {
-          start: effectiveStart,
-          end: effectiveEnd,
-          amount: amount,
-        });
-      }
-    },
+  const res = await fetch("https://rewards.morpho.org/v1/programs").then((r) =>
+    r.json(),
   );
 
-  aggregatedRewards.forEach((reward) => {
-    sections.push(manualLinear(reward.start, reward.end, reward.amount / 1e18));
-  });
+  const sections = res.data
+    .filter((p: any) => p.asset && allowedAssets.includes(p.asset.address.toLowerCase()))
+    .map((program: any): AdapterResult | null => {
+      const start = Number(program.start ?? program.created_at);
+      
+      if (start > now) {
+        return null;
+      }
 
-  return sections;
+      if (program.type === "airdrop-reward") {
+        if (!program.total_rewards) return null;
+        const amount = Number(program.total_rewards) / 1e18;
+        return manualCliff(start, amount);
+      }
+
+      const end = program.end ? Number(program.end) : now;
+      
+      let totalRatePerYear: bigint;
+
+      switch (program.type) {
+        case "uniform-reward":
+          if (!program.current_rates || program.current_rates.length === 0) return null;
+          totalRatePerYear = program.current_rates.reduce(
+            (sum: bigint, rate: any) => sum + BigInt(rate.rate_per_year),
+            BigInt(0)
+          );
+          break;
+        case "market-reward":
+          if (!program.supply_rate_per_year || !program.borrow_rate_per_year || !program.collateral_rate_per_year) return null;
+          totalRatePerYear = 
+            BigInt(program.supply_rate_per_year) + 
+            BigInt(program.borrow_rate_per_year) + 
+            BigInt(program.collateral_rate_per_year);
+          break;
+        case "vault-reward":
+          if (!program.rate_per_year) return null;
+          totalRatePerYear = BigInt(program.rate_per_year);
+          break;
+        default:
+          return null;
+      }
+      
+      if (totalRatePerYear <= BigInt(0)) {
+        return null;
+      }
+      
+      const durationSeconds = end - start;
+      if (durationSeconds < 0) return null;
+
+      const totalAmount = (totalRatePerYear * BigInt(durationSeconds)) / BigInt(periodToSeconds.year);
+
+      if (totalAmount <= BigInt(0)) {
+        return null;
+      }
+      
+      return manualLinear(start, end, Number(totalAmount) / 1e18);
+    });
+
+  return sections.filter((s: AdapterResult | null): s is AdapterResult => s !== null);
 }
