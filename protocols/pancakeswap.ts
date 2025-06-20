@@ -1,9 +1,10 @@
 import { CliffAdapterResult, LinearAdapterResult, Protocol } from "../types/adapters";
 import { queryDune } from "../utils/dune";
+import { periodToSeconds } from "../utils/time";
 
 
-const emissions = async (): Promise<CliffAdapterResult[]> => {
-  const result: CliffAdapterResult[] = [];
+const emissions = async (): Promise<LinearAdapterResult[]> => {
+  const result: LinearAdapterResult[] = [];
   //   const issuanceData = await queryDune("5057582")
   //   if(type == "burn"){
   //     for (let i = 0; i < issuanceData.length - 1; i++) {
@@ -35,14 +36,22 @@ const emissions = async (): Promise<CliffAdapterResult[]> => {
     return acc;
   }, {});
 
-  Object.entries(summed).forEach(([timestamp, mint]: [string, any]) => {
+  const sortedEntries = Object.entries(summed).sort(([a], [b]) => parseInt(a) - parseInt(b));
+
+  sortedEntries.forEach(([timestamp, mint]: [string, any], index: number) => {
+    const currentTimestamp = parseInt(timestamp);
+    const nextTimestamp = index < sortedEntries.length - 1 
+      ? parseInt(sortedEntries[index + 1][0])
+      : currentTimestamp + periodToSeconds.week;
+
     result.push({
-      type: "cliff",
-      start: parseInt(timestamp),
+      type: "linear",
+      start: currentTimestamp,
+      end: nextTimestamp,
       amount: mint,
-      isUnlock: false,
     });
   });
+  
   return result;
 }
 
