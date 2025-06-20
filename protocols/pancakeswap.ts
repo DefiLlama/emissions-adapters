@@ -10,7 +10,8 @@ const emissions = async (type: string): Promise<CliffAdapterResult[]> => {
     result.push({
       type: "cliff",
       start: issuanceData[i].day,
-      amount: -issuanceData[i].total_burned
+      amount: -issuanceData[i].total_burned,
+      isUnlock: false
     })
   }
     return result;
@@ -27,24 +28,8 @@ const emissions = async (type: string): Promise<CliffAdapterResult[]> => {
 }
 }
 
-const incentives = async (): Promise<CliffAdapterResult[]> => {
-  const result: CliffAdapterResult[] = [];
-  const issuanceData = await queryDune("5199656", true)
-
-  for (let i = 0; i < issuanceData.length; i++) {
-    result.push({
-      type: "cliff",
-      start: issuanceData[i].timestamp,
-      amount: issuanceData[i].amount,
-      isUnlock: false,
-    });
-  }
-  return result;
-}
-
 const pancakeswap: Protocol = {
     "Emissions": [emissions("mint"), emissions("burn")],
-    "Incentives": incentives,
     
     meta: {
         sources: [
@@ -56,12 +41,11 @@ const pancakeswap: Protocol = {
         protocolIds: ["parent#pancakeswap"],
         notes: [
             "This chart shows the change in circulating supply over time, calculated from net emissions (minted minus burned tokens) starting from an initial supply.",
-            "For Incentives we assume that CAKE that are claimed from Cake Pool are incentives.",
             "CAKE have maximum supply of 450 million tokens.",
         ],
     },
     categories: {
-        farming: ["Incentives"],
+        farming: ["Emissions"],
         noncirculating: ["Special Emissions"]
     },
 };
