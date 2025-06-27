@@ -30,28 +30,22 @@ const emissions = async (): Promise<LinearAdapterResult[]> => {
 
   //get https://burn-stats.pancakeswap.com/data.json
   const issuanceData = await fetch("https://burn-stats.pancakeswap.com/data.json").then(res => res.json());
-  const summed = issuanceData["mintTimeSeries"].reduce((acc: any, item: any) => {
-    item.timestamp = Math.floor(item.timestamp / 1000);
-    acc[item.timestamp] = (acc[item.timestamp] || 0) + item.mint;
-    return acc;
-  }, {});
+  const deflationTimeSeries = issuanceData.deflationTimeSeries;
 
-  const sortedEntries = Object.entries(summed).sort(([a], [b]) => parseInt(a) - parseInt(b));
-
-  sortedEntries.forEach(([timestamp, mint]: [string, any], index: number) => {
-    const currentTimestamp = parseInt(timestamp);
-    const nextTimestamp = index < sortedEntries.length - 1 
-      ? parseInt(sortedEntries[index + 1][0])
+  deflationTimeSeries.forEach((entry: any, index: number) => {
+    const currentTimestamp = Math.floor(entry.timestamp / 1000); // Convert from milliseconds to seconds
+    const nextTimestamp = index < deflationTimeSeries.length - 1
+      ? Math.floor(deflationTimeSeries[index + 1].timestamp / 1000)
       : currentTimestamp + periodToSeconds.week;
 
     result.push({
       type: "linear",
       start: currentTimestamp,
       end: nextTimestamp,
-      amount: mint,
+      amount: entry.deflation,
     });
   });
-  
+
   return result;
 }
 
@@ -68,7 +62,7 @@ const pancakeswap: Protocol = {
     token: `bsc:0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82`,
     protocolIds: ["parent#pancakeswap"],
     notes: [
-      "This chart shows only emissions of CAKE token.",
+      "This chart shows only emissions of CAKE token. (Including burns)",
       "CAKE have maximum supply of 450 million tokens.",
     ],
   },
