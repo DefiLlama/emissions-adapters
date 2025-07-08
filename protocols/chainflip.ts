@@ -3,32 +3,25 @@ import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 1732233600;
-const contributor = 1700697600;
+const start = 1732233600; // Nov'24
+const tge = 1700697600; // Nov'23
 const token = "0x826180541412d574cf1336d22c0c0a287822678a";
 const chain = "ethereum";
-
-const typeA = (amount: number) =>
-  manualCliff(start + periodToSeconds.year, amount);
-const typeB = (amount: number) => [
-  manualCliff(start, amount * 0.2),
-  manualLinear(start, start + periodToSeconds.year, amount * 0.8),
-];
 
 const chainflip: Protocol = {
   "Node Operators Programs": manualCliff(start, 4_750_000),
   "Token Sale": manualCliff(start, 2_066_314),
   "Liquid Treasury": manualCliff(start, 4_968_503),
-  "Strategic Investors": [typeA(18_886_906), ...typeB(3_162_974)],
-  "Oxen Foundation": [typeA(3_200_000), ...typeB(1_000_000)],
+  "Strategic Investors": manualCliff(start, 34_181_497),
+  "Oxen Foundation": manualCliff(start, 4_200_000),
   Contributors: (backfill: boolean) =>
     balance(
       ["0xCE317d9909F5dDD30dcd7331f832E906Adc81f5d"],
       token,
       chain,
       "chainflip",
-      contributor,
-      backfill,
+      tge,
+      backfill
     ),
   "Treasury Reserves": [],
   meta: {
@@ -44,8 +37,7 @@ const chainflip: Protocol = {
       {
         key: "Contributors",
         allocation: 13_000_000,
-        lastRecord: (backfill: boolean) =>
-          latest("chainflip", contributor, backfill),
+        lastRecord: (backfill: boolean) => latest("chainflip", tge, backfill),
       },
     ],
   },
