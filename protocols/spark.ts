@@ -8,7 +8,7 @@ const rewards = async (): Promise<CliffAdapterResult[]> => {
     const rewardPaidSql = `
     SELECT
   toStartOfDay(timestamp) AS date,
-  SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) AS amount
+  SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
 FROM evm_indexer.logs
 WHERE address IN (
     '0x173e314c7635b45322cd8cb14f44b312e079f3af',

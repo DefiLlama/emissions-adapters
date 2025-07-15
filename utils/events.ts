@@ -10,6 +10,27 @@ import { ratePerPeriod, isFuture } from "./time";
 
 const precision: number = 4;
 
+function mergeEvents(events: any[], section: string): any[] {
+  const merged: { [key: string]: any } = {};
+
+  events.forEach(event => {
+    const key = `${event.timestamp}-${event.category}-${event.unlockType}`;
+    
+    if (merged[key]) {
+      merged[key].noOfTokens[0] += event.noOfTokens[0];
+      if (event.unlockType === "cliff") {
+        merged[key].description = `A cliff of {tokens[0]} tokens ${
+          isFuture(event.timestamp) ? "will" : "was"
+        } unlock${isFuture(event.timestamp) ? "" : "ed"} from ${section} on {timestamp}`;
+      }
+    } else {
+      merged[key] = { ...event };
+    }
+  });
+
+  return Object.values(merged);
+}
+
 export function addResultToEvents(
   section: string,
   metadata: Metadata,
@@ -27,12 +48,13 @@ export function addResultToEvents(
     (t: any) => filterResultsByType(results, t),
   );
 
+  const tempEvents: any[] = [];
+
   cliffs.map((c: CliffAdapterResult) => {
-    if (!metadata.events) metadata.events = [];
     if (c.amount.toFixed(2) == "0.00") return;
     // Skip cliff events that are explicitly marked as not unlocks
     if (c.isUnlock === false) return;
-    metadata.events.push({
+    tempEvents.push({
       description: `A cliff of {tokens[0]} tokens ${
         isFuture(c.start) ? "will" : "was"
       } unlock${isFuture(c.start) ? "" : "ed"} from ${section} on {timestamp}`,
@@ -52,8 +74,7 @@ export function addResultToEvents(
       const nextRate = ratePerPeriod(l2, precision);
 
       if (Math.abs(Number(thisRate) - Number(nextRate)) / (thisRate || 1) >= 0.001) {
-        if (!metadata.events) metadata.events = [];
-          metadata.events.push({
+          tempEvents.push({
             description: `Linear unlock ${isFuture(l2.start) ? "will" : "was"} ${
               Number(thisRate) > Number(nextRate) ? "decrease" : "increase"
             }${
@@ -72,8 +93,7 @@ export function addResultToEvents(
     if (i === 0) {
         const initialRate = ratePerPeriod(l, precision);
         if (initialRate > 0) {
-          if (!metadata.events) metadata.events = [];
-          metadata.events.push({
+          tempEvents.push({
             description: `Linear unlock ${isFuture(l.start) ? "will" : "was"} ${
               0 > Number(initialRate) ? "decrease" : "increase"
             }${
@@ -91,8 +111,7 @@ export function addResultToEvents(
 
   steps.map((s: StepAdapterResult) => {
     for (let i = 0; i < s.steps; i++) {
-      if (!metadata.events) metadata.events = [];
-      metadata.events.push({
+      tempEvents.push({
         description: `On {timestamp} {tokens[0]} of ${section} tokens ${
           isFuture(s.start + i * s.stepDuration) ? "will be" : "were"
         } unlocked`,
@@ -103,6 +122,11 @@ export function addResultToEvents(
       });
     }
   });
+
+  const mergedEvents = mergeEvents(tempEvents, section);
+  
+  if (!metadata.events) metadata.events = [];
+  metadata.events.push(...mergedEvents);
 
   const cliffAllocations: any[] = [];
   const linearAllocations: any[] = [];
