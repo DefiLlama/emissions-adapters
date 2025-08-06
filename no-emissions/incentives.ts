@@ -45,4 +45,5 @@ export const protocolsIncentives:string[] = [
     "parent#euler", //euler
     "parent#ramses-exchange", //ramses
     "parent#spark", //spark
+    "parent#blackhole", //blackhole
 ]
