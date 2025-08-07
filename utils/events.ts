@@ -13,9 +13,9 @@ const precision: number = 4;
 function mergeEvents(events: any[], section: string): any[] {
   const merged: { [key: string]: any } = {};
 
-  events.forEach(event => {
+  events.forEach((event) => {
     const key = `${event.timestamp}-${event.category}-${event.unlockType}`;
-    
+
     if (merged[key]) {
       merged[key].noOfTokens[0] += event.noOfTokens[0];
       if (event.unlockType === "cliff") {
@@ -36,6 +36,7 @@ export function addResultToEvents(
   metadata: Metadata,
   results: AdapterResult[],
   categories: Categories,
+  categoryLookupSection?: string, // Optional: section name to use for category mapping
 ): { cliffAllocations: any[]; linearAllocations: any[] } {
   const sectionToCategory: { [section: string]: string } = {};
   for (const category in categories) {
@@ -60,8 +61,9 @@ export function addResultToEvents(
       } unlock${isFuture(c.start) ? "" : "ed"} from ${section} on {timestamp}`,
       timestamp: c.start,
       noOfTokens: [c.amount],
-      category: sectionToCategory[section] || 'Uncategorized',
-      unlockType: "cliff"
+      category:
+        sectionToCategory[categoryLookupSection || section] || "Uncategorized",
+      unlockType: "cliff",
     });
   });
 
@@ -73,39 +75,46 @@ export function addResultToEvents(
       const thisRate = ratePerPeriod(l, precision);
       const nextRate = ratePerPeriod(l2, precision);
 
-      if (Math.abs(Number(thisRate) - Number(nextRate)) / (thisRate || 1) >= 0.001) {
-          tempEvents.push({
-            description: `Linear unlock ${isFuture(l2.start) ? "will" : "was"} ${
-              Number(thisRate) > Number(nextRate) ? "decrease" : "increase"
-            }${
-              isFuture(l2.start) ? "" : "d"
-            } from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
-            timestamp: l2.start,
-            noOfTokens: [thisRate, nextRate],
-            category: sectionToCategory[section] || 'Uncategorized',
-            unlockType: "linear",
-            rateDurationDays: (l2.end - l2.start) / 86400
-          });
+      if (
+        Math.abs(Number(thisRate) - Number(nextRate)) / (thisRate || 1) >=
+        0.001
+      ) {
+        tempEvents.push({
+          description: `Linear unlock ${isFuture(l2.start) ? "will" : "was"} ${
+            Number(thisRate) > Number(nextRate) ? "decrease" : "increase"
+          }${
+            isFuture(l2.start) ? "" : "d"
+          } from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
+          timestamp: l2.start,
+          noOfTokens: [thisRate, nextRate],
+          category:
+            sectionToCategory[categoryLookupSection || section] ||
+            "Uncategorized",
+          unlockType: "linear",
+          rateDurationDays: (l2.end - l2.start) / 86400,
+        });
       }
     }
 
     // handle first linear period to show the initial rate increase from 0
     if (i === 0) {
-        const initialRate = ratePerPeriod(l, precision);
-        if (initialRate > 0) {
-          tempEvents.push({
-            description: `Linear unlock ${isFuture(l.start) ? "will" : "was"} ${
-              0 > Number(initialRate) ? "decrease" : "increase"
-            }${
-              isFuture(l.start) ? "" : "d"
-            } from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
-            timestamp: l.start,
-            noOfTokens: [0, initialRate],
-            category: sectionToCategory[section] || 'Uncategorized',
-            unlockType: "linear",
-            rateDurationDays: (l.end - l.start) / 86400
-          });
-        }
+      const initialRate = ratePerPeriod(l, precision);
+      if (initialRate > 0) {
+        tempEvents.push({
+          description: `Linear unlock ${isFuture(l.start) ? "will" : "was"} ${
+            0 > Number(initialRate) ? "decrease" : "increase"
+          }${
+            isFuture(l.start) ? "" : "d"
+          } from {tokens[0]} to {tokens[1]} tokens per week from ${section} on {timestamp}`,
+          timestamp: l.start,
+          noOfTokens: [0, initialRate],
+          category:
+            sectionToCategory[categoryLookupSection || section] ||
+            "Uncategorized",
+          unlockType: "linear",
+          rateDurationDays: (l.end - l.start) / 86400,
+        });
+      }
     }
   });
 
@@ -117,14 +126,16 @@ export function addResultToEvents(
         } unlocked`,
         timestamp: s.start + i * s.stepDuration,
         noOfTokens: [s.amount],
-        category: sectionToCategory[section] || 'Uncategorized',
-        unlockType: "cliff"
+        category:
+          sectionToCategory[categoryLookupSection || section] ||
+          "Uncategorized",
+        unlockType: "cliff",
       });
     }
   });
 
   const mergedEvents = mergeEvents(tempEvents, section);
-  
+
   if (!metadata.events) metadata.events = [];
   metadata.events.push(...mergedEvents);
 
@@ -137,10 +148,11 @@ export function addResultToEvents(
     if (c.isUnlock === false) return;
     cliffAllocations.push({
       recipient: section,
-      category: sectionToCategory[section] || 'Uncategorized',
+      category:
+        sectionToCategory[categoryLookupSection || section] || "Uncategorized",
       unlockType: "cliff",
       amount: c.amount,
-      timestamp: c.start
+      timestamp: c.start,
     });
   });
 
@@ -149,10 +161,12 @@ export function addResultToEvents(
       const ts = s.start + i * s.stepDuration;
       cliffAllocations.push({
         recipient: section,
-        category: sectionToCategory[section] || 'Uncategorized',
+        category:
+          sectionToCategory[categoryLookupSection || section] ||
+          "Uncategorized",
         unlockType: "cliff",
         amount: s.amount,
-        timestamp: ts
+        timestamp: ts,
       });
     }
   });
@@ -164,11 +178,13 @@ export function addResultToEvents(
       if (initialRate > 0) {
         linearAllocations.push({
           recipient: section,
-          category: sectionToCategory[section] || 'Uncategorized',
+          category:
+            sectionToCategory[categoryLookupSection || section] ||
+            "Uncategorized",
           unlockType: "linear_start",
           previousRatePerWeek: 0,
           newRatePerWeek: initialRate,
-          timestamp: l.start
+          timestamp: l.start,
         });
       }
     }
@@ -177,14 +193,19 @@ export function addResultToEvents(
       const l2 = linears[i + 1];
       const thisRate = ratePerPeriod(l, precision);
       const nextRate = ratePerPeriod(l2, precision);
-      if (Math.abs(Number(thisRate) - Number(nextRate)) / (thisRate || 1) >= 0.001) {
+      if (
+        Math.abs(Number(thisRate) - Number(nextRate)) / (thisRate || 1) >=
+        0.001
+      ) {
         linearAllocations.push({
           recipient: section,
-          category: sectionToCategory[section] || 'Uncategorized',
+          category:
+            sectionToCategory[categoryLookupSection || section] ||
+            "Uncategorized",
           unlockType: "linear_rate_change",
           previousRatePerWeek: thisRate,
           newRatePerWeek: nextRate,
-          timestamp: l2.start
+          timestamp: l2.start,
         });
       }
     }

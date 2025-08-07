@@ -51,7 +51,7 @@ const spark: Protocol = {
             "https://docs.spark.fi/governance/spk-token",
         ],
         notes: ["Sky Farming rewards are only counted when users have claimed them."],
-        token: "coingecko:spark",
+        token: "coingecko:spark-2",
         protocolIds: ["parent#spark"],
     },
     categories: {

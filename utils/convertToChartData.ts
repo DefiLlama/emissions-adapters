@@ -59,7 +59,7 @@ export async function createChartData(
     endTime: number;
   },
   replaces: string[],
-  backfill: boolean = false
+  backfill: boolean = false,
 ): Promise<{ realTimeData: ChartSection[]; documentedData: ChartSection[] }> {
   const realTimeData = await iterateThroughSections(data.rawSections);
   let documentedData = await iterateThroughSections(data.documented);
@@ -108,7 +108,7 @@ async function appendMissingDataSections(
     startTime: number;
     endTime: number;
   },
-  backfill: boolean
+  backfill: boolean,
 ) {
   const incompleteSections = data.metadata.incompleteSections;
   if (incompleteSections == null || incompleteSections.length == 0) return;
@@ -123,10 +123,10 @@ async function appendMissingDataSections(
     let body = res.body ? JSON.parse(res.body) : [];
     res =
       body && body.documentedData?.data.length
-        ? body.documentedData?.data ?? body.data
+        ? (body.documentedData?.data ?? body.data)
         : [];
   }
-  
+
   if (nullsInApiData(res)) {
     await sendMessage(
       `${protocol} has nulls in API res`,
@@ -174,9 +174,9 @@ function appendOldApiData(
       isContinuous: false,
       timestamps,
       unlocked,
-      rawEmission: unlocked.map(u => Math.max(0, u)),
-      burned: unlocked.map(u => Math.max(0, -u)),
-      apiData
+      rawEmission: unlocked.map((u) => Math.max(0, u)),
+      burned: unlocked.map((u) => Math.max(0, -u)),
+      apiData,
     },
     section: incompleteSection.key,
   });
@@ -203,41 +203,50 @@ function appendForecast(
 
     if (!relatedSections.length && unlocked.length === 0) return;
 
-    const { recentlyEmitted, totalEmitted, gradientLength } = findPreviouslyEmitted(relatedSections);
+    const { recentlyEmitted, totalEmitted, gradientLength } =
+      findPreviouslyEmitted(relatedSections);
 
-      if (Number.isNaN(totalEmitted) || totalEmitted === null || totalEmitted === undefined) {
-        err = true;
-        console.log(`Invalid total emitted value (NaN, null, or undefined) in ${incompleteSection.key}`);
+    if (
+      Number.isNaN(totalEmitted) ||
+      totalEmitted === null ||
+      totalEmitted === undefined
+    ) {
+      err = true;
+      console.log(
+        `Invalid total emitted value (NaN, null, or undefined) in ${incompleteSection.key}`,
+      );
     }
 
     const gradientDenominator = gradientLength * RESOLUTION_SECONDS;
-    const gradient: number = (totalEmitted > 0 && recentlyEmitted > 0 && gradientDenominator > 0) ?
-      recentlyEmitted / gradientDenominator : 0;
+    const gradient: number =
+      totalEmitted > 0 && recentlyEmitted > 0 && gradientDenominator > 0
+        ? recentlyEmitted / gradientDenominator
+        : 0;
     const change: number = incompleteSection.allocation - totalEmitted;
     if (change < 0) return;
     if (gradient > 0) {
       const continuousEnd: number = Math.round(
-          Math.min(
-            timestamp + change / gradient,
-            timestamp + periodToSeconds.year * 5,
-          ),
-        );
-        chartData.push({
-          data: rawToChartData(
-            "",
-            {
-              timestamp,
-              change,   
-              continuousEnd,
-            },
-            data.startTime,
+        Math.min(
+          timestamp + change / gradient,
+          timestamp + periodToSeconds.year * 5,
+        ),
+      );
+      chartData.push({
+        data: rawToChartData(
+          "",
+          {
+            timestamp,
+            change,
             continuousEnd,
-          ),
-          section: incompleteSection.key,
-        });
-        nullFinder(chartData, "postPush");
-      }
+          },
+          data.startTime,
+          continuousEnd,
+        ),
+        section: incompleteSection.key,
+      });
+      nullFinder(chartData, "postPush");
     }
+  }
 
   if (!("notes" in data.metadata)) data.metadata.notes = [];
   data.metadata.notes?.push(
@@ -253,9 +262,7 @@ function appendForecast(
       `error in ${incompleteSection.key}, probably RPC related!!!`,
     );
 }
-function findPreviouslyEmitted(
-  relatedSections: ChartSection[],
-): {
+function findPreviouslyEmitted(relatedSections: ChartSection[]): {
   recentlyEmitted: number;
   totalEmitted: number;
   gradientLength: number;
@@ -278,9 +285,11 @@ function findPreviouslyEmitted(
     if (forecastGradientPeriodLength >= length) {
       calculatedRecentlyEmitted += lastVal;
     } else {
-      const previousValIndex = Math.floor(length - forecastGradientPeriodLength);
+      const previousValIndex = Math.floor(
+        length - forecastGradientPeriodLength,
+      );
       const previousVal = unlocked[previousValIndex < 0 ? 0 : previousValIndex];
-      calculatedRecentlyEmitted += (lastVal - previousVal);
+      calculatedRecentlyEmitted += lastVal - previousVal;
     }
   }
 
@@ -318,9 +327,12 @@ function consolidateDuplicateKeys(data: ChartSection[]) {
       d.data.unlocked.forEach((unlockVal: number, i: number) => {
         sortedData[j].data.unlocked[i] += unlockVal;
         // Initialize arrays if they don't exist
-        sortedData[j].data.rawEmission = sortedData[j].data.rawEmission || Array(d.data.unlocked.length).fill(0);
-        sortedData[j].data.burned = sortedData[j].data.burned || Array(d.data.unlocked.length).fill(0);
-        
+        sortedData[j].data.rawEmission =
+          sortedData[j].data.rawEmission ||
+          Array(d.data.unlocked.length).fill(0);
+        sortedData[j].data.burned =
+          sortedData[j].data.burned || Array(d.data.unlocked.length).fill(0);
+
         // For rawEmission, we only add positive values
         if (unlockVal > 0) {
           sortedData[j].data.rawEmission[i] += unlockVal;
@@ -334,7 +346,7 @@ function consolidateDuplicateKeys(data: ChartSection[]) {
       // Initialize new arrays for a new section
       const rawEmission = Array(d.data.unlocked.length).fill(0);
       const burned = Array(d.data.unlocked.length).fill(0);
-      
+
       // Process each value to separate emissions and burns
       d.data.unlocked.forEach((val: number, i: number) => {
         if (val > 0) {
@@ -343,14 +355,14 @@ function consolidateDuplicateKeys(data: ChartSection[]) {
           burned[i] = Math.abs(val);
         }
       });
-      
+
       sortedData.push({
         section: d.section,
         data: {
           ...d.data,
           rawEmission,
           burned,
-        }
+        },
       });
     }
   });
@@ -416,10 +428,10 @@ function continuous(raw: RawResult, config: ChartConfig): ChartData {
   return {
     timestamps,
     unlocked,
-    rawEmission: unlocked.map(u => Math.max(0, u)),
-    burned: unlocked.map(u => Math.max(0, -u)),
+    rawEmission: unlocked.map((u) => Math.max(0, u)),
+    burned: unlocked.map((u) => Math.max(0, -u)),
     apiData,
-    isContinuous: true
+    isContinuous: true,
   };
 }
 function discreet(raw: RawResult, config: ChartConfig): ChartData {
@@ -448,10 +460,10 @@ function discreet(raw: RawResult, config: ChartConfig): ChartData {
   return {
     timestamps,
     unlocked,
-    rawEmission: unlocked.map(u => Math.max(0, u)),
-    burned: unlocked.map(u => Math.max(0, -u)),
+    rawEmission: unlocked.map((u) => Math.max(0, u)),
+    burned: unlocked.map((u) => Math.max(0, -u)),
     apiData,
-    isContinuous: false
+    isContinuous: false,
   };
 }
 
@@ -463,7 +475,7 @@ export function mapToServerData(testData: ChartSection[]) {
       timestamp,
       unlocked: s.data.unlocked[i],
       rawEmission: s.data.rawEmission[i],
-      burned: s.data.burned[i]
+      burned: s.data.burned[i],
     }));
 
     return { label, data };

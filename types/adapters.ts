@@ -61,17 +61,17 @@ export type LinearAdapterResult = {
 };
 export type ChartData = {
   timestamps: number[];
-  unlocked: number[];      // Net value after burns
-  rawEmission: number[];   // Original emission without burns
-  burned: number[];        // Burn amounts
+  unlocked: number[];
+  rawEmission: number[];
+  burned: number[];
   isContinuous: boolean;
   apiData?: ApiChartData[];
 };
 export type ApiChartData = {
   timestamp: number;
-  unlocked: number;      // Net value after burns
-  rawEmission: number;   // Original emission without burns
-  burned: number;        // Burn amount
+  unlocked: number;
+  rawEmission: number;
+  burned: number;
   label?: string;
 };
 export type TransposedApiChartData = {
@@ -84,12 +84,20 @@ export type ChartYAxisData = {
   data: number[];
   end: number;
 };
-export type Protocol = {
+export type ProtocolV1 = {
   [section: string]: any;
   documented?: Documented;
   meta: Metadata;
   categories: { [key in SectionType]?: string[] | undefined };
 };
+
+export interface ProtocolV2 extends Record<string, any> {
+  meta: MetadataV2;
+  categories: Categories;
+  documented?: Documented;
+}
+
+export type Protocol = ProtocolV1 | ProtocolV2;
 export type Documented = {
   replaces: string[];
   [section: string]: any;
@@ -175,10 +183,10 @@ export type AllocationDetail = {
   recipient: string;
   category: string;
   unlockType: "cliff" | "linear_start" | "linear_rate_change";
-  amount?: number;  
+  amount?: number;
   previousRatePerWeek?: number;
   newRatePerWeek?: number;
-}
+};
 
 export type UnlockEvent = {
   timestamp: number;
@@ -188,8 +196,8 @@ export type UnlockEvent = {
     totalTokensCliff?: number;
     netChangeInWeeklyRate?: number;
     totalNewWeeklyRate?: number;
-  }
-}
+  };
+};
 
 export type TimeSeriesChainData = {
   [block: string]: {
@@ -199,4 +207,109 @@ export type TimeSeriesChainData = {
 };
 export type Allocations = { [category: string]: number };
 
-export type EmissionBreakdown = Record<string, { emission24h: number; emission7d: number; emission30d: number }>;
+export type EmissionBreakdown = Record<
+  string,
+  { emission24h: number; emission7d: number; emission30d: number }
+>;
+
+export interface MetadataV2 extends Metadata {
+  version: 2;
+}
+
+export interface SectionV2 {
+  displayName?: string;
+  methodology?: string;
+  isIncentive?: boolean;
+  isTBD?: boolean;
+  protocols?: string[];
+  components: ComponentV2[];
+}
+
+export interface ComponentV2 {
+  id: string;
+  name: string;
+  methodology?: string;
+  isIncentive?: boolean;
+  isTBD?: boolean;
+  protocols?: string[];
+  fetch: (backfill?: boolean) => Promise<AdapterResult[]>;
+  metadata?: ComponentMetadata;
+}
+
+export interface ComponentMetadata {
+  contract?: string;
+  eventSignature?: string;
+  [key: string]: any;
+}
+
+export type SectionV1Function = (
+  backfill?: boolean,
+) => Promise<AdapterResult[]> | AdapterResult[];
+export type SectionV1Array = (SectionV1Function | AdapterResult)[];
+
+export interface ComponentResult {
+  component: ComponentV2;
+  results: AdapterResult[];
+  flags: {
+    isIncentive: boolean;
+    isTBD: boolean;
+    protocols?: string[];
+  };
+}
+
+export interface ProcessedSectionV2 {
+  sectionName: string;
+  section: SectionV2;
+  components: ComponentResult[];
+  aggregatedResults: AdapterResult[];
+  hasIncentives: boolean;
+  hasTBD: boolean;
+}
+
+export interface ProcessedProtocolV2 {
+  protocol: ProtocolV2;
+  sections: ProcessedSectionV2[];
+  supplyMetrics: AdjustedSupplyMetrics;
+}
+
+export interface AdjustedSupplyMetrics {
+  maxSupply: number;
+  adjustedSupply: number;
+  tbdAmount: number;
+  incentiveAmount: number;
+  nonIncentiveAmount: number;
+}
+
+export interface ChartDataV2 extends ChartData {
+  components?: ComponentChartData[];
+  supplyMetrics?: AdjustedSupplyMetrics;
+}
+
+export interface ComponentChartData {
+  section: string;
+  component: string;
+  name: string;
+  data: ChartData;
+  flags: {
+    isIncentive: boolean;
+    isTBD: boolean;
+    protocols?: string[];
+  };
+  metadata?: {
+    methodology?: string;
+    [key: string]: any;
+  };
+}
+
+export function isProtocolV2(protocol: Protocol): protocol is ProtocolV2 {
+  return (protocol as any).meta?.version === 2;
+}
+
+export function isSectionV2(section: any): section is SectionV2 {
+  return (
+    section &&
+    typeof section === "object" &&
+    "components" in section &&
+    Array.isArray(section.components)
+  );
+}

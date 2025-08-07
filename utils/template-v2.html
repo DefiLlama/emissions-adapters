@@ -1,0 +1,622 @@
+<!doctype html>
+<html>
+  <head>
+    <title>V2 Emissions Chart Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .header h1 {
+        margin: 0 0 10px 0;
+        color: #2c3e50;
+        font-size: 2.2em;
+      }
+
+      .protocol-name {
+        color: #7f8c8d;
+        font-size: 1.1em;
+        font-weight: 500;
+      }
+
+      .controls {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .view-toggle {
+        display: flex;
+        background: #ecf0f1;
+        border-radius: 8px;
+        padding: 2px;
+      }
+
+      .toggle-btn {
+        padding: 10px 20px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        color: #7f8c8d;
+      }
+
+      .toggle-btn.active {
+        background: #3498db;
+        color: white;
+        box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+      }
+
+      .toggle-btn:hover:not(.active) {
+        background: #d5dbdb;
+        color: #2c3e50;
+      }
+
+      .filters {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .filter-group label {
+        font-weight: 500;
+        color: #5d6d7e;
+      }
+
+      select {
+        padding: 8px 12px;
+        border: 1px solid #bdc3c7;
+        border-radius: 6px;
+        background: white;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .chart-container {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      .supply-metrics {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .metric-card {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        border-left: 4px solid #3498db;
+      }
+
+      .metric-card.tbd {
+        border-left-color: #e74c3c;
+      }
+
+      .metric-card.incentive {
+        border-left-color: #27ae60;
+      }
+
+      .metric-card.adjusted {
+        border-left-color: #f39c12;
+      }
+
+      .metric-value {
+        font-size: 1.5em;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 5px 0;
+      }
+
+      .metric-label {
+        color: #7f8c8d;
+        font-size: 0.9em;
+        font-weight: 500;
+      }
+
+      .info-panel {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        min-height: 120px;
+      }
+
+      .info-panel h3 {
+        margin: 0 0 10px 0;
+        color: #2c3e50;
+      }
+
+      .info-panel p {
+        margin: 8px 0;
+        line-height: 1.5;
+        color: #5d6d7e;
+      }
+
+      .metadata-item {
+        background: #f8f9fa;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin: 5px 0;
+        font-size: 0.9em;
+        border-left: 3px solid #3498db;
+      }
+
+      .flag-indicator {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.8em;
+        font-weight: 500;
+        margin: 2px 4px;
+      }
+
+      .flag-indicator.incentive {
+        background: #d5f4e6;
+        color: #27ae60;
+      }
+
+      .flag-indicator.tbd {
+        background: #fadbd8;
+        color: #e74c3c;
+      }
+
+      @media (max-width: 768px) {
+        .controls {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .view-toggle {
+          justify-content: center;
+        }
+
+        .supply-metrics {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Emissions Chart Viewer</h1>
+      <div class="protocol-name" id="protocolName">
+        Protocol Emissions Analysis
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="view-toggle">
+        <button id="sectionView" class="toggle-btn active">Section View</button>
+        <button id="componentView" class="toggle-btn">Component View</button>
+      </div>
+
+      <div class="filters">
+        <div class="filter-group">
+          <label for="sectionFilter">Filter:</label>
+          <select id="sectionFilter">
+            <option value="all">All Sections</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="flagFilter">Show:</label>
+          <select id="flagFilter">
+            <option value="all">All Components</option>
+            <option value="incentive">Incentives Only</option>
+            <option value="non-incentive">Non-Incentives Only</option>
+            <option value="tbd">TBD Only</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="emissionsChart"></canvas>
+    </div>
+
+    <div class="supply-metrics" id="supplyMetrics" style="display: none">
+      <div class="metric-card">
+        <div class="metric-value" id="maxSupply">-</div>
+        <div class="metric-label">Max Supply</div>
+      </div>
+      <div class="metric-card adjusted">
+        <div class="metric-value" id="adjustedSupply">-</div>
+        <div class="metric-label">Adjusted Supply</div>
+      </div>
+      <div class="metric-card tbd">
+        <div class="metric-value" id="tbdAmount">-</div>
+        <div class="metric-label">TBD Amount</div>
+      </div>
+      <div class="metric-card incentive">
+        <div class="metric-value" id="incentiveAmount">-</div>
+        <div class="metric-label">Incentive Amount</div>
+      </div>
+    </div>
+
+    <div class="info-panel">
+      <h3 id="infoTitle">Hover over chart elements for details</h3>
+      <p id="infoMethodology"></p>
+      <div id="infoMetadata"></div>
+      <div id="infoFlags"></div>
+    </div>
+
+    <script>
+      // Chart data will be injected here
+      const chartConfig = CHART_DATA_PLACEHOLDER;
+
+      let currentChart;
+      let currentView = "section";
+
+      // Initialize the application
+      function initializeApp() {
+        // Set protocol name
+        document.getElementById("protocolName").textContent =
+          chartConfig.protocolName;
+
+        // Show V2 controls if available
+        if (chartConfig.isV2) {
+          document.getElementById("componentView").style.display = "block";
+          document.getElementById("supplyMetrics").style.display = "grid";
+          populateSupplyMetrics();
+        } else {
+          document.getElementById("componentView").style.display = "none";
+          document.querySelector(".filters").style.display = "none";
+        }
+
+        // Populate section filter
+        populateSectionFilter();
+
+        // Initialize chart
+        renderChart();
+
+        // Setup event listeners
+        setupEventListeners();
+
+        // Initialize flag filter visibility (hidden for default section view)
+        const flagFilterGroup = document.querySelector(
+          ".filter-group:has(#flagFilter)",
+        );
+        if (flagFilterGroup) {
+          flagFilterGroup.style.display = "none";
+        }
+      }
+
+      function populateSupplyMetrics() {
+        if (!chartConfig.supplyMetrics) return;
+
+        const metrics = chartConfig.supplyMetrics;
+        document.getElementById("maxSupply").textContent = formatNumber(
+          metrics.maxSupply,
+        );
+        document.getElementById("adjustedSupply").textContent = formatNumber(
+          metrics.adjustedSupply,
+        );
+        document.getElementById("tbdAmount").textContent = formatNumber(
+          metrics.tbdAmount,
+        );
+        document.getElementById("incentiveAmount").textContent = formatNumber(
+          metrics.incentiveAmount,
+        );
+      }
+
+      function populateSectionFilter() {
+        const sectionFilter = document.getElementById("sectionFilter");
+        const sections = [...new Set(chartConfig.sections.map((s) => s.label))];
+
+        sections.forEach((section) => {
+          const option = document.createElement("option");
+          option.value = section;
+          option.textContent = section;
+          sectionFilter.appendChild(option);
+        });
+      }
+
+      function setupEventListeners() {
+        // View toggle buttons
+        document
+          .getElementById("sectionView")
+          .addEventListener("click", () => switchView("section"));
+        document
+          .getElementById("componentView")
+          .addEventListener("click", () => switchView("component"));
+
+        // Filters
+        document
+          .getElementById("sectionFilter")
+          .addEventListener("change", applyFilters);
+        document
+          .getElementById("flagFilter")
+          .addEventListener("change", applyFilters);
+      }
+
+      function switchView(view) {
+        currentView = view;
+
+        // Update button states
+        document
+          .querySelectorAll(".toggle-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        document.getElementById(view + "View").classList.add("active");
+
+        // Show/hide flag filter based on view
+        const flagFilterGroup = document.querySelector(
+          ".filter-group:has(#flagFilter)",
+        );
+        if (flagFilterGroup) {
+          flagFilterGroup.style.display =
+            view === "component" ? "flex" : "none";
+        }
+
+        // Reset flag filter when switching to section view
+        if (view === "section") {
+          document.getElementById("flagFilter").value = "all";
+        }
+
+        // Re-render chart
+        renderChart();
+      }
+
+      function applyFilters() {
+        renderChart();
+      }
+
+      function getFilteredDatasets() {
+        const sectionFilter = document.getElementById("sectionFilter").value;
+        const flagFilter = document.getElementById("flagFilter").value;
+
+        let datasets;
+
+        if (currentView === "section") {
+          datasets = chartConfig.sections.map((section) => ({
+            ...section,
+          }));
+        } else {
+          datasets = chartConfig.components.map((component) => ({
+            ...component,
+            hidden: false,
+          }));
+
+          // Apply flag filter (only in component view)
+          if (flagFilter !== "all") {
+            datasets = datasets.filter((dataset) => {
+              const flags = dataset.flags;
+              if (!flags) return false; // Skip if no flags
+
+              switch (flagFilter) {
+                case "incentive":
+                  return flags.isIncentive === true;
+                case "non-incentive":
+                  return flags.isIncentive !== true;
+                case "tbd":
+                  return flags.isTBD === true;
+                default:
+                  return true;
+              }
+            });
+          }
+        }
+
+        // Apply section filter
+        if (sectionFilter !== "all") {
+          datasets = datasets.filter((dataset) => {
+            return currentView === "section"
+              ? dataset.label === sectionFilter
+              : dataset.section === sectionFilter;
+          });
+        }
+
+        return datasets;
+      }
+
+      function renderChart() {
+        const ctx = document.getElementById("emissionsChart").getContext("2d");
+
+        if (currentChart) {
+          currentChart.destroy();
+        }
+
+        const datasets = getFilteredDatasets();
+
+        currentChart = new Chart(ctx, {
+          type: "line",
+          data: { datasets },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              intersect: false,
+              mode: "index",
+            },
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  title: (tooltipItems) => {
+                    const date = new Date(tooltipItems[0].parsed.x);
+                    return date.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    });
+                  },
+                  afterBody: (tooltipItems) => {
+                    const item = tooltipItems[0];
+                    const dataset = datasets[item.datasetIndex];
+
+                    if (
+                      currentView === "component" &&
+                      dataset.metadata?.methodology
+                    ) {
+                      return `\nMethodology: ${dataset.metadata.methodology}`;
+                    }
+                    return "";
+                  },
+                  footer: (tooltipItems) => {
+                    let total = 0;
+                    tooltipItems.forEach((item) => {
+                      total += item.parsed.y;
+                    });
+                    return `Total: ${formatNumber(total)}`;
+                  },
+                },
+              },
+              legend: {
+                position: "top",
+                labels: {
+                  boxWidth: 12,
+                  padding: 15,
+                  usePointStyle: true,
+                },
+              },
+              zoom: {
+                zoom: {
+                  wheel: { enabled: true },
+                  pinch: { enabled: true },
+                  mode: "xy",
+                },
+                pan: {
+                  enabled: true,
+                  mode: "xy",
+                },
+              },
+            },
+            elements: {
+              point: { radius: 0 },
+            },
+            scales: {
+              x: {
+                type: "time",
+                time: {
+                  displayFormats: { quarter: "MMM YYYY" },
+                },
+                title: {
+                  display: true,
+                  text: "Date",
+                },
+              },
+              y: {
+                stacked: currentView === "section",
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "Tokens",
+                },
+                ticks: {
+                  callback: function (value) {
+                    return formatNumber(value);
+                  },
+                },
+              },
+            },
+            onHover: (event, activeElements) => {
+              if (activeElements.length > 0) {
+                const element = activeElements[0];
+                const dataset = datasets[element.datasetIndex];
+                updateInfoPanel(dataset);
+              }
+            },
+          },
+        });
+
+        // Set chart height
+        ctx.canvas.parentElement.style.height = "500px";
+      }
+
+      function updateInfoPanel(dataset) {
+        const infoTitle = document.getElementById("infoTitle");
+        const infoMethodology = document.getElementById("infoMethodology");
+        const infoMetadata = document.getElementById("infoMetadata");
+        const infoFlags = document.getElementById("infoFlags");
+
+        infoTitle.textContent = dataset.label || "Chart Element";
+
+        if (dataset.metadata?.methodology) {
+          infoMethodology.textContent = dataset.metadata.methodology;
+          infoMethodology.style.display = "block";
+        } else {
+          infoMethodology.style.display = "none";
+        }
+
+        // Display metadata
+        infoMetadata.innerHTML = "";
+        if (dataset.metadata) {
+          Object.entries(dataset.metadata).forEach(([key, value]) => {
+            if (key !== "methodology" && value) {
+              const metadataDiv = document.createElement("div");
+              metadataDiv.className = "metadata-item";
+              metadataDiv.innerHTML = `<strong>${key}:</strong> ${value}`;
+              infoMetadata.appendChild(metadataDiv);
+            }
+          });
+        }
+
+        // Display flags
+        infoFlags.innerHTML = "";
+        if (dataset.flags) {
+          if (dataset.flags.isIncentive) {
+            const flag = document.createElement("span");
+            flag.className = "flag-indicator incentive";
+            flag.textContent = "Incentive";
+            infoFlags.appendChild(flag);
+          }
+          if (dataset.flags.isTBD) {
+            const flag = document.createElement("span");
+            flag.className = "flag-indicator tbd";
+            flag.textContent = "TBD";
+            infoFlags.appendChild(flag);
+          }
+        }
+      }
+
+      function formatNumber(num) {
+        if (num >= 1e9) return (num / 1e9).toFixed(2) + "B";
+        if (num >= 1e6) return (num / 1e6).toFixed(2) + "M";
+        if (num >= 1e3) return (num / 1e3).toFixed(2) + "K";
+        return num.toLocaleString();
+      }
+
+      // Initialize the app when DOM is loaded
+      document.addEventListener("DOMContentLoaded", initializeApp);
+    </script>
+  </body>
+</html>

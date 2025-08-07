@@ -28,9 +28,11 @@ export async function getBlock2(
   timestamp: number,
 ): Promise<number> {
   if (["polygon_zkevm", "vision", "era"].includes(chain))
-    return lookupBlock(timestamp, { chain }).then(blockData => blockData.block);
-  const res = await (await fetch(
-    `https://coins.llama.fi/block/${chain}/${timestamp}`,
-  )).json();
+    return lookupBlock(timestamp, { chain }).then(
+      (blockData) => blockData.block,
+    );
+  const res = await (
+    await fetch(`https://coins.llama.fi/block/${chain}/${timestamp}`)
+  ).json();
   return res.height;
 }

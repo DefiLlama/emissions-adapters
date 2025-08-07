@@ -69,7 +69,10 @@ export function createCategoryData(
       rawCurrentAllocations[c] += current;
       rawFinalAllocations[c] += final;
     });
-      progressAllocations[c] = calculateProgress(rawCurrentAllocations[c], rawFinalAllocations[c]);
+    progressAllocations[c] = calculateProgress(
+      rawCurrentAllocations[c],
+      rawFinalAllocations[c],
+    );
   });
 
   return {
@@ -79,9 +82,11 @@ export function createCategoryData(
   };
 }
 
-export function createSectionData(
-  data: ChartSection[]
-): { current: Allocations; final: Allocations, progress: Allocations } {
+export function createSectionData(data: ChartSection[]): {
+  current: Allocations;
+  final: Allocations;
+  progress: Allocations;
+} {
   if (!data.length) return { current: {}, final: {}, progress: {} };
   const rawCurrentAllocations: Allocations = {};
   const rawFinalAllocations: Allocations = {};
@@ -92,7 +97,7 @@ export function createSectionData(
     const s = section;
     if (!s) return;
     const currentEntryIndex = s.data.timestamps.findIndex(
-      (t: number) => timestampNow - RESOLUTION_SECONDS < t && t < timestampNow
+      (t: number) => timestampNow - RESOLUTION_SECONDS < t && t < timestampNow,
     );
     const finalEntryIndex = s.data.unlocked.length - 1;
     const current =

@@ -1,10 +1,14 @@
-import { ClickHouseClient, createClient, Row } from '@clickhouse/client';
-import { getEnv } from './env';
+import { ClickHouseClient, createClient, Row } from "@clickhouse/client";
+import { getEnv } from "./env";
 
 let client: ClickHouseClient | null = null;
 let connectionPromise: Promise<ClickHouseClient> | null = null;
 
-const requiredVars = ['CLICKHOUSE_HOST', 'CLICKHOUSE_USERNAME', 'CLICKHOUSE_PASSWORD'];
+const requiredVars = [
+  "CLICKHOUSE_HOST",
+  "CLICKHOUSE_USERNAME",
+  "CLICKHOUSE_PASSWORD",
+];
 
 export async function connectClickhouse() {
   if (client) {
@@ -16,19 +20,21 @@ export async function connectClickhouse() {
   }
 
   connectionPromise = (async () => {
-    const missingVars = requiredVars.filter(varName => !getEnv(varName));
+    const missingVars = requiredVars.filter((varName) => !getEnv(varName));
     if (missingVars.length) {
-      throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
+      throw new Error(
+        `Missing required environment variables: ${missingVars.join(", ")}`,
+      );
     }
 
-    const url = `http://${getEnv('CLICKHOUSE_HOST')}:${getEnv('CLICKHOUSE_PORT')}`;
+    const url = `http://${getEnv("CLICKHOUSE_HOST")}:${getEnv("CLICKHOUSE_PORT")}`;
     client = createClient({
       url,
-      username: getEnv('CLICKHOUSE_USERNAME'),
-      password: getEnv('CLICKHOUSE_PASSWORD'),
+      username: getEnv("CLICKHOUSE_USERNAME"),
+      password: getEnv("CLICKHOUSE_PASSWORD"),
       keep_alive: { enabled: true, idle_socket_ttl: 300000 },
       compression: { response: true, request: false },
-      max_open_connections: 10
+      max_open_connections: 10,
     });
     return client;
   })();
@@ -36,17 +42,20 @@ export async function connectClickhouse() {
   return connectionPromise;
 }
 
-export async function queryClickhouse<T extends Row>(sql: string, params?: Record<string, any>): Promise<T[]> {
+export async function queryClickhouse<T extends Row>(
+  sql: string,
+  params?: Record<string, any>,
+): Promise<T[]> {
   const client = await connectClickhouse();
   try {
-    const resultSet = await client.query({ 
-      query: sql, 
+    const resultSet = await client.query({
+      query: sql,
       query_params: params,
-      format: 'JSONEachRow'
+      format: "JSONEachRow",
     });
     return await resultSet.json<T>();
   } catch (error: any) {
-    if (error?.code === 'ECONNRESET' || error?.code === 'ECONNREFUSED') {
+    if (error?.code === "ECONNRESET" || error?.code === "ECONNREFUSED") {
       await disconnectClickhouse();
     }
     throw error;
