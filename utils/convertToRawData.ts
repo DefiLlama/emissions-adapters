@@ -147,11 +147,15 @@ export async function createRawSections(
         startTime = Math.min(
           startTime,
           ...adapterResults.flat().map((r: AdapterResult) => {
-            const start =
-              typeof r.start === "string"
-                ? new Date(r.start).getTime() / 1000
-                : r.start;
-            return start || 0;
+            if (typeof r.start === "string") {
+              if (/^\d+$/.test(r.start)) {
+                return parseInt(r.start);
+              } else {
+                return new Date(r.start).getTime() / 1000;
+              }
+            } else {
+              return r.start || 0;
+            }
           }),
         );
 
