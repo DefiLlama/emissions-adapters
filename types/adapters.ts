@@ -153,6 +153,12 @@ export type SectionData = {
 export type Categories = {
   [category: string]: string[];
 };
+
+export interface ChangeHistoryEntry {
+  timestamp: number; //unix timestapm
+  description: string;
+  sections?: string[]; // sections affected by this change
+}
 export type Metadata = {
   sources: string[];
   token: string;
@@ -163,6 +169,7 @@ export type Metadata = {
   incompleteSections?: IncompleteSection[];
   total?: number;
   chain?: string;
+  changeHistory?: ChangeHistoryEntry[];
 };
 export type FuturesData = {
   openInterest: number;
