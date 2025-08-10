@@ -302,10 +302,117 @@ const data: { [section: string]: any }[] = [
   },
 ];
 
+const s1_immediate = 106768233 + 321615883;
+const s1_vested = 321615885;
+const s1_vesting_months = 6;
+const s1_month_start = 1; // April 2024
+
+const s2_immediate = 407365421 + 171317290;
+const s2_vested = 171317288;
+const s2_vesting_months = 6;
+const s2_month_start = 6; // September 2024
+
+const s3_immediate = 437500000; // Assumed based on 83.3% immediate
+const s3_vested = 87500000; // Assumed 16.7% vested
+const s3_vesting_months = 6;
+const s3_month_start = 14; // May 2025
+
+// Function to distribute vested exactly
+function distributeVested(vested: number, months: number): number[] {
+  const perMonth = Math.floor(vested / months);
+  const remainder = vested % months;
+  const monthly = new Array(months).fill(perMonth);
+  for (let k = 0; k < remainder; k++) {
+    monthly[k] += 1;
+  }
+  return monthly;
+}
+
+const s1_vested_monthly = distributeVested(s1_vested, s1_vesting_months);
+const s2_vested_monthly = distributeVested(s2_vested, s2_vesting_months);
+const s3_vested_monthly = distributeVested(s3_vested, s3_vesting_months);
+
+// Monthly added for airdrops
+const s1_monthly_added = new Array(data.length).fill(0);
+s1_monthly_added[s1_month_start] += s1_immediate;
+for (let k = 0; k < s1_vesting_months; k++) {
+  if (s1_month_start + k < data.length) {
+    s1_monthly_added[s1_month_start + k] += s1_vested_monthly[k];
+  }
+}
+
+const s2_monthly_added = new Array(data.length).fill(0);
+s2_monthly_added[s2_month_start] += s2_immediate;
+for (let k = 0; k < s2_vesting_months; k++) {
+  if (s2_month_start + k < data.length) {
+    s2_monthly_added[s2_month_start + k] += s2_vested_monthly[k];
+  }
+}
+
+const s3_monthly_added = new Array(data.length).fill(0);
+s3_monthly_added[s3_month_start] += s3_immediate;
+for (let k = 0; k < s3_vesting_months; k++) {
+  if (s3_month_start + k < data.length) {
+    s3_monthly_added[s3_month_start + k] += s3_vested_monthly[k];
+  }
+}
+
+const original_eco_diffs: number[] = data.map((d, i) => {
+  const current = parseInt(d["Ecosystem Development"]);
+  const prev = i === 0 ? 0 : parseInt(data[i - 1]["Ecosystem Development"]);
+  return current - prev;
+});
+
+const adjusted_eco_diffs: number[] = [];
+let carry = 0;
+for (let i = 0; i < original_eco_diffs.length; i++) {
+  let subtract_this_month = s1_monthly_added[i] + s2_monthly_added[i] + s3_monthly_added[i] + carry;
+  let adjusted = original_eco_diffs[i] - subtract_this_month;
+  if (adjusted < 0) {
+    carry = -adjusted;
+    adjusted = 0;
+  } else {
+    carry = 0;
+  }
+  adjusted_eco_diffs.push(adjusted);
+}
+
+let eco_cum = 0;
+data.forEach((d, i) => {
+  eco_cum += adjusted_eco_diffs[i];
+  d["Ecosystem Development"] = eco_cum.toString();
+});
+
+// Set airdrop cumulatives
+let s1_current = 0;
+data.forEach((d, i) => {
+  s1_current += s1_monthly_added[i];
+  d["Airdrop S1"] = s1_current.toString();
+});
+
+let s2_current = 0;
+data.forEach((d, i) => {
+  s2_current += s2_monthly_added[i];
+  d["Airdrop S2"] = s2_current.toString();
+});
+
+let s3_current = 0;
+data.forEach((d, i) => {
+  s3_current += s3_monthly_added[i];
+  d["Airdrop S3"] = s3_current.toString();
+});
+
 const ena: Protocol = {
   meta: {
     token: `${chain}:${token}`,
-    notes: [`Data shown is from a CSV supplied by Ethena on 20 May 2024.`],
+    notes: [`Data shown is from a CSV supplied by Ethena on 20 May 2024.`,
+      `Airdrops (S1, S2, S3) are modeled as separate sections subtracted from Ecosystem Development to reflect distributions as allocated/owned tokens per oFDV principles, ensuring max supply remains exactly 15B ENA.`,
+      `S1 (Shard Campaign): 750M ENA total. Immediate: ~428M (non-top wallets 100% + top 2000 immediate 50%). Vested: ~322M (top 2000 50% over 6 months). Assumptions: Exact splits based on historical claims; vesting linearized monthly for simplicity (official is weekly).`,
+      `S2 (Sats Campaign): 750M ENA total. Immediate: ~578M (non-largest wallets 100% + largest 2000 immediate 50%). Vested: ~171M (largest 2000 50% over 6 months). Assumptions: As above; start month adjusted to match CSV bumps.`,
+      `S3: 525M ENA total (3.5% supply). Immediate: ~438M (assumed 83.3%: top 2000 immediate 2/3 + non-top 100%). Vested: ~88M (assumed 16.7%: top 2000 1/3 over 6 months, with top ~50% of total allocation). Assumptions: Proportions estimated from announcement (top vesting 1/3, no exact top/non-top split public); monthly linear (official weekly). Update if precise data available.`,
+      `Top 2000 wallet vesting: No public list of exact wallets or per-wallet amounts, so modeled as aggregate linear unlocks.`,
+      `General: Rounding applied for integer totals; minor discrepancies (~1-5M) may occur from vesting distribution.`,
+    ],
     sources: [
       "https://mirror.xyz/0xF99d0E4E3435cc9C9868D1C6274DfaB3e2721341/uCBp9VeuLWs-ul1b6AOUAoMg5HBB_iizMIi-11N6nT8",
     ],
@@ -315,6 +422,7 @@ const ena: Protocol = {
     noncirculating: ["Foundation","Ecosystem Development"],
     privateSale: ["Investors"],
     insiders: ["Team"],
+    airdrop: ["Airdrop S1", "Airdrop S2", "Airdrop S3"],
   },
 };
 
@@ -323,7 +431,7 @@ Object.keys(data[0]).map((key) => {
     start: start + periodToSeconds.months(i),
     type: "linear",
     end: start + periodToSeconds.months(i + 1),
-    amount: d[key] - (i == 0 ? 0 : data[i - 1][key]),
+    amount: parseInt(d[key]) - (i == 0 ? 0 : parseInt(data[i - 1][key])),
   }));
 });
 

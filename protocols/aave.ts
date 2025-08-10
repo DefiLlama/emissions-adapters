@@ -172,8 +172,17 @@ const aave: ProtocolV2 = {
   "LEND promotions and marketing": devSchedule(0.2),
   "LEND unexpected costs": devSchedule(0.1),
   "LEND public sale": manualCliff(lendSale, lendSaleQty),
-  "Ecosysten reserve": async () =>
-    adapter("0x25F2226B597E8F9514B3F68F00f494cF4f286491", "ethereum"),
+  "Ecosystem reserve": {
+    components: [
+      {
+        id: "ecosystem-reserve",
+        name: "Ecosystem Reserve",
+        isTBD: true,
+        fetch: async () =>
+          adapter("0x25F2226B597E8F9514B3F68F00f494cF4f286491", "ethereum"),
+      }
+    ]
+  },
   "AAVE Incentives": aaveIncentivesSection,
   meta: {
     version: 2,
@@ -186,14 +195,14 @@ const aave: ProtocolV2 = {
     protocolIds: ["parent#aave", "111", "1599", "1838", "1839"],
     incompleteSections: [
       {
-        key: "Ecosysten reserve",
+        key: "Ecosystem reserve",
         allocation: lendDevQty,
         lastRecord: () => 0,
       },
     ],
   },
   categories: {
-    noncirculating: ["Ecosysten reserve"],
+    noncirculating: ["Ecosystem reserve"],
     publicSale: ["LEND to AAVE migrator"],
     farming: ["AAVE Incentives"],
   },

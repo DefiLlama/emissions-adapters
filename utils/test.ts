@@ -47,23 +47,36 @@ export async function parseData(adapter: Protocol, i: number): Promise<void> {
   let rawData = await createRawSections(adapter);
   const replaces = (adapter as any).documented?.replaces ?? [];
   
-  if (!isProtocolV2(adapter)) {
-    try {
-      v1SupplyMetrics = await V2Processor.calculateAdjustedSupplyMetrics(
-        [],
-        adapter as any, // V1 adapter cast to ProtocolV2
-        rawData.categories,
-      );
-    } catch (error) {
-      console.warn("Could not calculate supply metrics for V1 adapter");
-    }
-  }
-  
   const { realTimeData, documentedData } = await createChartData(
     protocol,
     rawData,
     replaces,
   );
+
+  // Calculate supply metrics after chart data is available
+  if (isProtocolV2(adapter) && v2ProcessedData) {
+    try {
+      v2ProcessedData.supplyMetrics = await V2Processor.calculateAdjustedSupplyMetrics(
+        v2ProcessedData.sections,
+        adapter as ProtocolV2,
+        (adapter as ProtocolV2).categories,
+        realTimeData,
+      );
+    } catch (error) {
+      console.warn("Could not calculate supply metrics for V2 adapter");
+    }
+  } else {
+    try {
+      v1SupplyMetrics = await V2Processor.calculateAdjustedSupplyMetrics(
+        [],
+        adapter as any, // V1 adapter cast to ProtocolV2
+        rawData.categories,
+        realTimeData,
+      );
+    } catch (error) {
+      console.warn("Could not calculate supply metrics for V1 adapter");
+    }
+  }
 
   const categoryData = createCategoryData(realTimeData, rawData.categories);
   const documentedCategoryData = createCategoryData(
@@ -169,7 +182,8 @@ function calculateCirculationStatus(data: any[], supplyMetrics: any, categories:
     const totalSectionAmount = unlocked[unlocked.length - 1]; // Final amount
     
     if (isTBDSection) {
-      totalTBDAmount += totalSectionAmount;
+      // Use time-adjusted TBD: total - unlocked at current time
+      totalTBDAmount += (totalSectionAmount - todayUnlocked);
     } else {
       totalNonTBDUnlocked += todayUnlocked;
       totalNonTBDFuture += (totalSectionAmount - todayUnlocked);

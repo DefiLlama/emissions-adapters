@@ -43,16 +43,16 @@ export class V2Processor {
       }
     }
 
-    const supplyMetrics = await V2Processor.calculateAdjustedSupplyMetrics(
-      sections,
-      protocol,
-      protocol.categories,
-    );
-
     return {
       protocol,
       sections,
-      supplyMetrics,
+      supplyMetrics: {
+        maxSupply: 0,
+        adjustedSupply: 0,
+        tbdAmount: 0,
+        incentiveAmount: 0,
+        nonIncentiveAmount: 0,
+      }, // Will be recalculated later with chart data
     };
   }
   static async processV2Section(
@@ -144,10 +144,34 @@ export class V2Processor {
     sections: ProcessedSectionV2[],
     fullProtocol: ProtocolV2,
     categories: any,
+    chartData?: any[],
   ): Promise<AdjustedSupplyMetrics> {
     let maxSupply = 0;
     let tbdAmount = 0;
     let incentiveAmount = 0;
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+
+    // Helper function to find unlocked amount at current time from chart data
+    const getUnlockedAmountFromChart = (sectionName: string): number => {
+      if (!chartData) return 0;
+      
+      const sectionChart = chartData.find(chart => chart.section === sectionName);
+      if (!sectionChart?.data?.timestamps || !sectionChart?.data?.unlocked) return 0;
+      
+      const timestamps = sectionChart.data.timestamps;
+      const unlocked = sectionChart.data.unlocked;
+      
+      // Find the latest timestamp <= currentTimestamp
+      let todayIndex = -1;
+      for (let i = timestamps.length - 1; i >= 0; i--) {
+        if (timestamps[i] <= currentTimestamp) {
+          todayIndex = i;
+          break;
+        }
+      }
+      
+      return todayIndex >= 0 ? unlocked[todayIndex] : 0;
+    };
 
     for (const section of sections) {
       const sectionTotal = section.aggregatedResults.reduce(
@@ -173,7 +197,9 @@ export class V2Processor {
         );
 
         if (componentResult.flags.isTBD) {
-          tbdAmount += componentTotal;
+          // Use time-adjusted TBD: total - unlocked at current time
+          const unlockedAmount = getUnlockedAmountFromChart(section.sectionName);
+          tbdAmount += (componentTotal - unlockedAmount);
         }
 
         if (componentResult.flags.isIncentive) {
@@ -205,7 +231,26 @@ export class V2Processor {
           continue;
         }
       } else if (Array.isArray(section)) {
-        v1Results = section;
+        // Handle mixed arrays containing both AdapterResults and functions
+        try {
+          for (const item of section) {
+            if (typeof item === "function") {
+              const result = await item();
+              if (Array.isArray(result)) {
+                v1Results.push(...result);
+              } else {
+                v1Results.push(result);
+              }
+            } else {
+              v1Results.push(item as AdapterResult);
+            }
+          }
+        } catch (error) {
+          console.warn(
+            `error could not process array section ${sectionName} for supply metrics`,
+          );
+          continue;
+        }
       } else {
         v1Results = [section as AdapterResult];
       }
@@ -234,7 +279,9 @@ export class V2Processor {
       }
 
       if (isV1TBD) {
-        tbdAmount += v1SectionTotal;
+        // Use time-adjusted TBD: total - unlocked at current time
+        const unlockedAmount = getUnlockedAmountFromChart(sectionName);
+        tbdAmount += (v1SectionTotal - unlockedAmount);
       }
     }
 
