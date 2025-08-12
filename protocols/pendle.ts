@@ -10,7 +10,16 @@ const incentives = async (): Promise<CliffAdapterResult[]> => {
   const result: CliffAdapterResult[] = [];
 
   const data = await queryAggregatedDailyLogsAmountsMulti({
-    addresses: ["0x47d74516b33ed5d70dde7119a40839f6fcc24e57", "0x1e56299ebc8a1010cec26005d12e3e5c5cc2db00", "0x6875e4a945e498fe1b90bbb13cfbaf0b68658c9c", "0x704478dd72fd7f9b83d1f1e0fc18c14b54f034d0", "0xee708fc793a02f1edd5bb9dbd7fd13010d1f7136"],
+    addresses: [
+      "0x47d74516b33ed5d70dde7119a40839f6fcc24e57", // Ethereum
+      "0x1e56299ebc8a1010cec26005d12e3e5c5cc2db00", // Arbitrum
+      "0x6875e4a945e498fe1b90bbb13cfbaf0b68658c9c", // Optimism
+      "0x704478dd72fd7f9b83d1f1e0fc18c14b54f034d0", // BSC, Berachain
+      "0xee708fc793a02f1edd5bb9dbd7fd13010d1f7136", // Sonic
+      "0x428f2f93afAc3F96B0DE59854038c585e06165C8", // Mantle
+      "0x17F100fB4bE2707675c6439468d38249DD993d58", // Base
+      "0x7e500c6efbb00fd3227888256e477171a1304721" // HyperEVM
+    ],
     topic0: "0xf7823f78d472190ac0f94e11854ed334dce4a2e571e5f1bf7a8aec9469891d97",
     startDate: "2022-11-23",
   })
