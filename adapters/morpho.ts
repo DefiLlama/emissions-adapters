@@ -5,6 +5,8 @@ import { periodToSeconds, unixTimestampNow } from "../utils/time";
 
 export default async function morpho(): Promise<AdapterResult[]> {
   const now = unixTimestampNow();
+  const thirtyDaysAgo = now - (30 * 24 * 60 * 60); // 30 days in seconds
+  
   const allowedAssets = [
     "0x58D97B57BB95320F9a05dC918Aef65434969c2B2",
     "0x9994E35Db50125E0DF82e4c2dde62496CE330999",
@@ -26,11 +28,23 @@ export default async function morpho(): Promise<AdapterResult[]> {
 
       if (program.type === "airdrop-reward") {
         if (!program.total_rewards) return null;
+        
+        // For airdrops, filter out if created_at is before 30 days ago
+        const createdAt = Number(program.created_at);
+        if (createdAt < thirtyDaysAgo) {
+          return null;
+        }
+        
         const amount = Number(program.total_rewards) / 1e18;
         return manualCliff(start, amount);
       }
 
       const end = program.end ? Number(program.end) : now;
+      
+      // For non-airdrop programs, filter out if end is before 30 days ago
+      if (end < thirtyDaysAgo) {
+        return null;
+      }
       
       let totalRatePerYear: bigint;
 
@@ -45,8 +59,8 @@ export default async function morpho(): Promise<AdapterResult[]> {
         case "market-reward":
           if (!program.supply_rate_per_year || !program.borrow_rate_per_year || !program.collateral_rate_per_year) return null;
           totalRatePerYear = 
-            BigInt(program.supply_rate_per_year) + 
-            BigInt(program.borrow_rate_per_year) + 
+            BigInt(program.supply_rate_per_year) +
+            BigInt(program.borrow_rate_per_year) +
             BigInt(program.collateral_rate_per_year);
           break;
         case "vault-reward":
