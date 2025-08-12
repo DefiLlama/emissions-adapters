@@ -16,8 +16,8 @@ const incentives = async (): Promise<CliffAdapterResult[]> => {
       "0x6875e4a945e498fe1b90bbb13cfbaf0b68658c9c", // Optimism
       "0x704478dd72fd7f9b83d1f1e0fc18c14b54f034d0", // BSC, Berachain
       "0xee708fc793a02f1edd5bb9dbd7fd13010d1f7136", // Sonic
-      "0x428f2f93afAc3F96B0DE59854038c585e06165C8", // Mantle
-      "0x17F100fB4bE2707675c6439468d38249DD993d58", // Base
+      "0x428f2f93afac3f96b0de59854038c585e06165c8", // Mantle
+      "0x17f100fb4be2707675c6439468d38249dd993d58", // Base
       "0x7e500c6efbb00fd3227888256e477171a1304721" // HyperEVM
     ],
     topic0: "0xf7823f78d472190ac0f94e11854ed334dce4a2e571e5f1bf7a8aec9469891d97",
