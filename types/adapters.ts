@@ -193,6 +193,7 @@ export type AllocationDetail = {
   amount?: number;
   previousRatePerWeek?: number;
   newRatePerWeek?: number;
+  endTimestamp?: number;
 };
 
 export type UnlockEvent = {

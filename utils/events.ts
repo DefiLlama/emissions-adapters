@@ -185,6 +185,7 @@ export function addResultToEvents(
           previousRatePerWeek: 0,
           newRatePerWeek: initialRate,
           timestamp: l.start,
+          endTimestamp: l.end,
         });
       }
     }
@@ -206,6 +207,7 @@ export function addResultToEvents(
           previousRatePerWeek: thisRate,
           newRatePerWeek: nextRate,
           timestamp: l2.start,
+          endTimestamp: l2.end,
         });
       }
     }
