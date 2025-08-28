@@ -46,4 +46,5 @@ export const protocolsIncentives:string[] = [
     "parent#ramses-exchange", //ramses
     "parent#spark", //spark
     "parent#blackhole", //blackhole
+    "parent#uniswap"
 ]
