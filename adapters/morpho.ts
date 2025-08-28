@@ -1,77 +1,40 @@
 import fetch from "node-fetch";
-import { AdapterResult } from "../types/adapters";
-import { manualCliff, manualLinear } from "./manual";
-import { periodToSeconds, unixTimestampNow } from "../utils/time";
+import { CliffAdapterResult } from "../types/adapters";
+import { queryCustom } from "../utils/queries";
+import { readableToSeconds } from "../utils/time";
 
-export default async function morpho(): Promise<AdapterResult[]> {
-  const now = unixTimestampNow();
-  const allowedAssets = [
-    "0x58D97B57BB95320F9a05dC918Aef65434969c2B2",
-    "0x9994E35Db50125E0DF82e4c2dde62496CE330999",
-    "0xBAa5CC21fd487B8Fcc2F632f3F4E8D37262a0842"
-  ].map(addr => addr.toLowerCase());
-
-  const res = await fetch("https://rewards.morpho.org/v1/programs").then((r) =>
-    r.json(),
-  );
-
-  const sections = res.data
-    .filter((p: any) => p.asset && allowedAssets.includes(p.asset.address.toLowerCase()))
-    .map((program: any): AdapterResult | null => {
-      const start = Number(program.start ?? program.created_at);
-      
-      if (start > now) {
-        return null;
-      }
-
-      if (program.type === "airdrop-reward") {
-        if (!program.total_rewards) return null;
-        const amount = Number(program.total_rewards) / 1e18;
-        return manualCliff(start, amount);
-      }
-
-      const end = program.end ? Number(program.end) : now;
-      
-      let totalRatePerYear: bigint;
-
-      switch (program.type) {
-        case "uniform-reward":
-          if (!program.current_rates || program.current_rates.length === 0) return null;
-          totalRatePerYear = program.current_rates.reduce(
-            (sum: bigint, rate: any) => sum + BigInt(rate.rate_per_year),
-            BigInt(0)
-          );
-          break;
-        case "market-reward":
-          if (!program.supply_rate_per_year || !program.borrow_rate_per_year || !program.collateral_rate_per_year) return null;
-          totalRatePerYear = 
-            BigInt(program.supply_rate_per_year) + 
-            BigInt(program.borrow_rate_per_year) + 
-            BigInt(program.collateral_rate_per_year);
-          break;
-        case "vault-reward":
-          if (!program.rate_per_year) return null;
-          totalRatePerYear = BigInt(program.rate_per_year);
-          break;
-        default:
-          return null;
-      }
-      
-      if (totalRatePerYear <= BigInt(0)) {
-        return null;
-      }
-      
-      const durationSeconds = end - start;
-      if (durationSeconds < 0) return null;
-
-      const totalAmount = (totalRatePerYear * BigInt(durationSeconds)) / BigInt(periodToSeconds.year);
-
-      if (totalAmount <= BigInt(0)) {
-        return null;
-      }
-      
-      return manualLinear(start, end, Number(totalAmount) / 1e18);
-    });
-
-  return sections.filter((s: AdapterResult | null): s is AdapterResult => s !== null);
+export default async function morpho(): Promise<CliffAdapterResult[]> {
+  const data = await queryCustom(`
+SELECT
+    toStartOfDay(timestamp) AS date,
+    SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
+FROM evm_indexer.logs
+PREWHERE topic0 = '0xf7a40077ff7a04c7e61f6f26fb13774259ddf1b6bce9ecf26a8276cdd3992683'
+AND address IN (
+    '0x330eefa8a787552dc5cad3c3ca644844b1e61ddb',
+    '0x5400dbb270c956e8985184335a1c62aca6ce1333',
+    '0x678ddc1d07eaa166521325394cdeb1e4c086df43',
+    '0x3ef3d8ba38ebe18db133cec108f4d14ce00dd9ae'
+)
+WHERE topic2 IN (
+    '0x00000000000000000000000058d97b57bb95320f9a05dc918aef65434969c2b2',
+    '0x0000000000000000000000009d03bb2092270648d7480049d0e58d2fcf0e5123',
+    '0x0000000000000000000000009994e35db50125e0df82e4c2dde62496ce330999',
+    '0x000000000000000000000000baa5cc21fd487b8fcc2f632f3f4e8d37262a0842',
+    '0x00000000000000000000000040bd670a58238e6e230c430bbb5ce6ec0d40df48',
+)
+GROUP BY date
+ORDER BY date DESC;
+    `, {});
+  
+    const result: CliffAdapterResult[] = [];
+    for (let i = 0; i < data.length; i++) {
+      result.push({
+        type: "cliff",
+        start: readableToSeconds(data[i].date),
+        amount: Number(data[i].amount),
+        isUnlock: false,
+      });
+    }
+    return result;
 }
