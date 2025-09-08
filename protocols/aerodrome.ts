@@ -67,8 +67,8 @@ const aerodrome: Protocol = {
   ),
   "LP Emissions": emissions(95),
   "Team Emissions": emissions(5),
-  "Rebase Emissions": getEmissionsV2("rebase"),
-  "Gauge Emissions": getEmissionsV2("gauge"),
+  "Rebase Emissions": () => getEmissionsV2("rebase"),
+  "Gauge Emissions": () => getEmissionsV2("gauge"),
   //   },
   meta: {
     notes: [
