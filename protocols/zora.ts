@@ -2,7 +2,7 @@ import { manualCliff, manualStep } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 import { Protocol } from "../types/adapters";
 
-const tgeTimestamp = 1745366400; 
+const tgeTimestamp = 1745416800; 
 
 const totalSupply = 10_000_000_000;
 
