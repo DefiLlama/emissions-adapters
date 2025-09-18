@@ -15,7 +15,7 @@ async function createStreamflowProtocol(): Promise<Protocol> {
         "https://docs.streamflow.finance/en/articles/9869372-stream-token",
       ],
       token: `${CHAIN}:${STREAM_MINT}`,
-      protocolIds: [],
+      protocolIds: ["2608"],
       notes: [
         "Token unlock schedule data is fetched from the Streamflow Finance API",
         "Data includes all labels and their respective unlock schedules",
