@@ -10,7 +10,7 @@ const emissions = async (): Promise<LinearAdapterResult[]> => {
   const result: LinearAdapterResult[] = [];
 
   const data = await queryAggregatedDailyLogsAmounts({
-    address: "	0x0b6d3B42861eE8aBFCaaC818033694E758ECC3eb",
+    address: "0x0b6d3b42861ee8abfcaac818033694e758ecc3eb",
     topic0: "0x0f6798a560793a54c3bcfe86a93cde1e73087d944c0ea20544137d4121396885",
     startDate: "2025-08-14",
   })
@@ -55,7 +55,7 @@ const etherex: Protocol = {
       "Emission schedule: +20% epoch 1, +10% epoch 2, +9% epoch 3, -16% epoch 4, -25% epoch 5, then -1% decay per epoch",
       "Projected total supply after 10 years: approximately 683M tokens",
     ],
-    token: `linea:0xEfD81eeC32B9A8222D1842ec3d99c7532C31e348`,
+    token: `coingecko:etherex`,
     sources: [
       "https://docs.etherex.finance/pages/tokenomics",
       "https://etherscan.io/address/0x0b6d3B42861eE8aBFCaaC818033694E758ECC3eb"
