@@ -51,6 +51,7 @@ const mantle: Protocol = {
         lastRecord: (backfill: boolean) => latest(chain, deployed, backfill),
         key: "Treasury",
         allocation: 3046328614,
+        skipExtrapolation: true,
       },
     ],
   },

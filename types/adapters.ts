@@ -106,6 +106,7 @@ export type IncompleteSection = {
   key: string;
   allocation: number | undefined;
   lastRecord: any;
+  skipExtrapolation?: boolean;
 };
 export type SectionType =
   | "publicSale"

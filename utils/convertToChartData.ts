@@ -196,7 +196,7 @@ function appendForecast(
   const timestamp =
     Math.floor(unixTimestampNow() / RESOLUTION_SECONDS) * RESOLUTION_SECONDS;
 
-  if (incompleteSection.allocation) {
+  if (incompleteSection.allocation && !incompleteSection.skipExtrapolation) {
     const relatedSections = chartData.filter(
       (d: ChartSection) => d.section == incompleteSection.key,
     );
@@ -248,10 +248,12 @@ function appendForecast(
     }
   }
 
-  if (!("notes" in data.metadata)) data.metadata.notes = [];
-  data.metadata.notes?.push(
-    `Only past ${incompleteSection.key} unlocks have been included in this analysis, because ${incompleteSection.key} allocation is unlocked adhoc. Future unlocks have been extrapolated, which may not be accurate.`,
-  );
+  if (!incompleteSection.skipExtrapolation) {
+    if (!("notes" in data.metadata)) data.metadata.notes = [];
+    data.metadata.notes?.push(
+      `Only past ${incompleteSection.key} unlocks have been included in this analysis, because ${incompleteSection.key} allocation is unlocked adhoc. Future unlocks have been extrapolated, which may not be accurate.`,
+    );
+  }
 
   incompleteSection.lastRecord = err
     ? null
