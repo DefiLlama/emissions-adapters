@@ -33,7 +33,7 @@ export function filterRawAmounts(
   const sections: CliffAdapterResult[] = [];
   let depositIndex: number = 0;
 
-  const data = Object.values(chainData);
+  const data = Object.values(chainData).sort((a, b) => a.timestamp - b.timestamp);
   for (let i = 0; i < data.length; i++) {
     if (!("result" in data[i])) data[i].result = i > 0 ? data[i - 1].result : 0;
     const thisBalance = data[i].result;

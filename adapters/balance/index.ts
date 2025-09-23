@@ -69,8 +69,10 @@ export async function balance(
                 block: Number(block),
                 chain,
               }).then((r: any) => {
-                if (!r.output)
-                  throw new Error(`balance call failed for ${adapter}`);
+                if (!r.output) {
+                  console.error(`balance call failed for ${adapter} at block ${block}`);
+                  return;
+                }
                 if (!chainData[block].result) chainData[block].result = 0;
                 chainData[block].result += Number(r.output);
               });
@@ -82,8 +84,10 @@ export async function balance(
             block,
             requery: true,
           }).then((r: (number | null)[]) => {
-            if (r.includes(null))
-              throw new Error(`balance call failed for ${adapter}`);
+            if (r.includes(null)) {
+              console.error(`balance call failed for ${adapter} at block ${block}`);
+              return;
+            }
             chainData[block].result = r.reduce(
               (p: number, c: any) => Number(p) + Number(c),
               0,

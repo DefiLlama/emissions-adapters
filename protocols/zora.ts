@@ -1,7 +1,7 @@
 import { manualCliff } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 
-const tgeTimestamp = 1745416800;
+const tgeTimestamp = 1741651200;
 
 const totalSupply = 10_000_000_000;
 
