@@ -3,7 +3,7 @@ import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1712876400;
-const total = 21e9;
+const total = 21e8;
 
 const bouncebit: Protocol = {
   "Testnet & TVL Incentives": manualCliff(start, total * 0.04),
