@@ -6,8 +6,8 @@ const token = "0x949D48EcA67b17269629c7194F4b727d4Ef9E5d6";
 const chain = "ethereum";
 const qty = 1e9;
 const realtime =
-  (holder: string, deployed: number) => async (backfill: boolean) =>
-    balance([holder], token, chain, "merit-circle", deployed, backfill).then(
+  (holder: string, deployed: number, sectionKey: string) => async (backfill: boolean) =>
+    balance([holder], token, chain, "merit-circle", deployed, backfill, sectionKey).then(
       (s: CliffAdapterResult[]) =>
         s.filter((c: CliffAdapterResult) => c.amount < 1e8),
     );
@@ -16,24 +16,29 @@ const merit: Protocol = {
   "Community Incentives": realtime(
     "0x56475a4a8D00b6F7b01E0879CBbba609707aef6b",
     1641513600,
+    "Community Incentives",
   ),
   Contributors: realtime(
     "0x97173277FED329ee844BAfa44D7719ad372a7150",
     1668124800,
+    "Contributors",
   ),
   "DAO Treasury": realtime(
     "0x7e9e4c0876B2102F33A1d82117Cc73B7FddD0032",
     1635548400,
+    "DAO Treasury",
   ),
   "Early Contributors": realtime(
     "0xB5A0cbB4fC7294642216Cd7AFbc3525B24316cbc",
     1652137200,
+    "Early Contributors",
   ),
   "Liquidity Rewards": manualCliff(1633042800, qty * 0.1),
   "Public Distribution": manualCliff(1633042800, qty * 0.075),
   "Retroactive Rewards": realtime(
     "0x4f6d9907fBc54feDeA9296860d36E14ccC348F7A",
     1640649600,
+    "Retroactive Rewards",
   ),
   meta: {
     notes: [],
