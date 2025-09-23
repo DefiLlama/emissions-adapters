@@ -4,7 +4,6 @@ import { Protocol } from "../types/adapters";
 const tgeTimestamp = 1745416800;
 
 const totalSupply = 10_000_000_000;
-const claimDayOfMonth = 30;
 
 const createMonthlyCliffSchedule = (
   originTimestamp: number,
@@ -25,8 +24,7 @@ const createMonthlyCliffSchedule = (
     const monthIndex = baseMonth + i;
     const year = baseYear + Math.floor(monthIndex / 12);
     const month = monthIndex % 12;
-    const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
-    const day = Math.min(claimDayOfMonth, daysInMonth);
+    const day = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
 
     const timestamp = Math.floor(
       Date.UTC(year, month, day, hours, minutes, seconds) / 1000,
@@ -62,7 +60,7 @@ const zora: Protocol = {
   meta: {
     notes: [
       "Allocations described as 'Not subject to lockup restrictions' (Incentives, Airdrop, Liquidity) are modeled as fully unlocked at TGE using manualCliff.",
-      "Treasury, Team, and Investors unlocks start 6 months post-TGE and occur on the last available day up to the 30th of each month (February adjusts to month-end), as per confirmed by team.",
+      "Treasury, Team, and Investors unlocks start 6 months post-TGE and occur on the last day of each month, as per confirmed by team.",
     ],
     sources: ["https://support.zora.co/en/articles/4797185"],
     token: `base:0x1111111111166b7fe7bd91427724b487980afc69`,
