@@ -44,7 +44,7 @@ export const protocolsIncentives:string[] = [
     "1571", //stargate
     "parent#euler", //euler
     "parent#ramses-exchange", //ramses
-    "parent#spark", //spark
+    // "parent#spark", //spark is not correct #135
     "parent#blackhole", //blackhole
     "parent#uniswap"
     "parent#etherex" //etherex
