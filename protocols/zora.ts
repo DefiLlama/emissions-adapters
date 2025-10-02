@@ -1,66 +1,400 @@
 import { manualCliff } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 
-const tgeTimestamp = 1741651200;
-
-const totalSupply = 10_000_000_000;
-
-const createMonthlyCliffSchedule = (
-  originTimestamp: number,
-  cliffMonths: number,
-  periods: number,
-  amountPerPeriod: number,
-) => {
-  const origin = new Date(originTimestamp * 1000);
-  const hours = origin.getUTCHours();
-  const minutes = origin.getUTCMinutes();
-  const seconds = origin.getUTCSeconds();
-  const baseYear = origin.getUTCFullYear();
-  const baseMonth = origin.getUTCMonth() + cliffMonths;
-
-  const schedule: ReturnType<typeof manualCliff>[] = [];
-
-  for (let i = 0; i < periods; i++) {
-    const monthIndex = baseMonth + i;
-    const year = baseYear + Math.floor(monthIndex / 12);
-    const month = monthIndex % 12;
-    const day = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
-
-    const timestamp = Math.floor(
-      Date.UTC(year, month, day, hours, minutes, seconds) / 1000,
-    );
-
-    schedule.push(manualCliff(timestamp, amountPerPeriod));
-  }
-
-  return schedule;
+const schedules: { [date: string]: { [section: string]: number } } = {
+  "30/04/2025": {
+    "Retroactive Airdrop": 1000000000,
+    "Community Incentives": 2000000000,
+    "Liquidity": 500000000,
+    "Team": 0,
+    "Treasury": 0,
+    "Investors": 0,
+  },
+  "30/05/2025": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 0,
+    "Investors": 0,
+  },
+  "30/06/2025": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 0,
+    "Investors": 0,
+  },
+  "30/07/2025": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 0,
+    "Investors": 0,
+  },
+  "30/08/2025": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 0,
+    "Investors": 0,
+  },
+  "30/09/2025": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 311856193,
+    "Treasury": 250000000,
+    "Investors": 408143805,
+  },
+  "30/10/2025": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/11/2025": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/12/2025": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/01/2026": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/02/2026": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/03/2026": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/04/2026": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/05/2026": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/06/2026": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/07/2026": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/08/2026": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/09/2026": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/10/2026": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/11/2026": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/12/2026": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/01/2027": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/02/2027": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/03/2027": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/04/2027": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/05/2027": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/06/2027": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/07/2027": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/08/2027": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/09/2027": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/10/2027": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/11/2027": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/12/2027": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/01/2028": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/02/2028": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/03/2028": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 54574834,
+    "Treasury": 41666667,
+    "Investors": 71425167,
+  },
+  "30/04/2028": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 41666667,
+    "Investors": 0,
+  },
+  "30/05/2028": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 41666667,
+    "Investors": 0,
+  },
+  "30/06/2028": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 41666667,
+    "Investors": 0,
+  },
+  "30/07/2028": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 41666667,
+    "Investors": 0,
+  },
+  "30/08/2028": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 41666667,
+    "Investors": 0,
+  },
+  "30/09/2028": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 41666667,
+    "Investors": 0,
+  },
+  "30/10/2028": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 41666667,
+    "Investors": 0,
+  },
+  "30/11/2028": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 41666667,
+    "Investors": 0,
+  },
+  "30/12/2028": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 41666667,
+    "Investors": 0,
+  },
+  "30/01/2029": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 41666667,
+    "Investors": 0,
+  },
+  "30/02/2029": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 41666667,
+    "Investors": 0,
+  },
+  "30/03/2029": {
+    "Retroactive Airdrop": 0,
+    "Community Incentives": 0,
+    "Liquidity": 0,
+    "Team": 0,
+    "Treasury": 41666667,
+    "Investors": 0,
+  },
 };
 
-const incentivesAllocation = totalSupply * 0.20;
-const airdropAllocation = totalSupply * 0.10;
-const liquidityAllocation = totalSupply * 0.05;
-const treasuryAllocation = totalSupply * 0.20;
-const teamAllocation = totalSupply * 0.189;
-const investorsAllocation = totalSupply * 0.261;
-
-
 const zora: Protocol = {
-  "Retroactive Airdrop": manualCliff(tgeTimestamp, airdropAllocation),
-  "Community Incentives": manualCliff(tgeTimestamp, incentivesAllocation),
-  "Ecosystem Liquidity": manualCliff(tgeTimestamp, liquidityAllocation),
-  "Team": createMonthlyCliffSchedule(tgeTimestamp, 6, 36, teamAllocation / 36),
-  "Investors": createMonthlyCliffSchedule(
-    tgeTimestamp,
-    6,
-    36,
-    investorsAllocation / 36,
-  ),
-  "Treasury": createMonthlyCliffSchedule(tgeTimestamp, 6, 48, treasuryAllocation / 48),
-
   meta: {
     notes: [
-      "Allocations described as 'Not subject to lockup restrictions' (Incentives, Airdrop, Liquidity) are modeled as fully unlocked at TGE using manualCliff.",
-      "Treasury, Team, and Investors unlocks start 6 months post-TGE and occur on the last day of each month, as per confirmed by team.",
+      "Token vesting schedule data provided directly by Zora team.",
+      "All unlocks occur on the 30th of each month.",
+      "Airdrop, Community Incentives, and Liquidity fully unlock at Month 1 (April 2025).",
+      "Team, Treasury, and Investors have 6-month cliff (September 2025) followed by monthly vesting.",
     ],
     sources: ["https://support.zora.co/en/articles/4797185"],
     token: `base:0x1111111111166b7fe7bd91427724b487980afc69`,
@@ -69,11 +403,20 @@ const zora: Protocol = {
   categories: {
     farming: ["Community Incentives"],
     airdrop: ["Retroactive Airdrop"],
-    liquidity: ["Ecosystem Liquidity"],
+    liquidity: ["Liquidity"],
     noncirculating: ["Treasury"],
     privateSale: ["Investors"],
     insiders: ["Team"],
-  }
+  },
 };
+
+Object.keys(schedules).map((end: string, i: number) => {
+  Object.keys(schedules[end]).map((section: string) => {
+    if (i == 0)
+      zora[section] = [manualCliff(end, schedules[end][section], "dd/mm/yyyy")];
+    else
+      zora[section].push(manualCliff(end, schedules[end][section], "dd/mm/yyyy"));
+  });
+});
 
 export default zora;
