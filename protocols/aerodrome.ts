@@ -82,6 +82,7 @@ const aerodrome: Protocol = {
       `https://github.com/aerodrome-finance/contracts/blob/main/contracts/Minter.sol#L170-L198`,
     ],
     protocolIds: ["parent#aerodrome", "3450", "4524"],
+    excludeFromAdjustedSupply: ["LP Emissions", "Team Emissions"],
     incompleteSections: [
       {
         lastRecord: (backfill: boolean) => latest("aerodrome", start, backfill),

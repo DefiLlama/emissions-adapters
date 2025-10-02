@@ -271,7 +271,8 @@ export class V2Processor {
         categories[cat].includes(sectionName),
       );
 
-      const isV1Incentive = sectionCategory === "farming";
+      const excludeFromAdjusted = (fullProtocol.meta as any).excludeFromAdjustedSupply || [];
+      const isV1Incentive = sectionCategory === "farming" || excludeFromAdjusted.includes(sectionName);
       const isV1TBD = sectionCategory === "noncirculating";
 
       if (isV1Incentive) {

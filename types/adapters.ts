@@ -171,6 +171,7 @@ export type Metadata = {
   total?: number;
   chain?: string;
   changeHistory?: ChangeHistoryEntry[];
+  excludeFromAdjustedSupply?: string[];
 };
 export type FuturesData = {
   openInterest: number;
