@@ -149,6 +149,7 @@ export class V2Processor {
     let maxSupply = 0;
     let tbdAmount = 0;
     let incentiveAmount = 0;
+    let excludedAmount = 0;
     const currentTimestamp = Math.floor(Date.now() / 1000);
 
     // Helper function to find unlocked amount at current time from chart data
@@ -272,11 +273,16 @@ export class V2Processor {
       );
 
       const excludeFromAdjusted = (fullProtocol.meta as any).excludeFromAdjustedSupply || [];
-      const isV1Incentive = sectionCategory === "farming" || excludeFromAdjusted.includes(sectionName);
+      const isV1Incentive = sectionCategory === "farming";
+      const isV1Excluded = excludeFromAdjusted.includes(sectionName);
       const isV1TBD = sectionCategory === "noncirculating";
 
-      if (isV1Incentive) {
+      if (isV1Incentive || isV1Excluded) {
         incentiveAmount += v1SectionTotal;
+      }
+
+      if (isV1Excluded) {
+        excludedAmount += v1SectionTotal;
       }
 
       if (isV1TBD) {
@@ -286,7 +292,7 @@ export class V2Processor {
       }
     }
 
-    const adjustedSupply = maxSupply - tbdAmount;
+    const adjustedSupply = maxSupply - tbdAmount - excludedAmount;
     const nonIncentiveAmount = maxSupply - incentiveAmount;
 
     return {
