@@ -1,4 +1,5 @@
 {
+  "name": "emissions-adapters",
   "scripts": {
     "test": "mkdir -p utils/testCharts && ts-node utils/test.ts"
   },
