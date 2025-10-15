@@ -5,7 +5,7 @@ import { periodToSeconds } from "../utils/time";
 
 const token = "0xec53bF9167f50cDEB3Ae105f56099aaaB9061F83";
 const chain = "ethereum";
-const start = 1759190400; // 30/09/2024
+const start = 1727654400; // 30/09/2024
 const total = 1_673_646_668.28466; // Initial Total Supply: 1.67 billion tokens
 const weeklyInflation = 1_287_420.5140651232; // Weekly inflation amount
 const inflationStart = "2024-09-29"; // Inflation start date
