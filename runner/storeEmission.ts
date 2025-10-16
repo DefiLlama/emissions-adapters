@@ -2,10 +2,12 @@ import { PromisePool } from "@supercharge/promise-pool";
 import { EmissionBreakdown, Protocol } from "../types/adapters";
 import { storeR2JSONString } from "./r2";
 import { sendMessage, withTimeout } from "./serverUtils";
-import { processSingleProtocol } from "./utils";
+import { init, processSingleProtocol } from "./utils";
 import { readdirSync } from "fs";
 
 export async function processProtocolList() {
+  await init()
+
   let protocolsArray: string[] = [];
   let protocolErrors: string[] = [];
   let emissionsBrakedown: EmissionBreakdown = {};
@@ -86,7 +88,7 @@ const extensions = ['ts', 'md', 'js']
 
 
 function createEmissionsImportsFile() {
-  const emission_keys = getDirectories(`./emissions-adapters/protocols`)
+  const emission_keys = getDirectories(__dirname + `/../protocols`)
   const adapters: any = {}
 
   emission_keys.forEach(key => {

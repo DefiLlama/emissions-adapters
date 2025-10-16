@@ -1,16 +1,35 @@
 import fetch from "node-fetch";
-import { createChartData, mapToServerData, nullFinder } from "../emissions-adapters/utils/convertToChartData";
-import { createRawSections } from "../emissions-adapters/utils/convertToRawData";
-import { createCategoryData, createSectionData } from "../emissions-adapters/utils/categoryData";
-import { ChartSection, EmissionBreakdown, Protocol, SectionData, isProtocolV2, ProtocolV2, ProcessedProtocolV2, ComponentResult, AdapterResult } from "../emissions-adapters/types/adapters";
-import { createFuturesData } from "../emissions-adapters/utils/futures";
-import { storeR2JSONString, getR2 } from "./utils/r2";
-import protocols from "./protocols/data";
-import { sluggifyString } from "./utils/sluggify";
-import parentProtocols from "./protocols/parentProtocols";
-import { getDisplayChainNameCached } from "./adaptors/utils/getAllChainsFromAdaptors";
-import { protocolsIncentives } from "../emissions-adapters/no-emissions/incentives";
-import { V2Processor } from "../emissions-adapters/utils/v2-processor";
+import { createChartData, mapToServerData, nullFinder } from "../utils/convertToChartData";
+import { createRawSections } from "../utils/convertToRawData";
+import { createCategoryData, createSectionData } from "../utils/categoryData";
+import { ChartSection, EmissionBreakdown, Protocol, SectionData, isProtocolV2, ProtocolV2, ProcessedProtocolV2, ComponentResult, AdapterResult } from "../types/adapters";
+import { createFuturesData } from "../utils/futures";
+import { storeR2JSONString } from "./r2";
+import { protocolsIncentives } from "../no-emissions/incentives";
+import { V2Processor } from "../utils/v2-processor";
+
+const sluggifyString = (name: string) => name.toLowerCase().split(" ").join("-").split("'").join("");
+let protocols: any = {}
+let parentProtocols: any = {}
+let chainKeyToLabelMap: any = {}
+
+const chainNameCache: Record<string, string> = {}
+
+function getDisplayChainNameCached(chain = '') {
+  if (!chainNameCache[chain]) {
+    chainNameCache[chain] = chainKeyToLabelMap[chain] ?? (chain.slice(0, 1).toUpperCase() + chain.slice(1));
+  }
+  return chainNameCache[chain];
+}
+
+// pull protocol metadata from api.llama.fi
+export async function init() {
+  const response = await fetch("https://api.llama.fi/_fe/static/configs");
+  const data = await response.json();
+  protocols = data.protocols;
+  parentProtocols = data.parentProtocols;
+  chainKeyToLabelMap = data.chainKeyToLabelMap;
+}
 
 const prefix = "coingecko:";
 
@@ -21,9 +40,9 @@ function getCgId(token: string) {
 }
 function findPId(cgId?: string | null, parentId?: string) {
   if (!cgId && !parentId) return;
-  const parent = parentProtocols.find((p) => (parentId ? p.id == parentId : p.gecko_id == cgId));
+  const parent = parentProtocols.find((p: any) => (parentId ? p.id == parentId : p.gecko_id == cgId));
   if (parent) return { parentProtocol: parent.id, name: parent.name, gecko_id: parent.gecko_id };
-  return protocols.find((p) => p.gecko_id == cgId);
+  return protocols.find((p: any) => p.gecko_id == cgId);
 }
 
 async function aggregateMetadata(
@@ -33,17 +52,17 @@ async function aggregateMetadata(
   rawData: SectionData,
 ) {
   const pId = rawData.metadata.protocolIds?.[0] ?? null;
-  const pData0 = protocols.find((p) => p.id == pId);
+  const pData0 = protocols.find((p: any) => p.id == pId);
   const cgId = getCgId(rawData.metadata.token) ?? pData0?.gecko_id;
   const pData = findPId(cgId, pId?.startsWith("parent#") ? pId : pData0?.parentProtocol) ?? pData0;
   const id = pData ? pData.name : cgId ? cgId : protocolName;
   let defillamaIds = [rawData.metadata.protocolIds?.[0]].filter(Boolean)
-  const protocolCategory = protocols.find(p => p.id === pId || p.parentProtocol === pId)?.category;
+  const protocolCategory = protocols.find((p: any) => p.id === pId || p.parentProtocol === pId)?.category;
   //transform parent#id to ids
   if (pId?.startsWith("parent#")) {
     const childIds = protocols
-    .filter(protocol => protocol.parentProtocol === pId)
-    .map(protocol => protocol.id);
+      .filter((protocol: any) => protocol.parentProtocol === pId)
+      .map((protocol: any) => protocol.id);
 
     defillamaIds = childIds.length ? childIds : [];
   }
@@ -57,8 +76,8 @@ async function aggregateMetadata(
   let gecko_id = pData?.gecko_id ?? cgId;
 
   if (pData?.parentProtocol) {
-    name = parentProtocols.find((p) => p.id === pData.parentProtocol)?.name ?? id;
-    gecko_id = parentProtocols.find((p) => p.id === pData.parentProtocol)?.gecko_id ?? pData?.gecko_id;
+    name = parentProtocols.find((p: any) => p.id === pData.parentProtocol)?.name ?? id;
+    gecko_id = parentProtocols.find((p: any) => p.id === pData.parentProtocol)?.gecko_id ?? pData?.gecko_id;
   }
 
   const realTimeTokenAllocation = createCategoryData(realTimeChart, rawData.categories);
@@ -117,7 +136,7 @@ async function aggregateMetadata(
 async function getPricedUnlockChart(emissionData: Awaited<ReturnType<typeof aggregateMetadata>>["data"], v2ProcessedData?: ProcessedProtocolV2, priceCache?: Record<string, number>) {
   try {
     const hasIncentives = emissionData.pId ? protocolsIncentives.includes(emissionData.pId) : false;
-    
+
     if (!hasIncentives && !v2ProcessedData) {
       return [];
     }
@@ -125,12 +144,12 @@ async function getPricedUnlockChart(emissionData: Awaited<ReturnType<typeof aggr
     const unlocksByTimestamp: Record<string, number> = {};
     const now = new Date().getTime() / 1000;
     const currDate = new Date().getTime() / 1000;
-    
-    if (v2ProcessedData) {      
+
+    if (v2ProcessedData) {
       for (const section of v2ProcessedData.sections) {
         for (const componentResult of section.components) {
           if (!componentResult.flags.isIncentive) continue;
-                    
+
           componentResult.results.forEach((result: AdapterResult) => {
             if (result.type === "cliff" && typeof result.start === 'number') {
               if (result.start < now) {
@@ -139,14 +158,14 @@ async function getPricedUnlockChart(emissionData: Awaited<ReturnType<typeof aggr
             } else if (result.type === "linear" && typeof result.start === 'number' && typeof result.end === 'number') {
               const duration = result.end - result.start;
               const dailyAmount = result.amount / (duration / (24 * 60 * 60));
-              
+
               for (let timestamp = result.start; timestamp < result.end && timestamp < now; timestamp += 24 * 60 * 60) {
                 unlocksByTimestamp[timestamp] = (unlocksByTimestamp[timestamp] || 0) + dailyAmount;
               }
             } else if (result.type === "step" && typeof result.start === 'number') {
               const stepResult = result as any;
               const stepAmount = result.amount;
-              
+
               for (let i = 0; i < stepResult.steps; i++) {
                 const stepTimestamp = result.start + (i + 1) * stepResult.stepDuration;
                 if (stepTimestamp < now) {
@@ -157,7 +176,7 @@ async function getPricedUnlockChart(emissionData: Awaited<ReturnType<typeof aggr
           });
         }
       }
-    } else {      
+    } else {
       //v1
       const incentiveCategories = ["farming"];
       const incentiveSections = incentiveCategories
@@ -171,7 +190,7 @@ async function getPricedUnlockChart(emissionData: Awaited<ReturnType<typeof aggr
       emissionData.documentedData.data.forEach(
         (chart: { data: Array<{ timestamp: number; rawEmission: number }>; label: string }) => {
           if (!allIncentiveSections?.includes(chart.label)) return;
-          
+
           chart.data
             .filter((val) => val.timestamp < currDate)
             .forEach((val) => {
@@ -183,7 +202,7 @@ async function getPricedUnlockChart(emissionData: Awaited<ReturnType<typeof aggr
     }
 
     const timestamps = Object.keys(unlocksByTimestamp);
-    
+
     if (timestamps.length === 0) {
       return [];
     }
@@ -201,7 +220,7 @@ async function getPricedUnlockChart(emissionData: Awaited<ReturnType<typeof aggr
       .sort((a: any, b: any) => Number(a[0]) - Number(b[0]))
       .map(([ts, unlocked]: [string, number], i, arr: any[]) => {
         const currentPrice = prices[ts] || 0;
-        
+
         if (v2ProcessedData) {
           const usdValue = unlocked * currentPrice;
           return [Number(ts), usdValue];
@@ -231,13 +250,13 @@ const sum = (arr: number[]) => arr.reduce((acc, val) => acc + val, 0);
 
 async function fetchPricesForTimestamps(token: string, timestamps: string[]): Promise<Record<string, number>> {
   const prices: Record<string, number> = {};
-  
+
   if (!token || timestamps.length === 0) {
     return prices;
   }
-  
+
   console.log(`Fetching prices for ${timestamps.length} timestamps for token: ${token}`);
-  
+
   const pricePromises = timestamps.map(async (ts) => {
     try {
       const response = await fetch(
@@ -253,17 +272,17 @@ async function fetchPricesForTimestamps(token: string, timestamps: string[]): Pr
       return { ts, price: undefined };
     }
   });
-  
+
   await Promise.all(pricePromises);
   console.log(`Successfully fetched ${Object.keys(prices).length}/${timestamps.length} prices`);
-  
+
   return prices;
 }
 
 async function generateComponentChartData(componentResult: ComponentResult, protocolToken: string, priceCache?: Record<string, number>): Promise<number[][]> {
   const unlocksByTimestamp: Record<string, number> = {};
   const now = new Date().getTime() / 1000;
-  
+
   componentResult.results.forEach((result: AdapterResult) => {
     if (result.type === "cliff" && typeof result.start === 'number') {
       if (result.start < now) {
@@ -272,14 +291,14 @@ async function generateComponentChartData(componentResult: ComponentResult, prot
     } else if (result.type === "linear" && typeof result.start === 'number' && typeof result.end === 'number') {
       const duration = result.end - result.start;
       const dailyAmount = result.amount / (duration / (24 * 60 * 60));
-      
+
       for (let timestamp = result.start; timestamp < result.end && timestamp < now; timestamp += 24 * 60 * 60) {
         unlocksByTimestamp[timestamp] = (unlocksByTimestamp[timestamp] || 0) + dailyAmount;
       }
     } else if (result.type === "step" && typeof result.start === 'number') {
       const stepResult = result as any;
       const stepAmount = result.amount;
-      
+
       for (let i = 0; i < stepResult.steps; i++) {
         const stepTimestamp = result.start + (i + 1) * stepResult.stepDuration;
         if (stepTimestamp < now) {
@@ -304,7 +323,7 @@ async function generateComponentChartData(componentResult: ComponentResult, prot
     .map(([ts, unlocked]: [string, number]) => {
       const currentPrice = prices[ts] || 0;
       const usdValue = unlocked * currentPrice;
-      
+
       return [Number(ts), usdValue];
     });
 }
@@ -314,7 +333,7 @@ async function generateComponentData(v2ProcessedData: ProcessedProtocolV2, timeP
   const componentData = {
     sections: {} as any
   };
-  
+
   for (const section of v2ProcessedData.sections) {
     const sectionData = {
       displayName: section.section.displayName || section.sectionName,
@@ -327,19 +346,19 @@ async function generateComponentData(v2ProcessedData: ProcessedProtocolV2, timeP
       emission30d: 0,
       components: {} as any
     };
-    
+
     for (const componentResult of section.components) {
       const component = componentResult.component;
       const componentId = component.id;
-      
+
       const componentChartData = await generateComponentChartData(componentResult, protocolToken, priceCache);
-      
+
       const [day, week, month]: number[][] = [[], [], []];
       componentChartData.forEach(([ts, val]) => {
         if (Number(val) < 0) return;
         const timestamp = Number(ts);
         const value = Number(val);
-        
+
         if (timestamp > monthAgo) month.push(value);
         if (timestamp > weekAgo) week.push(value);
         if (timestamp >= dayAgo) day.push(value);
@@ -352,7 +371,7 @@ async function generateComponentData(v2ProcessedData: ProcessedProtocolV2, timeP
       sectionData.emission24h += emission24h;
       sectionData.emission7d += emission7d;
       sectionData.emission30d += emission30d;
-      
+
       sectionData.components[componentId] = {
         name: component.name,
         methodology: component.methodology,
@@ -366,10 +385,10 @@ async function generateComponentData(v2ProcessedData: ProcessedProtocolV2, timeP
         unlockUsdChart: componentChartData
       };
     }
-    
+
     componentData.sections[section.sectionName] = sectionData;
   }
-  
+
   return componentData;
 }
 
@@ -396,16 +415,16 @@ export async function processSingleProtocol(
   );
   nullFinder(realTimeData, "realTimeData");
   const { data, id } = await aggregateMetadata(protocolName, realTimeData, documentedData, rawData);
-  
+
   let priceCache: Record<string, number> | undefined;
-  if (v2ProcessedData && data.metadata.token) {    
+  if (v2ProcessedData && data.metadata.token) {
     const globalTimestamps: string[] = [];
     const now = new Date().getTime() / 1000;
-    
+
     for (const section of v2ProcessedData.sections) {
       for (const componentResult of section.components) {
         if (!componentResult.flags.isIncentive) continue;
-        
+
         componentResult.results.forEach((result: AdapterResult) => {
           if (result.type === "cliff" && typeof result.start === 'number') {
             if (result.start < now) {
@@ -427,7 +446,7 @@ export async function processSingleProtocol(
         });
       }
     }
-    
+
     const componentTimestamps: string[] = [];
     for (const section of v2ProcessedData.sections) {
       for (const componentResult of section.components) {
@@ -452,16 +471,16 @@ export async function processSingleProtocol(
         });
       }
     }
-    
+
     const allTimestamps = [...globalTimestamps, ...componentTimestamps];
     const uniqueTimestamps = [...new Set(allTimestamps)];
-    
-    
+
+
     if (uniqueTimestamps.length > 0) {
       priceCache = await fetchPricesForTimestamps(data.metadata.token, uniqueTimestamps);
     }
   }
-  
+
   const unlockUsdChart = await getPricedUnlockChart(data, v2ProcessedData, priceCache);
   const weekAgo = getDateByDaysAgo(7);
   const dayAgo = getDateByDaysAgo(1);
@@ -475,7 +494,7 @@ export async function processSingleProtocol(
     if (Number(val) < 0) return;
     const timestamp = Number(ts);
     const value = Number(val);
-    
+
     allTime.push(value);
     if (timestamp > yearAgo) year.push(value);
     if (timestamp > monthAgo) month.push(value);

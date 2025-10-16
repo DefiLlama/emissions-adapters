@@ -14,7 +14,7 @@ export async function latest(
   backfill: boolean = false
 ): Promise<number> {
   if (backfill) return timestampDeployed
-  if (!res) {
+  if (!res!) {
     let r;
     try {
       r = await fetch(`https://api.llama.fi/emission/${adapter}`).then((r) =>
