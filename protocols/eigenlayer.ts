@@ -1,214 +1,173 @@
-import { balance, latest } from "../adapters/balance";
-import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
+import { manualCliff, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 1759190400; // 30/09/2024
-const total = 1_673_646_668.28466; // Total Supply: 1.67 billion tokens
 const token = "0xec53bF9167f50cDEB3Ae105f56099aaaB9061F83";
 const chain = "ethereum";
+const start = 1727654400; // 30/09/2024
+const weeklyInflation = 1_287_420.5140651232; // Weekly inflation amount
+
+const unlockSchedules: { [date: string]: { [category: string]: number } } = {
+  "2025-10-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 21_697_690.05,
+  },
+  "2025-11-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 21_672_750.11,
+  },
+  "2025-12-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 21_594_263.19,
+  },
+  "2026-01-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 21_481_174.24,
+  },
+  "2026-02-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 21_275_068.58,
+  },
+  "2026-03-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 20_938_187.70,
+  },
+  "2026-04-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 20_566_147.69,
+  },
+  "2026-05-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 20_351_804.43,
+  },
+  "2026-06-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 20_185_416.18,
+  },
+  "2026-07-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 19_878_307.81,
+  },
+  "2026-08-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 19_698_418.08,
+  },
+  "2026-09-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 19_299_695.25,
+  },
+  "2026-10-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 18_835_879.83,
+  },
+  "2026-11-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 17_636_368.53,
+  },
+  "2026-12-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 16_605_781.69,
+  },
+  "2027-01-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_818_231.11,
+  },
+  "2027-02-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_676_329.61,
+  },
+  "2027-03-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-04-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-05-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-06-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-07-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-08-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-09-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-10-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+};
 
 const eigen: Protocol = {
-  "Airdrop/Stakedrop": [
-    manualCliff("2024-05-10", total * 0.0675),
-    manualCliff("2024-09-16", total * 0.042),
-    manualStep("2025-01-01", periodToSeconds.month * 3, 4, (total * 0.055) / 4),
+  // Fixed allocations that don't follow monthly schedule
+  "Stakedrops": [
+    manualCliff("2024-05-10", 112_970_000), // Season 1: ~113M EIGEN
+    manualCliff("2024-09-16", 70_290_000),  // Season 2: ~70.3M EIGEN
+    // Fixed at 183.26M after Season 2
   ],
-  "R&D, Ecosystem & Community Initiatives": (backfill: boolean) =>
-    balance(
-      [
-        "0xBF520AADBDC52dda54aCe4E7D2882360d25291B1",
-        "0x7822D916312afcD4B94973b2dc0C41d63210d94B",
-        "0x9280Ad0A3F994D9Fe5de783471c1788776102Da2",
-        "0xc345F9195400815b00f6e9da6154A800355bCe4f",
-        "0x322C567f40b7240CED2608B1974b04039c46cc52",
-        "0x52d5759C94DF99A90D9603f5E6c2032Ede35Ee1c",
-        "0x37bE0F82AF928b73Fcaac780D60D9d15a97D576F",
-        "0x41Bce732BaA3A2D315cFcE0B35005a09AB272429",
-        "0x70b8Ce191fA00C802A51241975aA6ba7480EBDa3",
-        "0x79aa8ad75DB301859BC0afEAcc4A00525bB620e6",
-        "0xF5193a510dC046CdC23C2CF1288281503DeC3BF6",
-        "0xfEE67E955A2F4e45003c3bA38644a0D028f9faAd",
-        "0x33432eC99D1307d3dD7690B14e32CA09693959B3",
-        "0x4177c073760f605B1133947546AB707D75cb9394",
-        "0xEf2d77EF1A2D59B8eDf9e7e825b81AFC051Aa55E",
-        "0x5327dA6A302A46eBd0DeB7BcfFDD650992D2fc43",
-        "0xC780db2E2Bcf04bcC8ba8e5A2ca53FDAA14A6118",
-        "0x7cF1E90aBC135FC00F85F9312846026C13Ea619B",
-        "0xBB2E259Dc4A9b2a9DfE6392D192C86881125D9d1",
-        "0x011aE25DD5891154553f11e53337122Dc05cF82f",
-        "0x6Fb8D36B691a496Eb3D16C18cA85a99203176f61",
-        "0x0e66281F10ca275881895204fddAb7806163f9cF",
-        "0x4fD30706842fd8Cc82DC42D748bC9Fb8E098C6e5",
-        "0x392C99C6cB13108195Bd893394CE273E8B69B012",
-        "0x974837040e5710D6cCF9404709b3f91eE93f4741",
-        "0x28c8B7fbdA64d6DA9E042b31b95E90831b73E7C9",
-        "0xdBa19d972FaaB514175f7185A1ab3368E289c566",
-        "0x9A38be66CA5581cFA630b4A199eA876FC23126be",
-        "0x0AC6755a2A0EFb5CBeF6f0e001107B56d319aCB6",
-        "0x396C78Ca161f8EF755F34de9b071462c9e09a5f9",
-        "0xE55ec4769721A678FAF7bB338629544125F70F5E",
-        "0xfe9F22926AeD553DDa8AD66d59712d98AEd91a90",
-        "0x0B622f33602A2B0b8D9d2f8aB032d44EC38C4498",
-        "0x50833E41B4Ed72148C4c727Ab9e0A40E11784a6C",
-        "0xC7B6fCa9C02cca968aB33267E395d4B3C54F1d87",
-        "0x968FB993D5e4caaF7Fee340C879B68eF028e9574",
-        "0xE59778241166d958483Ef14f5D2A11f059bD412f",
-        "0x003EDE4c8161537ca7e5e5A89E29fbCf57099F02",
-        "0xf373778101D690580A46181c2F685051b5eDb1A0",
-        "0xA109C19F804372CdC3f4B99844F30603Eed9d7aa",
-        "0xd5364c27811166A7b6C93ACb4Bc7B1eDDD75E9dd",
-        "0x8dC33Aba35e186B402d86C6C73ea455fa476A8C2",
-        "0x3FC2bdBD1C7e3f855481Ac2bC7d6dBF8839050f5",
-        "0x88CBce25B52E0F164357B95A58B61112eBb68a29",
-        "0xbb1511f782a986dadC475794D88E25D314cA07ac",
-        "0x0ba9f007079749c59D357748F8df80216aa909f6",
-        "0x95E51dFeb41a56705e84f57F4a8B545daAb019d4",
-        "0x6a89c92B138935e107CA9D5213eE61Fcc0CaF567",
-        "0x3df32F25f331C7902ddc6f35370aF31eC8D73594",
-        "0x88222c2B0DbE476E240EC873fdf69393b5C45B97",
-        "0x663FDdaFb57316853b4bDD8dF62A9D9a0501d6cA",
-        "0xBAAEbdb3E6802178a1C37f899688a89414C76154",
-        "0x5F9FdD73B0Cc0d2A5A40ecD2741a03B5F9d652Da",
-        "0xd55108815f4Bedb371b9741e81Ce674ADcfE3eAc",
-        "0x97e759c56037DE70316dD16fA6b21Efb97a89467",
-        "0xAFbDbE1C01c1F32CBF67DE5d5D2bdA68A779b6F2",
-        "0x23b3976D017AeE61eB984896699a00Ce8f43ab2A",
-        "0xc57b80519cF953BDe26FD43B381ca48d090739CB",
-        "0x49a6AedDBd5F7091471624DC567BcDb67D2E1611",
-        "0xbd53A356FeF60cDb6c83fa3a0cE576bb9E2B8FBd",
-        "0x6e0963BceC1F7BfB477C08c445af8c80F8c3Ea68",
-        "0x7E1e9860671692B2C707bA85168Cbf7E0D9C8344",
-        "0x386072F19d8c5457CE634bbf748d650f4e661635",
-        "0xfA21B68d51d00Dc19783eF86fCC21Da35AF52AfD",
-        "0xe7190d35389670801aED7DA2A663d91D9fe39280",
-        "0x58795D8FA706772fC19961998A14390D5F256484",
-        "0x734278F2bf50D352abD93Ca4D7a9eC8225719cf9",
-        "0x76935F65330281a1038a899B71F75eEA7C780886",
-        "0x8f50F65B8278fe1A225063c2599062a54c355783",
-        "0x08cAE0885813dCaB40dDBD1cd3D9C708CdeF37E7",
-        "0x783006e6a7B63baF8a93044aa146ee0F5DC82D57",
-        "0xca77c7AAb7692B70dFe6E71187aDF85185B02128",
-        "0xF3D98E8Ce938B555EDb0a3623aC61156CfDe3180",
-        "0x78D7700EDD50223455F49a4279a3F89134196BA2",
-        "0x65c8467AAe563f20713bd97a45034DfB3Ca47a21",
-        "0xA76297fC71CCf943C33f6E23807bDd5Ad0124a4B",
-        "0x889832924D8e05619f82e7F4D1C29F9cb8C8904F",
-        "0xAc6Aa107a6253831766348532b00CFdeDc8c9E70",
-        "0x4B6cb934a49b7757e24E64e7CfA113818c2eA2a1",
-        "0xBa4e60af843Ed8c7C7D5eC6B4859414591B6210F",
-        "0xec97Eb8471b7bb38E69D3a59D68fdefd69F617BE",
-        "0x521592B429BD39dc8F8C70b3D8F2fBE1f2B7D6f9",
-        "0x41f80E09E7F5a7AcC2e161eD824AbBC2B71eabfd",
-        "0x9BeC42B458e644653276f5f0cB7595f6c68b29Bb",
-        "0x628d208e03055D6F9Af9d41d971fEAd06F1cA293",
-        "0x2DDBACd6B4bCDA428C3BdC974E35791b0e8AcAD7",
-        "0x508C4Dd081dF7c5ED480C899E68BCeb20cCB3076",
-        "0xe5E1b4b6F32B8Eb524840EB79022746382Cd839A",
-        "0x8Fcb919a474BB563Ae9528a5578260AEA3A5CD4a",
-        "0x9e2246233F2b9a588fCddf0A28cDc31cBEfAc6BF",
-        "0x3cce50F247c0cEbCBED251ac351Ee11045F7392E",
-        "0x03BfF866Da2BF9169b49DFc7576d3090E266072a",
-        "0x6FfbFfaF8A896E775c44846372e320712a817c0C",
-        "0x867a2fCC994e4f78fB8f256e1Fa41Beb2d9206Bc",
-        "0xCe9593EEFD69fC53c40Ce4BaD00C85c7A5Eb8015",
-        "0xa411773d8e0D0671873fb956b05839138046E2D8",
-        "0x95d4309d343218D669D35e511ad6951E3Cc5a8A4",
-        "0xF0de9FCbc5f9A3aD8b752ebeCAf4B142F3B61fD0",
-        "0x991380813A04fc51Aa04647f14Fc138295810cBa",
-        "0x6bDE04270fEfc1Ba01489E91fAE4013Aa0EE1123",
-        "0x5c2a280FBe7937Db7285b9A6A343Eb8802a03929",
-        "0xB279Fc4B9ff694F972485Ca21AD5D66601376153",
-        "0xb1a2a781b5747F8cD74EB938879B1D14a566B1F9",
-        "0xeF95990BFf61E2719cd148cD78D396deC2742E41",
-        "0x14DC071E132f974ACA9095198D61d3ba42588968",
-        "0x302177C18ABA0352D279E9f83586AB446bA39070",
-        "0x41f90783EE8630BC74A0d3Cd9E50e797Ed5B5019",
-        "0xF0588a2a730afd0679aDe84562C8e07E949501Bd",
-        "0xAC6BCF0109a5d00F8A5AD42e49f839E993974c23",
-        "0x52Ac2F26c908E981a1D64056605fB5d849d542Bc",
-        "0xae08720d7b66c2029c6Bd6D74295D8f058257239",
-        "0xEF9A5905b82BF2610A43D5c2e3f915Ad51DD9921",
-        "0x97Db5C5B8c6B10e5E58389Dbb636fa1fAD9f5E83",
-        "0x5918844212156b5FC220444915cbcd9e46Ca2F78",
-        "0xFb22780cb49c3A488f2Ec99b2A17cE4f11fa67B1",
-        "0xAFFc0C8D4648618e099390CC02Dcb6ed2FA4B5D5",
-        "0x1B0eC103651d82437f3f443f7944614B5fd402d1",
-        "0xEFC175AaFa6085866d9f433b775AAE177bfD73ed",
-        "0x8A9796847Ab81EA2878C8629B93d9C0453845E51",
-        "0xf9C056e771f3e6CDA093c89170EAF85Ca32ED9b9",
-        "0xD9D283511bED9bf8DF9E42198C198EB25f37e6C7",
-        "0xDB5caA160c0876830cc7a593bc6cae3f97dD2CDb",
-        "0x1e0be31f06508473411Fc141F336A06BE0294B52",
-        "0xaa093AaCa9e62E5C83c09203b845097c80Df8B53",
-        "0x56A59D9cF7bc539ADc29537280023543C5c38A00",
-        "0xE47a7aDc4D24f3A1A93cb3965EFB1C92776a5e99",
-        "0xF15457a59FB2659C8471c79955aF310F2F48c885",
-        "0x5dC432bF98121c9eC02bdB7F7acEbDA7950Efa4D",
-        "0x7528dc3B5805f82d20bdBb06bDe51e6F0933F57E",
-        "0x790f27CbE87769840B99EaD43026Bc2fee23D8bF",
-        "0xCA0A574c3248CA52C5f0E3b88fb56D91Ba7E6c94",
-        "0xcEbAEa384464A6d82a2808bb7b28BCd32c2673ba",
-        "0x88eb1bF13e1e2F3883D24627499B2e4c6498e892",
-        "0x5baB8c5Aa05C72733EB0948EbAC8AC6B0733aAbe",
-        "0xff35084ABaA5ff2bE6D432a06Adff32bF1fe6A14",
-        "0x136E979F57DFbE7a80F07D6Cbe96032Eb56B9d7c",
-        "0x85FC5cC1536f8Ffd720D13Af242DcC2E996eB8fF",
-        "0x33F9cfc9F5fc48d9ce8A033272120556909a8f90",
-        "0x0AB2cD2a2AB3c3C2302B8E250993B8856fac48b1",
-        "0x4BF58BdCDec1F001caB75E1AC84e1Eb3b946900E",
-        "0x2dB2DB2ee1a25A6C69274167d06184fC4c722a00",
-        "0x30b932D2Ce37BcADB7A3588B26A743762721cA95",
-        "0xa50b90444B92F07412EBD0a9AE39D1B93d65939B",
-        "0xC22deBBaDC303f3C7DA07AE4f0f2405122E09912",
-        "0x450d139425682dA18221C3eb2140CF0a9Cd4Af31",
-        "0x51FbEF303428F689151eFdA9a6cb4EB3668B05B8",
-        "0xbb00DDa2832850a43840A3A86515E3Fe226865F2",
-      ],
-      token,
-      chain,
-      "eigenlayer",
-      start,
-      backfill,
-    ),
-  Investors: [
-    manualCliff(start + periodToSeconds.year, (total * 0.295) / 4),
-    manualLinear(
-      start + periodToSeconds.year,
-      start + periodToSeconds.years(3),
-      (total * 0.295 * 3) / 4,
-    ),
+  
+  "Inflation": [
+    manualCliff("2024-09-29", 7_724_523.084390739), // Initial distribution
+    manualCliff("2024-10-03", 1_287_420.5140651232),
+    manualCliff("2024-10-04", 1_287_420.5140651232),
+    manualCliff("2024-10-10", 1_287_420.5140651232),
+    manualCliff("2024-10-17", 1_287_420.5140651232),
+    manualStep("2024-10-24", periodToSeconds.week, 152, weeklyInflation), // Regular weekly from Oct 24
   ],
-  "Early Contributors": [
-    manualStep(
-      start + periodToSeconds.year,
-      periodToSeconds.month,
-      25,
-      total * 0.255 * 0.04,
-    ),
+  
+  "R&D": [
+    manualCliff("2024-09-30", 607_050_893), // Fixed allocation
   ],
-Inflation: manualLinear("2024-10-1", "2028-10-1", total * 0.04 * 4),
+  
   meta: {
-    notes: ["Airdrop/Stakedrop: Assuming there will be 6 seassons"],
-    token: `${chain}:${token}`,
-    sources: ["https://docs.eigenfoundation.org/"],
-    protocolIds: ["3107"],
-    incompleteSections: [
-      {
-        key: "R&D, Ecosystem & Community Initiatives",
-        allocation: total * 0.3,
-        lastRecord: (backfill: boolean) =>
-          latest("eigenlayer", start, backfill),
-      },
+    notes: [
+      "Initial allocation: Community 45%, Investors 29.5%, Early Contributors 25.5%",
+      "Stakedrops fixed at 183.26M after Season 2",
+      "R&D fixed allocation of 607.05M",
+      "Investors: 504.73M monthly unlocks",
+      "Early Contributors: 458.55M monthly unlocks",
+      "Inflation started Sep 29 2024 with irregular early pattern, then weekly 1,287,420.514 EIGEN",
+      "All components complete by October 2027 reaching 1,954.42M total supply (assumes inflation ends before Oct 2027)",
     ],
+    token: `${chain}:${token}`,
+    sources: [
+      "https://docs.eigenfoundation.org/",
+      "https://etherscan.io/token/0xec53bf9167f50cdeb3ae105f56099aaab9061f83",
+      "Internal unlock schedule data",
+    ],
+    protocolIds: ["3107"],
   },
+  
   categories: {
-    publicSale: ["Airdrop/Stakedrop"],
-    noncirculating: ["R&D, Ecosystem & Community Initiatives"],
+    publicSale: ["Stakedrops"],
+    noncirculating: ["R&D"],
     privateSale: ["Investors"],
     insiders: ["Early Contributors"],
     farming: ["Inflation"],
   },
 };
+
+Object.keys(unlockSchedules).forEach((date: string) => {
+  Object.keys(unlockSchedules[date]).forEach((category: string) => {
+    if (!eigen[category]) {
+      eigen[category] = [];
+    }
+    eigen[category].push(
+      manualCliff(date, unlockSchedules[date][category])
+    );
+  });
+});
 
 export default eigen;
