@@ -2,7 +2,7 @@
   "name": "emissions-adapters",
   "scripts": {
     "test": "mkdir -p utils/testCharts && ts-node utils/test.ts",
-    "store-emissions": "export AWS_REGION='eu-central-1' && export tableName='prod-table' && npx ts-node --logError runner/storeEmission.ts"
+    "store-emissions": "export AWS_REGION='eu-central-1' && export tableName='prod-table' && npx ts-node --logError --transpile-only runner/storeEmission.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.911.0",
