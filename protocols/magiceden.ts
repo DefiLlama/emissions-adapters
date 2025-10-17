@@ -39,7 +39,7 @@ const magiceden: Protocol = {
   meta: {
     token: "coingecko:magic-eden",
     sources: ["https://blog.mefoundation.com/blog/me-tokenomics/"],
-    protocolIds: ["6028"],
+    protocolIds: ["6029"],
     notes: [
       "Assuming Core Contributors (60% of contributors) lock for 18 months after TGE",
       "Assuming all Strategic Participants lock for 1 year after TGE",
