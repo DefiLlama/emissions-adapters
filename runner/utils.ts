@@ -7,6 +7,8 @@ import { createFuturesData } from "../utils/futures";
 import { storeR2JSONString } from "./r2";
 import { protocolsIncentives } from "../no-emissions/incentives";
 import { V2Processor } from "../utils/v2-processor";
+import * as sdk from "@defillama/sdk";
+import { PromisePool } from "@supercharge/promise-pool";
 
 const sluggifyString = (name: string) => name.toLowerCase().split(" ").join("-").split("'").join("");
 let protocols: any = {}
@@ -249,31 +251,47 @@ const getDateByDaysAgo = (days: number) => {
 const sum = (arr: number[]) => arr.reduce((acc, val) => acc + val, 0);
 
 async function fetchPricesForTimestamps(token: string, timestamps: string[]): Promise<Record<string, number>> {
+  const cacheKey = `token-price-${token.replace(":", "-")}`;
+  const tokenPriceCache = (await sdk.cache.readCache(cacheKey, {
+    skipR2Cache: true,
+    skipCompression: true,
+  })) ?? {}
+
   const prices: Record<string, number> = {};
+  
+  timestamps = timestamps.filter(ts => {
+    if (typeof tokenPriceCache[ts] === 'number') {
+      prices[ts] = tokenPriceCache[ts];
+      return false;
+    }
+    return true;
+  });
 
   if (!token || timestamps.length === 0) {
     return prices;
   }
 
-  console.log(`Fetching prices for ${timestamps.length} timestamps for token: ${token}`);
+  console.log(`Fetching prices for ${timestamps.length} timestamps for token: ${token}`)
 
-  const pricePromises = timestamps.map(async (ts) => {
-    try {
+  const fetchPrice = async (ts: any) => {
       const response = await fetch(
         `https://coins.llama.fi/prices/historical/${ts}/${token}?apikey=${process.env.APIKEY}`
       );
       const price = await response.json();
       const priceValue = price?.coins?.[token]?.price;
-      if (priceValue) {
-        prices[ts] = priceValue;
+      if (typeof priceValue === 'number') {
+        prices[ts] = priceValue
+        tokenPriceCache[ts] = priceValue
       }
-      return { ts, price: priceValue };
-    } catch (error) {
-      return { ts, price: undefined };
-    }
+  }
+
+  await PromisePool.withConcurrency(15).for(timestamps).process(fetchPrice)
+
+  await sdk.cache.writeCache(cacheKey, tokenPriceCache, {
+    skipR2CacheWrite: true,
+    skipCompression: true,
   });
 
-  await Promise.all(pricePromises);
   console.log(`Successfully fetched ${Object.keys(prices).length}/${timestamps.length} prices`);
 
   return prices;
