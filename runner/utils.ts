@@ -272,6 +272,7 @@ async function fetchPricesForTimestamps(token: string, timestamps: string[]): Pr
   }
 
   console.log(`Fetching prices for ${timestamps.length} timestamps for token: ${token}`)
+  let success = 0
 
   const fetchPrice = async (ts: any) => {
       const response = await fetch(
@@ -280,6 +281,7 @@ async function fetchPricesForTimestamps(token: string, timestamps: string[]): Pr
       const price = await response.json();
       const priceValue = price?.coins?.[token]?.price;
       if (typeof priceValue === 'number') {
+        success++
         prices[ts] = priceValue
         tokenPriceCache[ts] = priceValue
       }
@@ -292,7 +294,7 @@ async function fetchPricesForTimestamps(token: string, timestamps: string[]): Pr
     skipCompression: true,
   });
 
-  console.log(`Successfully fetched ${Object.keys(prices).length}/${timestamps.length} prices`);
+  console.log(`Successfully fetched total: ${Object.keys(prices).length} | queried: ${timestamps.length} | successful: ${success} for token: ${token}`);
 
   return prices;
 }
