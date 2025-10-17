@@ -258,13 +258,14 @@ async function fetchPricesForTimestamps(token: string, timestamps: string[]): Pr
   })) ?? {}
 
   const prices: Record<string, number> = {};
-  
+  const failedSet = new Set<string>(tokenPriceCache.failed || []);
+
   timestamps = timestamps.filter(ts => {
     if (typeof tokenPriceCache[ts] === 'number') {
       prices[ts] = tokenPriceCache[ts];
       return false;
     }
-    return true;
+    return !failedSet.has(ts + '');
   });
 
   if (!token || timestamps.length === 0) {
@@ -275,6 +276,9 @@ async function fetchPricesForTimestamps(token: string, timestamps: string[]): Pr
   let success = 0
 
   const fetchPrice = async (ts: any) => {
+    try {
+
+
       const response = await fetch(
         `https://coins.llama.fi/prices/historical/${ts}/${token}?apikey=${process.env.APIKEY}`
       );
@@ -284,7 +288,16 @@ async function fetchPricesForTimestamps(token: string, timestamps: string[]): Pr
         success++
         prices[ts] = priceValue
         tokenPriceCache[ts] = priceValue
+      } else {
+        if (!tokenPriceCache.failed) tokenPriceCache.failed = [];
+        tokenPriceCache.failed.push(ts + '');
       }
+
+
+    } catch (error) {
+      if (!tokenPriceCache.failed) tokenPriceCache.failed = [];
+      tokenPriceCache.failed.push(ts + '');
+    }
   }
 
   await PromisePool.withConcurrency(15).for(timestamps).process(fetchPrice)
