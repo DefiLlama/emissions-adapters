@@ -5,6 +5,10 @@ import { sendMessage, withTimeout } from "./serverUtils";
 import { init, processSingleProtocol } from "./utils";
 import { readdirSync } from "fs";
 
+const duplicateIds: string[] = [
+  '1048' // merit circle, beam
+];
+
 async function validateAdapters(emissionsAdapters: any) {
   const errors = [] as string[];
   const tokens = new Set<string>(), protocolIds = new Set<string>(), notes = new Set<string>(), sources = new Set<string>();
@@ -25,7 +29,7 @@ async function validateAdapters(emissionsAdapters: any) {
         errors.push(`Error in ${protocolName}: protocolIds should be an array`)
       else {
         protocol.protocolIds.forEach((id: string) => {
-          if (protocolIds.has(id)) errors.push(`Error in ${protocolName}: duplicate protocolId ${id}`);
+          if (protocolIds.has(id) && !duplicateIds.includes(id)) errors.push(`Error in ${protocolName}: duplicate protocolId ${id}`);
           protocolIds.add(id);
         });
       }
