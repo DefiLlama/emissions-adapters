@@ -17,7 +17,7 @@ const chain: any = "ethereum";
 let res: number;
 
 export async function latest(): Promise<number> {
-  if (!res)
+  if (!res!)
     return fetch(`https://api.llama.fi/emission/api3`)
       .then((r) => r.json())
       .then((r) => JSON.parse(r.body))

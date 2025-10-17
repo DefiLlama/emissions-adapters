@@ -23,7 +23,7 @@ const contracts: { [chain: string]: any } = {
 let res: number;
 
 export async function latest(key: string, backfill: boolean): Promise<number> {
-  if (!res)
+  if (!res!)
     return fetch(`https://api.llama.fi/emission/${key}`)
       .then((r) => r.json())
       .then((r) => {
