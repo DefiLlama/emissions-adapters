@@ -5,6 +5,60 @@ import { sendMessage, withTimeout } from "./serverUtils";
 import { init, processSingleProtocol } from "./utils";
 import { readdirSync } from "fs";
 
+async function validateAdapters(emissionsAdapters: any) {
+  const errors = [] as string[];
+  const tokens = new Set<string>(), protocolIds = new Set<string>(), notes = new Set<string>(), sources = new Set<string>();
+  for (const [protocolName, protocolFile] of Object.entries(emissionsAdapters)) {
+    try {
+
+      if (protocolName === "daomaker" || protocolName === "streamflow") {
+        continue
+      }
+      const rawProtocol = (protocolFile as any).default
+      const protocol = rawProtocol.meta;
+      if (!protocol.token) errors.push(`Error in ${protocolName}: missing token field`);
+      if (tokens.has(protocol.token!)) errors.push(`Error in ${protocolName}: duplicate token ${protocol.token}`);
+
+      tokens.add(protocol.token!);
+
+      if (!Array.isArray(protocol.protocolIds) || protocol.protocolIds.length === 0)
+        errors.push(`Error in ${protocolName}: protocolIds should be an array`)
+      else {
+        protocol.protocolIds.forEach((id: string) => {
+          if (protocolIds.has(id)) errors.push(`Error in ${protocolName}: duplicate protocolId ${id}`);
+          protocolIds.add(id);
+        });
+      }
+
+      /*
+       // Why was the test checking if the notes was duplicated and the unit test had a bug by comparing objects instead of strings?
+      if (Array.isArray(protocol.notes)) {
+        protocol.notes.forEach((note: string) => {
+          if (notes.has(note)) errors.push(`Error in ${protocolName}: duplicate note ${note}`);
+          notes.add(note);
+        });
+      } 
+        */
+
+      if (Array.isArray(protocol.sources)) {
+        protocol.sources.forEach((source: string) => {
+          if (sources.has(source)) errors.push(`Error in ${protocolName}: duplicate source ${source}`);
+          sources.add(source);
+        });
+      }
+
+
+    } catch (e: any) {
+      errors.push(`Error in ${protocolName}: ${e?.message}`);
+    }
+  }
+
+  if (errors.length > 0) {
+    console.table(errors);
+    await sendMessage(`Emissions Adapters Validation Errors: \n${errors.join("\n")}`, process.env.DIM_ERROR_CHANNEL_WEBHOOK!);
+  }
+}
+
 export async function processProtocolList() {
   await init()
 
@@ -15,6 +69,8 @@ export async function processProtocolList() {
   const adapters = createEmissionsImportsFile()
 
   const protocolAdapters = Object.entries(adapters)
+
+  await validateAdapters(adapters)
 
   // randomize array
   protocolAdapters.sort(() => Math.random() - 0.5);
@@ -71,17 +127,6 @@ async function handlerErrors(errors: string[]) {
   }
 }
 
-export async function handler() {
-  try {
-    await withTimeout(8400000, processProtocolList());
-  } catch (e) {
-    process.env.UNLOCKS_WEBHOOK ? await sendMessage(`${e}`, process.env.UNLOCKS_WEBHOOK!) : console.log(e);
-  }
-  process.exit();
-}
-
-// export default wrapScheduledLambda(handler);
-handler(); // ts-node defi/src/storeEmissions.ts
 
 
 const extensions = ['ts', 'md', 'js']
@@ -114,3 +159,15 @@ function removeDotTs(s: string) {
     splitted.pop()
   return splitted.join('.')
 }
+
+async function run() {
+  try {
+    await withTimeout(8400000, processProtocolList());
+  } catch (e) {
+    process.env.DIM_ERROR_CHANNEL_WEBHOOK ? await sendMessage(`${e}`, process.env.DIM_ERROR_CHANNEL_WEBHOOK!) : console.log(e);
+  }
+  process.exit();
+}
+
+
+run()
