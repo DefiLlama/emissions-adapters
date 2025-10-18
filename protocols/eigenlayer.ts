@@ -140,12 +140,12 @@ const eigen: Protocol = {
       "Early Contributors: 458.55M monthly unlocks",
       "Inflation started Sep 29 2024 with irregular early pattern, then weekly 1,287,420.514 EIGEN",
       "All components complete by October 2027 reaching 1,954.42M total supply (assumes inflation ends before Oct 2027)",
+      "Data are provided by EigenLayer team"
     ],
     token: `${chain}:${token}`,
     sources: [
       "https://docs.eigenfoundation.org/",
       "https://etherscan.io/token/0xec53bf9167f50cdeb3ae105f56099aaab9061f83",
-      "Internal unlock schedule data",
     ],
     protocolIds: ["3107"],
   },
