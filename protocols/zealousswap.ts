@@ -76,7 +76,7 @@ const zealousSwap: Protocol = {
     "Liquidity & exchange listings (reserve)": manualCliff(START, LIQ_AND_LISTINGS),
 
     meta: {
-        protocolIds: [],
+        protocolIds: ["6877"],
         sources: [
             "https://zealous-swap.gitbook.io/zealous-swap/protocol/zeal-token",
         ],
