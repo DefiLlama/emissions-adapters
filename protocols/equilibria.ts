@@ -8,7 +8,7 @@ const qty: number = 100e6;
 
 const equilibria: Protocol = {
   // Airdrop: manualCliff(unixTimestampNow(), qty * 0.02),
-  "Boostrapping Incentives": manualCliff(
+  "Bootstrapping Incentives": manualCliff(
     start + periodToSeconds.month * 6,
     qty * 0.02,
   ),
@@ -59,7 +59,7 @@ const equilibria: Protocol = {
   categories: {
     publicSale: ["IDO"],
     noncirculating: ["Equilibria Treasury"],
-    farming: ["Liquidity Mining", "Boostrapping Incentives"],
+    farming: ["Liquidity Mining", "Bootstrapping Incentives"],
     privateSale: ["Presale Investors"],
   },
 };

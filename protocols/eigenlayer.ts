@@ -4,6 +4,111 @@ import { periodToSeconds } from "../utils/time";
 
 const token = "0xec53bF9167f50cDEB3Ae105f56099aaaB9061F83";
 const chain = "ethereum";
+const start = 1727654400; // 30/09/2024
+const weeklyInflation = 1_287_420.5140651232; // Weekly inflation amount
+
+const unlockSchedules: { [date: string]: { [category: string]: number } } = {
+  "2025-10-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 21_697_690.05,
+  },
+  "2025-11-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 21_672_750.11,
+  },
+  "2025-12-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 21_594_263.19,
+  },
+  "2026-01-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 21_481_174.24,
+  },
+  "2026-02-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 21_275_068.58,
+  },
+  "2026-03-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 20_938_187.70,
+  },
+  "2026-04-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 20_566_147.69,
+  },
+  "2026-05-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 20_351_804.43,
+  },
+  "2026-06-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 20_185_416.18,
+  },
+  "2026-07-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 19_878_307.81,
+  },
+  "2026-08-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 19_698_418.08,
+  },
+  "2026-09-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 19_299_695.25,
+  },
+  "2026-10-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 18_835_879.83,
+  },
+  "2026-11-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 17_636_368.53,
+  },
+  "2026-12-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 16_605_781.69,
+  },
+  "2027-01-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_818_231.11,
+  },
+  "2027-02-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_676_329.61,
+  },
+  "2027-03-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-04-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-05-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-06-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-07-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-08-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-09-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+  "2027-10-01": {
+    "Investors": 20_189_049.87,
+    "Early Contributors": 15_667_300.61,
+  },
+};
 
 // PI (Programmatic Incentives) weekly amounts
 const weeklyPI_v1 = 1_287_420.5140651232; // ended
