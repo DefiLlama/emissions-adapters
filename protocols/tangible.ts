@@ -27,7 +27,7 @@ const tangible: Protocol = {
       "https://docs.tangible.store/tngbl-and-marketplace/tangible-token-tngbl",
     ],
     notes: [
-      `"GURU Holders" allocation consists of a mix of 2-4 year staked NFT positions. The mix is unkown so here we have assumed they'll unlock linearly across the 2 year period.`,
+      `"GURU Holders" allocation consists of a mix of 2-4 year staked NFT positions. The mix is unknown so here we have assumed they'll unlock linearly across the 2 year period.`,
     ],
     token: "polygon:0x49e6A20f1BBdfEeC2a8222E052000BbB14EE6007",
     protocolIds: ["2231"],

@@ -83,7 +83,7 @@ ORDER BY date DESC`, {})
 const lido: Protocol = {
   Investors: schedule(0.2218),
   "Validators & Signature Holders": schedule(0.065),
-  "Initial Lido Devlopers": schedule(0.2),
+  "Initial Lido Developers": schedule(0.2),
   "Founders & Future Employees": schedule(0.15),
   // "DAO Treasury": (backfill: boolean) =>
   //   balance(
@@ -117,7 +117,7 @@ const lido: Protocol = {
     privateSale: ["Investors"],
     insiders: [
       "Validators & Signature Holders",
-      "Initial Lido Devlopers",
+      "Initial Lido Developers",
       "Founders & Future Employees",
     ],
   },
