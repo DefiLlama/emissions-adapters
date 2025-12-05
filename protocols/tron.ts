@@ -13,7 +13,7 @@ const privateSaleAmount = initialSupplyBase * 0.257;
 const icoAmount = initialSupplyBase * 0.40;
 const tronFoundationAmount = (initialSupplyBase * 0.343) - 1_000_000_000; // 1B TRX is burned at launch
 
-const dailyEmissionRate = 5_068_800; // TRX per day (Block + Voting rewards) (Caculated from approx 28800 blocks per day * (16 + 160))
+const dailyEmissionRate = 5_068_800; // TRX per day (Block + Voting rewards) (Calculated from approx 28800 blocks per day * (16 + 160))
 
 const tron: Protocol = {
   "Public Sale": manualCliff(launch, icoAmount),
