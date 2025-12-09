@@ -24,7 +24,7 @@ const stable: Protocol = {
     (total * 0.25) / 36,
   ),
   meta: {
-    token: "",
+    token: "coingecko:stable-2",
     sources: ["https://docs.stable.xyz/en/introduction/tokenomics"],
     protocolIds: ["7086"],
   },
