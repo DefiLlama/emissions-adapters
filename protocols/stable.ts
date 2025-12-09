@@ -2,7 +2,7 @@ import { manualCliff, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
-const start = 1733698800;
+const start = 1765152000;
 const total = 100e9;
 
 const stable: Protocol = {
