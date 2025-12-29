@@ -47,7 +47,7 @@ const morpho: Protocol = {
     ],
     token: "coingecko:morpho",
     sources: [
-      "https://docs.morpho.org/governance/morpho-token/overview/#token-distribution--vesting",
+      "https://docs.morpho.org/learn/governance/morpho-token/#token-distribution--vesting",
       "https://docs.google.com/spreadsheets/d/1eVFzOvsMlPYHjPyJZlNKEqD9BI-WUaxqvKMPH6wLTjk/edit",
     ],
     protocolIds: ["parent#morpho","3014", "4025"],
