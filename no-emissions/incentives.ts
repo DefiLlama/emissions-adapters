@@ -47,5 +47,6 @@ export const protocolsIncentives:string[] = [
     // "parent#spark", //spark is not correct #135
     "parent#blackhole", //blackhole
     "parent#uniswap",
-    "parent#etherex" //etherex
+    "parent#etherex", //etherex
+    "parent#hyperliquid" //hyperliquid
 ]

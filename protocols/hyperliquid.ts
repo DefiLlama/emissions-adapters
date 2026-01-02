@@ -13,6 +13,7 @@ const validatorRewards = async (): Promise<CliffAdapterResult[]> => {
       type: "cliff" as const,
       start: d.timestamp,
       amount: d.totalStake * (d.yield / 100) / 365,
+      isUnlock: false
     }));
 };
 
@@ -43,7 +44,7 @@ const hyperliquid: Protocol = {
     ],
     token: "coingecko:hyperliquid",
     sources: ["https://hyperfnd.medium.com/hype-genesis-1830a4dc2e3f", "https://data.asxn.xyz/dashboard/hype-staking", "https://hyperliquid.gitbook.io/hyperliquid-docs/hypercore/staking"],
-    protocolIds: ["4481", "5448", "5507", "5761"],
+    protocolIds: ["parent:hyperliquid"],
     total,
     chain: "hyperliquid"
   },
