@@ -46,7 +46,6 @@ const hyperliquid: Protocol = {
     sources: ["https://hyperfnd.medium.com/hype-genesis-1830a4dc2e3f", "https://data.asxn.xyz/dashboard/hype-staking", "https://hyperliquid.gitbook.io/hyperliquid-docs/hypercore/staking"],
     protocolIds: ["parent:hyperliquid"],
     total,
-    chain: "hyperliquid"
   },
   categories: {
     insiders: ["Core Contributors", "Hyper Foundation Budget"],
