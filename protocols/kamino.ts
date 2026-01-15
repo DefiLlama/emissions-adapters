@@ -12,8 +12,8 @@ const kamino: Protocol = {
   "Liquidity & Treasury": manualCliff(start, total * 0.10),
   "Genesis Allocation": manualCliff(start, total * 0.075),
   "Season 2 Allocation": manualCliff(1724630400, total * 0.035),
-  "Season 3 Allocation": manualCliff(1748822400, total * 0.035),
-  "Season 4 Allocation": manualCliff(1763337600, total * 0.01),
+  "Season 3 Allocation": manualCliff(1748476800, total * 0.035), // May 29, 2025
+  "Season 4 Allocation": manualCliff(1763078400, total * 0.01), // Nov 14, 2025
   "Season 5 Allocation": manualCliff(1770595200, total * 0.01),
   "Core Contributors": manualLinear(
     start + periodToSeconds.year,
