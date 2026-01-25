@@ -8,25 +8,30 @@ const token = "0xfe0c30065b384f05761f15d0cc899d4f9f9cc0eb";
 const chain = "ethereum";
 
 const etherfi: Protocol = {
-  "Core Contributors": manualLinear(
+  "Core Contributors": [
+    manualLinear(
     start + periodToSeconds.year,
+    start + periodToSeconds.years(2),
+    total * 0.160987500
+  ),
+    manualLinear(
+    start + periodToSeconds.years(2),
     start + periodToSeconds.years(3),
-    total * 0.2326,
+    total * 0.0536625
   ),
-  Treasury: manualLinear(
-    start,
-    start + periodToSeconds.years(6),
-    total * 0.2724,
-  ),
-  "User Airdrops": [
-    manualCliff(start, total * 0.06),
-    manualCliff(1719705600, total * 0.05),
+],
+  Treasury: manualCliff(start, total * 0.21629),
+  "Community": [
+    manualCliff(start, total * 0.095),
+    manualCliff(1720483200, total * 0.058),
+    manualCliff(1726531200, total * 0.027),
+    manualCliff(1738627200, total * 0.01265),
   ],
-  Partnerships: manualCliff(start, total * 0.06),
+  Partnerships: manualCliff(start, total * 0.039),
   Investors: manualLinear(
     start + periodToSeconds.year,
     start + periodToSeconds.years(2),
-    total * 0.325,
+    total * 0.33738,
   ),
   meta: {
     token: `${chain}:${token}`,
