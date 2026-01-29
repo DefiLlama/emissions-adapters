@@ -133,7 +133,7 @@ const aaveIncentivesSection: SectionV2 = {
       id: "stkaave-incentives",
       name: "stkAAVE incentives",
       methodology: "Tracks rewards claimed using event logs from stkAAVE contract",
-      isIncentive: true,
+      isIncentive: false,
       fetch: stkAaveIncentives,
       metadata: {
         contract: "0x4da27a545c0c5B758a6BA100e3a049001de870f5",
