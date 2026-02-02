@@ -49,5 +49,6 @@ export const protocolsIncentives:string[] = [
     "parent#uniswap",
     "parent#etherex", //etherex
     "parent#hyperliquid", //hyperliquid
-    "6771" //yieldbasis
+    "6771", //yieldbasis
+    "2187" //dolomite
 ]
