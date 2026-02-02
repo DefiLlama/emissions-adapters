@@ -220,8 +220,8 @@ const dolomite: ProtocolV2 = {
     total,
     notes: [
       "All allocations specified as veDOLO or oDOLO are modeled as standard DOLO",
-      "oDOLO Liquidity Mining tracks actual mints on Berachain via ClickHouse",
-      "oARB Liquidity Mining tracks claimed rewards on Arbitrum via ClickHouse (started Nov 2023)",
+      "oDOLO Liquidity Mining tracks actual mints on Berachain",
+      "oARB Liquidity Mining tracks claimed rewards on Arbitrum (started Nov 2023)",
       "Boyco Incentives assumed to be unlocked linearly over 4 years",
       "Future Partner Rewards have no defined schedule, modeled as unlocked at start",
       "Minerals Claimers represents tokens available via call options ($0.045 strike) exercisable for 6 months post-TGE",
