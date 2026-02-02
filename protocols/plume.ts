@@ -80,7 +80,7 @@ const plume: Protocol = {
   categories: {
     noncirculating: ["Foundation","Community & Ecosystem"],
     airdrop: ["Airdrop"],
-    farming: ["Validators"],
+    staking: ["Validators"],
     privateSale: ["Early Backers"],
     insiders: ["Core Contributors"],
   },

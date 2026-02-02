@@ -82,7 +82,7 @@ const flow: Protocol = {
     chain: 'flow'
   },
   categories: {
-    farming: ["Staking Rewards"],
+    staking: ["Staking Rewards"],
     publicSale: ["Community Sale","Auction"],
     noncirculating: ["Ecosystem Reserve"],
     privateSale: ["Pre-launch Backers"],

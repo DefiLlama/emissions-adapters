@@ -96,7 +96,8 @@ const axs: Protocol = {
   },
   categories: {
     publicSale: ["Public Sale"],
-    farming: ["Staking Reward","Play to Earn"],
+    staking: ["Staking Reward"],
+    farming: ["Play to Earn"],
     noncirculating: ["Ecosystem Fund"],
     privateSale: ["Private Sale"],
     insiders: ["Advisors","Sky Mavis"],

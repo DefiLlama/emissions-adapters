@@ -125,7 +125,7 @@ const celo: Protocol = {
   },
 
   categories: {
-    farming: ["Staking & Validator Reserve"],
+    staking: ["Staking & Validator Reserve"],
     noncirculating: ["Community Grants","Initial Reserve","Operational Grants"],
     privateSale: ["Pre-launch Sales"],
     insiders: ["Team, Advisors, Founders & Contributors"],
