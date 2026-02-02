@@ -1,7 +1,14 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
-import { CliffAdapterResult, Protocol } from "../types/adapters";
+import { CliffAdapterResult, ProtocolV2, SectionV2 } from "../types/adapters";
 import { queryCustom } from "../utils/queries";
 import { readableToSeconds } from "../utils/time";
+
+const SAFETY_MODULE_CONTRACT = "0x65f7ba4ec257af7c55fd5854e5f6356bbd0fb8ec";
+const MERKLE_DISTRIBUTOR_CONTRACT = "0x01d3348601968ab85b4bb028979006eac235a588";
+const LIQUIDITY_STAKING_CONTRACT = "0x5aa653a076c1dbb47cec8c1b4d152444cad91941";
+const SAFETY_MODULE_TOPIC = "0x2ef606d064225d24c1514dc94907c134faee1237445c2f63f410cce0852b2054";
+const MERKLE_CLAIMED_TOPIC = "0x8b787e8c8443ad32d7a6d2aed319d9bee901168951fe414912a3968f977c6a29";
+const LIQUIDITY_STAKING_TOPIC = "0xfc30cddea38e2bf4d6ea7d3f9ed3b6ad7f176419f4963bd81318067a4aee73fe";
 
 const schedules: { [date: string]: { [section: string]: number } } = {
   "03/08/2021": {
@@ -766,18 +773,16 @@ const schedules: { [date: string]: { [section: string]: number } } = {
   // }
 };
 
-const rewards = async (): Promise<CliffAdapterResult[]> => {
+const safetyModuleRewards = async (): Promise<CliffAdapterResult[]> => {
   const result: CliffAdapterResult[] = [];
   const data = await queryCustom(`SELECT
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) / 1e18 AS amount
 FROM evm_indexer.logs
-WHERE address IN ('0x5aa653a076c1dbb47cec8c1b4d152444cad91941', '0x01d3348601968ab85b4bb028979006eac235a588', '0x65f7ba4ec257af7c55fd5854e5f6356bbd0fb8ec')
-  AND (topic0 = '0x2ef606d064225d24c1514dc94907c134faee1237445c2f63f410cce0852b2054'
-  		OR topic0 = '0x8b787e8c8443ad32d7a6d2aed319d9bee901168951fe414912a3968f977c6a29'
-  		OR topic0 = '0xfc30cddea38e2bf4d6ea7d3f9ed3b6ad7f176419f4963bd81318067a4aee73fe')
+WHERE address = '${SAFETY_MODULE_CONTRACT}'
+  AND topic0 = '${SAFETY_MODULE_TOPIC}'
 GROUP BY date
-ORDER BY date DESC`, {})
+ORDER BY date DESC`, {});
 
   for (let i = 0; i < data.length; i++) {
     result.push({
@@ -787,11 +792,101 @@ ORDER BY date DESC`, {})
     });
   }
   return result;
-}
+};
 
-const dydx: Protocol = {
-  Rewards: rewards,
+const merkleDistributorRewards = async (): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
+  const data = await queryCustom(`SELECT
+    toStartOfDay(timestamp) AS date,
+    SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) / 1e18 AS amount
+FROM evm_indexer.logs
+WHERE address = '${MERKLE_DISTRIBUTOR_CONTRACT}'
+  AND topic0 = '${MERKLE_CLAIMED_TOPIC}'
+GROUP BY date
+ORDER BY date DESC`, {});
+
+  for (let i = 0; i < data.length; i++) {
+    result.push({
+      type: "cliff",
+      start: readableToSeconds(data[i].date),
+      amount: Number(data[i].amount)
+    });
+  }
+  return result;
+};
+
+const liquidityStakingRewards = async (): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
+  const data = await queryCustom(`SELECT
+    toStartOfDay(timestamp) AS date,
+    SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) / 1e18 AS amount
+FROM evm_indexer.logs
+WHERE address = '${LIQUIDITY_STAKING_CONTRACT}'
+  AND topic0 = '${LIQUIDITY_STAKING_TOPIC}'
+GROUP BY date
+ORDER BY date DESC`, {});
+
+  for (let i = 0; i < data.length; i++) {
+    result.push({
+      type: "cliff",
+      start: readableToSeconds(data[i].date),
+      amount: Number(data[i].amount)
+    });
+  }
+  return result;
+};
+
+const incentivesSection: SectionV2 = {
+  displayName: "Rewards",
+  methodology: "Tracks dYdX rewards from Safety Module, Merkle Distributor, and Liquidity Staking contracts",
+  isIncentive: true,
+  components: [
+    {
+      id: "safety-module-rewards",
+      name: "Safety Module Rewards",
+      methodology: "Tracks Claimed events from the Safety Module staking contract",
+      isIncentive: true,
+      fetch: safetyModuleRewards,
+      metadata: {
+        contract: SAFETY_MODULE_CONTRACT,
+        chain: "ethereum",
+        chainId: "1",
+        eventSignature: SAFETY_MODULE_TOPIC,
+      },
+    },
+    {
+      id: "merkle-distributor-rewards",
+      name: "Merkle Distributor Rewards",
+      methodology: "Tracks Claimed events from the Merkle Distributor for trading rewards",
+      isIncentive: true,
+      fetch: merkleDistributorRewards,
+      metadata: {
+        contract: MERKLE_DISTRIBUTOR_CONTRACT,
+        chain: "ethereum",
+        chainId: "1",
+        eventSignature: MERKLE_CLAIMED_TOPIC,
+      },
+    },
+    {
+      id: "liquidity-staking-rewards",
+      name: "Liquidity Staking Rewards",
+      methodology: "Tracks WithdrewStake events from the Liquidity Staking contract",
+      isIncentive: true,
+      fetch: liquidityStakingRewards,
+      metadata: {
+        contract: LIQUIDITY_STAKING_CONTRACT,
+        chain: "ethereum",
+        chainId: "1",
+        eventSignature: LIQUIDITY_STAKING_TOPIC,
+      },
+    },
+  ],
+};
+
+const dydx: ProtocolV2 = {
+  "Rewards": incentivesSection,
   meta: {
+    version: 2,
     sources: [
       "https://docs.dydx.community/dydx-unlimited/start-here/dydx-token-allocation",
     ],
