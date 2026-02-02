@@ -63,28 +63,15 @@ const stakingRewards = async (): Promise<CliffAdapterResult[]> => {
   return result;
 };
 
-const incentivesSection: SectionV2 = {
-  displayName: "Rewards",
-  methodology: "Tracks RDNT rewards from lending incentives and staking",
+const stakingSection: SectionV2 = {
+  displayName: "Staking Rewards",
+  methodology: "Tracks RDNT rewards distributed to dLP stakers (RDNT-ETH LP holders)",
   isIncentive: true,
   components: [
     {
-      id: "lending-rewards",
-      name: "Lending Rewards",
-      methodology: "Tracks RewardsAccrued events from IncentivesController for supply/borrow rewards",
-      isIncentive: true,
-      fetch: lendingRewards,
-      metadata: {
-        contract: INCENTIVES_CONTROLLER,
-        chain: "arbitrum",
-        chainId: "42161",
-        eventSignature: REWARDS_ACCRUED_TOPIC,
-      },
-    },
-    {
-      id: "staking-rewards",
-      name: "Staking Rewards",
-      methodology: "Tracks RewardClaimed events from dLP staking contracts",
+      id: "dlp-staking-rewards",
+      name: "dLP Staking Rewards",
+      methodology: "Tracks RewardClaimed events from dLP staking contracts. These rewards go to users who stake RDNT-ETH LP tokens, which requires holding RDNT.",
       isIncentive: true,
       fetch: stakingRewards,
       metadata: {
@@ -92,6 +79,27 @@ const incentivesSection: SectionV2 = {
         chain: "arbitrum",
         chainId: "42161",
         eventSignature: REWARD_CLAIMED_TOPIC,
+      },
+    },
+  ],
+};
+
+const farmingSection: SectionV2 = {
+  displayName: "Farming Incentives",
+  methodology: "Tracks RDNT rewards distributed to lenders and borrowers",
+  isIncentive: true,
+  components: [
+    {
+      id: "lending-rewards",
+      name: "Lending/Borrowing Rewards",
+      methodology: "Tracks RewardsAccrued events from IncentivesController for supply/borrow rewards. These go to protocol users, not necessarily RDNT holders.",
+      isIncentive: true,
+      fetch: lendingRewards,
+      metadata: {
+        contract: INCENTIVES_CONTROLLER,
+        chain: "arbitrum",
+        chainId: "42161",
+        eventSignature: REWARDS_ACCRUED_TOPIC,
       },
     },
   ],
@@ -113,7 +121,8 @@ const radiant: ProtocolV2 = {
     ),
     manualCliff(start + periodToSeconds.month * 3, qty * 0.2 * 0.1),
   ],
-  "Rewards": incentivesSection,
+  "Staking Rewards": stakingSection,
+  "Farming Incentives": farmingSection,
   meta: {
     version: 2,
     token: "arbitrum:0x0c4681e6c0235179ec3d4f4fc4df3d14fdd96017",
@@ -124,7 +133,8 @@ const radiant: ProtocolV2 = {
   },
   categories: {
     noncirculating: ["treasury", "dao reserve"],
-    farming: ["Rewards"],
+    staking: ["Staking Rewards"],
+    farming: ["Farming Incentives"],
     insiders: ["core contributors and advisors", "team"],
   },
 };

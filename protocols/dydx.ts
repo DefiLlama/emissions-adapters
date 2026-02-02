@@ -836,15 +836,15 @@ ORDER BY date DESC`, {});
   return result;
 };
 
-const incentivesSection: SectionV2 = {
-  displayName: "Rewards",
-  methodology: "Tracks dYdX rewards from Safety Module, Merkle Distributor, and Liquidity Staking contracts",
+const stakingSection: SectionV2 = {
+  displayName: "Staking Rewards",
+  methodology: "Tracks DYDX rewards distributed to token holders through the Safety Module",
   isIncentive: true,
   components: [
     {
       id: "safety-module-rewards",
       name: "Safety Module Rewards",
-      methodology: "Tracks Claimed events from the Safety Module staking contract",
+      methodology: "Tracks Claimed events from the Safety Module staking contract. Users stake DYDX to backstop the protocol and earn rewards.",
       isIncentive: true,
       fetch: safetyModuleRewards,
       metadata: {
@@ -854,10 +854,18 @@ const incentivesSection: SectionV2 = {
         eventSignature: SAFETY_MODULE_TOPIC,
       },
     },
+  ],
+};
+
+const farmingSection: SectionV2 = {
+  displayName: "Farming Incentives",
+  methodology: "Tracks DYDX rewards distributed to traders and liquidity providers",
+  isIncentive: true,
+  components: [
     {
       id: "merkle-distributor-rewards",
-      name: "Merkle Distributor Rewards",
-      methodology: "Tracks Claimed events from the Merkle Distributor for trading rewards",
+      name: "Trading Rewards",
+      methodology: "Tracks Claimed events from the Merkle Distributor for trading rewards. These go to traders, not necessarily DYDX holders.",
       isIncentive: true,
       fetch: merkleDistributorRewards,
       metadata: {
@@ -870,7 +878,7 @@ const incentivesSection: SectionV2 = {
     {
       id: "liquidity-staking-rewards",
       name: "Liquidity Staking Rewards",
-      methodology: "Tracks WithdrewStake events from the Liquidity Staking contract",
+      methodology: "Tracks WithdrewStake events from the Liquidity Staking contract. Users stake USDC to provide liquidity, not DYDX.",
       isIncentive: true,
       fetch: liquidityStakingRewards,
       metadata: {
@@ -884,7 +892,8 @@ const incentivesSection: SectionV2 = {
 };
 
 const dydx: ProtocolV2 = {
-  "Rewards": incentivesSection,
+  "Staking Rewards": stakingSection,
+  "Farming Incentives": farmingSection,
   meta: {
     version: 2,
     sources: [
@@ -892,10 +901,11 @@ const dydx: ProtocolV2 = {
     ],
     token: "coingecko:dydx-chain",
     protocolIds: ["parent#dydx", "144", "4067"],
-    notes: ["Rewards data are taken from Safety Module, Merkle Distributor and Liquidity Staking claim events"]
+    notes: ["Staking Rewards are from Safety Module (DYDX stakers), Farming Incentives are from trading rewards and liquidity staking (USDC)"]
   },
   categories: {
-    farming: ["Rewards"],
+    staking: ["Staking Rewards"],
+    farming: ["Farming Incentives"],
     airdrop: ["Retroactive Rewards"],
     noncirculating: ["Community Treasury"],
     privateSale: ["Investors"],

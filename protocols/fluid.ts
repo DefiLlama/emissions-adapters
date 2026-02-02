@@ -57,28 +57,15 @@ const stakeRewards = async (): Promise<CliffAdapterResult[]> => {
   return result;
 }
 
-const incentivesSection: SectionV2 = {
-  displayName: "Incentives",
-  methodology: "Tracks FLUID rewards from merkle distributors and staking contracts",
+const stakingSection: SectionV2 = {
+  displayName: "Staking Rewards",
+  methodology: "Tracks FLUID rewards distributed to token holders through staking",
   isIncentive: true,
   components: [
     {
-      id: "distributor-rewards",
-      name: "Distributor Rewards",
-      methodology: "Tracks Claimed events from Fluid merkle distributor contracts for lending/borrowing incentives",
-      isIncentive: true,
-      fetch: distributorRewards,
-      metadata: {
-        contracts: DISTRIBUTOR_CONTRACTS,
-        chain: "ethereum",
-        chainId: "1",
-        eventSignature: CLAIMED_TOPIC,
-      },
-    },
-    {
       id: "staking-rewards",
-      name: "Staking Rewards",
-      methodology: "Tracks RewardPaid events from FLUID staking contracts",
+      name: "FLUID Staking Rewards",
+      methodology: "Tracks RewardPaid events from FLUID staking contracts. These rewards go to FLUID token holders.",
       isIncentive: true,
       fetch: stakeRewards,
       metadata: {
@@ -86,6 +73,27 @@ const incentivesSection: SectionV2 = {
         chain: "ethereum",
         chainId: "1",
         eventSignature: REWARD_PAID_TOPIC,
+      },
+    },
+  ],
+};
+
+const farmingSection: SectionV2 = {
+  displayName: "Farming Incentives",
+  methodology: "Tracks FLUID rewards distributed to lenders and borrowers",
+  isIncentive: true,
+  components: [
+    {
+      id: "distributor-rewards",
+      name: "Lending/Borrowing Rewards",
+      methodology: "Tracks Claimed events from Fluid merkle distributor contracts for lending/borrowing incentives. These go to protocol users, not token holders.",
+      isIncentive: true,
+      fetch: distributorRewards,
+      metadata: {
+        contracts: DISTRIBUTOR_CONTRACTS,
+        chain: "ethereum",
+        chainId: "1",
+        eventSignature: CLAIMED_TOPIC,
       },
     },
   ],
@@ -109,7 +117,8 @@ const fluid: ProtocolV2 = {
 
   "Vested Allocations": () => adapter(),
 
-  "Incentives": incentivesSection,
+  "Staking Rewards": stakingSection,
+  "Farming Incentives": farmingSection,
 
 
   meta: {
@@ -133,7 +142,8 @@ const fluid: ProtocolV2 = {
   },
   categories: {
     insiders: ["Vested Allocations"],
-    farming: ["Liquidity Mining", "UNI-v3 Staking", "Incentives"],
+    staking: ["Staking Rewards"],
+    farming: ["Liquidity Mining", "UNI-v3 Staking", "Farming Incentives"],
     noncirculating: ["Future Community Initiatives"],
   }
 };
