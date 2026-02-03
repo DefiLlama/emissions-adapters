@@ -113,53 +113,69 @@ ORDER BY date DESC
   return result;
 };
 
-const aaveIncentivesSection: SectionV2 = {
-  displayName: "AAVE Incentives",
-  methodology: "Tracks rewards claimed using event logs from various AAVE contracts",
+const stakingSection: SectionV2 = {
+  displayName: "Staking Rewards",
+  methodology: "Tracks AAVE rewards distributed to token holders through staking",
   isIncentive: true,
   components: [
     {
-      id: "gho-incentives",
-      name: "GHO Incentives",
-      methodology: "Tracks rewards claimed using event logs from GHO contract",
-      isIncentive: true,
-      fetch: ghoIncentives,
-      metadata: {
-        contract: "0x1a88df1cfe15af22b3c4c783d4e6f7f9e0c1885d",
-        eventSignature: "0x9310ccfcb8de723f578a9e4282ea9f521f05ae40dc08f3068dfad528a65ee3c7"
-      }
-    },
-    {
       id: "stkaave-incentives",
-      name: "stkAAVE incentives",
-      methodology: "Tracks rewards claimed using event logs from stkAAVE contract",
-      isIncentive: false,
+      name: "stkAAVE Rewards",
+      methodology: "Tracks rewards claimed from stkAAVE contract. Users stake AAVE tokens and receive AAVE rewards.",
+      isIncentive: true,
       fetch: stkAaveIncentives,
       metadata: {
         contract: "0x4da27a545c0c5B758a6BA100e3a049001de870f5",
+        chain: "ethereum",
+        chainId: "1",
         eventSignature: "0x9310ccfcb8de723f578a9e4282ea9f521f05ae40dc08f3068dfad528a65ee3c7"
       }
     },
     {
       id: "stkabpt-incentives",
-      name: "stkABPTv2 incentives",
-      methodology: "Tracks rewards claimed using event logs from stkAAVE wstETH BPT contract",
+      name: "stkABPT Rewards",
+      methodology: "Tracks rewards claimed from stkAAVE-wstETH BPT contract. Users stake AAVE-containing LP tokens.",
       isIncentive: true,
       fetch: stkAbptIncentives,
       metadata: {
         contract: "0x9eDA81C21C273a82BE9Bbc19B6A6182212068101",
+        chain: "ethereum",
+        chainId: "1",
+        eventSignature: "0x9310ccfcb8de723f578a9e4282ea9f521f05ae40dc08f3068dfad528a65ee3c7"
+      }
+    }
+  ]
+};
+
+const farmingSection: SectionV2 = {
+  displayName: "Farming Incentives",
+  methodology: "Tracks AAVE rewards distributed to protocol users (lenders, borrowers, GHO users)",
+  isIncentive: true,
+  components: [
+    {
+      id: "gho-incentives",
+      name: "GHO Incentives",
+      methodology: "Tracks rewards claimed from GHO contract. These go to GHO minters/holders, not necessarily AAVE holders.",
+      isIncentive: true,
+      fetch: ghoIncentives,
+      metadata: {
+        contract: "0x1a88df1cfe15af22b3c4c783d4e6f7f9e0c1885d",
+        chain: "ethereum",
+        chainId: "1",
         eventSignature: "0x9310ccfcb8de723f578a9e4282ea9f521f05ae40dc08f3068dfad528a65ee3c7"
       }
     },
     {
       id: "incentives-controller",
-      name: "IncentivesController",
-      methodology: "Tracks rewards claimed using event logs from AAVE incentive controller",
+      name: "Lending/Borrowing Rewards",
+      methodology: "Tracks rewards claimed from AAVE IncentivesController. These go to lenders and borrowers, not necessarily AAVE holders.",
       isIncentive: true,
       fetch: incentivesControllerRewards,
       metadata: {
         contract: "0xd784927Ff2f95ba542BfC824c8a8a98F3495f6b5",
-        eventSignature: "0x9310ccfcb8de723f578a9e4282ea9f521f05ae40dc08f3068dfad528a65ee3c7"
+        chain: "ethereum",
+        chainId: "1",
+        eventSignature: "0x5637d7f962248a7f05a7ab69eec6446e31f3d0a299d997f135a65c62806e7891"
       }
     }
   ]
@@ -183,7 +199,8 @@ const aave: ProtocolV2 = {
       }
     ]
   },
-  "AAVE Incentives": aaveIncentivesSection,
+  "Staking Rewards": stakingSection,
+  "Farming Incentives": farmingSection,
   meta: {
     version: 2,
     sources: [
@@ -204,7 +221,8 @@ const aave: ProtocolV2 = {
   categories: {
     noncirculating: ["Ecosystem reserve"],
     publicSale: ["LEND to AAVE migrator"],
-    farming: ["AAVE Incentives"],
+    staking: ["Staking Rewards"],
+    farming: ["Farming Incentives"],
   },
 };
 export default aave;
