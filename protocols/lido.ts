@@ -56,6 +56,7 @@ SELECT
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
 FROM evm_indexer.logs
+PREWHERE short_topic0 = '0xddf252ad'
 WHERE
     topic0 = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
     AND lower(concat('0x', substring(topic1, 27))) IN (SELECT address FROM source_wallets)

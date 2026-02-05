@@ -13,6 +13,7 @@ const liquidityRewards = async (): Promise<CliffAdapterResult[]> => {
       toStartOfDay(timestamp) AS date,
       SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3, 64))))) / 1e18 AS amount
   FROM evm_indexer.logs
+  PREWHERE short_address = '0x9040e41e' AND short_topic0 = '0x72d2511a'
   WHERE address in ('0x9040e41ef5e8b281535a96d9a48acb8cfabd9a48')
     AND topic0 = '0x72d2511ac7dd6d1171d9b798c2662417660eb70235ed1b47dfe9a015929cdf40'
     AND timestamp >= toDateTime('2022-11-15')
@@ -38,6 +39,7 @@ const referralRewards = async (): Promise<CliffAdapterResult[]> => {
       toStartOfDay(timestamp) AS date,
       SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 131, 64))))) / 1e18 AS amount
   FROM evm_indexer.logs
+  PREWHERE short_address = '0xe50b2cea' AND short_topic0 = '0x18bdb6ad'
   WHERE address in ('0xe50b2ceac4f60e840ae513924033e753e2366487')
     AND topic0 = '0x18bdb6adb84039f917775d1fb8e7b7e7737ad5915d12eef0e4654b85e18d07b4'
     AND timestamp >= toDateTime('2022-11-15')

@@ -20,10 +20,12 @@ const REWARD_PAID_TOPIC = "0xe2403640ba68fed3a2f88b7557551d1993f84b99bb10ff833f0
 const distributorRewards = async (): Promise<CliffAdapterResult[]> => {
   const result: CliffAdapterResult[] = [];
   const addressList = DISTRIBUTOR_CONTRACTS.map(a => `'${a}'`).join(',');
+  const shortAddrList = DISTRIBUTOR_CONTRACTS.map(a => `'${a.slice(0, 10)}'`).join(',');
   const data = await queryCustom(`SELECT
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) / 1e18 AS amount
 FROM evm_indexer.logs
+PREWHERE short_address IN (${shortAddrList}) AND short_topic0 = '${CLAIMED_TOPIC.slice(0, 10)}'
 WHERE topic0 = '${CLAIMED_TOPIC}'
   AND address IN (${addressList})
 GROUP BY date

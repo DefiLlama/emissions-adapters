@@ -9,14 +9,15 @@ SELECT
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
 FROM evm_indexer.logs
-PREWHERE topic0 = '0xf7a40077ff7a04c7e61f6f26fb13774259ddf1b6bce9ecf26a8276cdd3992683'
+PREWHERE short_address IN ('0x330eefa8', '0x5400dbb2', '0x678ddc1d', '0x3ef3d8ba') AND short_topic0 = '0xf7a40077'
+WHERE topic0 = '0xf7a40077ff7a04c7e61f6f26fb13774259ddf1b6bce9ecf26a8276cdd3992683'
 AND address IN (
     '0x330eefa8a787552dc5cad3c3ca644844b1e61ddb',
     '0x5400dbb270c956e8985184335a1c62aca6ce1333',
     '0x678ddc1d07eaa166521325394cdeb1e4c086df43',
     '0x3ef3d8ba38ebe18db133cec108f4d14ce00dd9ae'
 )
-WHERE topic2 IN (
+AND topic2 IN (
     '0x00000000000000000000000058d97b57bb95320f9a05dc918aef65434969c2b2',
     '0x0000000000000000000000009d03bb2092270648d7480049d0e58d2fcf0e5123',
     '0x0000000000000000000000009994e35db50125e0df82e4c2dde62496ce330999',

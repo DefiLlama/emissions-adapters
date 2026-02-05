@@ -18,6 +18,7 @@ const stabilityPoolRewards = async (): Promise<CliffAdapterResult[]> => {
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
 FROM evm_indexer.logs
+PREWHERE short_address = '${STABILITY_POOL_CONTRACT.slice(0, 10)}' AND short_topic0 IN ('${LQTY_PAID_TOPIC.slice(0, 10)}', '${LQTY_SENT_TOPIC.slice(0, 10)}')
 WHERE address = '${STABILITY_POOL_CONTRACT}'
   AND (topic0 = '${LQTY_PAID_TOPIC}'
        OR topic0 = '${LQTY_SENT_TOPIC}')
@@ -40,6 +41,7 @@ const uniswapLPRewards = async (): Promise<CliffAdapterResult[]> => {
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
 FROM evm_indexer.logs
+PREWHERE short_address = '${UNISWAP_STAKING_CONTRACT.slice(0, 10)}' AND short_topic0 = '${REWARD_PAID_TOPIC.slice(0, 10)}'
 WHERE address = '${UNISWAP_STAKING_CONTRACT}'
   AND topic0 = '${REWARD_PAID_TOPIC}'
 GROUP BY date

@@ -22,6 +22,7 @@ const lendingRewards = async (): Promise<CliffAdapterResult[]> => {
       toStartOfDay(timestamp) AS date,
       SUM(reinterpretAsUInt256(reverse(unhex(SUBSTRING(data, 3, 64))))) / 1e18 AS amount
     FROM evm_indexer.logs
+    PREWHERE short_address = '${INCENTIVES_CONTROLLER.slice(0, 10)}' AND short_topic0 = '${REWARDS_ACCRUED_TOPIC.slice(0, 10)}'
     WHERE topic0 = '${REWARDS_ACCRUED_TOPIC}'
       AND address = '${INCENTIVES_CONTROLLER}'
       AND topic2 = '0x000000000000000000000000${RDNT_TOKEN.substring(2).toLowerCase()}'
@@ -42,11 +43,13 @@ const lendingRewards = async (): Promise<CliffAdapterResult[]> => {
 const stakingRewards = async (): Promise<CliffAdapterResult[]> => {
   const result: CliffAdapterResult[] = [];
   const addressList = STAKING_CONTRACTS.map(a => `'${a}'`).join(', ');
+  const shortAddrList = STAKING_CONTRACTS.map(a => `'${a.slice(0, 10)}'`).join(', ');
   const data = await queryCustom(`
     SELECT
       toStartOfDay(timestamp) AS date,
       SUM(reinterpretAsUInt256(reverse(unhex(SUBSTRING(data, 3, 64))))) / 1e18 AS amount
     FROM evm_indexer.logs
+    PREWHERE short_address IN (${shortAddrList}) AND short_topic0 = '${REWARD_CLAIMED_TOPIC.slice(0, 10)}'
     WHERE topic0 = '${REWARD_CLAIMED_TOPIC}'
       AND address IN (${addressList})
     GROUP BY date

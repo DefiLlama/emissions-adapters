@@ -17,7 +17,7 @@ const odoloEmissions = async (): Promise<CliffAdapterResult[]> => {
       toStartOfDay(timestamp) AS date,
       SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
     FROM evm_indexer.logs
-    PREWHERE chain = '80094'
+    PREWHERE chain = '80094' AND short_address = '0x02e513b5' AND short_topic0 = '0xddf252ad'
     WHERE topic0 = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
       AND address = '0x02e513b5b54ee216bf836ceb471507488fc89543'
       AND topic1 = '0x0000000000000000000000000000000000000000000000000000000000000000'
@@ -40,7 +40,7 @@ const oarbEmissions = async (): Promise<CliffAdapterResult[]> => {
       toStartOfDay(timestamp) AS date,
       SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
     FROM evm_indexer.logs
-    PREWHERE chain = '42161'
+    PREWHERE chain = '42161' AND short_address = '0x66cd7d0c' AND short_topic0 = '0x987d620f'
     WHERE address = '0x66cd7d0cc677f42f6662622c60a5e60ef573db67'
       AND topic0 = '0x987d620f307ff6b94d58743cb7a7509f24071586a77759b77c2d4e29f75a2f9a'
     GROUP BY date

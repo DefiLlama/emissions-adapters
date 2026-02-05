@@ -41,12 +41,13 @@ const CHAIN_CONFIG = {
 const createChainRewards = (chainId: string, addresses: string[]) => {
   return async (): Promise<CliffAdapterResult[]> => {
     const addressList = addresses.map(a => `'${a}'`).join(', ');
+    const shortAddrList = addresses.map(a => `'${a.slice(0, 10)}'`).join(', ');
     const data = await queryCustom(`
       SELECT
         toStartOfDay(timestamp) AS date,
         SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
       FROM evm_indexer.logs
-      PREWHERE chain = '${chainId}'
+      PREWHERE chain = '${chainId}' AND short_address IN (${shortAddrList}) AND short_topic0 = '${REWARDS_CLAIMED_TOPIC.slice(0, 10)}'
       WHERE topic0 = '${REWARDS_CLAIMED_TOPIC}'
         AND address IN (${addressList})
       GROUP BY date
@@ -70,7 +71,7 @@ const createHedgeyRewards = (chainId: string, hedgeyContract: string, siloToken:
         SUM(reinterpretAsUInt256(reverse(unhex(substring(l1.data, 3))))) / 1e18 AS amount
       FROM evm_indexer.logs l1
       INNER JOIN evm_indexer.logs l2 ON l1.transaction_hash = l2.transaction_hash AND l2.chain = '${chainId}'
-      PREWHERE l1.chain = '${chainId}'
+      PREWHERE l1.chain = '${chainId}' AND l1.short_address = '${siloToken.slice(0, 10)}' AND l1.short_topic0 = '${TRANSFER_TOPIC.slice(0, 10)}'
       WHERE l1.topic0 = '${TRANSFER_TOPIC}'
         AND l1.address = '${siloToken}'
         AND l2.topic0 = '${HEDGEY_CLAIM_TOPIC}'

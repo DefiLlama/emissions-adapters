@@ -35,6 +35,7 @@ export async function connectClickhouse() {
       keep_alive: { enabled: true, idle_socket_ttl: 300000 },
       compression: { response: true, request: false },
       max_open_connections: 10,
+      request_timeout: 120000,
     });
     return client;
   })();

@@ -13,11 +13,12 @@ const merklRewards = async (): Promise<CliffAdapterResult[]> => {
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
 FROM evm_indexer.logs
-PREWHERE topic0 = '0xf7a40077ff7a04c7e61f6f26fb13774259ddf1b6bce9ecf26a8276cdd3992683'
+PREWHERE short_address = '0x3ef3d8ba' AND short_topic0 = '0xf7a40077'
+WHERE topic0 = '0xf7a40077ff7a04c7e61f6f26fb13774259ddf1b6bce9ecf26a8276cdd3992683'
 AND address IN (
     '0x3ef3d8ba38ebe18db133cec108f4d14ce00dd9ae'
 )
-WHERE topic2 IN (
+AND topic2 IN (
     '0x0000000000000000000000001f9840a85d5af5bf1d1762f925bdaddc4201f984',
     '0x0000000000000000000000008f187aa05619a017077f5308904739877ce9ea21',
     '0x000000000000000000000000fa7f8980b0f1e64a2062791cc3b0871572f1f7f0',

@@ -3,17 +3,22 @@ import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
 import { readableToSeconds } from "../utils/time";
 import { queryCustom } from "../utils/queries";
 
+const SPARK_ADDRESSES = [
+  '0x173e314c7635b45322cd8cb14f44b312e079f3af',
+  '0x99cbc0e4e6427f6939536ed24d1275b95ff77404'
+];
+
 const rewards = async (): Promise<CliffAdapterResult[]> => {
     const result: CliffAdapterResult[] = [];
+    const addressList = SPARK_ADDRESSES.map(a => `'${a}'`).join(',\n    ');
+    const shortAddrList = SPARK_ADDRESSES.map(a => `'${a.slice(0, 10)}'`).join(', ');
     const rewardPaidSql = `
     SELECT
   toStartOfDay(timestamp) AS date,
   SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
 FROM evm_indexer.logs
-WHERE address IN (
-    '0x173e314c7635b45322cd8cb14f44b312e079f3af',
-    '0x99cbc0e4e6427f6939536ed24d1275b95ff77404'
-)
+PREWHERE short_address IN (${shortAddrList}) AND short_topic0 = '0xe2403640'
+WHERE address IN (${addressList})
   AND topic0 = '0xe2403640ba68fed3a2f88b7557551d1993f84b99bb10ff833f0cf8db0c5e0486'
   AND timestamp >= toDateTime({startDate:String})
 GROUP BY date

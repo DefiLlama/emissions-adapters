@@ -779,6 +779,7 @@ const safetyModuleRewards = async (): Promise<CliffAdapterResult[]> => {
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) / 1e18 AS amount
 FROM evm_indexer.logs
+PREWHERE short_address = '${SAFETY_MODULE_CONTRACT.slice(0, 10)}' AND short_topic0 = '${SAFETY_MODULE_TOPIC.slice(0, 10)}'
 WHERE address = '${SAFETY_MODULE_CONTRACT}'
   AND topic0 = '${SAFETY_MODULE_TOPIC}'
 GROUP BY date
@@ -800,6 +801,7 @@ const merkleDistributorRewards = async (): Promise<CliffAdapterResult[]> => {
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) / 1e18 AS amount
 FROM evm_indexer.logs
+PREWHERE short_address = '${MERKLE_DISTRIBUTOR_CONTRACT.slice(0, 10)}' AND short_topic0 = '${MERKLE_CLAIMED_TOPIC.slice(0, 10)}'
 WHERE address = '${MERKLE_DISTRIBUTOR_CONTRACT}'
   AND topic0 = '${MERKLE_CLAIMED_TOPIC}'
 GROUP BY date
@@ -821,6 +823,7 @@ const liquidityStakingRewards = async (): Promise<CliffAdapterResult[]> => {
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) / 1e18 AS amount
 FROM evm_indexer.logs
+PREWHERE short_address = '${LIQUIDITY_STAKING_CONTRACT.slice(0, 10)}' AND short_topic0 = '${LIQUIDITY_STAKING_TOPIC.slice(0, 10)}'
 WHERE address = '${LIQUIDITY_STAKING_CONTRACT}'
   AND topic0 = '${LIQUIDITY_STAKING_TOPIC}'
 GROUP BY date

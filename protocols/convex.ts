@@ -21,6 +21,7 @@ const stakingRewards = async (): Promise<CliffAdapterResult[]> => {
       toStartOfDay(timestamp) AS date,
       SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
     FROM evm_indexer.logs
+    PREWHERE short_address = '${REWARD_CONTRACT.slice(0, 10)}' AND short_topic0 = '${REWARD_PAID_TOPIC.slice(0, 10)}'
     WHERE address = {rewardContract:String}
       AND topic0 = {rewardTopic:String}
       AND topic1 != {treasuryTopic:String}
@@ -55,6 +56,7 @@ const treasuryDistributions = async (): Promise<CliffAdapterResult[]> => {
       toStartOfDay(timestamp) AS date,
       SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
     FROM evm_indexer.logs
+    PREWHERE short_address = '${CVX.slice(0, 10)}' AND short_topic0 = '${TRANSFER_TOPIC.slice(0, 10)}'
     WHERE address = {cvxToken:String}
       AND topic0 = '${TRANSFER_TOPIC}'
       AND topic1 = {treasuryFromTopic:String}

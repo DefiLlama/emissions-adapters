@@ -19,7 +19,7 @@ const ghoIncentives = async (): Promise<CliffAdapterResult[]> => {
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3, 64))))) / 1e18 AS amount
 FROM evm_indexer.logs
-PREWHERE chain = 1
+PREWHERE chain = 1 AND short_address = '0x1a88df1c' AND short_topic0 = '0x9310ccfc'
 WHERE address = '0x1a88df1cfe15af22b3c4c783d4e6f7f9e0c1885d'
   AND topic0 = '0x9310ccfcb8de723f578a9e4282ea9f521f05ae40dc08f3068dfad528a65ee3c7'
 GROUP BY date
@@ -44,7 +44,7 @@ const stkAaveIncentives = async (): Promise<CliffAdapterResult[]> => {
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3, 64))))) / 1e18 AS amount
 FROM evm_indexer.logs
-PREWHERE chain = 1
+PREWHERE chain = 1 AND short_address = '0x4da27a54' AND short_topic0 = '0x9310ccfc'
 WHERE address = '0x4da27a545c0c5b758a6ba100e3a049001de870f5'
   AND topic0 = '0x9310ccfcb8de723f578a9e4282ea9f521f05ae40dc08f3068dfad528a65ee3c7'
 GROUP BY date
@@ -69,7 +69,7 @@ const stkAbptIncentives = async (): Promise<CliffAdapterResult[]> => {
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3, 64))))) / 1e18 AS amount
 FROM evm_indexer.logs
-PREWHERE chain = 1
+PREWHERE chain = 1 AND short_address = '0x9eda81c2' AND short_topic0 = '0x9310ccfc'
 WHERE address = '0x9eda81c21c273a82be9bbc19b6a6182212068101'
   AND topic0 = '0x9310ccfcb8de723f578a9e4282ea9f521f05ae40dc08f3068dfad528a65ee3c7'
 GROUP BY date
@@ -94,7 +94,7 @@ const incentivesControllerRewards = async (): Promise<CliffAdapterResult[]> => {
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3, 64))))) / 1e18 AS amount
 FROM evm_indexer.logs
-PREWHERE chain = 1
+PREWHERE chain = 1 AND short_address = '0xd784927f' AND short_topic0 = '0x5637d7f9'
 WHERE address = '0xd784927ff2f95ba542bfc824c8a8a98f3495f6b5'
   AND topic0 = '0x5637d7f962248a7f05a7ab69eec6446e31f3d0a299d997f135a65c62806e7891'
 GROUP BY date

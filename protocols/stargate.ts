@@ -9,22 +9,26 @@ const start = 1647504000;
 const timestampDeployed = 1648252800;
 const token = "0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6";
 
+const STG_ADDRESSES = [
+  '0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6',
+  '0x6694340fc020c5e6b96567843da2df01b2ce1eb6',
+  '0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590',
+  '0xb0d502e938ed5f4df2e681fe6e419ff29631d62b',
+  '0x296f55f8fb28e498b858d0bcda06d955b2cb3f97'
+];
+
 const rewards = async (): Promise<CliffAdapterResult[]> => {
   const result: CliffAdapterResult[] = [];
+  const addrList = STG_ADDRESSES.map(a => `'${a}'`).join(',\n    ');
+  const shortAddrList = STG_ADDRESSES.map(a => `'${a.slice(0, 10)}'`).join(', ');
   const data = await queryCustom(`
     SELECT
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
 FROM evm_indexer.logs
-PREWHERE chain in ('1', '10', '56', '137', '42161')
+PREWHERE chain in ('1', '10', '56', '137', '42161') AND short_address IN (${shortAddrList}) AND short_topic0 = '0xddf252ad'
 WHERE topic0 = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
-AND address IN (
-    '0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6',
-    '0x6694340fc020c5e6b96567843da2df01b2ce1eb6',
-    '0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590',
-    '0xb0d502e938ed5f4df2e681fe6e419ff29631d62b',
-    '0x296f55f8fb28e498b858d0bcda06d955b2cb3f97'
-)
+AND address IN (${addrList})
 and topic1 IN (
     '0x000000000000000000000000b0d502e938ed5f4df2e681fe6e419ff29631d62b',
     '0x0000000000000000000000008731d54e9d02c286767d56ac03e8037c07e01e98',
