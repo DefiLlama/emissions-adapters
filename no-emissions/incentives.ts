@@ -50,5 +50,6 @@ export const protocolsIncentives:string[] = [
     "parent#etherex", //etherex
     "parent#hyperliquid", //hyperliquid
     "6771", //yieldbasis
-    "2187" //dolomite
+    "2187", //dolomite
+    "parent#ether-fi", //etherfi
 ]
