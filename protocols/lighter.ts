@@ -12,23 +12,23 @@ const shares = {
 }
 
 const lighter: Protocol = {
-  "Seasons 1 and 2 Airdrop": manualCliff(start, shares.airdrop),
-  "Ecosystem allocation": manualCliff(start, shares.ecosystem),
-  "Team": manualLinear(start + periodToSeconds.year, start + periodToSeconds.years(4), shares.team),
-  "Investors": manualLinear(start + periodToSeconds.year, start + periodToSeconds.years(4), shares.investors),
-  meta: {
-    notes: [
-      "The remaining ecosystem allocation after the airdrop will be used for future points seasons, partnerships and growth initiatives.",
-    ],
-    token: "coingecko:lighter",
-    sources: ["https://x.com/Lighter_xyz/status/2005862682608472263"],
-    protocolIds: ["parent#lighter"],
-    total,
-  },
-  categories: {
-    insiders: ["Team", "Investors"],
-    noncirculating: ["Ecosystem allocation"],
-    airdrop: ["Seasons 1 and 2 Airdrop"],
-  },
+    "Team": manualLinear(start + periodToSeconds.year, start + periodToSeconds.years(4), shares.team),
+    "Investors": manualLinear(start + periodToSeconds.year, start + periodToSeconds.years(4), shares.investors),
+    "Seasons 1 and 2 Airdrop": manualCliff(start, shares.airdrop),
+    "Ecosystem allocation": manualCliff(start, shares.ecosystem),
+    meta: {
+        notes: [
+        "The remaining ecosystem allocation after the airdrop will be used for future points seasons, partnerships and growth initiatives.",
+        ],
+        token: "coingecko:lighter",
+        sources: ["https://x.com/Lighter_xyz/status/2005862682608472263"],
+        protocolIds: ["parent#lighter"],
+        total,
+    },
+    categories: {
+        insiders: ["Team", "Investors"],
+        noncirculating: ["Ecosystem allocation"],
+        airdrop: ["Seasons 1 and 2 Airdrop"],
+    },
 };
 export default lighter;
