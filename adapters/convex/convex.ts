@@ -70,7 +70,7 @@ async function getCrvEarned(block: number): Promise<number> {
     (p: Number, c: Number) => Number(p) + Number(c),
     0,
   );
-  return minted; // https://etherscan.io/token/0x5f3b5dfeb7b28cdbd7faba78963ee202a494e2a2#balancs
+  return minted; // https://etherscan.io/token/0x5f3b5dfeb7b28cdbd7faba78963ee202a494e2a2#balances
 }
 
 async function getCvxEmitted(
