@@ -14,11 +14,11 @@ const shares = {
 }
 
 const lighter: Protocol = {
-    "Ecosystem & Community": manualLinear(start, start + periodToSeconds.months(20), shares.ecosystem),
-    "Team": manualLinear(start + periodToSeconds.year, start + periodToSeconds.months(40), shares.team),
-    "Treasury": manualCliff(start, shares.treasury),
     "Airdrop": [manualCliff(start, shares.initialAirdrop), manualLinear(start, start + periodToSeconds.months(80), shares.remainingAirdrops)],
+    "Ecosystem & Community": manualLinear(start, start + periodToSeconds.months(20), shares.ecosystem),
+    "Treasury": manualCliff(start, shares.treasury),
     "Initial Liquidity": manualCliff(start, shares.liquidity),
+    "Team": manualLinear(start + periodToSeconds.year, start + periodToSeconds.months(40), shares.team),
     meta: {
         notes: [
         "8.8% of the total supply was airdropped at TGE, the remaining airdrop allocation will be gradually released over the next 80 months.",
