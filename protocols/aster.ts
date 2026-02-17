@@ -13,7 +13,7 @@ const shares = {
     liquidity: total * 0.045
 }
 
-const lighter: Protocol = {
+const aster: Protocol = {
     "Airdrop": [manualCliff(start, shares.initialAirdrop), manualLinear(start, start + periodToSeconds.months(80), shares.remainingAirdrops)],
     "Ecosystem & Community": manualLinear(start, start + periodToSeconds.months(20), shares.ecosystem),
     "Treasury": manualCliff(start, shares.treasury),
@@ -37,4 +37,4 @@ const lighter: Protocol = {
         airdrop: ["Airdrop"],
     },
 };
-export default lighter;
+export default aster;
