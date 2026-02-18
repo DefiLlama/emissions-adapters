@@ -30,7 +30,7 @@ const bsc: Protocol = {
   },
 
   categories: {
-    farming: ["Staking Rewards"],
+    staking: ["Staking Rewards"],
   }
 };
 

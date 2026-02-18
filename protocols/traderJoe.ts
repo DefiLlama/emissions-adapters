@@ -59,18 +59,23 @@ function schedule(
   return sections;
 }
 
+const JOE_ADDRESSES = [
+  '0xd6a4f121ca35509af06a0be99093d08462f53052',
+  '0x188bed1968b795d5c9022f6a0bb5931ac4c18f00',
+  '0x4483f0b6e2f5486d06958c20f8c39a7abe87bf8f'
+];
+
 const rewards = async (): Promise<CliffAdapterResult[]> => {
   const result: CliffAdapterResult[] = [];
+  const addrList = JOE_ADDRESSES.map(a => `'${a}'`).join(',\n');
+  const shortAddrList = JOE_ADDRESSES.map(a => `'${a.slice(0, 10)}'`).join(', ');
   const data = await queryCustom(`SELECT
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
 FROM evm_indexer.logs
-where topic0 = '0x71bab65ced2e5750775a0613be067df48ef06cf92a496ebf7663ae0660924954'
-and address in (
-'0xd6a4f121ca35509af06a0be99093d08462f53052',
-'0x188bed1968b795d5c9022f6a0bb5931ac4c18f00',
-'0x4483f0b6e2f5486d06958c20f8c39a7abe87bf8f'
-)
+PREWHERE short_address IN (${shortAddrList}) AND short_topic0 = '0x71bab65c'
+WHERE topic0 = '0x71bab65ced2e5750775a0613be067df48ef06cf92a496ebf7663ae0660924954'
+AND address in (${addrList})
 GROUP BY date
 ORDER BY date DESC`, {})
 

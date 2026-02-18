@@ -36,7 +36,7 @@ export const protocolsIncentives:string[] = [
     "parent#dydx", //dydx
     "parent#fluid", //fluid
     "319", //convex
-    "2020", //silo
+    "parent#silo-finance", //silo
     "parent#bluefin", //bluefin
     "parent#trader-joe", //lfj
     "parent#radiant", //radiant
@@ -50,4 +50,7 @@ export const protocolsIncentives:string[] = [
     "parent#etherex", //etherex
     "parent#hyperliquid", //hyperliquid
     "parent#maia-dao-ecosystem" //hermes
+    "6771", //yieldbasis
+    "2187", //dolomite
+    "parent#ether-fi", //etherfi
 ]

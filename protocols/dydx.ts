@@ -1,7 +1,14 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
-import { CliffAdapterResult, Protocol } from "../types/adapters";
+import { CliffAdapterResult, ProtocolV2, SectionV2 } from "../types/adapters";
 import { queryCustom } from "../utils/queries";
 import { readableToSeconds } from "../utils/time";
+
+const SAFETY_MODULE_CONTRACT = "0x65f7ba4ec257af7c55fd5854e5f6356bbd0fb8ec";
+const MERKLE_DISTRIBUTOR_CONTRACT = "0x01d3348601968ab85b4bb028979006eac235a588";
+const LIQUIDITY_STAKING_CONTRACT = "0x5aa653a076c1dbb47cec8c1b4d152444cad91941";
+const SAFETY_MODULE_TOPIC = "0x2ef606d064225d24c1514dc94907c134faee1237445c2f63f410cce0852b2054";
+const MERKLE_CLAIMED_TOPIC = "0x8b787e8c8443ad32d7a6d2aed319d9bee901168951fe414912a3968f977c6a29";
+const LIQUIDITY_STAKING_TOPIC = "0xfc30cddea38e2bf4d6ea7d3f9ed3b6ad7f176419f4963bd81318067a4aee73fe";
 
 const schedules: { [date: string]: { [section: string]: number } } = {
   "03/08/2021": {
@@ -766,18 +773,17 @@ const schedules: { [date: string]: { [section: string]: number } } = {
   // }
 };
 
-const rewards = async (): Promise<CliffAdapterResult[]> => {
+const safetyModuleRewards = async (): Promise<CliffAdapterResult[]> => {
   const result: CliffAdapterResult[] = [];
   const data = await queryCustom(`SELECT
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) / 1e18 AS amount
 FROM evm_indexer.logs
-WHERE address IN ('0x5aa653a076c1dbb47cec8c1b4d152444cad91941', '0x01d3348601968ab85b4bb028979006eac235a588', '0x65f7ba4ec257af7c55fd5854e5f6356bbd0fb8ec')
-  AND (topic0 = '0x2ef606d064225d24c1514dc94907c134faee1237445c2f63f410cce0852b2054'
-  		OR topic0 = '0x8b787e8c8443ad32d7a6d2aed319d9bee901168951fe414912a3968f977c6a29'
-  		OR topic0 = '0xfc30cddea38e2bf4d6ea7d3f9ed3b6ad7f176419f4963bd81318067a4aee73fe')
+PREWHERE short_address = '${SAFETY_MODULE_CONTRACT.slice(0, 10)}' AND short_topic0 = '${SAFETY_MODULE_TOPIC.slice(0, 10)}'
+WHERE address = '${SAFETY_MODULE_CONTRACT}'
+  AND topic0 = '${SAFETY_MODULE_TOPIC}'
 GROUP BY date
-ORDER BY date DESC`, {})
+ORDER BY date DESC`, {});
 
   for (let i = 0; i < data.length; i++) {
     result.push({
@@ -787,20 +793,122 @@ ORDER BY date DESC`, {})
     });
   }
   return result;
-}
+};
 
-const dydx: Protocol = {
-  Rewards: rewards,
+const merkleDistributorRewards = async (): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
+  const data = await queryCustom(`SELECT
+    toStartOfDay(timestamp) AS date,
+    SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) / 1e18 AS amount
+FROM evm_indexer.logs
+PREWHERE short_address = '${MERKLE_DISTRIBUTOR_CONTRACT.slice(0, 10)}' AND short_topic0 = '${MERKLE_CLAIMED_TOPIC.slice(0, 10)}'
+WHERE address = '${MERKLE_DISTRIBUTOR_CONTRACT}'
+  AND topic0 = '${MERKLE_CLAIMED_TOPIC}'
+GROUP BY date
+ORDER BY date DESC`, {});
+
+  for (let i = 0; i < data.length; i++) {
+    result.push({
+      type: "cliff",
+      start: readableToSeconds(data[i].date),
+      amount: Number(data[i].amount)
+    });
+  }
+  return result;
+};
+
+const liquidityStakingRewards = async (): Promise<CliffAdapterResult[]> => {
+  const result: CliffAdapterResult[] = [];
+  const data = await queryCustom(`SELECT
+    toStartOfDay(timestamp) AS date,
+    SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) / 1e18 AS amount
+FROM evm_indexer.logs
+PREWHERE short_address = '${LIQUIDITY_STAKING_CONTRACT.slice(0, 10)}' AND short_topic0 = '${LIQUIDITY_STAKING_TOPIC.slice(0, 10)}'
+WHERE address = '${LIQUIDITY_STAKING_CONTRACT}'
+  AND topic0 = '${LIQUIDITY_STAKING_TOPIC}'
+GROUP BY date
+ORDER BY date DESC`, {});
+
+  for (let i = 0; i < data.length; i++) {
+    result.push({
+      type: "cliff",
+      start: readableToSeconds(data[i].date),
+      amount: Number(data[i].amount)
+    });
+  }
+  return result;
+};
+
+const stakingSection: SectionV2 = {
+  displayName: "Staking Rewards",
+  methodology: "Tracks DYDX rewards distributed to token holders through the Safety Module",
+  isIncentive: true,
+  components: [
+    {
+      id: "safety-module-rewards",
+      name: "Safety Module Rewards",
+      methodology: "Tracks Claimed events from the Safety Module staking contract. Users stake DYDX to backstop the protocol and earn rewards.",
+      isIncentive: true,
+      fetch: safetyModuleRewards,
+      metadata: {
+        contract: SAFETY_MODULE_CONTRACT,
+        chain: "ethereum",
+        chainId: "1",
+        eventSignature: SAFETY_MODULE_TOPIC,
+      },
+    },
+  ],
+};
+
+const farmingSection: SectionV2 = {
+  displayName: "Farming Incentives",
+  methodology: "Tracks DYDX rewards distributed to traders and liquidity providers",
+  isIncentive: true,
+  components: [
+    {
+      id: "merkle-distributor-rewards",
+      name: "Trading Rewards",
+      methodology: "Tracks Claimed events from the Merkle Distributor for trading rewards. These go to traders, not necessarily DYDX holders.",
+      isIncentive: true,
+      fetch: merkleDistributorRewards,
+      metadata: {
+        contract: MERKLE_DISTRIBUTOR_CONTRACT,
+        chain: "ethereum",
+        chainId: "1",
+        eventSignature: MERKLE_CLAIMED_TOPIC,
+      },
+    },
+    {
+      id: "liquidity-staking-rewards",
+      name: "Liquidity Staking Rewards",
+      methodology: "Tracks WithdrewStake events from the Liquidity Staking contract. Users stake USDC to provide liquidity, not DYDX.",
+      isIncentive: true,
+      fetch: liquidityStakingRewards,
+      metadata: {
+        contract: LIQUIDITY_STAKING_CONTRACT,
+        chain: "ethereum",
+        chainId: "1",
+        eventSignature: LIQUIDITY_STAKING_TOPIC,
+      },
+    },
+  ],
+};
+
+const dydx: ProtocolV2 = {
+  "Staking Rewards": stakingSection,
+  "Farming Incentives": farmingSection,
   meta: {
+    version: 2,
     sources: [
       "https://docs.dydx.community/dydx-unlimited/start-here/dydx-token-allocation",
     ],
     token: "coingecko:dydx-chain",
     protocolIds: ["parent#dydx", "144", "4067"],
-    notes: ["Rewards data are taken from Safety Module, Merkle Distributor and Liquidity Staking claim events"]
+    notes: ["Staking Rewards are from Safety Module (DYDX stakers), Farming Incentives are from trading rewards and liquidity staking (USDC)"]
   },
   categories: {
-    farming: ["Rewards"],
+    staking: ["Staking Rewards"],
+    farming: ["Farming Incentives"],
     airdrop: ["Retroactive Rewards"],
     noncirculating: ["Community Treasury"],
     privateSale: ["Investors"],

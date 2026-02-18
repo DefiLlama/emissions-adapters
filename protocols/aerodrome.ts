@@ -1,25 +1,13 @@
 import { getEmissionsV2 } from "../adapters/aerodrome";
 import { manualCliff, manualLinear } from "../adapters/manual";
-import { latest, supply } from "../adapters/supply";
-import { CliffAdapterResult, LinearAdapterResult, Protocol } from "../types/adapters";
-import { queryDune } from "../utils/dune";
+import { latest } from "../adapters/supply";
+import { Protocol } from "../types/adapters";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1693267200;
 const total = 5e8;
 const chain = "base";
 const token = "0x940181a94a35a4569e4529a3cdfb74e38fd98631";
-
-const emissionsDune = async (): Promise<CliffAdapterResult[]> => {
-  const duneData = await queryDune("6160942", true);
-  const filtered = duneData.map((row: any) => ({
-    type: "cliff",
-    start: Number(row.epoch),
-    amount: Number(row.total_tokens_minted),
-    isUnlock: false,
-  }));
-  return filtered;
-};
 
 const aerodrome: Protocol = {
   // Supply: () => supply(chain, token, start, "aerodrome"),
@@ -47,7 +35,8 @@ const aerodrome: Protocol = {
     start + periodToSeconds.years(2),
     total * 0.05,
   ),
-  "Emissions": emissionsDune,
+  "Gauge Emissions": () => getEmissionsV2("gauge"),
+  "Rebase Emissions": () => getEmissionsV2("rebase"),
   //   },
   meta: {
     notes: [
@@ -62,7 +51,7 @@ const aerodrome: Protocol = {
       `https://dune.com/queries/6160942`,
     ],
     protocolIds: ["parent#aerodrome", "3450", "4524"],
-    excludeFromAdjustedSupply: ["Emissions"],
+    excludeFromAdjustedSupply: ["Gauge Emissions", "Rebase Emissions"],
     incompleteSections: [
       {
         lastRecord: (backfill: boolean) => latest("aerodrome", start, backfill),
@@ -72,7 +61,8 @@ const aerodrome: Protocol = {
     ],
   },
   categories: {
-    farming: ["Emissions"],
+    staking: ["Rebase Emissions"],
+    farming: ["Gauge Emissions"],
   },
 };
 

@@ -115,7 +115,8 @@ export type SectionType =
   | "airdrop"
   | "farming"
   | "noncirculating"
-  | "liquidity";
+  | "liquidity"
+  | "staking";
 export type RawSection = {
   section: string;
   results: RawResult[] | RawResult[][];

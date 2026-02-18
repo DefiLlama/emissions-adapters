@@ -52,7 +52,8 @@ const hyperliquid: Protocol = {
     noncirculating: ["Community Grants"],
     publicSale: ["HIP-2"],
     airdrop: ["Genesis Distribution"],
-    farming: ["Community Rewards", "Validator Rewards"],
+    farming: ["Community Rewards"],
+    staking: ["Validator Rewards"],
   },
 };
 export default hyperliquid;

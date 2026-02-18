@@ -43,7 +43,8 @@ function velodrome(): Protocol {
       protocolIds: ["parent#velodrome"],
     },
     categories: {
-      farming: ["Community", "Genesis Liquidity Pools", "Rebase Emissions v2", "Gauge Emissions v2"],
+      staking: ["Rebase Emissions v1", "Rebase Emissions v2"],
+      farming: ["Community", "Genesis Liquidity Pools", "Gauge Emissions v1", "Gauge Emissions v2"],
       airdrop: ["Partner Protocols"],
       noncirculating: ["Grants"],
       insiders: ["Team", "Optimism Team"],

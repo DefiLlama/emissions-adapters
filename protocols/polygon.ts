@@ -55,7 +55,7 @@ const polygon: Protocol = {
   categories: {
     publicSale: ["Launchpad Sale"],
     noncirculating: ["Foundation","Ecosystem"],
-    farming: ["Staking Rewards"],
+    staking: ["Staking Rewards"],
     privateSale: ["Seed"],
     insiders: ["Early Supporters","Team","Advisors"],
   },

@@ -9,12 +9,14 @@ const emissions = async (): Promise<LinearAdapterResult[]> => {
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
 FROM evm_indexer.logs
+PREWHERE short_address = '0xaaa6c1e3' AND short_topic0 = '0xddf252ad'
 WHERE topic0 = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
   AND topic1 = '0x0000000000000000000000000000000000000000000000000000000000000000'
   AND address = '0xaaa6c1e32c55a7bfa8066a6fae9b42650f262418'
   AND transaction_hash IN (
-      SELECT transaction_hash 
+      SELECT transaction_hash
       FROM evm_indexer.logs
+      PREWHERE short_address = '0xaaaa0b6b' AND short_topic0 = '0x4c209b5f'
       WHERE topic0 = '0x4c209b5fc8ad50758f13e2e1088ba56a560dff690a1c6fef26394f4c03821c4f'
         AND address = '0xaaaa0b6baefaec478eb2d1337435623500ad4594'
   )

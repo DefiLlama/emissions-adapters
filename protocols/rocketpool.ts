@@ -46,7 +46,7 @@ const rocketpool: Protocol = {
     },
     categories: {
     publicSale: ["Public Sale"],
-    farming: ["Node Operator Rewards","Trusted Node Rewards"],
+    staking: ["Node Operator Rewards","Trusted Node Rewards"],
     noncirculating: ["Protocol DAO Rewards"],
     privateSale: ["Pre-Sale Investors"],
     insiders: ["Rocket Pool Team"],

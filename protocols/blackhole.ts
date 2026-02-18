@@ -10,12 +10,12 @@ SELECT
     toStartOfDay(timestamp) AS date,
     SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
 FROM evm_indexer.logs
-PREWHERE chain = '43114'
-AND topic0 = '0xc9695243a805adb74c91f28311176c65b417e842d5699893cef56d18bfa48cba'
+PREWHERE chain = '43114' AND short_topic0 = '0xc9695243'
+WHERE topic0 = '0xc9695243a805adb74c91f28311176c65b417e842d5699893cef56d18bfa48cba'
 AND address IN (
     SELECT concat('0x', substr(topic1,-40)) as gauge
     FROM evm_indexer.logs
-    PREWHERE chain = '43114'
+    PREWHERE chain = '43114' AND short_address = '0x59aa1773' AND short_topic0 = '0xa4d97e9e'
     WHERE address = '0x59aa177312ff6bdf39c8af6f46dae217bf76cbf6'
     AND topic0 = '0xa4d97e9e7c65249b4cd01acb82add613adea98af32daf092366982f0a0d4e453'
 )
