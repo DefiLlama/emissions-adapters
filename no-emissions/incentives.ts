@@ -48,5 +48,6 @@ export const protocolsIncentives:string[] = [
     "parent#blackhole", //blackhole
     "parent#uniswap",
     "parent#etherex", //etherex
-    "parent#hyperliquid" //hyperliquid
+    "parent#hyperliquid", //hyperliquid
+    "parent#maia-dao-ecosystem" //hermes
 ]
