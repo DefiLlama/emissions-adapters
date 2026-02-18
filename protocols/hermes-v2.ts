@@ -9,7 +9,7 @@ const hermesV2: Protocol = {
   meta: {
     token: "arbitrum:0x45940000009600102A1c002F0097C4A500fa00AB",
     sources: ["https://docs.maiadao.io/"],
-    protocolIds: [],
+    protocolIds: ["parent#maia-dao-ecosystem"],
     notes: [
       "Ongoing emissions tracked from on-chain Mint events from the BaseV2Minter contract and TokenUnstaked events from the UniswapV3 staker.",
       "Gauge emissions are distributed weekly to Hermes UniswapV3 Gauges via FlywheelGaugeRewards.",
