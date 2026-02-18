@@ -49,6 +49,7 @@ export const protocolsIncentives:string[] = [
     "parent#uniswap",
     "parent#etherex", //etherex
     "parent#hyperliquid", //hyperliquid
+    "parent#maia-dao-ecosystem" //hermes
     "6771", //yieldbasis
     "2187", //dolomite
     "parent#ether-fi", //etherfi
