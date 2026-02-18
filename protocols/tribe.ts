@@ -74,7 +74,7 @@ const fei: Protocol = {
   },
 
   categories: {
-    farming: ["Staking Rewards"],
+    staking: ["Staking Rewards"],
     publicSale: ["Initial DEX Offering"],
     privateSale: ["Investors"],
     insiders: ["FEI Core Team","Genesis Group"],

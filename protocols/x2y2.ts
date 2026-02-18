@@ -7,9 +7,14 @@ const start = 1645056000;
 const end = 1707350400;
 
 const x2y2: Protocol = {
-  "Staking Reward": manualStep(start, periodToSeconds.day, 1, 650_000_000), 
-  "Liquidity Management": manualStep(start, periodToSeconds.day, 1, 15_000_000),
   "Airdrop": manualStep(start, periodToSeconds.day, 1, 120_000_000), 
+  "Staking Rewards": [
+    manualStep(start, periodToSeconds.day, 30 , 3_703_703), 
+    manualStep(start, periodToSeconds.day, 90 , 597_790), 
+    manualStep(start, periodToSeconds.day, 240 , 97_465),
+    manualStep(start, periodToSeconds.day, 360 , 32_488)],
+  "Trading Rewards": manualStep(start, periodToSeconds.day, 720, 624_902),
+  "Presale": manualLinear(start, start + periodToSeconds.day * 360, 15_000_000),
   "Development & Team": [
     manualCliff(end - periodToSeconds.day,0),
     manualStep(start , periodToSeconds.day * 180, 4, 25_000_000), 
@@ -17,8 +22,8 @@ const x2y2: Protocol = {
   "Treasury & Ecosystem": [
     manualCliff(end,12_500_000),
     manualStep(start  , periodToSeconds.day * 90, 8, 12_500_000), 
-  ],
-  "Presale": manualLinear(start, start + periodToSeconds.day * 360, 15_000_000), 
+  ], 
+  "Liquidity Management": manualStep(start, periodToSeconds.day, 1, 15_000_000),
 
   meta: {
     notes: [
@@ -32,7 +37,8 @@ const x2y2: Protocol = {
     protocolIds: ["1431"], 
   },
   categories: {
-    farming: ["Staking Reward"],
+    staking: ["Staking Rewards"],
+    farming: ["Trading Rewards"],
     airdrop: ["Airdrop"],
     noncirculating: ["Treasury & Ecosystem"],
     liquidity: ["Liquidity Management"],

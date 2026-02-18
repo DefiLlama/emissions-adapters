@@ -65,7 +65,7 @@ const gogopool: Protocol = {
     protocolIds: ["3179"],
   },
   categories: {
-    farming: ["GGP Staking Rewards"],
+    staking: ["GGP Staking Rewards"],
     insiders: ["Original Team", "Advisors"],
     privateSale: ["Seed Round", "Pre-IDO Partner Sale"],
     publicSale: ["IDO"],
