@@ -1,6 +1,7 @@
 import { Protocol } from '../types/adapters';
 import { manualCliff, manualLinear } from '../adapters/manual';
-import { periodToSeconds } from '../utils/time';
+import { periodToSeconds, readableToSeconds } from '../utils/time';
+import { queryAggregatedDailyLogsAmounts } from '../utils/queries';
 
 const start = 1613952000;
 const totalSupply = 1_000_000_000;
@@ -16,7 +17,19 @@ const liquidity = totalSupply * 0.01;
 const ido = totalSupply * 0.01; 
 const foundersAdvisors = totalSupply * 0.1; 
 const ecosystem = totalSupply * 0.09;
-const development = totalSupply * 0.1; 
+const development = totalSupply * 0.1;
+
+async function processData(data: any) {
+  const result = []
+  for (let i = 0; i < data.length; i++) {
+    result.push({
+      type: "cliff",
+      start: readableToSeconds(data[i].date),
+      amount: Number(data[i].amount / 1e18)
+    });
+  }
+  return result
+}
 
 const superfarm: Protocol = {
   'IDO': manualCliff(start, ido),
@@ -48,39 +61,39 @@ const superfarm: Protocol = {
     privateRound3
   ),
   
-  'NFT Drops': manualLinear(
-    start,
-    start + periodToSeconds.years(1),
-    nftDrops
-  ),
+  'NFT Drops': async () => await queryAggregatedDailyLogsAmounts({
+    address: "0x23a1fd006d151e1d920d5de860e82c697e73fbcf",
+    topic0: "0x6b9c72f300610bf55a5039528cd34cee5ecab19a9b4dd950add9b336165a0c0b",
+    startDate: "2021-03-22"
+  }).then(data => processData(data)),
   
-  'Staking': manualLinear(
-    start,
-    start + periodToSeconds.years(1),
-    staking
-  ),
+  'Staking': async() => await queryAggregatedDailyLogsAmounts({
+    address: "0x72267d7090dcab8cb832fc77048f47333c250cb1",
+    topic0: "0x6b9c72f300610bf55a5039528cd34cee5ecab19a9b4dd950add9b336165a0c0b",
+    startDate: "2021-06-03"
+  }).then(data => processData(data)),
+
+  'Founders & Advisors': async() => await queryAggregatedDailyLogsAmounts({
+    address: "0xf6e4795173cafa138c76df176dde7c3bda2e14ca",
+    topic0: "0x6b9c72f300610bf55a5039528cd34cee5ecab19a9b4dd950add9b336165a0c0b",
+    startDate: "2025-03-10"
+  }).then(data => processData(data)),
+
+  'Ecosystem': async() => await queryAggregatedDailyLogsAmounts({
+    address: "0x7080f65abb8834259668900de238fcfb73ac3f2c",
+    topic0: "0x6b9c72f300610bf55a5039528cd34cee5ecab19a9b4dd950add9b336165a0c0b",
+    startDate: "2021-03-14"
+  }).then(data => processData(data)),
   
-  'Founders & Advisors': manualLinear(
-    start + periodToSeconds.years(1),
-    start + periodToSeconds.years(3), // 12 months cliff + 24 months vesting
-    foundersAdvisors
-  ),
-  
-  'Ecosystem': manualLinear(
-    start + periodToSeconds.years(1),
-    start + periodToSeconds.years(3), // 12 months cliff + 24 months vesting
-    ecosystem
-  ),
-  
-  'Development': manualLinear(
-    start + periodToSeconds.years(1),
-    start + periodToSeconds.years(3), // 12 months cliff + 24 months vesting
-    development
-  ),
+  'Development': async() => await queryAggregatedDailyLogsAmounts({
+    address: "0xbda122ff9d13e7b5baee2502fa35f8ceb23a4700",
+    topic0: "0x6b9c72f300610bf55a5039528cd34cee5ecab19a9b4dd950add9b336165a0c0b",
+    startDate: "2023-12-19"
+  }).then(data => processData(data)),
 
   meta: {
     token: 'ethereum:0xe53ec727dbdeb9e2d5456c3be40cff031ab40a55',
-    sources: ['https://docs.superverse.co/super-tokenomics'],
+    sources: ['https://docs.superverse.co/super-tokenomics', 'https://docs.superverse.co/super-tokenomics/transparency-report'],
     protocolIds: ["1093"],
     notes: [
       'Private rounds have 2-month cliff followed by 6-month linear vesting',
@@ -89,12 +102,12 @@ const superfarm: Protocol = {
   },
 
   categories: {
-    noncirculating: ["Ecosystem","Development"],
-    farming: ["Staking","NFT Drops"],
+    farming: ["NFT Drops", "Ecosystem"],
+    staking: ["Staking"],
     liquidity: ["Liquidity"],
     publicSale: ["IDO"],
     privateSale: ["Seed","Private Round 1","Private Round 2","Private Round 3"],
-    insiders: ["Founders & Advisors"],
+    insiders: ["Founders & Advisors", "Development"],
   },
 };
 
