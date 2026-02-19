@@ -39,9 +39,9 @@ const pike: Protocol = {
     insiders: ["Foundation Treasury", "Core Contributors", "Advisors"],
     farming: [
       "Liquidity Incentives",
-      "Staking Incentives",
       "Community and Launch",
     ],
+    staking: ["Staking Incentives"],
     noncirculating: ["Strategic Partners & Ecosystem", "Community Treasury"],
   },
 };

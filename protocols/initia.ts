@@ -54,7 +54,7 @@ const initia: Protocol = {
     manualCliff(start + periodToSeconds.months(24), echo * 0.25),
   ],
 
-  "Enshrined Liquidity": manualLinear(
+  "Enshrined Liquidity & Staking Rewards": manualLinear(
     start,
     start + periodToSeconds.years(250_000_000 / 12_500_000),
     enshrinedLiquidity,
@@ -80,7 +80,8 @@ const initia: Protocol = {
     insiders: ["Protocol Developers"],
     privateSale: ["Investors"],
     noncirculating: ["Foundation"],
-    farming: ["Enshrined Liquidity & Staking Rewards", "VIP Rewards"],
+    farming: ["VIP Rewards"],
+    staking: ["Enshrined Liquidity & Staking Rewards"],
     airdrop: ["Airdrop"],
     publicSale: ["Binance Launch", "Echo.xyz Community Sale"],
   }

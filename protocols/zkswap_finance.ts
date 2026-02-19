@@ -26,11 +26,12 @@ const zkswap_finance: Protocol = {
         protocolIds: ["3180"],
     },
     categories: {
-        publicSale: ["Token Generation Event (TGE)", "Initial Liquidity", "TGE Bonus"],
-        farming: ["Liquidity Providers Incentive", "Staking Reward", "Swap2Earn Incentive"],
-        airdrop: ["Early Supporters Retroactive"],
-        insiders: ["Team"],
-        noncirculating: ["Treasury + Operation"],
+      publicSale: ["Token Generation Event (TGE)", "Initial Liquidity", "TGE Bonus"],
+      farming: ["Liquidity Providers Incentive", "Swap2Earn Incentive"],
+      staking: ["Staking Reward"],
+      airdrop: ["Early Supporters Retroactive"],
+      insiders: ["Team"],
+      noncirculating: ["Treasury + Operation"],
     },
 };
 

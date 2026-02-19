@@ -80,15 +80,17 @@ const ethereum: Protocol = {
     6e6,
   ),
   "Ethereum Foundation": foundationOutflow,
-  "Issuance": [
+  "Mining Rewards": [
     manualLinear(genesis, byzantiumFork, 4369999 * 5),
     manualLinear(byzantiumFork, constantinopleFork, 2910000 * 3),
     manualLinear(constantinopleFork, merge, 8257393 * 2),
     uncle,
-    stakingRewards,
     () => burnData('pow'),  // Pre-merge burns
-    () => burnData('pos'),  // Post-merge burns
   ],
+  "Staking Rewards": [
+    stakingRewards,
+    () => burnData('pos'),  // Post-merge burns
+  ], 
   meta: {
     token: `${chain}:${GAS_TOKEN}`,
     notes: [
@@ -105,7 +107,8 @@ const ethereum: Protocol = {
     chain: "ethereum",
   },
   categories: {
-    farming: ["Issuance"],
+    farming: ["Mining Rewards"],
+    staking: ["Staking Rewards"],
     insiders: ["Ethereum Foundation"],
     publicSale: ["Crowd Sale"],
   },

@@ -157,7 +157,7 @@ const numProtocol: Protocol = {
     privateSale: ["Private Sale"],
     publicSale: ["Public Sale"],
     insiders: ["Team and Advisors", "Pre-Listing Partners and Consultants"],
-    farming: ["User Reward and Staking"],
+    staking: ["User Reward and Staking"],
     liquidity: ["Liquidity"],
     noncirculating: ["Ecosystem"],
   }

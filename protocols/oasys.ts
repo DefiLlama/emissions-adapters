@@ -40,7 +40,8 @@ const oasys: Protocol = {
     protocolIds: ["4649"],
   },
   categories: {
-    farming: ["Ecosystem & Community","Staking Rewards"],
+    farming: ["Ecosystem & Community"],
+    staking: ["Staking Rewards"],
     noncirculating: ["Foundation"],
     privateSale: ["Early Backers"],
     insiders: ["Development"],
