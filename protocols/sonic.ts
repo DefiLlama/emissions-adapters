@@ -85,7 +85,7 @@ const sonic: Protocol = {
   categories: {
     noncirculating: ["Ongoing Funding"],
     airdrop: ["Airdrop Season 1"],
-    farming: ["Initial Block Rewards", "Block Rewards"],
+    staking: ["Initial Block Rewards", "Block Rewards"],
   },
 };
 

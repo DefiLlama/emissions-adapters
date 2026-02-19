@@ -60,7 +60,7 @@ const tezos: Protocol = {
   categories: {
     publicSale: ["ICO Participants"],
     noncirculating: ["Tezos Foundation"],
-    farming: ["Emissions (Approximation)"],
+    staking: ["Emissions (Approximation)"],
     privateSale: ["Early Backers"],
     insiders: ["Dynamic Ledger Solutions (Team)"],
   }

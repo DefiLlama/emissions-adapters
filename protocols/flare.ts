@@ -87,7 +87,8 @@ const flare: Protocol = {
     chain: 'flare'
   },
   categories: {
-    farming: ["Inflation","Incentive Pool"],
+    farming: ["Incentive Pool"],
+    staking: ["Inflation"],
     airdrop: ["Initial Airdrop","FlareDrop"],
     privateSale: ["Backers"],
     insiders: ["Flare Labs","Flare VC Fund","Flare Foundation","Team","Future Team","Advisors"],
