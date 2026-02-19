@@ -54,7 +54,7 @@ const api3: Protocol = {
   categories: {
     noncirculating: ["Ecosystem Fund"],
     publicSale: ["Public distribution"],
-    farming: ["Staking rewards"],
+    staking: ["Staking rewards"],
     privateSale: ["Pre-seed Investors","Seed Investors"],
     insiders: ["Founding Team","Partners & Contributors"],
   },
