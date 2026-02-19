@@ -1,6 +1,7 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
-import { periodToSeconds } from "../utils/time";
+import { queryCustom, toShort } from "../utils/queries";
+import { periodToSeconds, readableToSeconds } from "../utils/time";
 
 const start = 1689634800;
 const qty = 1e9;
@@ -13,16 +14,32 @@ const insiderSchedule = (perc: number) =>
     start + periodToSeconds.year * 4,
     perc * qty,
   );
-const ecosystemSchedule = (perc: number) => [
-  manualCliff(start, qty * perc * 0.268),
-  manualLinear(start, start + periodToSeconds.year * 5, qty * perc * 0.742),
-];
+
+const ecosystemAllocation = "0xd6abb89b27eadc93c79649af472d238ed2b40165";
+const transferTopic = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+
+async function queryEcosystemAllocation() {
+  const sql = `
+    SELECT toStartOfDay(timestamp) AS date,
+      SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
+    FROM evm_indexer.logs
+    PREWHERE short_address = '${toShort(token)}'
+      AND short_topic0 = '${toShort(transferTopic)}'
+    WHERE address = '${token}'
+      AND topic0 = '${transferTopic}'
+      AND topic1 = lower(concat('0x', lpad(substring('${ecosystemAllocation}', 3), 64, '0')))
+    GROUP BY date ORDER BY date ASC`;
+
+  const data = await queryCustom(sql, {});
+  return data.filter(d => readableToSeconds(d.date) >= start).map((d) => ({
+    type: "cliff" as const,
+    start: readableToSeconds(d.date),
+    amount: Number(d.amount),
+  }));
+}
 
 const arkham: Protocol = {
-  "Community Rewards": ecosystemSchedule(0.107),
-  "Contributor Incentive Pool": ecosystemSchedule(0.1),
-  "DON PoS Rewards": ecosystemSchedule(0.1), // category????
-  "Ecosystem Grants": ecosystemSchedule(0.066),
+  "Ecosystem Incentives and Grants": queryEcosystemAllocation,
   "Core Contributors": insiderSchedule(0.2),
   Investors: insiderSchedule(0.175),
   "Foundation Treasury": manualLinear(
@@ -34,15 +51,17 @@ const arkham: Protocol = {
   Advisors: insiderSchedule(0.03),
   meta: {
     token: `${chain}:${token}`,
-    sources: ["https://codex.arkhamintelligence.com/tokenomics"],
+    sources: ["https://codex.arkm.com/tokenomics", "https://etherscan.io/address/0xd6abb89b27eadc93c79649af472d238ed2b40165"],
     notes: [
-      `DON PoS Rewards program is yet to be announced, here we have assumed its a farming program.`,
+      "The Ecosystem Incentives and Grants section includes Community Rewards, Contributor Incentive Pool, Ecosystem Grants and DON PoS Rewards",
+      "The current circulating supply of the Ecosystem Incentives and Grants allocation is determined by the outflows from this address: 0xd6aBb89b27eADC93C79649aF472d238ED2B40165",
+      `The DON PoS Rewards program is yet to be announced, here we have assumed its a farming program.`,
     ],
     protocolIds: ["3269"],
   },
   categories: {
-    farming: ["Community Rewards","Contributor Incentive Pool","DON PoS Rewards"],
-    noncirculating: ["Ecosystem Grants","Foundation Treasury"],
+    farming: ["Ecosystem Incentives and Grants"],
+    noncirculating: ["Foundation Treasury"],
     publicSale: ["Binance Launchpad"],
     privateSale: ["Investors"],
     insiders: ["Core Contributors","Advisors"],
