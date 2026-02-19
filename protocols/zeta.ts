@@ -94,15 +94,16 @@ const zeta: Protocol = {
     protocolIds: ["4556"],
     notes: [
       `There is no detail about the unlock rate of Validator Incentives, so we've used a linear unlock.`,
+      'The initial 10% total supply pool of validator incentives are programmed to distribute over the first 4 years after the launch of the network. As this initial genesis pool tends lower, the protocol will introduce a planned 2.5% inflation through validator rewards separate from the emission curve at a certain block height'
     ],
     chain: 'zeta'
   },
   categories: {
     farming: [
       "User Growth Pool",
-      "Validator Incentives",
       "Liquidity Incentives",
     ],
+    staking: ["Validator Incentives"],
     noncirculating: ["Ecosystem Growth Fund", "Protocol Treasury"],
     insiders: ["Core Contributors", "Purchasers & Advisors"],
   },
