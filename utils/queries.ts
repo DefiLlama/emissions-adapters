@@ -119,6 +119,30 @@ ORDER BY timestamp
   return queryClickhouse<DailyAmount>(sql, params);
 }
 
+export async function queryDailyOutflows(params: {
+  token: string;
+  tokenDecimals?: number;
+  fromAddress: string;
+  startDate: string;
+  endDate?: string;
+}): Promise<DailyAmount[]> {
+  const transferTopic = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+  const decimals = params.tokenDecimals ?? 18
+  const sql = `
+    SELECT toStartOfDay(timestamp) AS date,
+      SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e${decimals} AS amount
+    FROM evm_indexer.logs
+    PREWHERE short_address = '${toShort(params.token)}'
+      AND short_topic0 = '${toShort(transferTopic)}'
+    WHERE address = {token:String}
+      AND topic0 = '${transferTopic}'
+      AND topic1 = lower(concat('0x', lpad(substring({fromAddress:String}, 3), 64, '0')))
+      AND timestamp >= toDateTime({startDate:String})
+      ${params.endDate ? "AND timestamp < toDateTime({endDate:String})" : ""}
+    GROUP BY date ORDER BY date ASC`;
+  return queryClickhouse<DailyAmount>(sql, params);
+}
+
 // custom queries as long as the output is table with date and amount
 export async function queryCustom(
   sql: string,
