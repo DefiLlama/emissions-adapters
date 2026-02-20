@@ -1,7 +1,7 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
-import { periodToSeconds, unixTimestampNow } from "../utils/time";
-import queryContributorTransfers from "../adapters/chainflip";
+import { periodToSeconds, readableToSeconds, unixTimestampNow } from "../utils/time";
+import { queryDailyOutflows } from "../utils/queries";
 
 const start = 1732233600; // Nov'24
 const tge = 1700697600; // Nov'23
@@ -11,6 +11,20 @@ const now = unixTimestampNow()
 const elapsed = now - start
 const monthsPassed = Math.floor(elapsed / periodToSeconds.month)
 const emissionsPerMonth = 352_000
+const contributorsAddress = "0xce317d9909f5ddd30dcd7331f832e906adc81f5d";
+
+async function getOutflows() {
+    const data = await queryDailyOutflows({
+      token: token,
+      fromAddress: contributorsAddress,
+      startDate: "2024-11-01"
+    })
+    return data.map(d => ({
+      type: "cliff" as const,
+      start: readableToSeconds(d.date),
+      amount: Number(d.amount),
+    }))
+}
  
 const chainflip: Protocol = {
   "Node Operators Programs": manualCliff(start, 4_750_000),
@@ -18,7 +32,7 @@ const chainflip: Protocol = {
   "Liquid Treasury": manualCliff(start, 4_968_503),
   "Strategic Investors": manualCliff(start, 34_181_497),
   "Oxen Foundation": manualCliff(start, 4_200_000),
-  Contributors: async() => await queryContributorTransfers(start, token),
+  Contributors: getOutflows,
   "Treasury Reserves": [],
   "Protocol Emissions": manualLinear(start, now, emissionsPerMonth * monthsPassed),
   meta: {
