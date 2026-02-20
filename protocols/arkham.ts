@@ -47,7 +47,6 @@ const arkham: Protocol = {
     notes: [
       "The Ecosystem Incentives and Grants section includes Community Rewards, Contributor Incentive Pool, Ecosystem Grants and DON PoS Rewards",
       "The current circulating supply of the Ecosystem Incentives and Grants allocation is determined by the outflows from this address: 0xd6aBb89b27eADC93C79649aF472d238ED2B40165",
-      `The DON PoS Rewards program is yet to be announced, here we have assumed its a farming program.`,
     ],
     protocolIds: ["3269"],
   },
