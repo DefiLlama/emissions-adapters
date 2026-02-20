@@ -39,8 +39,8 @@ const api3: Protocol = {
     token: "coingecko:api3",
     sources: [
       "https://medium.com/api3/api3-public-token-distribution-event-1acb3b6d940",
-      `Inflationary staking rewards has no set allocation. In this analysis we can only look at past unlocks.`,
     ],
+    notes: ["Inflationary staking rewards has no set allocation. In this analysis we can only look at past unlocks"],
     protocolIds: ["1339"],
     total: qty,
     incompleteSections: [
