@@ -23,7 +23,7 @@ async function getOutflows() {
       fromAddress: ecosystemAllocation,
       startDate: "2023-07-17"
     })
-    return data.filter(d => readableToSeconds(d.date) >= start).map(d => ({
+    return data.map(d => ({
       type: "cliff" as const,
       start: readableToSeconds(d.date),
       amount: Number(d.amount),
