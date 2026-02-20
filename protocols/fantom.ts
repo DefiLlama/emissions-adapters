@@ -41,7 +41,8 @@ const fantom: Protocol = {
   categories: {
     publicSale: ["Token Sale"],
     insiders: ["Team & Founders", "Advisors & Consultants"],
-    farming: ["Platform Incentives", "Node Rewards"],
+    farming: ["Platform Incentives"],
+    staking: ["Node Rewards"],
     noncirculating: ["Market Development"],
   },
 };

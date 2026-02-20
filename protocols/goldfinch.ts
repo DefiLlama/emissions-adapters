@@ -39,7 +39,8 @@ const goldfinch: Protocol = {
         protocolIds: ["703"], 
     },
     categories: {
-    farming: ["Senior Pool Liquidity Mining","Backer Staking","Backer Pool Liquidity Mining"],
+    farming: ["Senior Pool Liquidity Mining","Backer Pool Liquidity Mining"],
+    staking: ["Backer Staking"],
     noncirculating: ["Community Treasury","Auditors","Borrowers"],
     airdrop: ["Retroactive Liquidity Provider Distribution","Early Liquidity Provider Program","Flight Academy"],
     privateSale: ["Investors"],
