@@ -96,7 +96,8 @@ const ethereum: Protocol = {
     notes: [
       `Information on the Early Contributor vesting schedule structure could not be found, here we have assumed it as linearly unlocked over 4 years.`,
       `The Ethereum Foundation supply is assumed to be unlocked when there's an outflow from EthDev address.`,
-      `Issuance is combination of PoW and PoS issuance, with Uncle Rewards and EIP-1559 burning included`,
+      `Mining Rewards includes Uncle Rewards and pre-merge EIP-1559 burns`,
+      `Staking Rewards includes post-merge EIP-1559 burns`,
     ],
     sources: [
       "https://dune.com/21co/ethereum-key-metrics",
