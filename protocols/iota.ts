@@ -1,12 +1,12 @@
 import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
-import { periodToSeconds, unixTimestampNow } from "../utils/time";
+import { periodToSeconds } from "../utils/time";
 
 const start = 1696377600; // 2023-10-04
+const end = start + periodToSeconds.years(4)
 const rebasedStart = 1746403200 // 2025-05-05
 const stardustTotal = 4_600_000_000
 const iotaPerEpoch = 767_000;
-const daysElapsed = Math.floor((unixTimestampNow() - rebasedStart) / periodToSeconds.day)
 
 const biweeklyUnlocks = (totalAmount: number, duration: number) => {
     const steps = duration / periodToSeconds.weeks(2)
@@ -29,7 +29,8 @@ const iota: Protocol = {
     "Tangle Ecosystem Association": [manualCliff(start, shares.tangleEcosystem * 0.1), biweeklyUnlocks(shares.tangleEcosystem * 0.9, periodToSeconds.years(4))],
     "IOTA Foundation": [manualCliff(start, shares.iotaFoundation * 0.1), biweeklyUnlocks(shares.iotaFoundation * 0.9, periodToSeconds.years(4))],
     "IOTA DLT Foundation": [manualCliff(start, shares.iotaDLTFoundation * 0.1), biweeklyUnlocks(shares.iotaDLTFoundation * 0.9, periodToSeconds.years(4))],
-    "Staking Rewards": manualStep(rebasedStart, periodToSeconds.day, daysElapsed, iotaPerEpoch),
+    "Staking Rewards": manualLinear(rebasedStart, end, iotaPerEpoch * ((end - rebasedStart) / periodToSeconds.day)),
+
     meta: {
         notes: [
             "The Unclaimed Tokens allocation was removed from circulation until valid claims are processed.",
