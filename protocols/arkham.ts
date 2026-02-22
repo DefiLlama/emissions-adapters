@@ -1,6 +1,7 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
-import { periodToSeconds } from "../utils/time";
+import { queryDailyOutflows } from "../utils/queries";
+import { periodToSeconds, readableToSeconds } from "../utils/time";
 
 const start = 1689634800;
 const qty = 1e9;
@@ -13,16 +14,24 @@ const insiderSchedule = (perc: number) =>
     start + periodToSeconds.year * 4,
     perc * qty,
   );
-const ecosystemSchedule = (perc: number) => [
-  manualCliff(start, qty * perc * 0.268),
-  manualLinear(start, start + periodToSeconds.year * 5, qty * perc * 0.742),
-];
+
+const ecosystemAllocation = "0xd6abb89b27eadc93c79649af472d238ed2b40165";
+
+async function getOutflows() {
+    const data = await queryDailyOutflows({
+      token: token,
+      fromAddress: ecosystemAllocation,
+      startDate: "2023-07-17"
+    })
+    return data.map(d => ({
+      type: "cliff" as const,
+      start: readableToSeconds(d.date),
+      amount: Number(d.amount),
+    }))
+}
 
 const arkham: Protocol = {
-  "Community Rewards": ecosystemSchedule(0.107),
-  "Contributor Incentive Pool": ecosystemSchedule(0.1),
-  "DON PoS Rewards": ecosystemSchedule(0.1), // category????
-  "Ecosystem Grants": ecosystemSchedule(0.066),
+  "Ecosystem Incentives and Grants": getOutflows,
   "Core Contributors": insiderSchedule(0.2),
   Investors: insiderSchedule(0.175),
   "Foundation Treasury": manualLinear(
@@ -34,15 +43,16 @@ const arkham: Protocol = {
   Advisors: insiderSchedule(0.03),
   meta: {
     token: `${chain}:${token}`,
-    sources: ["https://codex.arkhamintelligence.com/tokenomics"],
+    sources: ["https://codex.arkm.com/tokenomics", "https://etherscan.io/address/0xd6abb89b27eadc93c79649af472d238ed2b40165"],
     notes: [
-      `DON PoS Rewards program is yet to be announced, here we have assumed its a farming program.`,
+      "The Ecosystem Incentives and Grants section includes Community Rewards, Contributor Incentive Pool, Ecosystem Grants and DON PoS Rewards",
+      "The current circulating supply of the Ecosystem Incentives and Grants allocation is determined by the outflows from this address: 0xd6aBb89b27eADC93C79649aF472d238ED2B40165",
     ],
     protocolIds: ["3269"],
   },
   categories: {
-    farming: ["Community Rewards","Contributor Incentive Pool","DON PoS Rewards"],
-    noncirculating: ["Ecosystem Grants","Foundation Treasury"],
+    farming: ["Ecosystem Incentives and Grants"],
+    noncirculating: ["Foundation Treasury"],
     publicSale: ["Binance Launchpad"],
     privateSale: ["Investors"],
     insiders: ["Core Contributors","Advisors"],
