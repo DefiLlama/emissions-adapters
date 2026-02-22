@@ -1,9 +1,9 @@
 import { manualCliff, manualLinear, manualStep } from "../adapters/manual";
-import { Protocol } from "../types/adapters";
+import { CliffAdapterResult, Protocol } from "../types/adapters";
+import { queryDune } from "../utils/dune";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1763942400; // 2025-11-24
-const end = start + periodToSeconds.years(4)
 const initialSupply = 100_000_000_000;
 const shares = {
     ecosystem: initialSupply * 0.385,
@@ -13,7 +13,19 @@ const shares = {
     categoryLabsTreasury: initialSupply * 0.0395,
     airdrop: initialSupply * 0.033
 }
-const monadPerDay = 5_479_452
+async function stakingRewards(): Promise<CliffAdapterResult[]> {
+    const result: CliffAdapterResult[] = [];
+    const issuanceData = await queryDune("6728904", true)
+
+    for (let i = 0; i < issuanceData.length; i++) {
+    result.push({
+        type: "cliff",
+        start: issuanceData[i].date,
+        amount: issuanceData[i].amount
+    });
+    }
+    return result;
+}
 
 const monad: Protocol = {
     "Public Sale": manualCliff(start, shares.publicSale),
@@ -22,11 +34,8 @@ const monad: Protocol = {
     "Team": [manualCliff(start + periodToSeconds.year, initialSupply * 0.107), manualLinear(start + periodToSeconds.year, start + periodToSeconds.years(4), shares.team)],
     "Investors": [manualCliff(start + periodToSeconds.year, shares.investors * 0.25), manualStep(start + periodToSeconds.year, periodToSeconds.month, 36, (shares.investors * 0.75) / 36)],
     "Category Labs Treasury": [manualCliff(start + periodToSeconds.year, shares.categoryLabsTreasury * 0.25), manualStep(start + periodToSeconds.year, periodToSeconds.month, 36, (shares.categoryLabsTreasury * 0.75) / 36)],
-    "Staking Rewards": manualLinear(start, end, monadPerDay * ((end - start) / periodToSeconds.day)),
+    "Staking Rewards": stakingRewards,
     meta: {
-        notes: [
-        "Staking Rewards are calculated using a rate of 2B MON per year.",
-        ],
         token: "coingecko:monad",
         sources: ["https://www.monad.xyz/announcements/mon-tokenomics-overview"],
         chain: "monad",
