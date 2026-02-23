@@ -42,7 +42,7 @@ const chainflip: Protocol = {
     ],
     token: `${chain}:${token}`,
     sources: [
-      "https://docs.chainflip.io/concepts/token-economics/genesis-tokenomics",
+      "https://docs.chainflip.io/protocol/token-economics/genesis-token-economics-pre-2023",
       "https://docs.chainflip.io/protocol/token-economics/current-token-economics-2025-and-beyond"
     ],
     protocolIds: ["3853"],
