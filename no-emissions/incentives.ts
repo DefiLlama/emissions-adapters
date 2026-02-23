@@ -53,5 +53,25 @@ export const protocolsIncentives:string[] = [
     "6771", //yieldbasis
     "2187", //dolomite
     "parent#ether-fi", //etherfi
-    "7441" // xdc
+    "7441", // xdc
+    "6893", // ore
+    "parent#astherus", // aster
+    "parent#meteora", // meteora
+    "4649", // oasys
+    "4100", // pike
+    "1431", // x2y2
+    "3180", // zkswap
+    "1093", // superfarm
+    "4665", // flare
+    "6105", // sonic
+    "4556", // zeta
+    "3269", // arkham
+    "196", // fantom
+    "703", // goldfinch
+    "7429", // murasaki
+    "6554", // humidifi
+    "7444", // plasma
+    "parent#flowx-finance", // flowX
+    
+
 ]
