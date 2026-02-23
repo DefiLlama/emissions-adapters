@@ -84,3 +84,7 @@ export const isFuture = (timestamp: number) => {
   return timestamp * 1000 > Date.now();
 };
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+export const months = (start:number, n: number) => Math.round((start + periodToSeconds.months(n)) / 86400) * 86400;
+
+export const years = (start:number, n: number) => Math.round((start + periodToSeconds.years(n)) / 86400) * 86400;
