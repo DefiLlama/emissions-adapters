@@ -53,4 +53,5 @@ export const protocolsIncentives:string[] = [
     "6771", //yieldbasis
     "2187", //dolomite
     "parent#ether-fi", //etherfi
+    "7441" // xdc
 ]
