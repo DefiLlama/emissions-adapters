@@ -26,7 +26,7 @@ const falconFinance: Protocol = {
         sources: [
             "https://docs.falcon.finance/ff-token/ff-tokenomics",
         ],
-        protocolIds: ["parent#falcon-finance"],
+        protocolIds: ["6790"],
         total,
     },
     categories: {
