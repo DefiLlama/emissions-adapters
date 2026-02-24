@@ -72,6 +72,10 @@ export const protocolsIncentives:string[] = [
     "6554", // humidifi
     "7444", // plasma
     "parent#flowx-finance", // flowX
+    "5181", // limitless
+    "parent#doublezero", // doublezero
+    "7445", // grass
+    "parent#lombard", // lombard
     
 
 ]
