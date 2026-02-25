@@ -148,7 +148,7 @@ const hedera: Protocol = {
     notes: [`67,018,958 HBAR (0.13%) have yet to be allocated`],
     token: "coingecko:hedera-hashgraph",
     sources: ["https://hedera.com/treasury-management-report"],
-    protocolIds: [""],
+    protocolIds: ["5861"],
   },
   categories: {
     noncirculating: ["Network Governance/Ops"],
