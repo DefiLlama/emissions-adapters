@@ -15,6 +15,13 @@ interface DailyAmount extends Row {
   amount: string;
 }
 
+interface Transfers extends Row {
+  date: string;
+  from_address: string;
+  to_address: string;
+  amount: number;
+}
+
 export async function queryAggregatedDailyLogsAmounts(
   params: LogQueryParams,
 ): Promise<DailyAmount[]> {
@@ -96,7 +103,7 @@ export async function queryTransferEvents(params: {
   toAddress?: string;
   startDate: string;
   endDate?: string;
-}): Promise<DailyAmount[]> {
+}): Promise<Transfers[]> {
   const shortAddress = params.contractAddress ? toShort(params.contractAddress) : '';
   const shortTopic0 = '0xddf252ad';
   const sql = `
@@ -104,7 +111,7 @@ export async function queryTransferEvents(params: {
     toStartOfDay(timestamp) AS date,
     lower(concat('0x', right(topic1, 40))) AS from_address,
     lower(concat('0x', right(topic2, 40))) AS to_address,
-    reinterpretAsUInt256(reverse(unhex(substring(data, 1, 64)))) AS amount
+    reinterpretAsUInt256(reverse(unhex(substring(data, 3, 64)))) AS amount
 FROM evm_indexer.logs
 PREWHERE ${params.contractAddress ? `short_address = '${shortAddress}' AND ` : ''}short_topic0 = '${shortTopic0}'
 WHERE topic0 = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
@@ -116,7 +123,7 @@ WHERE topic0 = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3
 ORDER BY timestamp
 `;
 
-  return queryClickhouse<DailyAmount>(sql, params);
+  return queryClickhouse<Transfers>(sql, params);
 }
 
 export async function queryDailyOutflows(params: {
