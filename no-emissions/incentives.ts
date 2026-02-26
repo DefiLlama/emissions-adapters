@@ -76,6 +76,7 @@ export const protocolsIncentives:string[] = [
     "parent#doublezero", // doublezero
     "7445", // grass
     "parent#lombard", // lombard
+    "2643", // cowswap
     
 
 ]
