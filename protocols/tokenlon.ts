@@ -75,7 +75,7 @@ const incentivesSection: SectionV2 = {
 const stakingSection: SectionV2 = {
   displayName: "LON Staking Rewards",
   methodology: "Tracks LON token distributions to users through staking rewards programs",
-  isIncentive: true,
+  isIncentive: false,
   components: [
       {
       id: "staking-rewards",
