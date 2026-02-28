@@ -81,7 +81,7 @@ const stakingSection: SectionV2 = {
       id: "staking-rewards",
       name: "Staking Rewards",
       methodology: "Tracks LON rewards paid from StakingRewards contract. Users stake LON and receive rewards from trading fees.",
-      isIncentive: true,
+      isIncentive: false,
       fetch: stakingRewards,
       metadata: {
         contract: "0x929cf614c917944dd278bc2134714eaa4121bc6a",
