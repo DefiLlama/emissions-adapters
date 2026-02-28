@@ -76,6 +76,12 @@ const near: Protocol = {
     token: `coingecko:near`,
     protocolIds: ["3221"],
   },
-  categories: {},
+  categories: {
+    insiders: ["Core Team"],
+    privateSale: ["Prior Backers 12m", "Prior Backers 24m", "Prior Backers 36m"],
+    publicSale: ["Community Sale"],
+    staking: ["New Issuance"],
+    noncirculating: ["Foundation Endowment", "Operations Grants", "Early Ecosystem"],
+  },
 };
 export default near;
