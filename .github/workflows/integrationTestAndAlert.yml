@@ -1,4 +1,4 @@
-name: Test_Integration_And_Alert
+name: Test_Integration
 
 on:
   push:
@@ -17,5 +17,3 @@ jobs:
           ts-node ${{ github.workspace }}/.github/workflows/testImports.ts
         env:
           ETHEREUM_RPC: ETHEREUM_RPC
-      - name: Deploy to server
-        run: curl https://born-to-llama.herokuapp.com/rebuild-server
