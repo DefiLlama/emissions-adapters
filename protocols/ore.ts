@@ -1,12 +1,12 @@
-import { LinearAdapterResult, Protocol } from "../types/adapters";
+import { CliffAdapterResult, Protocol } from "../types/adapters";
 import { queryDune } from "../utils/dune";
 import { stringToTimestamp } from "../utils/time";
 
-const duneData = async (): Promise<LinearAdapterResult[]> => {
-    const data = await queryDune('6621804')
+const duneData = async (): Promise<CliffAdapterResult[]> => {
+    const data = await queryDune('6621804', true)
     return data.map((row: Record<string, string>) => ({
-        type: 'linear',
-        start: stringToTimestamp(row.block_time),
+        type: 'cliff',
+        start: row.date,
         amount: Number(row.amount),
         isUnlock: false
     }))
