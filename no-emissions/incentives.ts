@@ -78,5 +78,8 @@ export const protocolsIncentives:string[] = [
     "parent#lombard", // lombard
     "2643", // cowswap
     "parent#lista-dao", // listaDAO
+    "parent#centrifuge", // centrifuge
+    "6535", // gaib
+    "parent#river-inc", // river
 
 ]
