@@ -77,6 +77,6 @@ export const protocolsIncentives:string[] = [
     "7445", // grass
     "parent#lombard", // lombard
     "2643", // cowswap
-    
+    "parent#lista-dao", // listaDAO
 
 ]
