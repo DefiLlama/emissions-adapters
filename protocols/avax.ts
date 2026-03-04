@@ -64,7 +64,15 @@ const avax: Protocol = {
     token: "coingecko:avalanche-2",
     protocolIds: ["3140"],
   },
-  categories: {},
+  categories: {
+    privateSale: ["Seed Sale", "Private Sale"],
+    publicSale: ["Public Sale A1", "Public Sale A2", "Public Sale B"],
+    insiders: ["Team", "Strategic Partners"],
+    airdrop: ["Airdrop"],
+    farming: ["Testnet Incentive Program"],
+    staking: ["Staking Rewards"],
+    noncirculating: ["Foundation", "Community and Dev Endowment"]
+  },
 };
 
 export default avax;

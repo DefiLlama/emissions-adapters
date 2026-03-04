@@ -67,7 +67,13 @@ const biconomy: Protocol = {
     notes: [],
     protocolIds: ["1578"],
   },
-  categories: {},
+  categories: {
+    insiders: ["Team & Advisors"],
+    privateSale: ["Pre Seed Round","Seed Round", "Private Round", "Strategic Investors"],
+    publicSale: ["Public Sale"],
+    noncirculating: ["Foundation"],
+    farming: ["Community Rewards & Incentives"],
+  },
 };
 
 export default biconomy;

@@ -56,6 +56,7 @@ const osmosis: Protocol = {
     insiders: ['Developer Vesting'],
     airdrop: ['Community Airdrop', 'Liquidity Mining Incentives'],
     noncirculating: ['Community Pool', 'Strategic Reserve'],
+    staking: ["Staking Rewards"]
   },
 };
 

@@ -54,7 +54,7 @@ const stakingRewards = async (): Promise<CliffAdapterResult[]> => {
 
 const incentivesSection: SectionV2 = {
   displayName: "LON Incentives",
-  methodology: "Tracks LON token distributions to users through mining and staking rewards programs",
+  methodology: "Tracks LON token distributions to users through mining programs",
   isIncentive: true,
   components: [
     {
@@ -70,11 +70,18 @@ const incentivesSection: SectionV2 = {
         eventSignature: CLAIMED_SIG,
       },
     },
-    {
+  ],
+};
+const stakingSection: SectionV2 = {
+  displayName: "LON Staking Rewards",
+  methodology: "Tracks LON token distributions to users through staking rewards programs",
+  isIncentive: false,
+  components: [
+      {
       id: "staking-rewards",
       name: "Staking Rewards",
       methodology: "Tracks LON rewards paid from StakingRewards contract. Users stake LON and receive rewards from trading fees.",
-      isIncentive: true,
+      isIncentive: false,
       fetch: stakingRewards,
       metadata: {
         contract: "0x929cf614c917944dd278bc2134714eaa4121bc6a",
@@ -83,11 +90,12 @@ const incentivesSection: SectionV2 = {
         eventSignature: REWARD_PAID_SIG,
       },
     },
-  ],
-};
+  ]
+}
 
 const tokenlon: ProtocolV2 = {
   "Incentives": incentivesSection,
+  "Staking Rewards": stakingSection,
 
   meta: {
     version: 2,
@@ -107,6 +115,7 @@ const tokenlon: ProtocolV2 = {
 
   categories: {
     farming: ["Incentives"],
+    staking: ["Staking Rewards"]
   },
 };
 

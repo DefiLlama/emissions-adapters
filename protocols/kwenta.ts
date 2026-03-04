@@ -24,7 +24,7 @@ const kwenta: Protocol = {
   Investment: manualCliff(start, 0.05 * qty),
   "Early Users": manualCliff(start, 0.05 * qty),
   "SNX Stakers": manualCliff(start, 0.3 * qty),
-  Stakers: inflation(0.6),
+  "Staking Rewards": inflation(0.6),
   "Trading Rewards": inflation(0.15),
   meta: {
     token: "optimism:0x920cf626a271321c151d027030d5d08af699456b",
@@ -35,7 +35,14 @@ const kwenta: Protocol = {
       "KWENTA can be vested immediately for a 90% penalty. This penalty decreases linearly to 0% after 1 year. As we can't tell how many, and when, vesters will exit early, we have excluded this mechanism from our analysis.",
     ],
   },
-  categories: {},
+  categories: {
+    noncirculating: ["Treasury", "Growth Fund"],
+    insiders: ["Core Contributors"],
+    privateSale: ["Investment"],
+    airdrop: ["Early Users", "SNX Stakers"],
+    staking: ["Staking Rewards"],
+    farming: ["Trading Rewards"],
+  },
 };
 
 export default kwenta;
