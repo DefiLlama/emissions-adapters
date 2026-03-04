@@ -17,7 +17,7 @@ export const ENV_KEYS = new Set([
 ]);
 
 Object.keys(DEFAULTS).forEach((i) => {
-  if (!process.env[i]) process.env[i] = DEFAULTS[i]; // this is done to set the chain RPC details in @defillama/sdk
+  if (!process.env[i]) process.env[i] = DEFAULTS[i]; // Set the chain RPC details in @defillama/sdk
 });
 
 export function getEnv(key: string): any {

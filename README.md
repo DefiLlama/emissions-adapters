@@ -10,4 +10,4 @@ npm t protocols/gearbox.ts
 ```
 
 ## Further Questions:
-Ask in our Discord, give us a pat on the head and we wont bite.
+Ask in our Discord, give us a pat on the head and we won't bite.

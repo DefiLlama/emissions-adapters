@@ -17,7 +17,7 @@ const fundingStart = launchDate + periodToSeconds.months(6);
 
 const inflation = () => {
     const sections: LinearAdapterResult[] = [];
-    const yearlyInflationRate = 0.0175; //this depends on staked Sonic at the time, therefore it's assumed to be 1.75% for simplicity
+    const yearlyInflationRate = 0.0175; // This depends on staked Sonic at the time, therefore it's assumed to be 1.75% for simplicity
     const monthlyInflationRate = yearlyInflationRate / 12;
   
     let start = launchDate + periodToSeconds.years(4);
