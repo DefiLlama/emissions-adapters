@@ -52,7 +52,7 @@ const celestia: Protocol = {
       `Celestia’s 1 billion TIA supply at genesis will be subject to several different unlock schedules. All tokens, locked or unlocked, may be staked, but staking rewards are unlocked upon receipt.`,
     ],
     token: "coingecko:celestia",
-    sources: ["https://docs.celestia.org/learn/staking-governance-supply/"],
+    sources: ["https://docs.celestia.org/learn/TIA/staking-governance-supply/"],
     protocolIds: ["3562"],
     chain: 'celestia'
   },
@@ -65,3 +65,4 @@ const celestia: Protocol = {
   },
 };
 export default celestia;
+
