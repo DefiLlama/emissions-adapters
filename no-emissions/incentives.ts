@@ -81,5 +81,9 @@ export const protocolsIncentives:string[] = [
     "parent#centrifuge", // centrifuge
     "6535", // gaib
     "parent#river-inc", // river
-
+    "3140", // avax
+    "1578", // biconomy
+    "2981", // kwenta
+    "parent#tokenlon", // tokenlon
+    "parent#rhea-finance", // rhea
 ]
