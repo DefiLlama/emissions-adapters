@@ -86,4 +86,11 @@ export const protocolsIncentives:string[] = [
     "2981", // kwenta
     "parent#tokenlon", // tokenlon
     "parent#rhea-finance", // rhea
+    "parent#kodiak", // kodiak
+    "5775", // infrared
+    "7024", // godl
+    "6926", // opinion
+    "412", // thorchain
+    "5575", // virtuals
+    "6941", // thorswap
 ]
