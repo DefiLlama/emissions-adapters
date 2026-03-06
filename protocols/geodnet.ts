@@ -31,7 +31,7 @@ async function getBurns() {
 }
 
 const geodnet: Protocol = {
-    "Mining": [getOutflows("0xfa5fed5cc2b6dd8f370651d17242c52ed711b14f"), getBurns()],
+    "Mining": [getOutflows("0x8FB9dd00B9a3D893dA96d444817d0b77330d5478"), getBurns()],
     "Ecosystem": getOutflows("0x3a6906e4239f9860c81035c54198df58d892653b"),
     "Team": getOutflows("0xca3e874bc4e830796d822f529c29df30302324b2"),
     "Investors": getOutflows("0x486559899e96981dfe55c4e6ebf5101a76bfadfa"),
