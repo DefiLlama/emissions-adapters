@@ -93,4 +93,6 @@ export const protocolsIncentives:string[] = [
     "412", // thorchain
     "5575", // virtuals
     "6941", // thorswap
+    "4304", // geodnet
+    "214", // raydium
 ]
