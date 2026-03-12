@@ -19,17 +19,22 @@ const MORPHO_TOKENS: Record<number, string[]> = {
 };
 
 interface MerklCampaign {
-  dailyRewards: number;
+  dailyRewards: number; // in USD
+  amount: string; // total reward in wei
+  startTimestamp: number;
   endTimestamp: number;
   rewardToken: {
     address: string;
     symbol: string;
+    decimals: number;
+    price: number;
   };
 }
 
+// Returns daily DAO MORPHO emissions in tokens (not USD)
 async function fetchMerklDaoDaily(): Promise<number> {
   const now = Math.floor(Date.now() / 1000);
-  let totalDaily = 0;
+  let totalDailyTokens = 0;
   for (const chainId of MERKL_CHAINS) {
     try {
       const url = `${MERKL_API}?chainId=${chainId}&creatorTag=${DAO_CREATOR_TAG}&items=100&excludeSubCampaigns=true`;
@@ -43,13 +48,18 @@ async function fetchMerklDaoDaily(): Promise<number> {
         const addr = c.rewardToken?.address?.toLowerCase();
         if (knownAddrs.length > 0 && !knownAddrs.includes(addr)) continue;
         if (knownAddrs.length === 0 && c.rewardToken?.symbol?.toUpperCase() !== "MORPHO") continue;
-        totalDaily += c.dailyRewards;
+        // dailyRewards is in USD — convert to token amount using amount / duration
+        const durationSecs = c.endTimestamp - c.startTimestamp;
+        if (durationSecs <= 0) continue;
+        const totalTokens = Number(BigInt(c.amount)) / 10 ** c.rewardToken.decimals;
+        const dailyTokens = totalTokens / (durationSecs / 86400);
+        totalDailyTokens += dailyTokens;
       }
     } catch {
       continue;
     }
   }
-  return totalDaily;
+  return totalDailyTokens;
 }
 
 export default async function morpho(): Promise<CliffAdapterResult[]> {
