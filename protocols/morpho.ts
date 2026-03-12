@@ -44,6 +44,7 @@ const morpho: Protocol = {
   meta: {
     notes: [
       `Some Strategic Partners and Founders unlocks may happen earlier depending on transferability date.`,
+      `Rewards: historical URD claims + current DAO-only emissions via Merkl API (creatorTag=morpho). Excludes third-party MORPHO campaigns distributed through the same infrastructure.`,
     ],
     token: "coingecko:morpho",
     sources: [
