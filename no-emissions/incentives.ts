@@ -96,4 +96,5 @@ export const protocolsIncentives:string[] = [
     "4304", // geodnet
     "214", // raydium
     "1918", // aura
+    "parent#sushi", // sushiswap
 ]
