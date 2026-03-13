@@ -842,13 +842,13 @@ ORDER BY date DESC`, {});
 const stakingSection: SectionV2 = {
   displayName: "Staking Rewards",
   methodology: "Tracks DYDX rewards distributed to token holders through the Safety Module",
-  isIncentive: true,
+  isIncentive: false,
   components: [
     {
       id: "safety-module-rewards",
       name: "Safety Module Rewards",
       methodology: "Tracks Claimed events from the Safety Module staking contract. Users stake DYDX to backstop the protocol and earn rewards.",
-      isIncentive: true,
+      isIncentive: false,
       fetch: safetyModuleRewards,
       metadata: {
         contract: SAFETY_MODULE_CONTRACT,
