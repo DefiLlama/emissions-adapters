@@ -116,13 +116,13 @@ ORDER BY date DESC
 const stakingSection: SectionV2 = {
   displayName: "Staking Rewards",
   methodology: "Tracks AAVE rewards distributed to token holders through staking",
-  isIncentive: true,
+  isIncentive: false,
   components: [
     {
       id: "stkaave-incentives",
       name: "stkAAVE Rewards",
       methodology: "Tracks rewards claimed from stkAAVE contract. Users stake AAVE tokens and receive AAVE rewards.",
-      isIncentive: true,
+      isIncentive: false,
       fetch: stkAaveIncentives,
       metadata: {
         contract: "0x4da27a545c0c5B758a6BA100e3a049001de870f5",
@@ -135,7 +135,7 @@ const stakingSection: SectionV2 = {
       id: "stkabpt-incentives",
       name: "stkABPT Rewards",
       methodology: "Tracks rewards claimed from stkAAVE-wstETH BPT contract. Users stake AAVE-containing LP tokens.",
-      isIncentive: true,
+      isIncentive: false,
       fetch: stkAbptIncentives,
       metadata: {
         contract: "0x9eDA81C21C273a82BE9Bbc19B6A6182212068101",

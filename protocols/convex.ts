@@ -87,13 +87,13 @@ const treasuryDistributions = async (): Promise<CliffAdapterResult[]> => {
 const stakingSection: SectionV2 = {
   displayName: "Staking Rewards",
   methodology: "Tracks CVX rewards distributed to token holders through staking",
-  isIncentive: true,
+  isIncentive: false,
   components: [
     {
       id: "staking-rewards",
       name: "cvxCRV Staking Rewards",
       methodology: "Tracks RewardPaid events from cvxCRV staking contract, excluding rewards sent to treasury. These rewards go to token holders who stake their cvxCRV.",
-      isIncentive: true,
+      isIncentive: false,
       fetch: stakingRewards,
       metadata: {
         contract: REWARD_CONTRACT,

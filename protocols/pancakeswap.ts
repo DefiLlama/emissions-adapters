@@ -62,13 +62,13 @@ const farmingSection: SectionV2 = {
 const stakingSection: SectionV2 = {
   displayName: "Staking Rewards",
   methodology: "CAKE emissions distributed to veCAKE stakers",
-  isIncentive: true,
+  isIncentive: false,
   components: [
     {
       id: "vecake",
       name: "veCAKE (CAKE Pool)",
       methodology: "CAKE rewards distributed to veCAKE stakers",
-      isIncentive: true,
+      isIncentive: false,
       fetch: mintByProduct("veCAKE (CAKE pool)"),
     },
   ],

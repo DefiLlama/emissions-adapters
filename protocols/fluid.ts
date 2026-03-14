@@ -62,13 +62,13 @@ const stakeRewards = async (): Promise<CliffAdapterResult[]> => {
 const stakingSection: SectionV2 = {
   displayName: "Staking Rewards",
   methodology: "Tracks FLUID rewards distributed to token holders through staking",
-  isIncentive: true,
+  isIncentive: false,
   components: [
     {
       id: "staking-rewards",
       name: "FLUID Staking Rewards",
       methodology: "Tracks RewardPaid events from FLUID staking contracts. These rewards go to FLUID token holders.",
-      isIncentive: true,
+      isIncentive: false,
       fetch: stakeRewards,
       metadata: {
         contracts: STAKING_CONTRACTS,
