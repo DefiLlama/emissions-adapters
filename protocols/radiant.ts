@@ -69,13 +69,13 @@ const stakingRewards = async (): Promise<CliffAdapterResult[]> => {
 const stakingSection: SectionV2 = {
   displayName: "Staking Rewards",
   methodology: "Tracks RDNT rewards distributed to dLP stakers (RDNT-ETH LP holders)",
-  isIncentive: true,
+  isIncentive: false,
   components: [
     {
       id: "dlp-staking-rewards",
       name: "dLP Staking Rewards",
       methodology: "Tracks RewardClaimed events from dLP staking contracts. These rewards go to users who stake RDNT-ETH LP tokens, which requires holding RDNT.",
-      isIncentive: true,
+      isIncentive: false,
       fetch: stakingRewards,
       metadata: {
         contracts: STAKING_CONTRACTS,
