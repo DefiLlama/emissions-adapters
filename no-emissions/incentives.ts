@@ -97,4 +97,5 @@ export const protocolsIncentives:string[] = [
     "214", // raydium
     "1918", // aura
     "parent#sushi", // sushiswap
+    "parent#quickswap", // quickswap
 ]
