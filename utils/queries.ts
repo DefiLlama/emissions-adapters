@@ -22,6 +22,12 @@ interface Transfers extends Row {
   amount: number;
 }
 
+interface Campaigns extends Row {
+  start_timestamp: number;
+  amount: number;
+  duration: number;
+}
+
 export async function queryAggregatedDailyLogsAmounts(
   params: LogQueryParams,
 ): Promise<DailyAmount[]> {
@@ -187,6 +193,31 @@ export async function queryDailyNetOutflows(params: {
     GROUP BY date ORDER BY date ASC`;
   return queryClickhouse<DailyAmount>(sql, params);
 }
+
+export async function queryMerklCampaigns(tokens: string[], DISTRIBUTION_CREATOR: string): Promise<Campaigns[]> {
+  const NEW_CAMPAIGN_TOPIC = '0x6e3c6fa6d4815a856783888c5c3ea2ad7e7303ac0cca66c99f5bd93502c44299'
+  const mappedTokens = tokens.map(t => `'${t}'`).join(", ");
+  // NewCampaign event data layout (ABI-encoded struct):
+  // offset(32) + campaignId(32) + creator(32) + rewardToken(32) + amount(32) + campaignType(32) + startTimestamp(32) + duration(32) + ...
+  // In hex substring positions (1-indexed after '0x'):
+  // rewardToken address: chars 219-258, amount: chars 259-322, startTimestamp: chars 443 (last 8 of uint32), duration: chars 507 (last 8 of uint32)
+  const sql =`
+    SELECT
+      lower(concat('0x', substring(data, 219, 40))) AS reward_token,
+      reinterpretAsUInt256(reverse(unhex(substring(data, 259, 64)))) / 1e18 AS amount,
+      reinterpretAsUInt32(reverse(unhex(substring(data, 443, 8)))) AS start_timestamp,
+      reinterpretAsUInt32(reverse(unhex(substring(data, 507, 8)))) AS duration
+    FROM evm_indexer.logs
+    PREWHERE short_address = '${DISTRIBUTION_CREATOR.slice(0, 10)}'
+      AND short_topic0 = '${NEW_CAMPAIGN_TOPIC.slice(0, 10)}'
+    WHERE address = '${DISTRIBUTION_CREATOR}'
+      AND topic0 = '${NEW_CAMPAIGN_TOPIC}'
+      AND lower(concat('0x', substring(data, 219, 40))) IN (${mappedTokens})
+    ORDER BY start_timestamp ASC
+  `;
+  return queryClickhouse(sql, {})
+};
+
 
 // custom queries as long as the output is table with date and amount
 export async function queryCustom(

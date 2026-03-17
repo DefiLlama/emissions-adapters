@@ -1,7 +1,7 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import adapter from "../adapters/uniswap/uniswap";
 import { CliffAdapterResult, ProtocolV2, SectionV2 } from "../types/adapters";
-import { queryCustom } from "../utils/queries";
+import { queryCustom, queryMerklCampaigns } from "../utils/queries";
 import { periodToSeconds, readableToSeconds } from "../utils/time";
 
 const start = 1600106400;
@@ -55,33 +55,14 @@ const v2StakingRewards = async (): Promise<CliffAdapterResult[]> => {
 };
 
 const merklCampaigns = async (): Promise<CliffAdapterResult[]> => {
-  const uniFilter = UNI_TOKENS.map(t => `'${t}'`).join(", ");
-
-  // NewCampaign event data layout (ABI-encoded struct):
-  // offset(32) + campaignId(32) + creator(32) + rewardToken(32) + amount(32) + campaignType(32) + startTimestamp(32) + duration(32) + ...
-  // In hex substring positions (1-indexed after '0x'):
-  // rewardToken address: chars 219-258, amount: chars 259-322, startTimestamp: chars 443 (last 8 of uint32), duration: chars 507 (last 8 of uint32)
-  const campaigns: any[] = await queryCustom(`
-    SELECT
-      lower(concat('0x', substring(data, 219, 40))) AS reward_token,
-      reinterpretAsUInt256(reverse(unhex(substring(data, 259, 64)))) / 1e18 AS amount,
-      reinterpretAsUInt32(reverse(unhex(substring(data, 443, 8)))) AS start_timestamp,
-      reinterpretAsUInt32(reverse(unhex(substring(data, 507, 8)))) AS duration_seconds
-    FROM evm_indexer.logs
-    PREWHERE short_address = '${DISTRIBUTION_CREATOR.slice(0, 10)}'
-      AND short_topic0 = '${NEW_CAMPAIGN_TOPIC.slice(0, 10)}'
-    WHERE address = '${DISTRIBUTION_CREATOR}'
-      AND topic0 = '${NEW_CAMPAIGN_TOPIC}'
-      AND lower(concat('0x', substring(data, 219, 40))) IN (${uniFilter})
-    ORDER BY start_timestamp ASC
-  `, {});
+  const campaigns: any[] = await queryMerklCampaigns(UNI_TOKENS, DISTRIBUTION_CREATOR)
 
   // Amortize each campaign evenly across its duration days
   const dailyMap = new Map<number, number>();
   for (const c of campaigns) {
     const amount = Number(c.amount);
     const startTs = Number(c.start_timestamp);
-    const durationSec = Number(c.duration_seconds);
+    const durationSec = Number(c.duration);
     if (durationSec <= 0 || amount <= 0) continue;
 
     const durationDays = Math.ceil(durationSec / 86400);

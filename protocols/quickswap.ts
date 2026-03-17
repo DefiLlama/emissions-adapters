@@ -1,6 +1,6 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { CliffAdapterResult, ProtocolV2, SectionV2 } from "../types/adapters";
-import { queryCustom } from "../utils/queries";
+import { queryMerklCampaigns } from "../utils/queries";
 import { periodToSeconds } from "../utils/time";
 
 const start: number = 1610126596;
@@ -16,25 +16,7 @@ const QUICK_TOKENS = [
 ]
 
 const merklCampaigns = async (): Promise<CliffAdapterResult[]> => {
-  const quickTokens = QUICK_TOKENS.map(t => `'${t}'`).join(", ");
-  // NewCampaign event data layout (ABI-encoded struct):
-  // offset(32) + campaignId(32) + creator(32) + rewardToken(32) + amount(32) + campaignType(32) + startTimestamp(32) + duration(32) + ...
-  // In hex substring positions (1-indexed after '0x'):
-  // rewardToken address: chars 219-258, amount: chars 259-322, startTimestamp: chars 443 (last 8 of uint32), duration: chars 507 (last 8 of uint32)
-  const campaigns: any[] = await queryCustom(`
-    SELECT
-      lower(concat('0x', substring(data, 219, 40))) AS reward_token,
-      reinterpretAsUInt256(reverse(unhex(substring(data, 259, 64)))) / 1e18 AS amount,
-      reinterpretAsUInt32(reverse(unhex(substring(data, 443, 8)))) AS start_timestamp,
-      reinterpretAsUInt32(reverse(unhex(substring(data, 507, 8)))) AS duration
-    FROM evm_indexer.logs
-    PREWHERE short_address = '${DISTRIBUTION_CREATOR.slice(0, 10)}'
-      AND short_topic0 = '${NEW_CAMPAIGN_TOPIC.slice(0, 10)}'
-    WHERE address = '${DISTRIBUTION_CREATOR}'
-      AND topic0 = '${NEW_CAMPAIGN_TOPIC}'
-      AND lower(concat('0x', substring(data, 219, 40))) IN (${quickTokens})
-    ORDER BY start_timestamp ASC
-  `, {});
+  const campaigns = await queryMerklCampaigns(QUICK_TOKENS, DISTRIBUTION_CREATOR)
 
   // Amortize each campaign evenly across its duration days
   const dailyMap = new Map<number, number>();
