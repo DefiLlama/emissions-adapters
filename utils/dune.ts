@@ -207,54 +207,7 @@ export async function queryDuneSQLCached(query: string, start: number, cacheKeys
 }
 
 export async function queryDuneSQL(query: string, start?: number) {
-    return _queryDune("3996608", {
+    return queryDune("3996608", true, {
     fullQuery: query.split("TIME_RANGE").join(`block_time >= from_unixtime(${start})`)
   })
-}
-
-const _queryDune = async (queryId: string, query_parameters: any = {}) => {
-  try {
-    if (Object.keys(query_parameters).length === 0) {
-      const latest_result = await getLatestData(queryId, true)
-      if (latest_result !== undefined) return latest_result
-    }
-    const execution_id = await submitQuery(queryId, query_parameters)
-    const _status = await inquiryStatus(execution_id, queryId)
-    if (_status === 'QUERY_STATE_COMPLETED') {
-      const API_KEY = API_KEYS[API_KEY_INDEX];
-      const queryStatus = await limit(() =>
-        httpGet(
-          `https://api.dune.com/api/v1/execution/${execution_id}/results?limit=100000`,
-          {
-            headers: {
-              "x-dune-api-key": API_KEY,
-            },
-          },
-        ),
-      );
-      return queryStatus.result.rows;
-    } else if (_status === "QUERY_STATE_FAILED") {
-      if (query_parameters.fullQuery) {
-        console.log(`Dune query: ${query_parameters.fullQuery}`)
-      } else {
-        console.log("Dune parameters", query_parameters)
-      }
-      throw new Error(`Dune query failed: ${queryId}`)
-    } else {
-      throw new Error(`Dune query failed: ${queryId} unknown state: ${_status}`)
-    }
-
-  } catch (e: any) {
-
-    if (e.isAxiosError) {
-      let specificErrorMessage = e.message;
-      if (e.status === 401) {
-        specificErrorMessage = "Dune API Key is invalid";
-      }
-      const newErr = new Error(e.message);
-      (newErr as any).axiosError = specificErrorMessage;
-      throw newErr;
-    }
-    throw e;
-  }
 }
