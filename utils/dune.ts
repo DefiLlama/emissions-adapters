@@ -168,7 +168,7 @@ interface cacheKeys {
 async function getExistingData(cacheKeys: cacheKeys, isUnlock = false) {
   let res: any = []
   try {
-    res = await fetch(`https://api.llama.fi/emission/${cacheKeys.protocolSlug}`).then((r) =>
+    res = await fetch(`https://pro-api.llama.fi/${process.env.INTERNAL_API_KEY}/api/emission/${cacheKeys.protocolSlug}`).then((r) =>
         r.json(),
     );
   } catch {}
