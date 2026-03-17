@@ -145,6 +145,7 @@ export class V2Processor {
     fullProtocol: ProtocolV2,
     categories: any,
     chartData?: any[],
+    resolvedAdapterResults?: Record<string, AdapterResult[]>,
   ): Promise<AdjustedSupplyMetrics> {
     let maxSupply = 0;
     let tbdAmount = 0;
@@ -219,47 +220,14 @@ export class V2Processor {
         continue;
       }
 
-      let v1Results: AdapterResult[] = [];
+      // Use pre-resolved adapter results instead of re-calling adapter functions
+      const sectionResults = resolvedAdapterResults?.[sectionName];
+      if (!sectionResults?.length) continue;
 
-      if (typeof section === "function") {
-        try {
-          const result = await section();
-          v1Results = Array.isArray(result) ? result : [result];
-        } catch (error) {
-          console.warn(
-            `error could not process ${sectionName} for supply metrics`,
-          );
-          continue;
-        }
-      } else if (Array.isArray(section)) {
-        // Handle mixed arrays containing both AdapterResults and functions
-        try {
-          for (const item of section) {
-            if (typeof item === "function") {
-              const result = await item();
-              if (Array.isArray(result)) {
-                v1Results.push(...result);
-              } else {
-                v1Results.push(result);
-              }
-            } else {
-              v1Results.push(item as AdapterResult);
-            }
-          }
-        } catch (error) {
-          console.warn(
-            `error could not process array section ${sectionName} for supply metrics`,
-          );
-          continue;
-        }
-      } else {
-        v1Results = [section as AdapterResult];
-      }
-
-      const v1SectionTotal = v1Results.reduce(
+      const v1SectionTotal = sectionResults.reduce(
         (sum, result) => {
-          const totalAmount = result.type === "step" 
-            ? result.amount * (result as any).steps 
+          const totalAmount = result.type === "step"
+            ? result.amount * ((result as any).steps ?? 1)
             : result.amount;
           return sum + totalAmount;
         },

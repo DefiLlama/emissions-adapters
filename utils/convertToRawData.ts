@@ -36,6 +36,7 @@ export async function createRawSections(
 
   let allCliffAllocations: any[] = [];
   let allLinearAllocations: any[] = [];
+  const resolvedAdapterResults: Record<string, AdapterResult[]> = {};
 
   await Promise.all(
     Object.entries(adapter).map(async (a: any[]) => {
@@ -126,6 +127,8 @@ export async function createRawSections(
           allCliffAllocations.push(...cliffAllocations);
           allLinearAllocations.push(...linearAllocations);
         }
+
+        resolvedAdapterResults[section] = adapterResults.flat();
 
         const results: RawResult[] | RawResult[][] = adapterResults
           .flat()
@@ -229,7 +232,7 @@ export async function createRawSections(
   }
   metadata.unlockEvents.sort((a, b) => a.timestamp - b.timestamp);
 
-  return { rawSections, documented, startTime, endTime, metadata, categories };
+  return { rawSections, documented, startTime, endTime, metadata, categories, resolvedAdapterResults };
 }
 function stepAdapterToRaw(result: StepAdapterResult): RawResult[] {
   const output: RawResult[] = [];

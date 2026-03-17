@@ -566,7 +566,9 @@ export async function processSingleProtocol(
       supplyMetrics = await V2Processor.calculateAdjustedSupplyMetrics(
         [],
         adapter as any,
-        rawData.categories
+        rawData.categories,
+        realTimeData,
+        rawData.resolvedAdapterResults,
       );
     } catch (error) {
       console.warn(`Could not calculate supply metrics for V1 adapter ${protocolName}:`, error);
