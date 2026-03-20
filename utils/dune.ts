@@ -1,6 +1,7 @@
 import { httpGet, httpPost } from "./fetchURL";
 import { getEnv } from "./env";
 import { CliffAdapterResult } from "../types/adapters";
+import { elastic } from "@defillama/sdk";
 const plimit = require("p-limit");
 const limit = plimit(1);
 
@@ -111,15 +112,19 @@ export const queryDune = async (
 ) => {
   checkCanRunDuneQuery();
 
-  if (Object.keys(query_parameters).length === 0) {
-    const latest_result = await getLatestData(queryId, run_daily);
-    if (latest_result !== undefined) return latest_result;
-  }
-  const execution_id = await submitQuery(queryId, query_parameters);
-  const _status = await inquiryStatus(execution_id, queryId);
-  if (_status === "QUERY_STATE_COMPLETED") {
-    const API_KEY = API_KEYS[API_KEY_INDEX];
-    try {
+  const metadata: any = { application: "dune", query_parameters };
+  let success = false;
+  let startTime = +Date.now() / 1e3;
+
+  try {
+    if (Object.keys(query_parameters).length === 0) {
+      const latest_result = await getLatestData(queryId, run_daily);
+      if (latest_result !== undefined) return latest_result;
+    }
+    const execution_id = await submitQuery(queryId, query_parameters);
+    const _status = await inquiryStatus(execution_id, queryId);
+    if (_status === "QUERY_STATE_COMPLETED") {
+      const API_KEY = API_KEYS[API_KEY_INDEX];
       const queryStatus = await limit(() =>
         httpGet(
           `https://api.dune.com/api/v1/execution/${execution_id}/results?limit=100000`,
@@ -130,17 +135,28 @@ export const queryDune = async (
           },
         ),
       );
-      return queryStatus.result.rows;
-    } catch (e: any) {
-      throw e;
+      const rows = queryStatus.result.rows;
+      success = true;
+      let endTime = +Date.now() / 1e3;
+      await elastic.addRuntimeLog({
+        runtime: endTime - startTime,
+        success,
+        metadata: { ...metadata, rows: rows?.length },
+      });
+      return rows;
+    } else if (_status === "QUERY_STATE_FAILED") {
+      if (query_parameters.fullQuery) {
+        console.log(`Dune query: ${query_parameters.fullQuery}`);
+      } else {
+        console.log("Dune parameters", query_parameters);
+      }
+      throw new Error(`Dune query failed: ${queryId}`);
     }
-  } else if (_status === "QUERY_STATE_FAILED") {
-    if (query_parameters.fullQuery) {
-      console.log(`Dune query: ${query_parameters.fullQuery}`);
-    } else {
-      console.log("Dune parameters", query_parameters);
-    }
-    throw new Error(`Dune query failed: ${queryId}`);
+  } catch (e: any) {
+    let endTime = +Date.now() / 1e3;
+    await elastic.addRuntimeLog({ runtime: endTime - startTime, success, metadata });
+    await elastic.addErrorLog({ error: e?.toString(), metadata });
+    throw e;
   }
 };
 
