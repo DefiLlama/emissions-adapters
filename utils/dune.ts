@@ -206,7 +206,7 @@ export async function queryDuneSQLCached(query: string, start: number, cacheKeys
   return results
 }
 
-export async function queryDuneSQL(query: string, start?: number) {
+export async function queryDuneSQL(query: string, start: number) {
     return queryDune("3996608", true, {
     fullQuery: query.split("START").join(`from_unixtime(${start})`)
   })
