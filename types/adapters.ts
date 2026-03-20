@@ -151,6 +151,7 @@ export type SectionData = {
   endTime: number;
   metadata: Metadata;
   categories: Categories;
+  resolvedAdapterResults?: Record<string, AdapterResult[]>;
 };
 export type Categories = {
   [category: string]: string[];

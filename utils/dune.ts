@@ -1,5 +1,6 @@
 import { httpGet, httpPost } from "./fetchURL";
 import { getEnv } from "./env";
+import { CliffAdapterResult } from "../types/adapters";
 const plimit = require("p-limit");
 const limit = plimit(1);
 
@@ -157,4 +158,56 @@ export function checkCanRunDuneQuery() {
   throw new Error(
     `Current hour is ${currentHour}. In restricted mode, can run dune queries only between 1am - 3am UTC`,
   );
+}
+
+interface cacheKeys {
+  protocolSlug: string;
+  allocation: string
+}
+
+async function getExistingData(cacheKeys: cacheKeys, isUnlock = false) {
+  let res: any = []
+  try {
+    res = await fetch(`https://pro-api.llama.fi/${process.env.INTERNAL_API_KEY}/api/emission/${cacheKeys.protocolSlug}`).then((r) =>
+      r.json(),
+    );
+  } catch {}
+  let body = res.body ? JSON.parse(res.body) : [];
+  res =
+    body && body.documentedData?.data.length
+      ? (body.documentedData?.data ?? body.data)
+      : [];
+  const allocation = res.find((s: any) => s.label === cacheKeys.allocation);
+  if (!allocation?.data?.length) return [];
+  return allocation.data.map((row: any, i: number): CliffAdapterResult => ({
+    type: "cliff",
+    start: row.timestamp,
+    isUnlock: isUnlock,
+    amount: i === 0 ? row.unlocked : row.unlocked - allocation.data[i - 1].unlocked,
+  })).filter((row: any) => row.amount !== 0)
+}
+
+export async function queryDuneSQLCached(query: string, start: number, cacheKeys: cacheKeys, isUnlock = false) {
+  let results: any[] = []
+  let startTime = start
+  const existingData = await getExistingData(cacheKeys, isUnlock)
+  if (existingData.length) {
+    startTime = NOW_TIMESTAMP - 86400
+    results = existingData.filter((r: CliffAdapterResult) => r.start < startTime)
+  }
+  const rawData = await queryDuneSQL(query, startTime)
+  const newData = (rawData ?? []).map((row: any): CliffAdapterResult => ({
+    type: "cliff",
+    start: row.date,
+    isUnlock: isUnlock,
+    amount: row.amount
+  }))
+  results.push(...newData)
+  return results
+}
+
+export async function queryDuneSQL(query: string, start: number) {
+    return queryDune("3996608", true, {
+    fullQuery: query.split("START").join(`from_unixtime(${start})`)
+  })
 }
