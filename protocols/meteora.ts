@@ -1,6 +1,6 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { CliffAdapterResult, Protocol } from "../types/adapters";
-import { queryDune } from "../utils/dune";
+import { queryDuneSQLCached } from "../utils/dune";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1761177600; // 2025-10-23
@@ -19,17 +19,15 @@ const shares = {
 }
 
 const meteoraReserve = async (): Promise<CliffAdapterResult[]> => {
-  const result: CliffAdapterResult[] = [];
-  const issuanceData = await queryDune("6713037", true)
-
-  for (let i = 0; i < issuanceData.length; i++) {
-    result.push({
-      type: "cliff",
-      start: new Date(issuanceData[i].block_date).getTime() / 1000,
-      amount: issuanceData[i].amount / 1e6
-    });
-  }
-  return result;
+    return await queryDuneSQLCached(`
+    SELECT 
+        to_unixtime(block_date) AS date, 
+        amount_display AS amount 
+    FROM tokens_solana.transfers
+    WHERE from_token_account = '2efFfkUNuSRpBqjNTu5Mr6Czhecd5jFF6NkxhEJA4hGF'
+        AND block_date >= START
+    ORDER BY block_date ASC
+`, 1763942400, {protocolSlug: "meteora", allocation: "Meteora Reserve"})
 }
 
 const meteora: Protocol = {
