@@ -1,6 +1,5 @@
-import { balance, latest } from "../adapters/balance";
 import { CliffAdapterResult, Protocol } from "../types/adapters";
-import { queryDune } from "../utils/dune";
+import { queryDuneSQLCached } from "../utils/dune";
 
 const start = 1652227200;
 const qty = 5e9;
@@ -8,18 +7,24 @@ const chain = "moonbeam";
 const address = "0x511ab53f793683763e5a8829738301368a2411e3";
 
 const emissions = async (): Promise<CliffAdapterResult[]> => {
-  const result: CliffAdapterResult[] = [];
-  const issuanceData = await queryDune("5199550", true)
-
-  for (let i = 0; i < issuanceData.length; i++) {
-    result.push({
-      type: "cliff",
-      start: issuanceData[i].timestamp,
-      amount: issuanceData[i].amount,
-      isUnlock: false,
-    });
-  }
-  return result;
+  return await queryDuneSQLCached(`
+    SELECT
+      to_unixtime(t.block_date) AS date,
+      SUM(t.amount) AS amount
+    FROM tokens.transfers t
+    WHERE t.block_date < CURRENT_DATE
+      AND t."from" = 0xe9005b078701e2a0948d2eac43010d35870ad9d2
+      AND contract_address = 0xa88594d404727625a9437c3f886c7643872296ae
+      AND t.block_date >= START
+      AND t.tx_hash IN (
+        SELECT DISTINCT c.call_tx_hash
+        FROM moonwell_multichain.comptroller_call_claimreward c
+        WHERE c.call_block_date < CURRENT_DATE
+          AND c.call_block_date >= START
+      )
+    GROUP BY t.block_date
+    ORDER BY t.block_date
+`, 1713484800, {protocolSlug: "moonwell", allocation: "WELL Rewards"})
 }
 
 const moonwell: Protocol = {
