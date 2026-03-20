@@ -1,7 +1,7 @@
 import { CliffAdapterResult, Protocol } from "../types/adapters";
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
-import { queryDune } from "../utils/dune";
+import { queryDuneSQLCached } from "../utils/dune";
 
 const start = 1721260800;
 const totalSupply = 1_000_000_000; // 1B total supply
@@ -19,17 +19,15 @@ const initialAirdrop = launchLiquidity * 0.5;  // 10% of total supply
 const launchPool = launchLiquidity * 0.5;      // 10% of total supply
 
 const communityReserve = async (): Promise<CliffAdapterResult[]> => {
-  const result: CliffAdapterResult[] = [];
-  const issuanceData = await queryDune("5189738", true)
-
-  for (let i = 0; i < issuanceData.length; i++) {
-    result.push({
-      type: "cliff",
-      start: new Date(issuanceData[i].block_date).getTime() / 1000,
-      amount: issuanceData[i].amount / 1e9
-    });
-  }
-  return result;
+  return await queryDuneSQLCached(`
+    SELECT 
+      to_unixtime(block_date) AS date,
+      amount_display AS amount 
+    FROM tokens_solana.transfers
+    WHERE from_token_account IN ('Ay1sXM9gG1ZFARXr1TowweUyhbZrj3BMcX5Zb4HgbcKr', '9uyCjS84BfeF56WbANu2xHFtrjTe7GsSpLzMJ4adWNXY')
+      AND block_date >= START
+    ORDER BY block_date
+`, 1721174400, {protocolSlug: "sanctum", allocation: "Community Reserve"})
 }
 
 const cloud: Protocol = {
