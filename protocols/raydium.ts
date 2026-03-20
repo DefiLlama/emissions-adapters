@@ -1,7 +1,7 @@
 import { CliffAdapterResult, Protocol } from "../types/adapters";
 import { manualLinear, manualCliff } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
-import { queryDune } from "../utils/dune";
+import { queryDuneSQLCached } from "../utils/dune";
 
 const totalSupply = 555_000_000; 
 const RAY_TGE = 1613865600; // Sunday, February 21, 2021
@@ -15,12 +15,15 @@ const communitySeedAllocation = totalSupply * 0.06; // 6%
 const advisorsAllocation = totalSupply * 0.02; // 2%
 
 const miningReserve = async (): Promise<CliffAdapterResult[]> => {
-    const data = await queryDune('6804761', true)
-    return data.map((row: Record<string, string>) => ({
-        type: 'cliff',
-        start: row.date,
-        amount: Number(row.amount),
-    }))
+  return await queryDuneSQLCached(`
+    SELECT 
+        to_unixtime(block_date) AS date, 
+        amount / 1e6 AS amount 
+    FROM tokens_solana.transfers
+    WHERE from_token_account ='fArUAncZwVbMimiWv5cPUfFsapdLd8QMXZE4VXqFagR'
+        AND block_date >= START
+    ORDER BY block_date ASC
+`, 1612137600, {protocolSlug: "raydium", allocation: "Mining Reserve"})
 }
 
 const raydium: Protocol = {
