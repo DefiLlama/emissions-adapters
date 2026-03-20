@@ -169,7 +169,7 @@ async function getExistingData(cacheKeys: cacheKeys, isUnlock = false) {
   let res: any = []
   try {
     res = await fetch(`https://pro-api.llama.fi/${process.env.INTERNAL_API_KEY}/api/emission/${cacheKeys.protocolSlug}`).then((r) =>
-        r.json(),
+      r.json(),
     );
   } catch {}
   let body = res.body ? JSON.parse(res.body) : [];
@@ -208,6 +208,6 @@ export async function queryDuneSQLCached(query: string, start: number, cacheKeys
 
 export async function queryDuneSQL(query: string, start?: number) {
     return queryDune("3996608", true, {
-    fullQuery: query.split("TIME_RANGE").join(`block_time >= from_unixtime(${start})`)
+    fullQuery: query.split("START").join(`from_unixtime(${start})`)
   })
 }

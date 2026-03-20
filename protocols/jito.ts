@@ -1,6 +1,6 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { CliffAdapterResult, Protocol } from "../types/adapters";
-import { queryDune, queryDuneSQL, queryDuneSQLCached } from "../utils/dune";
+import { queryDuneSQLCached } from "../utils/dune";
 import { periodToSeconds } from "../utils/time";
 
 const start = 1701907200;
@@ -28,7 +28,7 @@ const jitoDAO = async (): Promise<CliffAdapterResult[]> => {
         '5wQULuzRkYe4KAttSD1L1fuxavjepcMn1PycNMmPchna',
         '7muKsqJwrWczBKE5ZNvApvdsku6ZVjaWT6w5ZbzbxrfY'
     )
-    AND TIME_RANGE
+    AND t.block_time >= START
     ORDER BY date
 `, 1698364800, {protocolSlug: "jito", allocation: jitoDAOAllocation})
 }
