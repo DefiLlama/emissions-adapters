@@ -91,7 +91,7 @@ const apwine: ProtocolV2 = {
       "https://docs.spectra.finance/tokenomics/spectra"
     ],
     token: `${chain}:${token}`,
-    protocolIds: ["1109"],
+    protocolIds: ["parent#spectra"],
   },
   categories: {
     publicSale: ["Bootstrap"],
