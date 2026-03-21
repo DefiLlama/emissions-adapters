@@ -98,4 +98,5 @@ export const protocolsIncentives:string[] = [
     "1918", // aura
     "parent#sushi", // sushiswap
     "parent#quickswap", // quickswap
+    "parent#spectra", // spectra
 ]
