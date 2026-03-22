@@ -185,7 +185,7 @@ async function getExistingData(cacheKeys: cacheKeys, isUnlock = false) {
   let res: any = []
   try {
     res = await fetch(`https://pro-api.llama.fi/${process.env.INTERNAL_API_KEY}/api/emission/${cacheKeys.protocolSlug}`).then((r) =>
-      r.json(),
+        r.json(),
     );
   } catch {}
   let body = res.body ? JSON.parse(res.body) : [];
@@ -208,7 +208,7 @@ export async function queryDuneSQLCached(query: string, start: number, cacheKeys
   let startTime = start
   const existingData = await getExistingData(cacheKeys, isUnlock)
   if (existingData.length) {
-    startTime = NOW_TIMESTAMP - 86400
+    startTime = NOW_TIMESTAMP - (NOW_TIMESTAMP % 86400) - 86400
     results = existingData.filter((r: CliffAdapterResult) => r.start < startTime)
   }
   const rawData = await queryDuneSQL(query, startTime)
