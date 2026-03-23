@@ -9,11 +9,15 @@ const TRANSFER_TOPIC =
   "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 const ZERO_ADDRESS_TOPIC =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
-const GRID_MINING_TOPIC =
-  `0x000000000000000000000000${GRID_MINING.slice(2)}`;
+const GRID_MINING_TOPIC = `0x000000000000000000000000${GRID_MINING.slice(2)}`;
+
+type EmissionRow = {
+  date: string;
+  amount: string;
+};
 
 const miningEmissions = async (): Promise<CliffAdapterResult[]> => {
-  const data = await queryCustom(
+  const data = (await queryCustom(
     `SELECT
       toStartOfDay(timestamp) AS date,
       SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
@@ -24,13 +28,13 @@ const miningEmissions = async (): Promise<CliffAdapterResult[]> => {
       AND topic0 = '${TRANSFER_TOPIC}'
       AND topic1 = '${ZERO_ADDRESS_TOPIC}'
       AND topic2 = '${GRID_MINING_TOPIC}'
-      AND timestamp >= toDateTime('2026-03-08')
+      AND timestamp >= toDateTime('2026-03-09')
     GROUP BY date
     ORDER BY date ASC`,
     {}
-  );
+  )) as EmissionRow[];
 
-  return data.map((d: any) => ({
+  return data.map((d) => ({
     type: "cliff",
     start: readableToSeconds(d.date),
     amount: Number(d.amount),
