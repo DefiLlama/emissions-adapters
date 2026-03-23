@@ -30,11 +30,13 @@ export type AdapterResult = {
   token?: string;
   confirmed?: boolean;
   dateFormat?: string;
+  isForecast?: boolean;
 };
 export type RawResult = {
   timestamp: number;
   change: number;
   continuousEnd: number | undefined;
+  isForecast?: boolean;
 };
 export type StepAdapterResult = {
   start: number;
@@ -50,6 +52,7 @@ export type CliffAdapterResult = {
   amount: number;
   dateFormat?: string;
   isUnlock?: boolean;
+  isForecast?: boolean;
 };
 export type LinearAdapterResult = {
   type: "linear";
@@ -58,6 +61,7 @@ export type LinearAdapterResult = {
   amount: number;
   dateFormat?: string;
   isUnlock?: boolean;
+  isForecast?: boolean;
 };
 export type ChartData = {
   timestamps: number[];
@@ -65,6 +69,7 @@ export type ChartData = {
   rawEmission: number[];
   burned: number[];
   isContinuous: boolean;
+  isForecast?: boolean;
   apiData?: ApiChartData[];
 };
 export type ApiChartData = {
@@ -73,6 +78,7 @@ export type ApiChartData = {
   rawEmission: number;
   burned: number;
   label?: string;
+  isForecast?: boolean;
 };
 export type TransposedApiChartData = {
   label: string;

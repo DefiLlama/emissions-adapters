@@ -231,17 +231,19 @@ function appendForecast(
           timestamp + periodToSeconds.year * 5,
         ),
       );
-      chartData.push({
-        data: rawToChartData(
-          "",
-          {
-            timestamp,
-            change,
-            continuousEnd,
-          },
-          data.startTime,
+      const forecastData = rawToChartData(
+        "",
+        {
+          timestamp,
+          change,
           continuousEnd,
-        ),
+        },
+        data.startTime,
+        continuousEnd,
+      );
+      forecastData.isForecast = true;
+      chartData.push({
+        data: forecastData,
         section: incompleteSection.key,
       });
       nullFinder(chartData, "postPush");
@@ -393,7 +395,9 @@ export function rawToChartData(
     protocol,
   };
 
-  return raw.continuousEnd ? continuous(raw, config) : discreet(raw, config);
+  const chartData = raw.continuousEnd ? continuous(raw, config) : discreet(raw, config);
+  if (raw.isForecast) chartData.isForecast = true;
+  return chartData;
 }
 function continuous(raw: RawResult, config: ChartConfig): ChartData {
   let {
@@ -472,12 +476,14 @@ function discreet(raw: RawResult, config: ChartConfig): ChartData {
 export function mapToServerData(testData: ChartSection[]) {
   const serverData: any[] = testData.map((s: ChartSection) => {
     const label = s.section;
+    const isForecast = s.data.isForecast;
 
     const data = s.data.timestamps.map((timestamp: number, i: number) => ({
       timestamp,
       unlocked: s.data.unlocked[i],
       rawEmission: s.data.rawEmission[i],
       burned: s.data.burned[i],
+      ...(isForecast ? { isForecast: true } : {}),
     }));
 
     return { label, data };

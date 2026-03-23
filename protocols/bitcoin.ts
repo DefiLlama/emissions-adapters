@@ -22,6 +22,7 @@ const miningRewardsDune = async (): Promise<{ data: CliffAdapterResult[]; lastTi
     start: Number(row.timestamp),
     amount: Number(row.btc_mined),
     isUnlock: false,
+    isForecast: false,
   }));
   const lastTimestamp = Math.max(...duneData.map((row: any) => Number(row.timestamp)));
   return { data: filtered, lastTimestamp };
@@ -42,6 +43,7 @@ function miningRewardsForecast(splitTimestamp: number): LinearAdapterResult[] {
       const qty = reward * 210000 * ((end - forecastStart) / (end - start));
       const section = manualLinear(forecastStart, end, qty);
       section.isUnlock = false;
+      section.isForecast = true;
       sections.push(section);
     }
     reward /= 2;
@@ -51,6 +53,7 @@ function miningRewardsForecast(splitTimestamp: number): LinearAdapterResult[] {
       const nextQty = reward * 210000;
       const nextSection = manualLinear(nextStart, nextEnd, nextQty);
       nextSection.isUnlock = false;
+      nextSection.isForecast = true;
       sections.push(nextSection);
       reward /= 2;
     }

@@ -253,6 +253,7 @@ function cliffAdapterToRaw(result: CliffAdapterResult): RawResult[] {
       timestamp: result.start,
       change: result.amount,
       continuousEnd: undefined,
+      ...(result.isForecast ? { isForecast: true } : {}),
     },
   ];
 }
@@ -262,6 +263,7 @@ function linearAdapterToRaw(result: LinearAdapterResult): RawResult[] {
       timestamp: result.start,
       change: result.amount,
       continuousEnd: result.end,
+      ...(result.isForecast ? { isForecast: true } : {}),
     },
   ];
 }

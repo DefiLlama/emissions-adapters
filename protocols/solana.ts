@@ -20,6 +20,7 @@ const stakingRewardsDune = async (): Promise<{ data: CliffAdapterResult[]; lastT
     start: Number(row.timestamp),
     amount: Number(row.sol_reward),
     isUnlock: false,
+    isForecast: false,
   }));
   const lastTimestamp = Math.max(...duneData.map((row: any) => Number(row.timestamp)));
   return { data: filtered, lastTimestamp };
@@ -54,6 +55,7 @@ function stakingRewardsForecast(splitTimestamp: number): LinearAdapterResult[] {
       start,
       end: start + periodToSeconds.month,
       amount,
+      isForecast: true,
     });
     workingQty += amount;
     total += amount;
