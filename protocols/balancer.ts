@@ -17,7 +17,7 @@ const lpEmissions = async (): Promise<CliffAdapterResult[]> => {
     WHERE address = '${token}'
       AND topic0 = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
       AND topic1 = '0x0000000000000000000000000000000000000000000000000000000000000000'
-      AND timestamp >= toDateTime('2020-07-01')
+      AND timestamp >= toDateTime('2020-06-23')
     GROUP BY date
     ORDER BY date DESC
   `,
