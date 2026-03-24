@@ -46,6 +46,7 @@ const mineloot: Protocol = {
   meta: {
     token: `base:${LOOT}`,
     sources: [
+      "https://www.mineloot.app/about",
       "https://basescan.org/token/0x00E701Eff4f9Dc647f1510f835C5d1ee7E41D28f",
       "https://basescan.org/address/0xA8E2F506aDcbBF18733A9F0f32e3D70b1A34d723",
     ],
@@ -53,7 +54,7 @@ const mineloot: Protocol = {
       "Tracks LOOT minted from zero address directly to GridMining (round emissions).",
       "Constructor mint to owner is excluded by topic2 filter.",
     ],
-    protocolIds: [""],
+    protocolIds: ["7570"],
   },
   categories: {
     farming: ["Mining Emissions"],
