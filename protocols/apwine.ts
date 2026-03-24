@@ -3,9 +3,10 @@ import { manualCliff, manualLinear } from "../adapters/manual";
 import { periodToSeconds } from "../utils/time";
 import { queryMerklCampaigns } from "../utils/queries";
 
-const total = 5e7;
+const migrationRatio = 20; // 1 APW = 20 SPECTRA
+const total = 5e7 * migrationRatio;
 const start = 1621209600;
-const token = "0x4104b135DBC9609Fc1A9490E61369036497660c8";
+const token = "0x6a89228055c7c28430692e342f149f37462b478b";
 const chain = "ethereum";
 
 const DISTRIBUTION_CREATOR = '0x8bb4c975ff3c250e0ceea271728547f3802b36fd'
@@ -78,7 +79,7 @@ const apwine: ProtocolV2 = {
     total * 0.08264,
   ),
   Bootstrap: manualCliff(start, total * 0.07),
-  "Airdrop": manualCliff(1639702800, 588_430),
+  "Airdrop": manualCliff(1639702800, 588_430 * migrationRatio),
   "Gauge Emissions": incentivesSection,
   meta: {
     version: 2,
@@ -88,7 +89,8 @@ const apwine: ProtocolV2 = {
     sources: [
       "https://medium.com/apwine/apwine-tokenomics-50e0db1cc33d",
       "https://medium.com/apwine/apwine-genesis-airdrop-and-apw-locking-749447817687",
-      "https://docs.spectra.finance/tokenomics/spectra"
+      "https://docs.spectra.finance/tokenomics/spectra",
+      "https://paragraph.com/@spectraprotocol/spectra-migration-guide-for-apw-and-veapw-holders"
     ],
     token: `${chain}:${token}`,
     protocolIds: ["parent#spectra"],
