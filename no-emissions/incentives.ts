@@ -99,4 +99,6 @@ export const protocolsIncentives:string[] = [
     "parent#sushi", // sushiswap
     "parent#quickswap", // quickswap
     "parent#spectra", // spectra
+    "parent#balancer", // balancer
+    "7570", // mineloot
 ]
