@@ -1,15 +1,10 @@
-import { CliffAdapterResult, Protocol } from "../types/adapters";
+import { CliffAdapterResult, ProtocolV2, SectionV2 } from "../types/adapters";
 import { manualCliff } from "../adapters/manual";
-import { balance, latest } from "../adapters/balance";
-import { queryCustom } from "../utils/queries";
+import { queryCustom, queryDailyNetOutflows, queryDailyOutflows } from "../utils/queries";
 import { readableToSeconds } from "../utils/time";
 
 const total = 100_000_000; // 100 million
-const token = "0xba100000625a3754423978a60c9317c58a424e3D";
-const chain = "ethereum";
-
-const balanceSection = (address: string, deployed: number, backfill: boolean) =>
-  balance([address], token, chain, "balancer", deployed, backfill);
+const token = "0xba100000625a3754423978a60c9317c58a424e3d";
 
 const lpEmissions = async (): Promise<CliffAdapterResult[]> => {
   const data = await queryCustom(
@@ -18,8 +13,8 @@ const lpEmissions = async (): Promise<CliffAdapterResult[]> => {
       toStartOfDay(timestamp) AS date,
       SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3, 64))))) / 1e18 AS amount
     FROM evm_indexer.logs
-    PREWHERE chain = 1 AND short_address = '0xba100000' AND short_topic0 = '0xddf252ad'
-    WHERE address = '0xba100000625a3754423978a60c9317c58a424e3d'
+    PREWHERE chain = 1 AND short_address = '${token.slice(0,10)}' AND short_topic0 = '0xddf252ad'
+    WHERE address = '${token}'
       AND topic0 = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
       AND topic1 = '0x0000000000000000000000000000000000000000000000000000000000000000'
       AND timestamp >= toDateTime('2020-07-01')
@@ -40,31 +35,69 @@ const lpEmissions = async (): Promise<CliffAdapterResult[]> => {
   return result;
 };
 
-const balancer: Protocol = {
-  "Liquidity Providers": lpEmissions,
+const incentivesSection: SectionV2 = {
+  displayName: "Liquidity Providers",
+  methodology: "Tracks BAL tokens distributed to liquidity providers",
+  isIncentive: true,
+  components: [
+    {
+      id: "liquidity-providers",
+      name: "Liquidity Providers",
+      methodology: "Tracks new mints of BAL that are used to incentivize liquidity providers.",
+      isIncentive: true,
+      fetch: lpEmissions,
+      metadata: {
+        contract: '0xba100000625a3754423978a60c9317c58a424e3d',
+        chains: ["ethereum"],
+      },
+    },
+  ],
+};
+
+async function getNetOutflows(address: string) {
+    const data = await queryDailyNetOutflows({
+      token: token,
+      address: address,
+      startDate: "2020-07-01"
+    })
+    return data.map(d => ({
+      type: "cliff" as const,
+      start: readableToSeconds(d.date),
+      amount: Number(d.amount),
+    }))
+}
+
+async function getOutflows(address: string, startDate: string) {
+    const data = await queryDailyOutflows({
+      token: token,
+      fromAddress: address,
+      startDate,
+    })
+    return data.map(d => ({
+      type: "cliff" as const,
+      start: readableToSeconds(d.date),
+      amount: Number(d.amount),
+    }))
+}
+
+const balancer: ProtocolV2 = {
+  "Liquidity Providers": incentivesSection,
   "Founders, Options, Advisors, Investors": manualCliff(
     1696118400,
     total * 0.225,
   ),
-  "Treasury Safe": (backfill: boolean) =>
-    balanceSection(
-      "0x0EFcCBb9E2C09Ea29551879bd9Da32362b32fc89",
-      1618272000,
-      backfill,
-    ),
-  "Balancer Labs Fundraising Fund": (backfill: boolean) =>
-    balanceSection(
+  "Treasury Safe": getOutflows(
+       "0x0EFcCBb9E2C09Ea29551879bd9Da32362b32fc89",
+       "2025-07-25"
+     ),
+  "Balancer Labs Fundraising Fund": getNetOutflows(
       "0xB129F73f1AFd3A49C701241F374dB17AE63B20Eb",
-      1604192400,
-      backfill,
     ),
-  "Balancer Labs Contributors Incentives Program": (backfill: boolean) =>
-    balanceSection(
+  "Balancer Labs Contributors Incentives Program": getNetOutflows(
       "0xCDcEBF1f28678eb4A1478403BA7f34C94F7dDBc5",
-      1592870400,
-      backfill,
     ),
   meta: {
+    version: 2,
     notes: [
       "No information regarding the Founders, Options, Advisors, Investors unlock schedule is given in the source material, other than it had all been vested by Oct 23.",
       "Liquidity Provider emissions are tracked via BAL mint events (Transfer from 0x00) on the BAL token contract.",
@@ -73,27 +106,8 @@ const balancer: Protocol = {
       "https://docs.balancer.fi/concepts/governance/bal-token.html#supply-inflation-schedule",
     ],
     token: "coingecko:balancer",
-    protocolIds: ["116", "2611"],
-    incompleteSections: [
-      {
-        key: "Treasury Safe",
-        allocation: total * 0.05,
-        lastRecord: (backfill: boolean) =>
-          latest("balancer", 1618272000, backfill),
-      },
-      {
-        key: "Balancer Labs Fundraising Fund",
-        allocation: total * 0.05,
-        lastRecord: (backfill: boolean) =>
-          latest("balancer", 1604192400, backfill),
-      },
-      {
-        key: "Balancer Labs Contributors Incentives Program",
-        allocation: total * 0.025,
-        lastRecord: (backfill: boolean) =>
-          latest("balancer", 1592870400, backfill),
-      },
-    ],
+    protocolIds: ["parent#balancer"],
+    total
   },
   categories: {
     farming: ["Liquidity Providers"],
