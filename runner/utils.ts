@@ -560,7 +560,18 @@ export async function processSingleProtocol(
 
   let supplyMetrics;
   if (v2ProcessedData) {
-    supplyMetrics = v2ProcessedData.supplyMetrics;
+    try {
+      supplyMetrics = await V2Processor.calculateAdjustedSupplyMetrics(
+        v2ProcessedData.sections,
+        adapter as ProtocolV2,
+        (adapter as ProtocolV2).categories,
+        realTimeData,
+        rawData.resolvedAdapterResults,
+      );
+    } catch (error) {
+      console.warn(`Could not calculate supply metrics for V2 adapter ${protocolName}:`, error);
+      supplyMetrics = undefined;
+    }
   } else {
     try {
       supplyMetrics = await V2Processor.calculateAdjustedSupplyMetrics(

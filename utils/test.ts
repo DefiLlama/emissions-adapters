@@ -61,6 +61,7 @@ export async function parseData(adapter: Protocol, i: number): Promise<void> {
         adapter as ProtocolV2,
         (adapter as ProtocolV2).categories,
         realTimeData,
+        rawData.resolvedAdapterResults
       );
     } catch (error) {
       console.warn("Could not calculate supply metrics for V2 adapter");
