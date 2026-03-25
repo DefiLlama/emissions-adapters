@@ -23,7 +23,7 @@ const xdc: Protocol = {
     "Founders and Team": manualLinear(start, start + periodToSeconds.years(14),15_000_000_000),
     "Ecosystem Development": manualLinear(start, start + periodToSeconds.years(11), 10_000_000_000),
     "Contingency Fund": manualCliff(start, 2_500_000_000),
-    "Pre-Placement": manualCliff(start, 10_000_000_000),
+    "Pre Placement": manualCliff(start, 10_000_000_000),
     "Staking Rewards": getEmissions,
     meta: {
         notes: [
@@ -43,7 +43,7 @@ const xdc: Protocol = {
         insiders: ["Founders and Team"],
         noncirculating: ["Contingency Fund"],
         farming: ["Ecosystem Development"],
-        privateSale: ["Pre-Placement"],
+        privateSale: ["Pre Placement"],
         staking: ["Staking Rewards"]
     },
 };

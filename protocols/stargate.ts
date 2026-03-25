@@ -66,7 +66,7 @@ const stargate: Protocol = {
     start + 1.5 * periodToSeconds.year,
     0.1 * qty,
   ),
-  "STG-USDC Curve pool incentives": manualCliff(start, 0.05 * qty),
+  "STG USDC Curve pool incentives": manualCliff(start, 0.05 * qty),
   "post launch bonding curve": manualCliff(start, 0.1595 * qty),
   "initial emissions program": manualLinear(
     start,
@@ -102,7 +102,7 @@ const stargate: Protocol = {
   },
   categories: {
     // farming: [
-    //   "STG-USDC Curve pool incentives",
+    //   "STG USDC Curve pool incentives",
     //   "initial emissions program",
     //   "future incentives",
     // ],

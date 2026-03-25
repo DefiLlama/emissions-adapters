@@ -13,7 +13,7 @@ const initialReserve = 120_000_000;
 
 const celo: Protocol = {
 
-  "Pre-launch Sales": [
+  "Pre Launch Sales": [
     manualCliff(
       start,
       preLaunchSales * 0.1641
@@ -127,7 +127,7 @@ const celo: Protocol = {
   categories: {
     staking: ["Staking & Validator Reserve"],
     noncirculating: ["Community Grants","Initial Reserve","Operational Grants"],
-    privateSale: ["Pre-launch Sales"],
+    privateSale: ["Pre Launch Sales"],
     insiders: ["Team, Advisors, Founders & Contributors"],
   },
 };

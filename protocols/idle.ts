@@ -20,7 +20,7 @@ const idle: Protocol = {
   "Liquidity mining": [
     manualLinear(start, start + periodToSeconds.year * 2, qty * 0.18),
   ],
-  "Long-term rewards": (backfill: boolean) =>
+  "Long Term Rewards": (backfill: boolean) =>
     balance(
       ["0x107A369bc066c77FF061c7d2420618a6ce31B925"],
       token,
@@ -61,7 +61,7 @@ const idle: Protocol = {
     total: qty,
     incompleteSections: [
       {
-        key: "Long-term rewards",
+        key: "Long Term Rewards",
         allocation: qty * 0.2,
         lastRecord: (backfill: boolean) =>
           latest("idle", timestampDeployed, backfill),
@@ -75,7 +75,7 @@ const idle: Protocol = {
     ],
   },
   categories: {
-    farming: ["Long-term rewards", "Liquidity mining", "early LPs"],
+    farming: ["Long Term Rewards", "Liquidity mining", "early LPs"],
     publicSale: ["Liquidity bootstrap"],
     noncirculating: ["Ecosystem fund"],
     privateSale: ["Investors"],

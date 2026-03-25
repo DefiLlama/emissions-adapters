@@ -67,7 +67,7 @@ const peaq: Protocol = {
     ),
   ],
   
-  "Investors (Private and Pre-Launch)": [
+  "Investors (Private and Pre Launch)": [
     manualCliff(start, investorsFundingPrivate * 0.075 + investorsFundingPreLaunch * 0.075), // 7.5% at TGE
     manualLinear(
       start + periodToSeconds.months(6), // 6 months lock-up
@@ -117,7 +117,7 @@ const peaq: Protocol = {
     noncirculating: ["Community Reserve","Network Security","Ecosystem Funds"],
     liquidity: ["Ecosystem Market Making & Liquidity"],
     publicSale: ["Community Sale","Community Initial Campaign","Community Campaigns (Get Real & Early Adopters)"],
-    privateSale: ["Investors (Pre Seed)","Investors (Seed)","Investors (Private and Pre-Launch)"],
+    privateSale: ["Investors (Pre Seed)","Investors (Seed)","Investors (Private and Pre Launch)"],
     insiders: ["Core Contributors and EoT Labs"],
   },
 };

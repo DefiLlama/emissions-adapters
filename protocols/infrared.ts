@@ -27,7 +27,7 @@ const infrared: Protocol = {
     "Liquidity": manualCliff(start, shares.liquidity),
     "Airdrop": manualCliff(start, shares.airdrop),
     "Ecosystem": [manualCliff(start, shares.ecosystem * 0.2), manualLinear(start, months(start, 24), shares.ecosystem * 0.8)],
-    "Build-a-Bera": insiderSchedule(shares.buildABera),
+    "Build a Bera": insiderSchedule(shares.buildABera),
     "Investors": insiderSchedule(shares.investors),
     Team: insiderSchedule(shares.team),
     meta: {
@@ -48,7 +48,7 @@ const infrared: Protocol = {
         privateSale: ["Investors"],
         publicSale: ["Alpha TGE Sale"],
         insiders: ["Team"],
-        noncirculating: ["Treasury", "Build-a-Bera"],
+        noncirculating: ["Treasury", "Build a Bera"],
         farming: ["Ecosystem"],
     },
 };

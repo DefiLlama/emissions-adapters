@@ -23,7 +23,7 @@ const kodiak: Protocol = {
         manualLinear(start, months(start, 36), shares.incentives * 0.75),
     ],
     "Investors": manualLinear(start, months(start, 24), shares.investors),
-    "Build-a-Bera": manualLinear(start, months(start, 24), shares.buildABera),
+    "Build a Bera": manualLinear(start, months(start, 24), shares.buildABera),
     "Core Contributors": manualLinear(
         months(start, 6),
         months(start, 30),
@@ -54,7 +54,7 @@ const kodiak: Protocol = {
         farming: ["Incentives"],
         insiders: ["Core Contributors", "Advisors"],
         privateSale: ["Investors"],
-        noncirculating: ["Foundation & Ecosystem Growth", "Build-a-Bera"],
+        noncirculating: ["Foundation & Ecosystem Growth", "Build a Bera"],
     },
 };
 export default kodiak;

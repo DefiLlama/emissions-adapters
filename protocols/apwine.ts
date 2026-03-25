@@ -73,7 +73,7 @@ const apwine: ProtocolV2 = {
     start + periodToSeconds.years(4),
     total * 0.0068,
   ),
-  "Seed & Pre-seed": manualLinear(
+  "Seed & Pre Seed": manualLinear(
     start,
     start + periodToSeconds.years(2),
     total * 0.08264,
@@ -99,7 +99,7 @@ const apwine: ProtocolV2 = {
     publicSale: ["Bootstrap"],
     farming: ["Gauge Emissions"],
     airdrop: ["Airdrop"],
-    privateSale: ["Seed & Pre-seed"],
+    privateSale: ["Seed & Pre Seed"],
     insiders: ["Advisors", "Team"],
   },
 };

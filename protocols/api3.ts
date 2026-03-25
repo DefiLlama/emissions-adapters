@@ -22,7 +22,7 @@ const api3: Protocol = {
       qty * (0.5 / 6),
     ),
   ],
-  "Pre-seed Investors": manualLinear(
+  "Pre Seed Investors": manualLinear(
     start,
     start + periodToSeconds.year * 2,
     qty * 0.05,
@@ -55,7 +55,7 @@ const api3: Protocol = {
     noncirculating: ["Ecosystem Fund"],
     publicSale: ["Public distribution"],
     staking: ["Staking rewards"],
-    privateSale: ["Pre-seed Investors","Seed Investors"],
+    privateSale: ["Pre Seed Investors","Seed Investors"],
     insiders: ["Founding Team","Partners & Contributors"],
   },
 };

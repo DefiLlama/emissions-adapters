@@ -34,7 +34,7 @@ const babylon: Protocol = {
     )
   ],
 
-  "Early Private-Round Investors": [
+  "Early Private Round Investors": [
     manualCliff(start + periodToSeconds.year, investors * 0.125),
     manualLinear(
       start + periodToSeconds.year,
@@ -74,7 +74,7 @@ const babylon: Protocol = {
 
   categories: {
     noncirculating: ["Community Incentives","Ecosystem Building","Research and Development + Operations"],
-    privateSale: ["Early Private-Round Investors"],
+    privateSale: ["Early Private Round Investors"],
     insiders: ["Team","Advisors"],
   },
 };

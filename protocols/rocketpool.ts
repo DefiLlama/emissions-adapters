@@ -5,7 +5,7 @@ import { manualCliff } from "../adapters/manual";
 const startOld = 1504742400; // old RPL token start date
 const inflationStart = 1632960000; 
 const rocketpool: Protocol = {
-    "Pre-Sale Investors": manualCliff(startOld, 9_720_000),
+    "Pre Sale Investors": manualCliff(startOld, 9_720_000),
     "Public Sale": manualCliff(startOld, 5_580_000),
     "Rocket Pool Team": manualCliff(startOld, 2_700_000),
 
@@ -48,7 +48,7 @@ const rocketpool: Protocol = {
     publicSale: ["Public Sale"],
     staking: ["Node Operator Rewards","Trusted Node Rewards"],
     noncirculating: ["Protocol DAO Rewards"],
-    privateSale: ["Pre-Sale Investors"],
+    privateSale: ["Pre Sale Investors"],
     insiders: ["Rocket Pool Team"],
   }
 };

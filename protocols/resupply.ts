@@ -45,8 +45,8 @@ for (let i = 0; i < data.length; i++) {
 }
 
 const resupply: Protocol = {
-  "Convex Protocol sub-DAO": manualLinear(start, start + periodToSeconds.years(5), total * 0.2),
-  "Yearn Protocol sub-DAO": manualLinear(start, start + periodToSeconds.years(5), total * 0.1),
+  "Convex Protocol Sub DAO": manualLinear(start, start + periodToSeconds.years(5), total * 0.2),
+  "Yearn Protocol Sub DAO": manualLinear(start, start + periodToSeconds.years(5), total * 0.1),
   "Frax Protocol": manualLinear(start, start + periodToSeconds.year, total * 0.05),
   "Prisma Burns": manualLinear(start, start + periodToSeconds.years(5), total * 0.15),
   "Prisma Hack Victims": manualLinear(start, start + periodToSeconds.years(2), total * 0.02),
@@ -64,7 +64,7 @@ const resupply: Protocol = {
     protocolIds: ["5963"]
   },
   categories: {
-    insiders: ["Team", "Convex Protocol sub-DAO", "Yearn Protocol sub-DAO", "Frax Protocol", "Prisma Burns"],
+    insiders: ["Team", "Convex Protocol Sub DAO", "Yearn Protocol Sub DAO", "Frax Protocol", "Prisma Burns"],
     airdrop: ["Prisma Hack Victims"],
     noncirculating: ["Treasury"],
     farming: ["Emissions"],

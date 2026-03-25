@@ -53,7 +53,7 @@ const flow: Protocol = {
 
   "Auction": manualCliff(start + periodToSeconds.year, 25_000_000),
 
-  "Pre-launch Backers": manualCliff(start + periodToSeconds.years(2), 259_800_000), //from flow post about the circulating updates, where it combine pre launch backer and community sale
+  "Pre Launch Backers": manualCliff(start + periodToSeconds.years(2), 259_800_000), //from flow post about the circulating updates, where it combine pre launch backer and community sale
 
   "Development Team": manualLinear(
     start,
@@ -85,7 +85,7 @@ const flow: Protocol = {
     staking: ["Staking Rewards"],
     publicSale: ["Community Sale","Auction"],
     noncirculating: ["Ecosystem Reserve"],
-    privateSale: ["Pre-launch Backers"],
+    privateSale: ["Pre Launch Backers"],
     insiders: ["Development Team","Dapper Labs"],
   }
 };
