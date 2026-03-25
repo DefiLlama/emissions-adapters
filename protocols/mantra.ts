@@ -30,7 +30,7 @@ const mantra: Protocol = {
       airdrops * 0.9
     )
   ],
-  "Mainnet Pre-Seed": manualLinear(
+  "Mainnet Pre Seed": manualLinear(
     start + periodToSeconds.year,
     start + periodToSeconds.years(3),
     mainnetPreSeed
@@ -64,7 +64,7 @@ const mantra: Protocol = {
   categories: {
     noncirculating: ["Ecosystem","Existing OM (EVM)","OM Upgrade"],
     airdrop: ["Airdrops"],
-    privateSale: ["Mainnet Pre-Seed","Mainnet Seed"],
+    privateSale: ["Mainnet Pre Seed","Mainnet Seed"],
     insiders: ["Core Contributors"],
   },
 };

@@ -38,7 +38,7 @@ const emissions = async (): Promise<LinearAdapterResult[]> => {
 
 const shadow: Protocol = {
   // Direct SHADOW allocations (no vesting)
-  "Protocol-Owned Liquidity": manualCliff(start, total * 0.03),  // 300,000
+  "Protocol Owned Liquidity": manualCliff(start, total * 0.03),  // 300,000
   "Reserves": manualCliff(start, total * 0.045),         // 450,000
 
   // xSHADOW allocations (with 180-day vesting)
@@ -91,7 +91,7 @@ const shadow: Protocol = {
     airdrop: ["Airdrop"],
     noncirculating: ["Reserves"],
     farming: ["Gauge Emissions"],
-    liquidity: ["Protocol-Owned Liquidity"]
+    liquidity: ["Protocol Owned Liquidity"]
   }
 };
 

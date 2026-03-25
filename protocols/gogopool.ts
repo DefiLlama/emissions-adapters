@@ -41,7 +41,7 @@ const gogopool: Protocol = {
     12, 
     seedRoundAmount / 12, 
   ),
-  "Pre-IDO Partner Sale": manualStep(
+  "Pre IDO Partner Sale": manualStep(
     start + periodToSeconds.year + periodToSeconds.months(3),
     periodToSeconds.months(3), 
     12, 
@@ -67,7 +67,7 @@ const gogopool: Protocol = {
   categories: {
     staking: ["GGP Staking Rewards"],
     insiders: ["Original Team", "Advisors"],
-    privateSale: ["Seed Round", "Pre-IDO Partner Sale"],
+    privateSale: ["Seed Round", "Pre IDO Partner Sale"],
     publicSale: ["IDO"],
     noncirculating: ["GoGoPool Foundation"],
     liquidity: ["Liquidity"],

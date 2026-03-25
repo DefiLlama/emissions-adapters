@@ -27,7 +27,7 @@ async function getEcosystemOutflows() {
 }
 
 const limitless: Protocol = {
-    "Kaito Pre-Sale": [manualCliff(start, shares.kaito / 2), manualCliff(start + periodToSeconds.months(6), shares.kaito / 2)],
+    "Kaito Pre Sale": [manualCliff(start, shares.kaito / 2), manualCliff(start + periodToSeconds.months(6), shares.kaito / 2)],
     "Investors": manualLinear(start + periodToSeconds.months(6), start + periodToSeconds.months(30), shares.investors),
     "Echo Round": manualLinear(start + periodToSeconds.months(6), start + periodToSeconds.months(30), shares.echo),
     "Treasury": manualLinear(start + periodToSeconds.months(6), start + periodToSeconds.months(30), shares.treasury),
@@ -49,7 +49,7 @@ const limitless: Protocol = {
     categories: {
         insiders: ["Team"],
         privateSale: ["Investors"],
-        publicSale: ["Echo Round", "Kaito Pre-Sale"],
+        publicSale: ["Echo Round", "Kaito Pre Sale"],
         noncirculating: ["Treasury"],
         liquidity: ["Liquidity"],
         farming: ["Ecosystem Rewards"]

@@ -39,7 +39,7 @@ const kaito: Protocol = {
     36,
     (totalSupply * 0.083) / 36,
   ),
-  "Long-term Creator Incentives": manualStep(
+  "Long Term Creator Incentives": manualStep(
     start,
     periodToSeconds.month * 6,
     4,
@@ -55,7 +55,7 @@ const kaito: Protocol = {
   },
   categories: {
     noncirculating: ["Foundation","Ecosystem & Network Growth"],
-    farming: ["Liquidity Incentives","Long-term Creator Incentives"],
+    farming: ["Liquidity Incentives","Long Term Creator Incentives"],
     airdrop: ["Initial Community & Ecosystem","Binance Holder"],
     privateSale: ["Early Backers"],
     insiders: ["Core Contributors"],

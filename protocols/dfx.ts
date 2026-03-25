@@ -13,7 +13,7 @@ const dfx: Protocol = {
     "Dev Fund": manualLinear(start, start + periodToSeconds.month * 36, totalSupply * 0.05),
     "Founders (4 founders)": manualLinear(start, start + periodToSeconds.month * 36, totalSupply * 0.15),
     "Seed (11 investors)": manualLinear(start, start + periodToSeconds.month * 36, totalSupply * 0.108),
-    "Pre-Seed (9 investors)": manualLinear(start, start + periodToSeconds.month * 24, totalSupply * 0.092),
+    "Pre Seed (9 investors)": manualLinear(start, start + periodToSeconds.month * 24, totalSupply * 0.092),
     "Treasury - Ecosystem DAO": manualLinear(start, start + periodToSeconds.month * 36, totalSupply * 0.20),
     "Liquidity Providers": [
         manualLinear(start, start + periodToSeconds.month * 32, totalSupply * 0.35 * 0.65),
@@ -34,7 +34,7 @@ const dfx: Protocol = {
     categories: {
     farming: ["Liquidity Providers"],
     noncirculating: ["Treasury - Ecosystem DAO","Dev Fund","Future Token Sale"],
-    privateSale: ["Pre-Seed (9 investors)","Seed (11 investors)"],
+    privateSale: ["Pre Seed (9 investors)","Seed (11 investors)"],
     insiders: ["Founders (4 founders)"],
   },
 };

@@ -111,7 +111,7 @@ const fluid: ProtocolV2 = {
     "2021-09-16",
     3_000_000
   ),
-  "UNI-v3 Staking": manualLinear(
+  "UNI V3 Staking": manualLinear(
     "2021-06-16",
     "2021-09-16",
     1_000_000
@@ -145,7 +145,7 @@ const fluid: ProtocolV2 = {
   categories: {
     insiders: ["Vested Allocations"],
     staking: ["Staking Rewards"],
-    farming: ["Liquidity Mining", "UNI-v3 Staking", "Farming Incentives"],
+    farming: ["Liquidity Mining", "UNI V3 Staking", "Farming Incentives"],
     noncirculating: ["Future Community Initiatives"],
   }
 };

@@ -92,7 +92,7 @@ const numProtocol: Protocol = {
       stakingAmount * 0.02 // 2% of total staking allocation per month
     )
   ],
-  "Pre-Listing Partners and Consultants": [
+  "Pre Listing Partners and Consultants": [
     // 10% on TGE, 6-month lock, 22.5% on month 7, 13, 16, 19.
     manualCliff(start, partnersAmount * 0.10),
     manualCliff(start + periodToSeconds.months(7), partnersAmount * 0.225),
@@ -156,7 +156,7 @@ const numProtocol: Protocol = {
   categories: {
     privateSale: ["Private Sale"],
     publicSale: ["Public Sale"],
-    insiders: ["Team and Advisors", "Pre-Listing Partners and Consultants"],
+    insiders: ["Team and Advisors", "Pre Listing Partners and Consultants"],
     staking: ["User Reward and Staking"],
     liquidity: ["Liquidity"],
     noncirculating: ["Ecosystem"],

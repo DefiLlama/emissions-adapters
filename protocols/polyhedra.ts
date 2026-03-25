@@ -20,7 +20,7 @@ const polyhedra: Protocol = {
     manualCliff(start, total * 0.02),
     manualLinear(start, start + periodToSeconds.months(36), total * 0.13),
   ],
-  "Pre-TGE Purchasers": manualLinear(
+  "Pre TGE Purchasers": manualLinear(
     start,
     start + periodToSeconds.months(24),
     total * 0.02,
@@ -44,7 +44,7 @@ const polyhedra: Protocol = {
     airdrop: ["Airdrop"],
     farming: ["Community, other activities","Ecosystem and Network Incentives"],
     noncirculating: ["Foundation Reserves"],
-    privateSale: ["Pre-TGE Purchasers","Private Sale"],
+    privateSale: ["Pre TGE Purchasers","Private Sale"],
     insiders: ["Core Contributors"],
   },
 };
