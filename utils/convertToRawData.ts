@@ -13,6 +13,7 @@ import {
   isSectionV2,
   SectionV2,
   ProtocolV2,
+  ProcessedProtocolV2,
 } from "../types/adapters";
 import { addResultToEvents } from "./events";
 import { V2Processor } from "./v2-processor";
@@ -21,6 +22,7 @@ const excludedKeys = ["meta", "categories", "documented"];
 export async function createRawSections(
   adapter: Protocol,
   backfill: boolean = false,
+  v2ProcessedData?: ProcessedProtocolV2,
 ): Promise<SectionData> {
   let startTime: number = 10000000000;
   let endTime: number = 0;
@@ -76,11 +78,12 @@ export async function createRawSections(
         let adapterResults: AdapterResult[] = [];
 
         if (isSectionV2(sectionData)) {
-          const processedSection = await V2Processor.processV2Section(
-            section,
-            sectionData as SectionV2,
-            backfill,
-          );
+          const processedSection = v2ProcessedData?.sections.find(s => s.sectionName === section)
+            ?? await V2Processor.processV2Section(
+              section,
+              sectionData as SectionV2,
+              backfill,
+            );
 
           for (const componentResult of processedSection.components) {
             if (componentResult.flags.isTBD) continue;
