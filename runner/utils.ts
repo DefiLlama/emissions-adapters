@@ -432,13 +432,13 @@ export async function processSingleProtocol(
   supplyMetricsBreakdown: Record<string, any>,
   backfill: boolean = false
 ): Promise<string> {
-  const rawData = await createRawSections(adapter, backfill);
-  nullFinder(rawData.rawSections, "rawSections");
-
   let v2ProcessedData: ProcessedProtocolV2 | undefined;
   if (isProtocolV2(adapter)) {
     v2ProcessedData = await V2Processor.processV2Protocol(adapter as ProtocolV2, backfill);
   }
+
+  const rawData = await createRawSections(adapter, backfill, v2ProcessedData);
+  nullFinder(rawData.rawSections, "rawSections");
 
   const { realTimeData, documentedData } = await createChartData(
     protocolName,
