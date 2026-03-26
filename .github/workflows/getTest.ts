@@ -1,3 +1,4 @@
+/// <reference types="node" />
 const MODIFIED1 = parse1(process.env.MODIFIED);
 const ADDED1 = parse1(process.env.ADDED);
 console.log('Modified', MODIFIED1);

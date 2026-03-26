@@ -40,16 +40,14 @@ async function getTransfers() {
     return { farming, staking}
 }
 
-const transfers = getTransfers()
-
 const thorswap: Protocol = {
     "Airdrop": manualCliff(start, shares.airdrop),
     "Public Sale": manualCliff(start, shares.public),
     "Treasury": manualCliff(start, shares.treasury),
     "Core Contributors": manualLinear(start, months(start, 36), shares.contributors),
     "Private Investors": manualLinear(start, months(start, 24), shares.privateInvestors),
-    "Community Incentives": transfers.then(t => t.farming),
-    "Staking Rewards": transfers.then(t => t.staking),
+    "Community Incentives": async () => (await getTransfers()).farming,
+    "Staking Rewards": async () => (await getTransfers()).staking,
     meta: {
         token: "coingecko:thorswap",
         sources: [

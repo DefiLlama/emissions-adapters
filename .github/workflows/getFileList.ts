@@ -1,3 +1,4 @@
+/// <reference types="node" />
 const MODIFIED = parse(process.env.MODIFIED);
 const ADDED = parse(process.env.ADDED);
 const fileSet = new Set();
