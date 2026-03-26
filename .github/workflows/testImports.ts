@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { readdirSync } from "fs"
 
 function getDirectories(source: string) {

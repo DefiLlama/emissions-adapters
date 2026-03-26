@@ -86,14 +86,14 @@ const balancer: ProtocolV2 = {
     1696118400,
     total * 0.225,
   ),
-  "Treasury Safe": getOutflows(
+  "Treasury Safe": () => getOutflows(
        "0x0EFcCBb9E2C09Ea29551879bd9Da32362b32fc89",
        "2025-07-25"
      ),
-  "Balancer Labs Fundraising Fund": getNetOutflows(
+  "Balancer Labs Fundraising Fund": () => getNetOutflows(
       "0xB129F73f1AFd3A49C701241F374dB17AE63B20Eb",
     ),
-  "Balancer Labs Contributors Incentives Program": getNetOutflows(
+  "Balancer Labs Contributors Incentives Program": () => getNetOutflows(
       "0xCDcEBF1f28678eb4A1478403BA7f34C94F7dDBc5",
     ),
   meta: {

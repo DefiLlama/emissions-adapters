@@ -31,12 +31,12 @@ async function getBurns() {
 }
 
 const geodnet: Protocol = {
-    "Mining": [getOutflows("0x8FB9dd00B9a3D893dA96d444817d0b77330d5478"), getBurns()],
-    "Ecosystem": getOutflows("0x3a6906e4239f9860c81035c54198df58d892653b"),
-    "Team": getOutflows("0xca3e874bc4e830796d822f529c29df30302324b2"),
-    "Investors": getOutflows("0x486559899e96981dfe55c4e6ebf5101a76bfadfa"),
-    "Vendor / Marketing": getOutflows("0x82146cf0f350c241757660fd803c73313b06d75c"),
-    "Public Sale": getOutflows("0xcecccb3ee2c208fb58a5a02499e97d4bf041ff6f"),
+    "Mining": () => Promise.all([getOutflows("0x8FB9dd00B9a3D893dA96d444817d0b77330d5478"), getBurns()]).then(r => r.flat()),
+    "Ecosystem": () => getOutflows("0x3a6906e4239f9860c81035c54198df58d892653b"),
+    "Team": () => getOutflows("0xca3e874bc4e830796d822f529c29df30302324b2"),
+    "Investors": () => getOutflows("0x486559899e96981dfe55c4e6ebf5101a76bfadfa"),
+    "Vendor / Marketing": () => getOutflows("0x82146cf0f350c241757660fd803c73313b06d75c"),
+    "Public Sale": () => getOutflows("0xcecccb3ee2c208fb58a5a02499e97d4bf041ff6f"),
     meta: {
         notes: [
             "All the allocations are tracked onchain",
