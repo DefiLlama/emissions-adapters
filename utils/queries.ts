@@ -8,6 +8,7 @@ interface LogQueryParams {
   topic0: string;
   startDate: string;
   endDate?: string;
+  chain?: number;
 }
 
 interface DailyAmount extends Row {
@@ -38,7 +39,7 @@ export async function queryAggregatedDailyLogsAmounts(
       toStartOfDay(timestamp) AS date,
       SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) AS amount
     FROM evm_indexer.logs
-    PREWHERE short_address = '${shortAddress}' AND short_topic0 = '${shortTopic0}'
+    PREWHERE short_address = '${shortAddress}' AND short_topic0 = '${shortTopic0}'${params.chain != null ? ` AND chain = ${params.chain}` : ""}
     WHERE (address = {address:String})
       AND (topic0 = {topic0:String})
       AND (timestamp >= toDateTime({startDate:String}))
