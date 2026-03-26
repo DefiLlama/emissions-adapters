@@ -88,7 +88,7 @@ const quarterlyBurnsDune = async (): Promise<CliffAdapterResult[]> => {
     autoBurnsCutoff,
     { protocolSlug: "binance-smart-chain", allocation: "Quarterly Auto Burns" },
   );
-  return results.map((r) => ({ ...r, amount: -Math.abs(r.amount) }));
+  return results.filter((r) => r.start >= autoBurnsCutoff).map((r) => ({ ...r, amount: -Math.abs(r.amount) }));
 };
 
 const stakingSection: SectionV2 = {
