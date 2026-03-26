@@ -44,7 +44,7 @@ export async function parseData(adapter: Protocol, i: number): Promise<void> {
     }
   }
 
-  let rawData = await createRawSections(adapter);
+  let rawData = await createRawSections(adapter, false, v2ProcessedData);
   const replaces = (adapter as any).documented?.replaces ?? [];
   
   const { realTimeData, documentedData } = await createChartData(
