@@ -559,7 +559,9 @@ export async function processSingleProtocol(
   emissionsBrakedown[sluggifiedId] = breakdown;
 
   let supplyMetrics;
-  if (v2ProcessedData) {
+  if (rawData.metadata.incentivesOnly) {
+    // Skip supply metrics for incentives-only adapters
+  } else if (v2ProcessedData) {
     try {
       supplyMetrics = await V2Processor.calculateAdjustedSupplyMetrics(
         v2ProcessedData.sections,

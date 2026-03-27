@@ -180,6 +180,7 @@ export type Metadata = {
   chain?: string;
   changeHistory?: ChangeHistoryEntry[];
   excludeFromAdjustedSupply?: string[];
+  incentivesOnly?: boolean;
 };
 export type FuturesData = {
   openInterest: number;

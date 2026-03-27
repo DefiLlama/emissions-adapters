@@ -1,18 +1,16 @@
-import { CliffAdapterResult, Protocol } from "../types/adapters";
-import { queryDailyOutflows } from "../utils/queries";
+import { CliffAdapterResult, ProtocolV2, SectionV2 } from "../types/adapters";
+import { queryDailyOutflows, queryMerklCampaigns } from "../utils/queries";
 import { readableToSeconds } from "../utils/time";
 
-const start = 1652227200;
-const qty = 5e9;
-const chain = "moonbeam";
-const address = "0x511ab53f793683763e5a8829738301368a2411e3";
+const chain = "base";
+const token = "0xa88594d404727625a9437c3f886c7643872296ae";
 
-const emissions = async (): Promise<CliffAdapterResult[]> => {
+const wellRewardsClaims = async (): Promise<CliffAdapterResult[]> => {
   const data = await queryDailyOutflows({
-    token: "0xa88594d404727625a9437c3f886c7643872296ae",
+    token: token,
     tokenDecimals: 18,
     fromAddress: "0xe9005b078701e2a0948d2eac43010d35870ad9d2",
-    startDate: "2024-04-19"
+    startDate: "2024-04-19",
   });
 
   return data.map((d) => ({
@@ -23,117 +21,111 @@ const emissions = async (): Promise<CliffAdapterResult[]> => {
   }));
 };
 
+const wellRewardsClaimsOP = async (): Promise<CliffAdapterResult[]> => {
+  const data = await queryDailyOutflows({
+    token: token,
+    tokenDecimals: 18,
+    fromAddress: "0xf9524bfa18c19c3e605fbfe8dfd05c6e967574aa",
+    startDate: "2024-04-19",
+  });
 
-const moonwell: Protocol = {
-  "WELL Rewards": emissions,
-  // "Liquidity Incentives": (backfill: boolean) =>
-  //   balance(
-  //     ["0x6972f25ab3fc425eaf719721f0ebd1cdb58ee451"],
-  //     address,
-  //     chain,
-  //     "moonwell",
-  //     start,
-  //     backfill,
-  //   ),
-  // "Long-Term Protocol & Ecosystem Development": (backfill: boolean) =>
-  //   balance(
-  //     ["0xf130e4946f862f2c6ca3d007d51c21688908e006"],
-  //     address,
-  //     chain,
-  //     "moonwell",
-  //     start,
-  //     backfill,
-  //   ),
-  // "Application Development": (backfill: boolean) =>
-  //   balance(
-  //     ["0x519ee031e182d3e941549e7909c9319cff4be69a"],
-  //     address,
-  //     chain,
-  //     "moonwell",
-  //     start,
-  //     backfill,
-  //   ),
-  // "Bootstrap & Private Sale": (backfill: boolean) =>
-  //   balance(
-  //     ["0xf2248fa0b30e5f8c6e4501e3222e935ca38b4b0f"],
-  //     address,
-  //     chain,
-  //     "moonwell",
-  //     start,
-  //     backfill,
-  //   ),
-  // "Public & Strategic Sale": (backfill: boolean) =>
-  //   balance(
-  //     ["0x1bc67c936e4c1b99f980bd6dd15c0bf169df0eba"],
-  //     address,
-  //     chain,
-  //     "moonwell",
-  //     start,
-  //     backfill,
-  //   ),
-  // Contributors: (backfill: boolean) =>
-  //   balance(
-  //     ["0xe4b19a9944060b14504936b5e58bcc06a747b738"],
-  //     address,
-  //     chain,
-  //     "moonwell",
-  //     start,
-  //     backfill,
-  //   ),
+  return data.map((d) => ({
+    type: "cliff" as const,
+    start: readableToSeconds(d.date),
+    amount: Number(d.amount),
+    isUnlock: false,
+  }));
+};
+
+const DISTRIBUTION_CREATOR = "0x8bb4c975ff3c250e0ceea271728547f3802b36fd";
+const wellRewardsMerkl = async (): Promise<CliffAdapterResult[]> => {
+  const campaigns = await queryMerklCampaigns(
+    [token],
+    DISTRIBUTION_CREATOR,
+  );
+
+  const dailyMap = new Map<number, number>();
+  for (const c of campaigns) {
+    const amount = Number(c.amount);
+    const startTs = Number(c.start_timestamp);
+    const durationSec = Number(c.duration);
+    if (durationSec <= 0 || amount <= 0) continue;
+
+    const durationDays = Math.ceil(durationSec / 86400);
+    const dailyAmount = amount / durationDays;
+    for (let day = 0; day < durationDays; day++) {
+      const dayTs =
+        Math.floor((startTs + day * 86400) / 86400) * 86400;
+      dailyMap.set(dayTs, (dailyMap.get(dayTs) || 0) + dailyAmount);
+    }
+  }
+
+  return Array.from(dailyMap.entries())
+    .sort(([a], [b]) => a - b)
+    .map(([ts, amount]) => ({
+      type: "cliff" as const,
+      start: ts,
+      amount,
+      isUnlock: false,
+    }));
+};
+
+const rewardsSection: SectionV2 = {
+  displayName: "WELL Rewards",
+  methodology: "Tracks WELL rewards distributed through claims and Merkl campaigns",
+  isIncentive: true,
+  components: [
+    {
+      id: "well-rewards-claims",
+      name: "WELL Rewards (Base)",
+      methodology: "Tracks WELL rewards claimed from the Base rewards contract.",
+      isIncentive: true,
+      fetch: wellRewardsClaims,
+      metadata: {
+        contract: "0xe9005b078701e2a0948d2eac43010d35870ad9d2",
+        chain: "base",
+      },
+    },
+    {
+      id: "well-rewards-claims-op",
+      name: "WELL Rewards (Optimism)",
+      methodology: "Tracks WELL rewards claimed from the Optimism rewards contract.",
+      isIncentive: true,
+      fetch: wellRewardsClaimsOP,
+      metadata: {
+        contract: "0xf9524bfa18c19c3e605fbfe8dfd05c6e967574aa",
+        chain: "optimism",
+      },
+    },
+    {
+      id: "well-rewards-merkl",
+      name: "WELL Rewards (Merkl)",
+      methodology: "Tracks WELL rewards distributed through Merkl campaigns.",
+      isIncentive: true,
+      fetch: wellRewardsMerkl,
+      metadata: {
+        distributionCreator: DISTRIBUTION_CREATOR,
+      },
+    },
+  ],
+};
+
+const moonwell: ProtocolV2 = {
+  "WELL Rewards": rewardsSection,
   meta: {
-    token: `${chain}:${address}`,
+    version: 2,
+    token: `${chain}:${token}`,
     notes: [
-      "We currently only track WELL rewards distributed on Base.",
+      "Only WELL rewards on Base and Optimism are tracked.",
     ],
     sources: [
-      "https://docs.moonwell.fi/moonwell/moonwell-overview/tokens/well-transparency-report#initial-distribution",
-      "https://basescan.org/address/0xfbb21d0380bee3312b33c4353c8936a0f13ef26c"
+      "https://docs.moonwell.fi/moonwell/protocol-information/contracts",
     ],
     protocolIds: ["parent#moonwell"],
-    total: qty,
-    // incompleteSections: [
-    //   {
-    //     key: "Liquidity Incentives",
-    //     lastRecord: (backfill: boolean) => latest("moonwell", start, backfill),
-    //     allocation: undefined,
-    //   },
-    //   {
-    //     key: "Long-Term Protocol & Ecosystem Development",
-    //     lastRecord: (backfill: boolean) => latest("moonwell", start, backfill),
-    //     allocation: undefined,
-    //   },
-    //   {
-    //     key: "Application Development",
-    //     lastRecord: (backfill: boolean) => latest("moonwell", start, backfill),
-    //     allocation: undefined,
-    //   },
-    //   {
-    //     key: "Bootstrap & Private Sale",
-    //     lastRecord: (backfill: boolean) => latest("moonwell", start, backfill),
-    //     allocation: undefined,
-    //   },
-    //   {
-    //     key: "Public & Strategic Sale",
-    //     lastRecord: (backfill: boolean) => latest("moonwell", start, backfill),
-    //     allocation: undefined,
-    //   },
-    //   {
-    //     key: "Contributors",
-    //     lastRecord: (backfill: boolean) => latest("moonwell", start, backfill),
-    //     allocation: undefined,
-    //   },
-    // ],
+    incentivesOnly: true,
   },
   categories: {
-    // publicSale: ["Public Sale & Strategic Sale"],
     farming: ["WELL Rewards"],
-    // noncirculating: [
-    //   "Long-Term Protocol & Ecosystem Development",
-    //   "Application Development",
-    //   "Future Contributors",
-    // ],
-    // privateSale: ["Bootstrap & Private Sale", "Strategic Sale"],
-    // insiders: ["Key Partners", "Advisors", "Founding Contributors"],
   },
 };
 

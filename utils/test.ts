@@ -54,7 +54,9 @@ export async function parseData(adapter: Protocol, i: number): Promise<void> {
   );
 
   // Calculate supply metrics after chart data is available
-  if (isProtocolV2(adapter) && v2ProcessedData) {
+  if (rawData.metadata.incentivesOnly) {
+    console.log("Skipping supply metrics (incentivesOnly adapter)");
+  } else if (isProtocolV2(adapter) && v2ProcessedData) {
     try {
       v2ProcessedData.supplyMetrics = await V2Processor.calculateAdjustedSupplyMetrics(
         v2ProcessedData.sections,
