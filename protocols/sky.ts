@@ -50,6 +50,7 @@ const netMkrMigration = async (): Promise<CliffAdapterResult[]> => {
     type: "cliff" as const,
     start: readableToSeconds(d.date),
     amount: Number(d.amount),
+    isUnlock: false
   }));
 };
 
@@ -64,6 +65,7 @@ const incentivesRewards = async (): Promise<CliffAdapterResult[]> => {
     type: "cliff" as const,
     start: readableToSeconds(d.date),
     amount: Number(d.amount) / 1e18,
+    isUnlock: false
   }));
 };
 
@@ -122,7 +124,7 @@ const sky: ProtocolV2 = {
       "https://developers.skyeco.com/protocol/tokens/sky/",
       "https://developers.skyeco.com/guides/sky/token-governance-upgrade/key-info/",
     ],
-    token: "coingecko:sky",
+    token: `ethereum:{${SKY_TOKEN}`,
     protocolIds: ["parent#maker"],
     notes: [
       "SKY replaced MKR via a 1:24,000 conversion ratio starting Sep 2024.",
