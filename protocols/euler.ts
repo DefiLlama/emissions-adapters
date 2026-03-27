@@ -1,11 +1,10 @@
-import distribution from "../adapters/euler";
 import { manualCliff, manualLinear } from "../adapters/manual";
-import { CliffAdapterResult, Protocol } from "../types/adapters";
+import { CliffAdapterResult, ProtocolV2, SectionV2 } from "../types/adapters";
 import { queryCustom } from "../utils/queries";
 import { periodToSeconds, readableToSeconds } from "../utils/time";
 
-const start = 1640995200;
-const cliff = 1640995200;
+const start = 1640995200; // 2022-01-01
+const total = 27_182_818;
 
 const MERKLE_CONTRACTS = [
   '0xf3e621395fc714b90da337aa9108771597b4e696',
@@ -41,8 +40,7 @@ const MERKLE_LIST = MERKLE_CONTRACTS.map(a => `'${a}'`).join(',\n    ');
 const EUL_LIST = EUL_TOKENS.map(a => `'${a}'`).join(',\n    ');
 const MERKLE_PADDED = MERKLE_CONTRACTS.map(a => `'0x000000000000000000000000${a.slice(2)}'`).join(',\n    ');
 
-const rewards = async (): Promise<CliffAdapterResult[]> => {
-  const result: CliffAdapterResult[] = [];
+const fetchRewardsClaims = async () => {
   const data = await queryCustom(`WITH txs AS (
     SELECT transaction_hash
     FROM evm_indexer.logs
@@ -60,64 +58,115 @@ WHERE topic0 = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3
   AND address IN (${EUL_LIST})
   AND topic1 IN (${MERKLE_PADDED})
   AND transaction_hash IN (SELECT transaction_hash FROM txs)
+  AND timestamp >= toDateTime('2025-06-10')
 GROUP BY date
 ORDER BY date DESC
-`, {})
+`, {});
 
-  for (let i = 0; i < data.length; i++) {
-    result.push({
-      type: "cliff",
-      start: readableToSeconds(data[i].date),
-      amount: Number(data[i].amount),
-      isUnlock: false
-    });
-  }
-  return result;
-}
+  return data.map((d: any) => ({
+    type: "cliff" as const,
+    start: readableToSeconds(d.date),
+    amount: Number(d.amount),
+    isUnlock: false,
+  }));
+};
 
-const euler: Protocol = {
-  // treasury: manualCliff(start, 3759791),
-  // "early users": manualCliff(start, 271828),
-  // shareholders: manualLinear(
-  //   cliff,
-  //   cliff + periodToSeconds.month * 18,
-  //   7026759,
-  // ),
-  // "DAO partners": manualLinear(
-  //   cliff,
-  //   cliff + periodToSeconds.month * 18,
-  //   2628170,
-  // ),
-  // "Encode incubator": manualLinear(
-  //   cliff,
-  //   cliff + periodToSeconds.month * 30,
-  //   1087313,
-  // ),
-  // "employees, advisors, consultants": manualLinear(
-  //   cliff,
-  //   cliff + periodToSeconds.month * 48,
-  //   5613252,
-  // ),
-  "Incentives": rewards,
+const incentives = async (): Promise<CliffAdapterResult[]> => fetchRewardsClaims();
+
+const treasuryOffset = async (): Promise<CliffAdapterResult[]> => {
+  const claims = await fetchRewardsClaims();
+  return claims.map(c => ({ ...c, amount: -c.amount }));
+};
+
+const treasurySection: SectionV2 = {
+  displayName: "Treasury",
+  methodology: "DAO treasury allocation minus ongoing rEUL reward distributions",
+  isTBD: true,
+  components: [
+    {
+      id: "dao-treasury",
+      name: "DAO Treasury",
+      methodology: "Non-circulating DAO treasury, offset by ongoing rEUL→EUL claims",
+      isTBD: true,
+      fetch: async () => {
+        const offset = await treasuryOffset();
+        return [manualCliff(start, 3_027_942), ...offset];
+      },
+    },
+  ],
+};
+
+const incentivesSection: SectionV2 = {
+  displayName: "rEUL Incentives",
+  methodology: "Incentives paid in rEUL",
+  isIncentive: true,
+  components: [
+    {
+      id: "reul-incentives",
+      name: "rEUL Incentives",
+      methodology: "Incentives paid in rEUL, tracks EUL tokens transferred by Merkl contracts",
+      isIncentive: true,
+      fetch: incentives,
+    },
+  ],
+};
+
+const euler: ProtocolV2 = {
+  "Treasury": treasurySection,
+  "User Rewards": manualCliff(start, 1_712_517),
+  "DAO Ecosystem": manualCliff(start, 2_265_543),
+  "Incentives": incentivesSection,
+  "Early Users": manualCliff(start, 271_828),
+  "Shareholders": manualLinear(
+    start,
+    start + periodToSeconds.month * 18,
+    7_026_759,
+  ),
+  "DAO Partners": manualLinear(
+    start,
+    start + periodToSeconds.month * 18,
+    2_628_170,
+  ),
+  "Encode Incubator": manualLinear(
+    start,
+    start + periodToSeconds.month * 30,
+    1_087_313,
+  ),
+  "Euler Labs": manualLinear(
+    start,
+    start + periodToSeconds.month * 48,
+    7_203_446,
+  ),
+  "Foundation": manualCliff(start, 1_005_000),
+  "Protocol-Owned Liquidity": manualCliff(start, 954_300),
   meta: {
-    sources: ["https://docs.euler.finance/eul/about"],
-    token: "ethereum:0xd9fcd98c322942075a5c3860693e9f4f03aae07b",
-    notes: [
-      `We track only incentives redeemed rEUL to EUL.`,
-      `Euler v2 launched on 4 September 2024`,
+    version: 2,
+    sources: [
+      "https://docs.euler.finance/EUL/overview",
+      "https://docs.euler.finance/EUL/reward-eul",
+      "https://docs.euler.finance/euler-dao/treasury",
     ],
+    token: "ethereum:0xd9fcd98c322942075a5c3860693e9f4f03aae07b",
     protocolIds: ["parent#euler"],
+    total,
+    notes: [
+      `DAO allocations per docs as of 31/01/25: treasury 6,236,107 + user rewards 1,712,517 + Uni v3 POL 48,100 + soft launch 271,828.`,
+      `DAO Ecosystem (2,265,543) covers POL deployments, grants, and other treasury outflows.`,
+      `Incentives tracks ongoing rEUL→EUL Merkle claims after Jan 2025 snapshot.`,
+      `Shareholders = Cohort A (2,718,282) + Cohort B (4,308,477). DAO Partners = Cohort C.`,
+    ],
   },
   categories: {
-    // insiders: [
-    //   "employees, advisors, consultants",
-    //   "Encode incubator",
-    //   "DAO partners",
-    //   "shareholders",
-    // ],
-    farming: ["Incentives"],
-    // airdrop: ["early users"],
-    // noncirculating: ["treasury"],
+    insiders: [
+      "Euler Labs",
+      "Encode Incubator",
+      "DAO Partners",
+      "Shareholders",
+    ],
+    farming: ["User Rewards", "Incentives"],
+    airdrop: ["Early Users"],
+    noncirculating: ["Treasury", "Foundation"],
+    liquidity: ["Protocol-Owned Liquidity"],
   },
 };
 export default euler;
