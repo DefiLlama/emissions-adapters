@@ -116,7 +116,7 @@ const moonwell: ProtocolV2 = {
     version: 2,
     token: `${chain}:${token}`,
     notes: [
-      "Only WELL rewards are tracked.",
+      "Only WELL rewards on Base and Optimism are tracked.",
     ],
     sources: [
       "https://docs.moonwell.fi/moonwell/protocol-information/contracts",
