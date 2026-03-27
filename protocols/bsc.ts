@@ -34,7 +34,7 @@ const stakingRewards = async (): Promise<CliffAdapterResult[]> => {
 };
 
 // Quarterly auto-burns from https://www.bnbburn.info/
-const autoBurnsCutoff = 1742947200
+const autoBurnsCutoff = 1774483200
 const autoBurns: [string, number][] = [
   ["2017-10-18",  986_000],       
   ["2018-01-15",  1_821_586],   
@@ -86,7 +86,7 @@ const quarterlyBurnsDune = async (): Promise<CliffAdapterResult[]> => {
     GROUP BY 1
     ORDER BY 1`,
     autoBurnsCutoff,
-    { protocolSlug: "binance-smart-chain", allocation: "Quarterly Auto Burns" },
+    { protocolSlug: "binance-smart-chain", allocation: "Quarterly Burns" },
   );
   return results.filter((r) => r.start >= autoBurnsCutoff).map((r) => ({ ...r, amount: -Math.abs(r.amount) }));
 };
@@ -117,6 +117,7 @@ const gasBurns = async (): Promise<CliffAdapterResult[]> => {
     type: "cliff" as const,
     start: readableToSeconds(row.date),
     amount: -Number(row.amount) / 1e18,
+    isUnlock: false
   }));
 };
 
@@ -125,7 +126,7 @@ const bsc: ProtocolV2 = {
   "Founding Team": manualStep(start, periodToSeconds.year, 5, shares.team / 5),
   "Angel Investors": manualCliff(start, shares.investors),
   "Staking Rewards": stakingSection,
-  "Quarterly Auto Burns": [
+  "Quarterly Burns": [
     ...autoBurns.map(([date, amount]) => manualCliff(date, -amount)),
     quarterlyBurnsDune,
   ],
@@ -164,7 +165,7 @@ const bsc: ProtocolV2 = {
     privateSale: ["Angel Investors"],
     staking: ["Staking Rewards"],
     burned: [
-      "Quarterly Auto Burns", 
+      "Quarterly Burns", 
       "Gas Burns", 
       "Bridge Hack",
       "TokenHub Locked",
