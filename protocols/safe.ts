@@ -1,56 +1,56 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
-import { periodToSeconds } from "../utils/time";
+import { years } from "../utils/time";
 
-const start = 1713830400;
-const total = 1e8;
+const start = 1664323200; // 2022-09-28
+const total = 1e9;
 
 const safe: Protocol = {
   Airdrop: [
     manualCliff(start, total * 0.025),
-    manualLinear(start, start + periodToSeconds.years(4), total * 0.025),
+    manualLinear(start, years(start, 4), total * 0.025),
   ],
   "Core Contributors": manualLinear(
     start,
-    start + periodToSeconds.years(4),
+    years(start, 4),
     total * 0.15,
   ),
-  "Grants & Reserve": [
+  "Safe Foundation": [
     manualCliff(start, total * 0.02),
-    manualLinear(start, start + periodToSeconds.years(4), total * 0.05),
+    manualLinear(start, years(start, 4), total * 0.05),
   ],
-  Ecosystem: [
+  Guardians: [
     manualCliff(start, total * 0.0125),
-    manualLinear(start, start + periodToSeconds.years(4), total * 0.0375),
+    manualLinear(start, years(start, 4), total * 0.0375),
   ],
-  "SafeDAO Treasury": [
+  "Safe DAO Treasury": [
     manualCliff(start, total * 0.05),
-    manualLinear(start, start + periodToSeconds.years(8), total * 0.35),
+    manualLinear(start, years(start, 8), total * 0.35),
   ],
-  "GnosisDAO Treasury": [
+  "Gnosis DAO Treasury": [
     manualCliff(start, total * 0.01),
-    manualLinear(start, start + periodToSeconds.years(8), total * 0.14),
+    manualLinear(start, years(start, 4), total * 0.14),
   ],
   "Joint Treasury": manualCliff(start, total * 0.05),
   "Strategic Raise": [
-    manualCliff(start + periodToSeconds.year, total * 0.02),
+    manualCliff(years(start, 1), total * 0.02),
     manualLinear(
-      start + periodToSeconds.year,
-      start + periodToSeconds.years(4),
+      years(start, 1),
+      years(start, 4),
       total * 0.06,
     ),
   ],
   meta: {
-    sources: [`https://safe.global/blog/safe-tokenomics`],
-    token: "coingecko:safe",
+    sources: ["https://safefoundation.org/blog/safe-tokenomics"],
+    token: "ethereum:0x5aFE3855358E112B5647B952709E6165e1c1eEEe",
     protocolIds: ["3320"],
+    total,
   },
   categories: {
-    farming: ["Ecosystem"],
-    noncirculating: ["SafeDAO Treasury","GnosisDAO Treasury","Joint Treasury"],
+    noncirculating: ["Safe DAO Treasury", "Gnosis DAO Treasury", "Joint Treasury"],
     airdrop: ["Airdrop"],
     privateSale: ["Strategic Raise"],
-    insiders: ["Core Contributors","Grants & Reserve"],
+    insiders: ["Core Contributors", "Safe Foundation", "Guardians"],
   },
 };
 export default safe;
