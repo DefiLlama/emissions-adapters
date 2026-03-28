@@ -108,6 +108,7 @@ const pancakeswap: ProtocolV2 = {
       "Product-level breakdown available from Sept 2021 onward.",
       "CAKE has a maximum supply of 450 million tokens.",
     ],
+    incentivesOnly: true
   },
   categories: {
     farming: ["Farming Rewards"],
