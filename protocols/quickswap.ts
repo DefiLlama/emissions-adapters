@@ -1,10 +1,5 @@
-import { manualCliff, manualLinear } from "../adapters/manual";
 import { CliffAdapterResult, ProtocolV2, SectionV2 } from "../types/adapters";
 import { queryMerklCampaigns } from "../utils/queries";
-import { periodToSeconds } from "../utils/time";
-
-const start: number = 1610126596;
-const qty: number = 1000000;
 
 const DISTRIBUTION_CREATOR = '0x8bb4c975ff3c250e0ceea271728547f3802b36fd'
 const NEW_CAMPAIGN_TOPIC = '0x6e3c6fa6d4815a856783888c5c3ea2ad7e7303ac0cca66c99f5bd93502c44299'
@@ -45,7 +40,7 @@ const merklCampaigns = async (): Promise<CliffAdapterResult[]> => {
 };
 
 const incentivesSection: SectionV2 = {
-  displayName: "Liqudity Mining",
+  displayName: "Liquidity Mining",
   methodology: "Tracks QUICK tokens distributed to farms using Merkl DistributionCreator campaigns",
   isIncentive: true,
   components: [
@@ -66,8 +61,6 @@ const incentivesSection: SectionV2 = {
 
 const quickswap: ProtocolV2 = {
   "Liquidity Mining": incentivesSection,
-  Airdrop: manualCliff(start + periodToSeconds.year, qty * 0.06),
-  "Team and marketing": manualLinear(start, start + 39139200, qty * 0.04),
   meta: {
     version: 2,
     sources: [
@@ -76,11 +69,13 @@ const quickswap: ProtocolV2 = {
     ],
     token: "coingecko:quickswap",
     protocolIds: ["parent#quickswap"],
+    notes: [
+      "Only tracks ongoing Merkl incentive campaigns on Polygon, Base, Soneium and Manta.",
+    ],
+    incentivesOnly: true
   },
   categories: {
-    insiders: ["Team and marketing"],
-    airdrop: ["Airdrop"],
-    farming: ["Liqudity Mining"],
+    farming: ["Liquidity Mining"],
   },
 };
 export default quickswap;
