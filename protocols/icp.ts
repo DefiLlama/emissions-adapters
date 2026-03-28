@@ -58,7 +58,7 @@ const icp: Protocol = {
   ),
   "Network Rewards": [
     // gap: rewards minted between genesis and first total supply data point
-    manualCliff(supplySeriesStart, 474_132_538 - genesisSupply),
+    manualCliff(supplySeriesStart, 474_137_538 - genesisSupply),
     networkRewards,
   ],
   meta: {
