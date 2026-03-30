@@ -55,6 +55,7 @@ const mineloot: Protocol = {
       "Constructor mint to owner is excluded by topic2 filter.",
     ],
     protocolIds: ["7570"],
+    incentivesOnly: true,
   },
   categories: {
     farming: ["Mining Emissions"],
