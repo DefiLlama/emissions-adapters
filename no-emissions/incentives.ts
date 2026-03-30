@@ -101,4 +101,5 @@ export const protocolsIncentives:string[] = [
     "parent#spectra", // spectra
     "parent#balancer", // balancer
     "7570", // mineloot
+    "parent#abracadabra", // abracadabra
 ]
