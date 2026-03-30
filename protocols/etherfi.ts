@@ -280,9 +280,11 @@ const etherfi: ProtocolV2 = {
       "https://etherfi.gitbook.io/etherfi/contracts-and-integrations/deployed-contracts",
     ],
     protocolIds: ["parent#ether-fi"],
+    excludeFromAdjustedSupply: ["Incentives"],
   },
   categories: {
     noncirculating: ["Foundation", "Ecosystem Development", "Treasury"],
+    airdrop: ["Community"],
     privateSale: ["Investors"],
     insiders: ["Core Contributors"],
     farming: ["Incentives"],

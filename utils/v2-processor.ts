@@ -175,17 +175,22 @@ export class V2Processor {
       return todayIndex >= 0 ? unlocked[todayIndex] : 0;
     };
 
+    const excludeFromAdjusted = (fullProtocol.meta as any).excludeFromAdjustedSupply || [];
+
     for (const section of sections) {
       const sectionTotal = section.aggregatedResults.reduce(
         (sum, result) => {
-          const totalAmount = result.type === "step" 
-            ? result.amount * (result as any).steps 
+          const totalAmount = result.type === "step"
+            ? result.amount * (result as any).steps
             : result.amount;
           return sum + totalAmount;
         },
         0,
       );
-      maxSupply += sectionTotal;
+      const isExcluded = excludeFromAdjusted.includes(section.sectionName);
+      if (!isExcluded) {
+        maxSupply += sectionTotal;
+      }
 
       for (const componentResult of section.components) {
         const componentTotal = componentResult.results.reduce(
