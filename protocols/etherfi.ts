@@ -1,12 +1,13 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { CliffAdapterResult, ProtocolV2, SectionV2 } from "../types/adapters";
 import { queryCustom } from "../utils/queries";
-import { periodToSeconds, readableToSeconds } from "../utils/time";
+import { readableToSeconds, unixTimestampNow, years } from "../utils/time";
 
 const start = 1710284400;
 const total = 1e9;
 const token = "0xfe0c30065b384f05761f15d0cc899d4f9f9cc0eb";
 const chain = "ethereum";
+const now = unixTimestampNow()
 
 // Event signatures
 const CLAIMED_MERKLE = "0x4ec90e965519d92681267467f775ada5bd214aa92c0dc93d90a5e880ce9ed026"; // Claimed(uint256,address,uint256) - all fields in data
@@ -240,53 +241,86 @@ const incentivesSection: SectionV2 = {
   ],
 };
 
+const airdropsSection: SectionV2 = {
+  displayName: "Airdrops (TBD)",
+  methodology: "19.27% of the total supply is allocated to airdrops. This section tracks the remaining portion that has not yet been released.",
+  isTBD: true,
+  components: [
+    {
+      id: "airdrops-tbd",
+      name: "Airdrops (TBD)",
+      methodology: "The portion of the user airdrops allocation that has not been used.",
+      isTBD: true,
+      fetch: async () => [manualCliff(now, total * 0.0197)],
+    },
+  ]
+}
+
+const treasuryAllocation = total * 0.2162;
+const treasurySection: SectionV2 = {
+  displayName: "DAO Treasury",
+  methodology: "DAO Treasury allocation minus claimed incentives",
+  components: [
+    {
+      id: "treasury-net",
+      name: "DAO Treasury",
+      methodology: "DAO Treasury allocation with incentive claims subtracted",
+      fetch: async () => {
+        const [eth, arb, base, scroll] = await Promise.all([
+          ethereumClaims(), arbitrumClaims(), baseClaims(), scrollCashback(),
+        ]);
+        const totalClaimed = [...eth, ...arb, ...base, ...scroll]
+          .reduce((sum, c) => sum + c.amount, 0);
+        return [manualCliff(start, treasuryAllocation - totalClaimed)];
+      },
+    },
+  ],
+};
+
+
 const etherfi: ProtocolV2 = {
   "Core Contributors": [
     manualLinear(
-      start + periodToSeconds.year,
-      start + periodToSeconds.years(2),
-      total * 0.160987500,
-    ),
-    manualLinear(
-      start + periodToSeconds.years(2),
-      start + periodToSeconds.years(3),
-      total * 0.0536625,
+      years(start, 1),
+      years(start, 3),
+      total * 0.2147,
     ),
   ],
-  Treasury: manualCliff(start, total * 0.21629),
-  "Community": [
-    manualCliff(start, total * 0.095),
-    manualCliff(1720483200, total * 0.058),
-    manualCliff(1726531200, total * 0.027),
-    manualCliff(1738627200, total * 0.01265),
+  "DAO Treasury": treasurySection,
+  "Airdrops": [
+    manualCliff(start, total * 0.075),
+    manualCliff(1721174400, total * 0.058),
+    manualCliff(1727222400, total * 0.027),
+    manualCliff(1738627200, total * 0.013),
   ],
-  Partnerships: manualCliff(start, total * 0.039),
+  "Airdrops (TBD)": airdropsSection,
+  "Partnerships & Liquidity": manualCliff(start, total * 0.039),
   Investors: manualLinear(
-    start + periodToSeconds.year,
-    start + periodToSeconds.years(2),
-    total * 0.33738,
+    years(start, 1),
+    years(start, 2),
+    total * 0.3374,
   ),
   "Incentives": incentivesSection,
   meta: {
     version: 2,
     token: `${chain}:${token}`,
     notes: [
-      "User Airdrops and Partnerships section schedules inferred from source chart",
       "ETHFI claims tracked via Claimed events from MerkleDistributor and Liquid ETH Rewards contracts",
       "Scroll cashback tracked via Cashback events from CashEventEmitter (weETH token)",
     ],
     sources: [
       "https://etherfi.medium.com/announcing-ethfi-the-ether-fi-governance-token-8cae7327763a",
       "https://etherfi.gitbook.io/etherfi/contracts-and-integrations/deployed-contracts",
+      "https://etherfi.gitbook.io/gov/ethfi-allocations"
     ],
     protocolIds: ["parent#ether-fi"],
-    excludeFromAdjustedSupply: ["Incentives"],
   },
   categories: {
-    noncirculating: ["Foundation", "Ecosystem Development", "Treasury"],
-    airdrop: ["Community"],
+    noncirculating: ["Foundation", "Ecosystem Development", "DAO Treasury"],
+    airdrop: ["Airdrops", "Airdrops (TBD)"],
     privateSale: ["Investors"],
     insiders: ["Core Contributors"],
+    liquity: ["Partnerships & Liquidity"],
     farming: ["Incentives"],
   },
 };
