@@ -81,7 +81,7 @@ const chainflip: Protocol = {
       "https://docs.chainflip.io/protocol/token-economics/current-token-economics-2025-and-beyond",
       "https://etherscan.io/address/0x6995ab7c4d7f4b03f467cf4c8e920427d9621dbd",
     ],
-    protocolIds: ["3853"],
+    protocolIds: ["parent#chainflip"],
   },
   categories: {
     publicSale: ["Token Sale"],
