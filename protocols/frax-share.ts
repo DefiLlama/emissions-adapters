@@ -66,7 +66,7 @@ const fxs: ProtocolV2 = {
   ],
   "Project Team Treasury": manualCliff(start, totalQty * 0.05), 
   "Initial Farming Rewards": manualCliff(start, 13_016_120), 
-  "Liquidity Programs / Farming  / Community": communitySection,
+  "Liquidity Programs & Farming": communitySection,
   meta: {
     version: 2,
     sources: [
@@ -84,7 +84,7 @@ const fxs: ProtocolV2 = {
     insiders: ["Team / Founders", "Strategic Advisors"],
     privateSale: ["Accredited Private Investors"],
     noncirculating: ["Project Team Treasury"],
-    farming: ["Initial Farming Rewards", "Liquidity Programs / Farming  / Community"],
+    farming: ["Initial Farming Rewards", "Liquidity Programs & Farming"],
   },
 };
 
