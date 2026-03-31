@@ -85,10 +85,11 @@ const chainflip: Protocol = {
   },
   categories: {
     publicSale: ["Token Sale"],
-    privateSale: ["Strategic Investors", "Other Allocations"],
+    privateSale: ["Strategic Investors"],
     insiders: ["Oxen Foundation", "Contributors", "Liquid Treasury", "Treasury Reserves"],
     airdrop: ["Node Operators Program"],
     staking: ["Net Emissions"],
+    other: ["Other Allocations"]
   },
 };
 
