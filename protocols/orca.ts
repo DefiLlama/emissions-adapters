@@ -3,7 +3,7 @@ import { queryDuneSQLCached } from "../utils/dune";
 
 const start = 1628553600; // August 10, 2021
 
-const aquafarmQuery = queryDuneSQLCached(`
+const aquafarmQuery = async () => queryDuneSQLCached(`
   SELECT to_unixtime(ic.block_date) as date, SUM(amount_display) as amount
   FROM solana.instruction_calls ic
   LEFT JOIN tokens_solana.transfers t
@@ -17,7 +17,7 @@ const aquafarmQuery = queryDuneSQLCached(`
   ORDER BY ic.block_date ASC
 `, start, { protocolSlug: 'orca', allocation: 'Aquafarms Incentives'})
 
-const whirlPoolsQuery = queryDuneSQLCached(`
+const whirlPoolsQuery = async () => queryDuneSQLCached(`
   SELECT to_unixtime(ic.block_date) AS date, SUM(t.amount_display) AS amount 
   FROM solana.instruction_calls ic
   LEFT JOIN tokens_solana.transfers t 
@@ -52,7 +52,7 @@ const aquafarmSection: SectionV2 = {
       methodology:
         "Tracks Harvest instruction calls on the Aquafarms program, filtering for ORCA claims",
       isIncentive: true,
-      fetch: async () => aquafarmQuery,
+      fetch: aquafarmQuery,
     },
   ],
 };
@@ -69,7 +69,7 @@ const whirlpoolSection: SectionV2 = {
       methodology:
         "Tracks collectRewards and collectRewardsV2 instruction calls on the Whirlpools program, filtering for ORCA claims",
       isIncentive: true,
-      fetch: async () => whirlPoolsQuery,
+      fetch: whirlPoolsQuery,
     },
   ],
 };
