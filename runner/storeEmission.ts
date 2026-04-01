@@ -4,6 +4,8 @@ import { storeR2JSONString } from "./r2";
 import { sendMessage, withTimeout } from "./serverUtils";
 import { init, processSingleProtocol } from "./utils";
 import { readdirSync } from "fs";
+import { elastic } from "@defillama/sdk";
+import { unixTimestampNow } from "../utils/time";
 
 const duplicateIds: string[] = [
   '1048' // merit circle, beam
@@ -82,15 +84,26 @@ export async function processProtocolList() {
   await PromisePool.withConcurrency(5)
     .for(protocolAdapters)
     .process(async ([protocolName, rawAdapter]: any) => {
+      const startTime = unixTimestampNow();
+      const metadata = { application: "emissions", protocol: protocolName };
       let adapters = typeof rawAdapter.default === "function" ? await rawAdapter.default() : rawAdapter.default;
       if (!adapters.length) adapters = [adapters];
       await Promise.all(
         adapters.map((adapter: Protocol) =>
           withTimeout(6000000, processSingleProtocol(adapter, protocolName, emissionsBrakedown, supplyMetricsBreakdown), protocolName)
-            .then((p: string) => protocolsArray.push(p))
-            .catch((err: Error) => {
+            .then(async (p: string) => {
+              protocolsArray.push(p);
+              await elastic.addRuntimeLog({ runtime: unixTimestampNow() - startTime, success: true, metadata });
+            })
+            .catch(async (err: Error) => {
               console.log(err.message ? `${err.message}: \n storing ${protocolName}` : err);
               protocolErrors.push(protocolName);
+              await elastic.addRuntimeLog({ runtime: unixTimestampNow() - startTime, success: false, metadata });
+              await elastic.addErrorLog({
+                error: err,
+                errorString: err?.toString(),
+                metadata,
+              } as any);
             })
         )
       );
