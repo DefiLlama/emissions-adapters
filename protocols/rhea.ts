@@ -179,7 +179,7 @@ const rhea: ProtocolV2 = {
         version: 2,
         notes: [
             "REF/BRRR Conversion (37%) is tracked on-chain via Dune from rhea-conversion.sputnik-dao.near. The remaining untracked portion is marked as TBD.",
-            "Airdrop and Incentives (30.6%) are tracked on-chain via Dune. The remaining untracked portion is projected as linear vesting through month 39.",
+            "Airdrop and Incentives (30.6%) are tracked on-chain via Dune. The remaining untracked portion is marked as TBD.",
         ],
         token: "coingecko:rhea-2",
         sources: [
