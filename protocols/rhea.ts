@@ -170,7 +170,7 @@ const rhea: ProtocolV2 = {
     "Remaining REF/BRRR Conversion": remainingConversionSection,
     "Token Operation Treasury": manualCliff(start, shares.treasury),
     "Liquidity Provision": manualCliff(start, shares.liquidity),
-    "Airdrop": airdropSection,
+    "Airdrops": airdropSection,
     "Incentives": incentivesSection,
     "Remaining Airdrop & Incentives": remainingAirdropIncentivesSection,
     "Marketing": [manualCliff(start, shares.marketing / 2), manualCliff(months(start, 3), shares.marketing / 4), manualCliff(months(start, 6), shares.marketing / 4)],
