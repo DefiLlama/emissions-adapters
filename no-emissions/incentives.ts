@@ -103,4 +103,5 @@ export const protocolsIncentives:string[] = [
     "7570", // mineloot
     "parent#abracadabra", // abracadabra
     "parent#frax-finance", // frax
+    "parent#orca", // orca
 ]
