@@ -104,7 +104,7 @@ const layer3: ProtocolV2 = {
     version: 2,
     token: "ethereum:0x88909D489678dD17aA6D9609F89B0419Bf78FD9a",
     sources: ["https://docs.layer3foundation.org/tokenomics"],
-    protocolIds: [""],
+    protocolIds: ["7611"],
     total,
     notes: [
       "Community allocation (51%) are marked as TBD since there's no unlock schedule.",
