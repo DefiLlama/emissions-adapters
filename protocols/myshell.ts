@@ -41,7 +41,7 @@ const myshell: Protocol = {
   meta: {
     token: "ethereum:0xf2c88757f8d03634671208935974b60a2a28bdb3",
     sources: ["https://docs.myshell.ai/tokenomics/shell-basics"],
-    protocolIds: [],
+    protocolIds: ["7612"],
     total,
     notes: [
         "After their TGE unlocks the Ecosystem & Treasury and Community Incentives allocations vest linearly over 5 years"
