@@ -6,7 +6,7 @@ const start = 1628553600; // August 10, 2021
 const aquafarmQuery = async () => queryDuneSQLCached(`
   SELECT to_unixtime(ic.block_date) as date, SUM(amount_display) as amount
   FROM solana.instruction_calls ic
-  INNER JOIN tokens_solana.transfers t
+  LEFT JOIN tokens_solana.transfers t
     ON ic.tx_id = t.tx_id
     AND t.token_mint_address = 'orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE'
     AND t.block_time >= START
@@ -14,13 +14,14 @@ const aquafarmQuery = async () => queryDuneSQLCached(`
     AND ic.block_time >= START
     AND bytearray_starts_with(ic.data, 0x04)
   GROUP BY ic.block_date
+  HAVING SUM(amount_display) IS NOT NULL
   ORDER BY ic.block_date ASC
 `, start, { protocolSlug: 'orca', allocation: 'Aquafarms Incentives'})
 
 const whirlPoolsQuery = async () => queryDuneSQLCached(`
-  SELECT to_unixtime(ic.block_date) AS date, SUM(t.amount_display) AS amount 
+  SELECT to_unixtime(ic.block_date) AS date, SUM(t.amount_display) AS amount
   FROM solana.instruction_calls ic
-  INNER JOIN tokens_solana.transfers t
+  LEFT JOIN tokens_solana.transfers t
     ON ic.tx_id = t.tx_id
     AND t.block_time >= START
     AND t.token_mint_address = 'orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE'
@@ -37,6 +38,7 @@ const whirlPoolsQuery = async () => queryDuneSQLCached(`
     )
     AND ic.block_time >= START
   GROUP BY ic.block_date
+  HAVING SUM(t.amount_display) IS NOT NULL
   ORDER BY ic.block_date ASC
 `, start, { protocolSlug: 'orca', allocation: 'Whirlpools Incentives'})
 
