@@ -37,7 +37,7 @@ const worldOfDypians: Protocol = {
   meta: {
     token: "bsc:0xb994882a1b9bd98a71dd6ea5f61577c42848b0e8",
     sources: ["https://www.worldofdypians.com/about#tokenomics"],
-    protocolIds: [""],
+    protocolIds: ["7629"],
     total,
   },
   categories: {
