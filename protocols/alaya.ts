@@ -62,7 +62,7 @@ const alaya: Protocol = {
   meta: {
     token: "bsc:0x5dBde81fcE337FF4bcaaEe4Ca3466C00aeCaE274",
     sources: ["https://medium.com/@alaya-ai/alaya-ai-official-tge-announcement-e88af94c32f4"],
-    protocolIds: [""],
+    protocolIds: ["7627"],
     total,
   },
   categories: {
