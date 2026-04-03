@@ -1,9 +1,33 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
-import { Protocol } from "../types/adapters";
-import { periodToSeconds } from "../utils/time";
-import { stakingRewards, latest } from "../adapters/api3";
+import { CliffAdapterResult, Protocol } from "../types/adapters";
+import { periodToSeconds, readableToSeconds } from "../utils/time";
+import { queryCustom } from "../utils/queries";
 const start = 1606741200;
 const qty = 100000000;
+
+const STAKING_POOL = "0x6dd655f10d4b9e242ae186d9050b68f725c76d76";
+const MINTED_REWARD_TOPIC = "0x6e0fc10bac330e97bc2fd6c13cbb1c1189ddb48a8ce96395650ba8f2bd28f6fc";
+
+const stakingRewards = async (): Promise<CliffAdapterResult[]> => {
+  const data = await queryCustom(`
+    SELECT
+      toStartOfDay(timestamp) AS date,
+      SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3, 64))))) / 1e18 AS amount
+    FROM evm_indexer.logs
+    PREWHERE short_address = '${STAKING_POOL.slice(0, 10)}' AND short_topic0 = '${MINTED_REWARD_TOPIC.slice(0, 10)}'
+    WHERE topic0 = '${MINTED_REWARD_TOPIC}'
+      AND address = '${STAKING_POOL}'
+    GROUP BY date
+    ORDER BY date DESC
+  `, {});
+
+  return data.map((d: any) => ({
+    type: "cliff" as const,
+    start: readableToSeconds(d.date),
+    amount: Number(d.amount),
+  }));
+};
+
 
 const api3: Protocol = {
   "Founding Team": [
@@ -40,16 +64,9 @@ const api3: Protocol = {
     sources: [
       "https://medium.com/api3/api3-public-token-distribution-event-1acb3b6d940",
     ],
-    notes: ["Inflationary staking rewards has no set allocation. In this analysis we can only look at past unlocks"],
+    notes: ["Inflationary staking rewards are tracked via MintedReward events from the API3 staking pool contract."],
     protocolIds: ["1339"],
-    total: qty,
-    incompleteSections: [
-      {
-        key: "Staking rewards",
-        allocation: undefined,
-        lastRecord: () => latest(),
-      },
-    ],
+    total: qty
   },
   categories: {
     noncirculating: ["Ecosystem Fund"],
