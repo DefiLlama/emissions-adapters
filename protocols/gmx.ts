@@ -33,6 +33,7 @@ const queryVesterClaims = async (addresses: string[]): Promise<CliffAdapterResul
     type: "cliff" as const,
     start: readableToSeconds(d.date),
     amount: Number(d.amount),
+    isUnlock: false
   }));
 };
 
