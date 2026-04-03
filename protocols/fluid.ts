@@ -1,111 +1,122 @@
 import { manualCliff, manualLinear } from "../adapters/manual";
 import { CliffAdapterResult, ProtocolV2, SectionV2 } from "../types/adapters";
-import adapter from "../adapters/fluid";
 import { readableToSeconds } from "../utils/time";
-import { queryAggregatedDailyLogsAmountsMulti, queryCustom } from "../utils/queries";
+import { queryCustom } from "../utils/queries";
 
-const DISTRIBUTOR_CONTRACTS = [
-  "0x7060fe0dd3e31be01efac6b28c8d38018fd163b0",
-  "0xbabb3f87424d900abd83c807c1e01a22a54e726f",
-  "0xb48bbe313edb7faaa28c03684d48f58dd7dea239",
-  "0xd833484b198d3d05707832cc1c2d62b520d95b8a"
+const FLUID_TOKEN = "0x6f40d4a6237c257fff2db00fa0510deeecd303eb";
+const DAO_TREASURY = "0x28849d2b63fa8d361e5fc15cb8abb13019884d09";
+const TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+
+const AIRDROP_DISTRIBUTORS = [
+  "0x1ba631331503f0486538cb707c6685cbc6b28944",
+  "0x6300080a77ffff563b542978555d121ded05b896", 
+  "0xac838332afc2937fded89c16a59b2ed8e8e2743c",
 ];
-const STAKING_CONTRACTS = [
-  "0x2fA6c95B69c10f9F52b8990b6C03171F13C46225",
-  "0x490681095ed277B45377d28cA15Ac41d64583048"
-];
-const CLAIMED_TOPIC = "0x309cb1c0dc6ce0f02c0c35cc1f46bbe61ec9deb311d101b87e7d25bd0b647fd7";
-const REWARD_PAID_TOPIC = "0xe2403640ba68fed3a2f88b7557551d1993f84b99bb10ff833f0cf8db0c5e0486";
 
-const distributorRewards = async (): Promise<CliffAdapterResult[]> => {
-  const result: CliffAdapterResult[] = [];
-  const addressList = DISTRIBUTOR_CONTRACTS.map(a => `'${a}'`).join(',');
-  const shortAddrList = DISTRIBUTOR_CONTRACTS.map(a => `'${a.slice(0, 10)}'`).join(',');
-  const data = await queryCustom(`SELECT
-    toStartOfDay(timestamp) AS date,
-    SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 67, 64))))) / 1e18 AS amount
-FROM evm_indexer.logs
-PREWHERE short_address IN (${shortAddrList}) AND short_topic0 = '${CLAIMED_TOPIC.slice(0, 10)}'
-WHERE topic0 = '${CLAIMED_TOPIC}'
-  AND address IN (${addressList})
-GROUP BY date
-ORDER BY date DESC`, {})
+const shortToken = FLUID_TOKEN.slice(0, 10);
+const shortTransfer = TRANSFER_TOPIC.slice(0, 10);
+const padAddr = (a: string) => `'0x${a.slice(2).toLowerCase().padStart(64, '0')}'`;
+const paddedTreasury = padAddr(DAO_TREASURY);
+const paddedDistributors = AIRDROP_DISTRIBUTORS.map(padAddr).join(',');
 
-  for (let i = 0; i < data.length; i++) {
-    result.push({
-      type: "cliff",
-      start: readableToSeconds(data[i].date),
-      amount: Number(data[i].amount)
-    });
-  }
-  return result;
-}
+// Airdrop claims: outflows from distributors excluding returns to treasury
+const airdropClaims = async (): Promise<CliffAdapterResult[]> => {
+  const data = await queryCustom(`
+    SELECT
+      toStartOfDay(timestamp) AS date,
+      SUM(reinterpretAsUInt256(reverse(unhex(substring(data, 3))))) / 1e18 AS amount
+    FROM evm_indexer.logs
+    PREWHERE short_address = '${shortToken}' AND short_topic0 = '${shortTransfer}'
+    WHERE address = '${FLUID_TOKEN}'
+      AND topic0 = '${TRANSFER_TOPIC}'
+      AND topic1 IN (${paddedDistributors})
+      AND topic2 != ${paddedTreasury}
+    GROUP BY date
+    ORDER BY date ASC`, {});
 
-const stakeRewards = async (): Promise<CliffAdapterResult[]> => {
-  const result: CliffAdapterResult[] = [];
-  const data = await queryAggregatedDailyLogsAmountsMulti({
-    addresses: STAKING_CONTRACTS,
-    topic0: REWARD_PAID_TOPIC,
-    startDate: "2024-02-22"
-  })
+  return data.map((d: any) => ({
+    type: "cliff" as const,
+    start: readableToSeconds(d.date),
+    amount: Number(d.amount),
+  }));
+};
 
-  for (let i = 0; i < data.length; i++) {
-    result.push({
-      type: "cliff",
-      start: readableToSeconds(data[i].date),
-      amount: Number(data[i].amount)
-    });
-  }
-  return result;
-}
+// Treasury incentives: net outflows excluding inflows from airdrop distributors
+const treasuryIncentives = async (): Promise<CliffAdapterResult[]> => {
+  const data = await queryCustom(`
+    SELECT date, SUM(amount) AS amount FROM (
+      SELECT toStartOfDay(timestamp) AS date,
+        reinterpretAsUInt256(reverse(unhex(substring(data, 3)))) / 1e18 AS amount
+      FROM evm_indexer.logs
+      PREWHERE short_address = '${shortToken}' AND short_topic0 = '${shortTransfer}'
+      WHERE address = '${FLUID_TOKEN}'
+        AND topic0 = '${TRANSFER_TOPIC}'
+        AND topic1 = ${paddedTreasury}
+        AND timestamp >= toDateTime('2021-06-16')
+      UNION ALL
+      SELECT toStartOfDay(timestamp) AS date,
+        -reinterpretAsUInt256(reverse(unhex(substring(data, 3)))) / 1e18 AS amount
+      FROM evm_indexer.logs
+      PREWHERE short_address = '${shortToken}' AND short_topic0 = '${shortTransfer}'
+      WHERE address = '${FLUID_TOKEN}'
+        AND topic0 = '${TRANSFER_TOPIC}'
+        AND topic2 = ${paddedTreasury}
+        AND topic1 NOT IN (${paddedDistributors})
+        AND timestamp >= toDateTime('2021-06-16')
+    )
+    GROUP BY date
+    ORDER BY date ASC`, {});
 
-const stakingSection: SectionV2 = {
-  displayName: "Staking Rewards",
-  methodology: "Tracks FLUID rewards distributed to token holders through staking",
+  return data.map((d: any) => ({
+    type: "cliff" as const,
+    start: readableToSeconds(d.date),
+    amount: Number(d.amount),
+  }));
+};
+
+const airdropSection: SectionV2 = {
+  displayName: "Airdrop",
+  methodology: "Tracks claimed INST/FLUID airdrop tokens from the genesis merkle distributors",
   isIncentive: false,
   components: [
     {
-      id: "staking-rewards",
-      name: "FLUID Staking Rewards",
-      methodology: "Tracks RewardPaid events from FLUID staking contracts. These rewards go to FLUID token holders.",
+      id: "eth-airdrop-claims",
+      name: "Ethereum Airdrop Claims",
+      methodology: "Tracks FLUID transfers from the 3 genesis airdrop merkle distributors (Compound, Aave, MakerDAO) to users. Excludes returns to DAO treasury.",
       isIncentive: false,
-      fetch: stakeRewards,
+      fetch: airdropClaims,
       metadata: {
-        contracts: STAKING_CONTRACTS,
+        contracts: AIRDROP_DISTRIBUTORS,
         chain: "ethereum",
         chainId: "1",
-        eventSignature: REWARD_PAID_TOPIC,
       },
     },
   ],
 };
 
-const farmingSection: SectionV2 = {
-  displayName: "Farming Incentives",
-  methodology: "Tracks FLUID rewards distributed to lenders and borrowers",
+const communityIncentivesSection: SectionV2 = {
+  displayName: "Community Incentives",
+  methodology: "Tracks FLUID net outflows from the DAO treasury, which funds farming incentives and ecosystem grants",
   isIncentive: true,
   components: [
     {
-      id: "distributor-rewards",
-      name: "Lending/Borrowing Rewards",
-      methodology: "Tracks Claimed events from Fluid merkle distributor contracts for lending/borrowing incentives. These go to protocol users, not token holders.",
+      id: "treasury-incentives",
+      name: "DAO Treasury Incentives",
+      methodology: "Tracks net FLUID outflows from the DAO treasury (0x28849d...). Inflows from airdrop distributors (returned unclaimed tokens) are excluded to avoid double-counting. Buyback inflows are subtracted.",
       isIncentive: true,
-      fetch: distributorRewards,
+      fetch: treasuryIncentives,
       metadata: {
-        contracts: DISTRIBUTOR_CONTRACTS,
+        contract: DAO_TREASURY,
         chain: "ethereum",
         chainId: "1",
-        eventSignature: CLAIMED_TOPIC,
       },
     },
   ],
 };
 
 const fluid: ProtocolV2 = {
-  "Airdrop": [
-    manualCliff("2021-06-16", 10_000_000),
-    manualCliff("2021-06-16", 1_000_000),
-  ],
+  "Airdrop": airdropSection,
+  "Polygon Airdrop": manualCliff("2021-06-16", 1_000_000),
   "Liquidity Mining": manualLinear(
     "2021-06-16",
     "2021-09-16",
@@ -116,37 +127,33 @@ const fluid: ProtocolV2 = {
     "2021-09-16",
     1_000_000
   ),
-
-  "Vested Allocations": () => adapter(),
-
-  "Staking Rewards": stakingSection,
-  "Farming Incentives": farmingSection,
-
+  "Team": manualLinear("2021-07-01", "2025-07-01", 23_794_114),
+  "Investors": manualLinear("2021-07-01", "2025-07-01", 12_078_714),
+  "Future Team & Ecosystem": manualLinear("2021-07-01", "2025-07-01", 7_851_941),
+  "Advisors": manualLinear("2021-07-01", "2025-07-01", 1_275_231),
+  "Community Incentives": communityIncentivesSection,
 
   meta: {
     version: 2,
     sources: [
-      "https://etherscan.io/address/0x3b05a5295Aa749D78858E33ECe3b97bB3Ef4F029",
       "https://blog.instadapp.io/inst/",
-      "https://github.com/Instadapp/fluid-contracts-public/blob/main/deployments/deployments.md"
+      "https://github.com/Instadapp/fluid-contracts-public/blob/main/deployments/deployments.md",
+      "https://gov.fluid.io/t/return-unclaimed-airdropped-inst-to-governance-treasury/392"
     ],
-    token: "coingecko:instadapp",
+    token: `ethereum:${FLUID_TOKEN}`,
     protocolIds: ["parent#fluid"],
     notes: [
-      "INST token was rebranded to FLUID",
-      "40M tokens reserved for future community initiatives governed by DAO.",
-      "Distributor Rewards track merkle distributor claims for lending/borrowing incentives",
-      "Staking Rewards track RewardPaid events from staking contracts",
-      "Vested Allocations should be 45M total, including Team (23.8M), Investors (12.1M), Future Team (7.8M), and Advisors (1.3M) with 4-year vesting schedules",
-      "However based on onchain data, only 37.293.668 tokens are vested",
-      "Due to the nature of the vesting contracts, we cannot determine the exact amounts for each allocation",
+      "INST token was rebranded to FLUID, no allocations changed",
+      "40M community allocation sent to DAO treasury at TGE, distributed over time",
+      "Airdrop tracks actual claims from genesis merkle distributors",
+      "~8.61M unclaimed airdrop tokens were returned to the DAO treasury",
+      "Community Incentives tracks treasury net outflows excluding airdrop distributor returns to avoid double-counting",
     ]
   },
   categories: {
-    insiders: ["Vested Allocations"],
-    staking: ["Staking Rewards"],
-    farming: ["Liquidity Mining", "UNI V3 Staking", "Farming Incentives"],
-    noncirculating: ["Future Community Initiatives"],
+    insiders: ["Team", "Investors", "Future Team & Ecosystem", "Advisors"],
+    airdrop: ["Airdrop", "Polygon Airdrop"],
+    farming: ["Liquidity Mining", "UNI V3 Staking", "Community Incentives"],
   }
 };
 
