@@ -31,7 +31,7 @@ const carv: Protocol = {
   meta: {
     token: "ethereum:0xc08cd26474722ce93f4d0c34d16201461c10aa8c",
     sources: ["https://docs.carv.io/carv-token/distribution-and-vesting"],
-    protocolIds: [""],
+    protocolIds: ["7628"],
     total,
     notes: [
       "Nodes & Community vesting follows a rewards schedule over 4 years, modeled as linear",
