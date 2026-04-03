@@ -75,9 +75,9 @@ const gmx: ProtocolV2 = {
     version: 2,
     token: "arbitrum:0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a",
     sources: ["https://docs.gmx.io/docs/tokenomics/gmx-token"],
-    protocolIds: ["337"],
+    protocolIds: ["parent#gmx"],
     notes: [
-      "Only incentive emissions are tracked.",
+      "Only incentive claims from the GLP and affiliates vesting contracts are tracked.",
       "esGMX is distributed to GMX stakers, GLP LPs, and affiliates, then vested into GMX over 1 year via vester contracts.",
     ],
     incentivesOnly: true,
