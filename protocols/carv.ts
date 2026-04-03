@@ -2,7 +2,7 @@ import { manualCliff, manualLinear } from "../adapters/manual";
 import { Protocol } from "../types/adapters";
 import { months, years } from "../utils/time";
 
-const start = 1728547200; // 2024-10-10
+const start = 1728518400; // 2024-10-10
 const total = 1e9;
 
 const carv: Protocol = {
